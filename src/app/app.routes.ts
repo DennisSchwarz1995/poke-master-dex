@@ -26,6 +26,12 @@ export const routes: Routes = [
   },
   {
     path: 'dex/:id',
+    loadComponent: () => import('./features/pokedex/dex-overview/dex-overview.component')
+      .then(m => m.DexOverviewComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'dex/:id/box/:boxNum',
     loadComponent: () => import('./features/pokedex/box-view/box-view.component')
       .then(m => m.BoxViewComponent),
     canActivate: [authGuard]

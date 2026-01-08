@@ -164,7 +164,7 @@ export class DashboardComponent implements OnInit {
   }
   
   openDex(dex: Dex) {
-    this.router.navigate(['/dex', dex.id]);
+    this.router.navigate(['/dex', dex.id, 'box', 1]);
   }
   
   goToProfile() {

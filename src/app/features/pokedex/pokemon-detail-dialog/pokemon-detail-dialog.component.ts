@@ -310,16 +310,31 @@ export class PokemonDetailDialogComponent implements OnInit {
     this.saving.set(true);
     
     try {
+      const updates: Record<string, any> = {
+        isOwned: this.isOwned,
+        isShiny: this.isShiny,
+        // Use null for clearing values, or the value itself
+        customName: this.customName || null,
+        notes: this.notes || null,
+        ball: this.ball || null,
+        originGame: this.originGame || null,
+        originalTrainer: this.originalTrainer || null,
+        trainerId: this.trainerId || null,
+        level: this.level || null
+      };
+      
+      // Remove keys that are strictly undefined (double safety)
+      Object.keys(updates).forEach(key => {
+        if (updates[key] === undefined) {
+          delete updates[key];
+        }
+      });
+      
       await this.firestoreService.updateSlot(
         this.dexId(),
         this.boxNumber(),
         this.pokemon().position,
-        {
-          isOwned: this.isOwned,
-          isShiny: this.isShiny,
-          customName: this.customName || undefined,
-          notes: this.notes || undefined
-        }
+        updates
       );
       
       this.saved.emit();

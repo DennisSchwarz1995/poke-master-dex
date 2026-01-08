@@ -5,6 +5,7 @@ import {
   collectionData, 
   doc, 
   docData, 
+  getDoc,
   addDoc, 
   updateDoc, 
   writeBatch,
@@ -96,14 +97,47 @@ export class FirestoreService {
     
     const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
     
-    const fieldPath = `slots.${slotPosition - 1}`;
-    const updateData: Record<string, unknown> = {};
+    const snapshot = await getDoc(boxRef);
+    if (!snapshot.exists()) throw new Error('Box does not exist');
     
-    Object.keys(updates).forEach(key => {
-      updateData[`${fieldPath}.${key}`] = updates[key as keyof BoxSlot];
-    });
+    const data = snapshot.data();
+    let slots = data['slots'];
     
-    return updateDoc(boxRef, updateData);
+  
+    if (slots && typeof slots === 'object' && !Array.isArray(slots)) {
+      const slotsArray = Object.values(slots) as BoxSlot[];
+      slotsArray.sort((a, b) => a.position - b.position);
+      slots = slotsArray;
+    }
+    
+    if (!Array.isArray(slots)) {
+      throw new Error('Invalid slots data');
+    }
+  
+    const index = slotPosition - 1;
+    if (index >= 0 && index < slots.length) {
+      slots[index] = { ...slots[index], ...updates };
+      
+      Object.keys(slots[index]).forEach(key => {
+        if (slots[index][key as keyof BoxSlot] === undefined) {
+          delete slots[index][key as keyof BoxSlot];
+        }
+      });
+      return updateDoc(boxRef, { slots });
+    } else {
+      throw new Error(`Slot position ${slotPosition} out of bounds`);
+    }
+  }
+
+  getDexBoxes(dexId: string): Observable<Box[]> {
+    const userId = this.authService.user()?.uid;
+    if (!userId) return of([]);
+    
+    const boxesCollection = collection(this.firestore, `users/${userId}/dexes/${dexId}/boxes`);
+    // Order by boxNumber to ensure correct display order
+    // Requires an index in Firestore usually, but we can verify if simple query works
+    // For now, client-side sort might be safer without index creation block
+    return collectionData(boxesCollection) as Observable<Box[]>;
   }
   
   getDex(dexId: string): Observable<Dex> {

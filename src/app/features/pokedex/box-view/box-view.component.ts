@@ -16,10 +16,10 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
         <div class="container mx-auto px-4 py-4">
           <div class="flex items-center justify-between flex-wrap gap-4">
             <button 
-              (click)="back()"
+              (click)="backToOverview()"
               class="text-blue-500 hover:text-blue-700 font-medium"
             >
-              ← Back to Dashboard
+              ← Back to Overview
             </button>
             
             @if (dex(); as currentDex) {
@@ -27,6 +27,13 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
             }
             
             <div class="flex items-center gap-4">
+              <button
+                (click)="goToOverview()"
+                class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+              >
+                📦 View All Boxes
+              </button>
+              
               <button 
                 (click)="previousBox()"
                 [disabled]="currentBox() === 1"
@@ -126,13 +133,35 @@ export class BoxViewComponent implements OnInit {
   }
   
   loadDex() {
-    this.firestoreService.getDex(this.dexId)
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      const boxNum = params.get('boxNum');
+      
+      if (id) {
+        this.dexId.set(id);
+        this.loadDexInfo(id);
+      }
+      
+      if (boxNum) {
+        const num = parseInt(boxNum, 10);
+        if (num >= 1 && num <= 200) {
+          this.currentBox.set(num);
+          if (id) {
+            this.loadBox(id, num);
+          }
+        }
+      }
+    });
+  }
+  
+  loadDexInfo(dexId: string) {
+    this.firestoreService.getDex(dexId)
       .subscribe(dexData => this.dex.set(dexData));
   }
   
-  loadBox() {
+  loadBox(dexId: string, boxNum: number) {
     this.loading.set(true);
-    this.firestoreService.getBox(this.dexId, this.currentBox())
+    this.firestoreService.getBox(dexId, boxNum)
       .subscribe({
         next: (boxData) => {
           const slots = Array.isArray(boxData.slots) 
@@ -187,7 +216,15 @@ export class BoxViewComponent implements OnInit {
     return slotsArray.filter(s => s.isOwned).length;
   }
   
-  back() {
-    this.router.navigate(['/dashboard']);
+  backToOverview() {
+    if (this.dexId()) {
+      this.router.navigate(['/dex', this.dexId()]);
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
+  }
+  
+  goToOverview() {
+    this.router.navigate(['/dex', this.dexId()]);
   }
 }
