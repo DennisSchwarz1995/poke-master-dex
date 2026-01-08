@@ -1,59 +1,95 @@
-# PokemonDex
+# Pokémon Dex - Portfolio Project
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.0.
+Eine professionelle Angular Pokémon Dex Webapplikation mit Firebase-Backend und PokéAPI-Integration.
 
-## Development server
+## 🚀 Features
 
-To start a local development server, run:
+- ✅ Google Authentication (Firebase)
+- ✅ Multiple Pokédex Variants (Living Dex, Shiny Dex, etc.)
+- ✅ 6000 Pokémon Storage Slots (200 Boxen × 30 pro Box)
+- ✅ Detailliertes Pokémon-Management
+- ✅ Pokémon HOME-Style Legality Checking
+- ✅ Offline-Support mit Sync-Queue
+- ✅ Mehrsprachigkeit (DE, EN, FR, ES, JP)
+- ✅ Alle 9 Generationen (~1025 Pokémon)
 
-```bash
-ng serve
-```
+## 🛠️ Tech Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Angular 20.3.0** (Standalone Components, Zoneless)
+- **TypeScript 5.9**
+- **Firebase** (Auth + Firestore 11.10.0)
+- **PokéAPI v2** (Alle Generationen)
+- **TailwindCSS 4.1** (Custom Pokémon Type Colors)
+- **@angular/localize** (i18n)
+- **@angular/service-worker** (Offline PWA)
+- **IndexedDB** (idb 8.0.3 - Offline Cache)
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## 📦 Installation
 
 ```bash
-ng build
+# Dependencies installieren
+npm install
+
+# Development Server starten
+npm start
+
+# Auf http://localhost:4200/ öffnen
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## ⚙️ Firebase Setup
 
-## Running unit tests
+1. Firebase Projekt erstellen: https://console.firebase.google.com
+2. Authentication → Google Sign-In aktivieren
+3. Firestore Database erstellen
+4. Web App hinzufügen und Config kopieren
+5. Erstelle `.env` Datei (Vorlage: `.env.example`)
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 📁 Projektstruktur
+
+```
+src/app/
+├── core/                 # Singleton Services
+│   ├── auth/            # Authentication
+│   ├── api/             # API Services
+│   └── state/           # State Management
+├── features/            # Feature Modules
+│   ├── auth/           # Login, Profile
+│   ├── pokedex/        # Box View, Pokemon Detail
+│   └── dashboard/      # Main Dashboard
+└── shared/              # Wiederverwendbare Components
+    ├── components/
+    ├── pipes/
+    ├── directives/
+    └── models/
+```
+
+## 🌍 Unterstützte Sprachen
+
+- 🇩🇪 Deutsch
+- 🇬🇧 English
+- 🇫🇷 Français
+- 🇪🇸 Español
+- 🇯🇵 日本語
+
+## 🧪 Testing
 
 ```bash
-ng test
+# Unit Tests
+npm test
+
+# E2E Tests
+npm run e2e
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+## 📝 Build
 
 ```bash
-ng e2e
+# Production Build
+npm run build
+
+# Build Output: dist/
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 📄 License
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+© 2026 Dennis Schwarz - Portfolio Project

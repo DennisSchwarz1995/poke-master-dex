@@ -29,6 +29,11 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
+.env
+.env.local
+firebase-debug.log
+firestore-debug.log
+*.log
 /.angular/cache
 .sass-cache/
 /connect.lock
