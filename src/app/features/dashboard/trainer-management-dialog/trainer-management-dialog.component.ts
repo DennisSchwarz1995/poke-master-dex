@@ -50,26 +50,67 @@ import { Trainer } from '../../../shared/models/trainer.model';
                   class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
                 >
                   <option value="">Select Game</option>
-                  <option value="red">Red/Blue</option>
-                  <option value="yellow">Yellow</option>
-                  <option value="gold">Gold/Silver</option>
-                  <option value="crystal">Crystal</option>
-                  <option value="ruby">Ruby/Sapphire</option>
-                  <option value="emerald">Emerald</option>
-                  <option value="firered">FireRed/LeafGreen</option>
-                  <option value="diamond">Diamond/Pearl</option>
-                  <option value="platinum">Platinum</option>
-                  <option value="heartgold">HeartGold/SoulSilver</option>
-                  <option value="black">Black/White</option>
-                  <option value="black2">Black 2/White 2</option>
-                  <option value="x">X/Y</option>
-                  <option value="oras">Omega Ruby/Alpha Sapphire</option>
-                  <option value="sun">Sun/Moon</option>
-                  <option value="usum">Ultra Sun/Ultra Moon</option>
-                  <option value="sword">Sword/Shield</option>
-                  <option value="bdsp">Brilliant Diamond/Shining Pearl</option>
-                  <option value="legends">Legends Arceus</option>
-                  <option value="scarlet">Scarlet/Violet</option>
+                  <optgroup label="Gen 1">
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="yellow">Yellow</option>
+                  </optgroup>
+                  <optgroup label="Gen 2">
+                    <option value="gold">Gold</option>
+                    <option value="silver">Silver</option>
+                    <option value="crystal">Crystal</option>
+                  </optgroup>
+                  <optgroup label="Gen 3">
+                    <option value="ruby">Ruby</option>
+                    <option value="sapphire">Sapphire</option>
+                    <option value="emerald">Emerald</option>
+                    <option value="firered">FireRed</option>
+                    <option value="leafgreen">LeafGreen</option>
+                    <option value="colosseum">Colosseum</option>
+                    <option value="xd">XD: Gale of Darkness</option>
+                  </optgroup>
+                  <optgroup label="Gen 4">
+                    <option value="diamond">Diamond</option>
+                    <option value="pearl">Pearl</option>
+                    <option value="platinum">Platinum</option>
+                    <option value="heartgold">HeartGold</option>
+                    <option value="soulsilver">SoulSilver</option>
+                  </optgroup>
+                  <optgroup label="Gen 5">
+                    <option value="black">Black</option>
+                    <option value="white">White</option>
+                    <option value="black2">Black 2</option>
+                    <option value="white2">White 2</option>
+                  </optgroup>
+                  <optgroup label="Gen 6">
+                    <option value="x">X</option>
+                    <option value="y">Y</option>
+                    <option value="omegaruby">Omega Ruby</option>
+                    <option value="alphasapphire">Alpha Sapphire</option>
+                  </optgroup>
+                  <optgroup label="Gen 7">
+                    <option value="sun">Sun</option>
+                    <option value="moon">Moon</option>
+                    <option value="ultrasun">Ultra Sun</option>
+                    <option value="ultramoon">Ultra Moon</option>
+                    <option value="letsgopikachu">Let's Go Pikachu</option>
+                   <option value="letsgoeevee">Let's Go Eevee</option>
+                  </optgroup>
+                  <optgroup label="Gen 8">
+                    <option value="sword">Sword</option>
+                    <option value="shield">Shield</option>
+                    <option value="brilliantdiamond">Brilliant Diamond</option>
+                    <option value="shiningpearl">Shining Pearl</option>
+                    <option value="legendsarceus">Legends: Arceus</option>
+                  </optgroup>
+                  <optgroup label="Gen 9">
+                    <option value="scarlet">Scarlet</option>
+                    <option value="violet">Violet</option>
+                  </optgroup>
+                  <optgroup label="GO & HOME">
+                    <option value="pokemongo">Pokemon GO</option>
+                    <option value="home">Pokemon HOME</option>
+                  </optgroup>
                 </select>
               </div>
             </div>
