@@ -66,35 +66,25 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
         } @else if (box(); as currentBoxData) {
           <div class="bg-white rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between mb-6">
-              <h3 class="text-2xl font-bold">{{ currentBoxData.name }}</h3>
-              <span class="text-gray-500 text-sm">
-                {{ getOwnedCount(currentBoxData.slots) }} / 30 owned
-              </span>
+              <h2 class="text-2xl font-bold">{{ currentBoxData.name }}</h2>
+              <div class="text-sm text-gray-500">
+                {{ getOwnedCount() }} / 30 owned
+              </div>
             </div>
             
-            <div class="grid grid-cols-6 gap-3">
-              @for (slot of currentBoxData.slots; track slot.position) {
-                <div class="flex flex-col items-center">
+            <div class="grid grid-cols-5 gap-4">
+              @for (slot of slots(); track slot.position) {
+                <div 
+                  (click)="onSlotClick(slot)"
+                  class="cursor-pointer"
+                >
                   <app-pokemon-sprite
                     [pokemonId]="slot.pokemonId"
                     [isOwned]="slot.isOwned"
                     [isShiny]="slot.isShiny"
-                    (clicked)="onSlotClick(slot)"
                   />
-                  @if (slot.pokemonId) {
-                    <span class="text-xs text-gray-500 mt-1 font-mono">
-                      #{{ slot.pokemonId.toString().padStart(4, '0') }}
-                    </span>
-                  }
                 </div>
               }
-            </div>
-            
-            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-              <p class="text-sm text-gray-700">
-                <strong>Tip:</strong> Click on a Pokemon sprite to mark it as owned/unowned. 
-                Owned Pokemon will appear in full color, unowned Pokemon are grayed out.
-              </p>
             </div>
           </div>
         }
@@ -104,10 +94,10 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
     @if (showDetailDialog() && selectedSlot()) {
       <app-pokemon-detail-dialog
         [pokemon]="selectedSlot()!"
-        [dexId]="dexId"
+        [dexId]="dexId()"
         [boxNumber]="currentBox()"
         (closed)="closeDetailDialog()"
-        (saved)="onPokemonUpdated()"
+        (saved)="onDetailSaved()"
       />
     }
   `,
@@ -118,21 +108,16 @@ export class BoxViewComponent implements OnInit {
   private router = inject(Router);
   private firestoreService = inject(FirestoreService);
   
-  dexId = '';
+  dexId = signal('');
   currentBox = signal(1);
   box = signal<Box | null>(null);
+  slots = signal<BoxSlot[]>([]);
   dex = signal<Dex | null>(null);
   loading = signal(true);
   showDetailDialog = signal(false);
   selectedSlot = signal<BoxSlot | null>(null);
   
   ngOnInit() {
-    this.dexId = this.route.snapshot.paramMap.get('id')!;
-    this.loadDex();
-    this.loadBox();
-  }
-  
-  loadDex() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       const boxNum = params.get('boxNum');
@@ -142,13 +127,11 @@ export class BoxViewComponent implements OnInit {
         this.loadDexInfo(id);
       }
       
-      if (boxNum) {
+      if (boxNum && id) {
         const num = parseInt(boxNum, 10);
         if (num >= 1 && num <= 200) {
           this.currentBox.set(num);
-          if (id) {
-            this.loadBox(id, num);
-          }
+          this.loadBox(id, num);
         }
       }
     });
@@ -166,12 +149,13 @@ export class BoxViewComponent implements OnInit {
         next: (boxData) => {
           const slots = Array.isArray(boxData.slots) 
             ? boxData.slots 
-            : Object.values(boxData.slots || {});
+            : Object.values(boxData.slots || {}) as BoxSlot[];
           
-          this.box.set({
-            ...boxData,
-            slots: slots as BoxSlot[]
-          });
+          // Sort by position to ensure correct display
+          const sortedSlots = slots.sort((a, b) => a.position - b.position);
+          
+          this.box.set(boxData);
+          this.slots.set(sortedSlots);
           this.loading.set(false);
         },
         error: (err) => {
@@ -181,23 +165,7 @@ export class BoxViewComponent implements OnInit {
       });
   }
   
-  previousBox() {
-    if (this.currentBox() > 1) {
-      this.currentBox.update(v => v - 1);
-      this.loadBox();
-    }
-  }
-  
-  nextBox() {
-    if (this.currentBox() < 200) {
-      this.currentBox.update(v => v + 1);
-      this.loadBox();
-    }
-  }
-  
   onSlotClick(slot: BoxSlot) {
-    if (!slot.pokemonId) return;
-    
     this.selectedSlot.set(slot);
     this.showDetailDialog.set(true);
   }
@@ -207,12 +175,26 @@ export class BoxViewComponent implements OnInit {
     this.selectedSlot.set(null);
   }
   
-  onPokemonUpdated() {
-    this.loadBox();
+  onDetailSaved() {
+    this.loadBox(this.dexId(), this.currentBox());
   }
   
-  getOwnedCount(slots: BoxSlot[] | Record<string, BoxSlot>): number {
-    const slotsArray = Array.isArray(slots) ? slots : Object.values(slots || {});
+  previousBox() {
+    if (this.currentBox() > 1) {
+      const newBox = this.currentBox() - 1;
+      this.router.navigate(['/dex', this.dexId(), 'box', newBox]);
+    }
+  }
+  
+  nextBox() {
+    if (this.currentBox() < 200) {
+      const newBox = this.currentBox() + 1;
+      this.router.navigate(['/dex', this.dexId(), 'box', newBox]);
+    }
+  }
+  
+  getOwnedCount(): number {
+    const slotsArray = this.slots();
     return slotsArray.filter(s => s.isOwned).length;
   }
   
