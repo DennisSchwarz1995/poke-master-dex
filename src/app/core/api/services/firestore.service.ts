@@ -140,6 +140,14 @@ export class FirestoreService {
     return collectionData(boxesCollection) as Observable<Box[]>;
   }
   
+  async updateBoxName(dexId: string, boxNumber: number, newName: string): Promise<void> {
+    const userId = this.authService.user()?.uid;
+    if (!userId) throw new Error('User not authenticated');
+    
+    const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
+    return updateDoc(boxRef, { name: newName });
+  }
+  
   getDex(dexId: string): Observable<Dex> {
     const userId = this.authService.user()?.uid;
     if (!userId) return of({} as Dex);

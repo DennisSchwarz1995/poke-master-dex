@@ -1,47 +1,79 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, computed, signal, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PokeapiService } from '../../../core/api/services/pokeapi.service';
+import { Pokemon } from '../../../core/api/models/pokeapi-response.model';
 
 @Component({
   selector: 'app-pokemon-sprite',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div 
-      class="aspect-square bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer 
-             hover:bg-gray-200 transition-colors border-2"
-      [class.border-blue-400]="isOwned()"
-      [class.border-transparent]="!isOwned()"
-      (click)="onClick()"
-    >
+    <div class="flex flex-col items-center">
       @if (pokemonId()) {
-        <img 
-          [src]="getSpriteUrl(pokemonId()!)"
-          [alt]="'Pokemon #' + pokemonId()"
-          class="w-full h-full object-contain p-1 transition-all"
+        <div 
+          class="relative w-20 h-20 rounded-lg transition-all hover:scale-110"
           [class.grayscale]="!isOwned()"
           [class.opacity-40]="!isOwned()"
-          loading="lazy"
-        />
+        >
+          <img 
+            [src]="spriteUrl()" 
+            [alt]="pokemonName()"
+            class="w-full h-full object-contain"
+            loading="lazy"
+          />
+          @if (isShiny()) {
+            <div class="absolute top-0 right-0 text-yellow-400 text-xl" title="Shiny">✨</div>
+          }
+        </div>
+        <div class="text-center mt-1">
+          <div class="text-[10px] text-gray-400 font-mono">
+            #{{ (pokemonId() || 0).toString().padStart(4, '0') }}
+          </div>
+          <div class="text-xs font-medium capitalize truncate max-w-[80px]" [title]="pokemonName()">
+            {{ pokemonName() }}
+          </div>
+        </div>
       } @else {
-        <span class="text-gray-300">—</span>
+        <div class="w-20 h-20 rounded-lg bg-gray-100 flex items-center justify-center">
+          <span class="text-gray-300 text-2xl">?</span>
+        </div>
+        <div class="text-center mt-1">
+          <div class="text-[10px] text-gray-300">—</div>
+          <div class="text-xs text-gray-300">Empty</div>
+        </div>
       }
     </div>
   `,
   styles: []
 })
 export class PokemonSpriteComponent {
+  private pokeapiService = inject(PokeapiService);
+  
   pokemonId = input<number | null>(null);
   isOwned = input<boolean>(false);
   isShiny = input<boolean>(false);
   
-  clicked = output<number | null>();
+  pokemonName = signal('...');
   
-  onClick() {
-    this.clicked.emit(this.pokemonId());
-  }
+  spriteUrl = computed(() => {
+    const id = this.pokemonId();
+    if (!id) return '';
+    
+    const variant = this.isShiny() ? 'shiny' : 'default';
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${variant}/${id}.png`;
+  });
   
-  getSpriteUrl(id: number): string {
-    const shiny = this.isShiny() ? 'shiny/' : '';
-    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${shiny}${id}.png`;
+  constructor() {
+    effect(() => {
+      const id = this.pokemonId();
+      if (id) {
+        this.pokeapiService.getPokemonById(id).subscribe({
+          next: (pokemon: Pokemon) => this.pokemonName.set(pokemon.name),
+          error: () => this.pokemonName.set('Unknown')
+        });
+      } else {
+        this.pokemonName.set('');
+      }
+    });
   }
 }

@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { PokemonSpriteComponent } from '../../../shared/components/pokemon-sprite/pokemon-sprite.component';
@@ -9,7 +10,7 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
 @Component({
   selector: 'app-box-view',
   standalone: true,
-  imports: [CommonModule, PokemonSpriteComponent, PokemonDetailDialogComponent],
+  imports: [CommonModule, FormsModule, PokemonSpriteComponent, PokemonDetailDialogComponent],
   template: `
     <div class="min-h-screen bg-gray-50">
       <header class="bg-white shadow-sm border-b">
@@ -66,13 +67,48 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
         } @else if (box(); as currentBoxData) {
           <div class="bg-white rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between mb-6">
-              <h2 class="text-2xl font-bold">{{ currentBoxData.name }}</h2>
+              @if (editingBoxName()) {
+                <div class="flex items-center gap-2">
+                  <input 
+                    #boxNameInput
+                    [(ngModel)]="newBoxName"
+                    type="text"
+                    maxlength="16"
+                    class="text-2xl font-bold px-2 py-1 border-2 border-blue-500 rounded focus:outline-none"
+                    (keyup.enter)="saveBoxName()"
+                    (keyup.escape)="cancelEditBoxName()"
+                  />
+                  <button 
+                    (click)="saveBoxName()"
+                    class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                  >
+                    ✓
+                  </button>
+                  <button 
+                    (click)="cancelEditBoxName()"
+                    class="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                  >
+                    ✕
+                  </button>
+                </div>
+              } @else {
+                <div class="flex items-center gap-2">
+                  <h2 class="text-2xl font-bold">{{ currentBoxData.name }}</h2>
+                  <button
+                    (click)="startEditBoxName(currentBoxData.name)"
+                    class="text-gray-400 hover:text-blue-500 px-2"
+                    title="Rename Box"
+                  >
+                    ✏️
+                  </button>
+                </div>
+              }
               <div class="text-sm text-gray-500">
                 {{ getOwnedCount() }} / 30 owned
               </div>
             </div>
             
-            <div class="grid grid-cols-5 gap-4">
+            <div class="grid grid-cols-6 gap-2">
               @for (slot of slots(); track slot.position) {
                 <div 
                   (click)="onSlotClick(slot)"
@@ -116,6 +152,8 @@ export class BoxViewComponent implements OnInit {
   loading = signal(true);
   showDetailDialog = signal(false);
   selectedSlot = signal<BoxSlot | null>(null);
+  editingBoxName = signal(false);
+  newBoxName = '';
   
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -204,6 +242,36 @@ export class BoxViewComponent implements OnInit {
     } else {
       this.router.navigate(['/dashboard']);
     }
+  }
+  
+  startEditBoxName(currentName: string) {
+    this.newBoxName = currentName;
+    this.editingBoxName.set(true);
+  }
+  
+  async saveBoxName() {
+    if (!this.newBoxName.trim() || this.newBoxName.length > 16) {
+      this.cancelEditBoxName();
+      return;
+    }
+    
+    try {  
+      await this.firestoreService.updateBoxName(
+        this.dexId(),
+        this.currentBox(),
+        this.newBoxName.trim()
+      );
+      this.editingBoxName.set(false);
+      this.loadBox(this.dexId(), this.currentBox());
+    } catch (err) {
+      console.error('Failed to rename box:', err);
+      this.cancelEditBoxName();
+    }
+  }
+  
+  cancelEditBoxName() {
+    this.newBoxName = '';
+    this.editingBoxName.set(false);
   }
   
   goToOverview() {
