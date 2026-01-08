@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { PokemonSpriteComponent } from '../../../shared/components/pokemon-sprite/pokemon-sprite.component';
+import { PokemonDetailDialogComponent } from '../pokemon-detail-dialog/pokemon-detail-dialog.component';
 import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
 
 @Component({
   selector: 'app-box-view',
   standalone: true,
-  imports: [CommonModule, PokemonSpriteComponent],
+  imports: [CommonModule, PokemonSpriteComponent, PokemonDetailDialogComponent],
   template: `
     <div class="min-h-screen bg-gray-50">
       <header class="bg-white shadow-sm border-b">
@@ -92,6 +93,16 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
         }
       </main>
     </div>
+    
+    @if (showDetailDialog() && selectedSlot()) {
+      <app-pokemon-detail-dialog
+        [pokemon]="selectedSlot()!"
+        [dexId]="dexId"
+        [boxNumber]="currentBox()"
+        (closed)="closeDetailDialog()"
+        (saved)="onPokemonUpdated()"
+      />
+    }
   `,
   styles: []
 })
@@ -105,6 +116,8 @@ export class BoxViewComponent implements OnInit {
   box = signal<Box | null>(null);
   dex = signal<Dex | null>(null);
   loading = signal(true);
+  showDetailDialog = signal(false);
+  selectedSlot = signal<BoxSlot | null>(null);
   
   ngOnInit() {
     this.dexId = this.route.snapshot.paramMap.get('id')!;
@@ -153,37 +166,20 @@ export class BoxViewComponent implements OnInit {
     }
   }
   
-  async onSlotClick(slot: BoxSlot) {
+  onSlotClick(slot: BoxSlot) {
     if (!slot.pokemonId) return;
     
-    const newIsOwned = !slot.isOwned;
-    
-    try {
-      await this.firestoreService.updateSlot(
-        this.dexId,
-        this.currentBox(),
-        slot.position,
-        { isOwned: newIsOwned }
-      );
-      
-      this.box.update(currentBox => {
-        if (!currentBox || !currentBox.slots) return currentBox;
-        
-        const slotsArray = Array.isArray(currentBox.slots) 
-          ? currentBox.slots 
-          : Object.values(currentBox.slots) as BoxSlot[];
-        
-        const newSlots = slotsArray.map((s: BoxSlot) => 
-          s.position === slot.position 
-            ? { ...s, isOwned: newIsOwned } 
-            : s
-        );
-        
-        return { ...currentBox, slots: newSlots };
-      });
-    } catch (err) {
-      console.error('Failed to update slot:', err);
-    }
+    this.selectedSlot.set(slot);
+    this.showDetailDialog.set(true);
+  }
+  
+  closeDetailDialog() {
+    this.showDetailDialog.set(false);
+    this.selectedSlot.set(null);
+  }
+  
+  onPokemonUpdated() {
+    this.loadBox();
   }
   
   getOwnedCount(slots: BoxSlot[] | Record<string, BoxSlot>): number {
