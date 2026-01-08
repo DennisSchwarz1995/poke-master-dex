@@ -23,7 +23,7 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
               />
               <div>
                 <h2 class="text-2xl font-bold capitalize">{{ pokemonName() }}</h2>
-                <span class="text-gray-500 font-mono">#{{ pkmn.pokemonId?.toString().padStart(4, '0') }}</span>
+                <span class="text-gray-500 font-mono">#{{ (pkmn.pokemonId || 0).toString().padStart(4, '0') }}</span>
               </div>
             </div>
             <button (click)="close()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
