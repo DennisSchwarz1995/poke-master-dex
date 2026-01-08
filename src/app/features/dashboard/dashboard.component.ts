@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/services/auth.service';
 import { FirestoreService } from '../../core/api/services/firestore.service';
 import { CreateDexDialogComponent } from './create-dex-dialog/create-dex-dialog.component';
+import { TrainerManagementDialogComponent } from './trainer-management-dialog/trainer-management-dialog.component';
 import { DexCardComponent } from './dex-card/dex-card.component';
 import { Dex } from '../../shared/models/dex.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, CreateDexDialogComponent, DexCardComponent],
+  imports: [CommonModule, CreateDexDialogComponent, TrainerManagementDialogComponent, DexCardComponent],
   template: `
     <div class="min-h-screen bg-gray-50">
       <header class="bg-white shadow-sm border-b">
@@ -20,6 +21,12 @@ import { Dex } from '../../shared/models/dex.model';
             
             @if (user(); as currentUser) {
               <div class="flex items-center gap-4">
+                <button
+                  (click)="openTrainerManagement()"
+                  class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                >
+                  Trainer Profiles
+                </button>
                 <span class="text-gray-600 hidden md:inline">{{ currentUser.displayName }}</span>
                 @if (currentUser.photoURL) {
                   <img 
@@ -67,6 +74,7 @@ import { Dex } from '../../shared/models/dex.model';
               <app-dex-card 
                 [dex]="dex"
                 (clicked)="openDex($event)"
+                (deleteRequested)="onDeleteDex($event)"
               />
             }
           </div>
@@ -78,6 +86,12 @@ import { Dex } from '../../shared/models/dex.model';
       <app-create-dex-dialog
         (closed)="closeDialog()"
         (dexCreated)="onDexCreated()"
+      />
+    }
+    
+    @if (showTrainerDialog()) {
+      <app-trainer-management-dialog
+        (closed)="closeTrainerDialog()"
       />
     }
   `,
@@ -92,6 +106,7 @@ export class DashboardComponent implements OnInit {
   dexList = signal<Dex[]>([]);
   loading = signal(true);
   showCreateDialog = signal(false);
+  showTrainerDialog = signal(false);
   
   ngOnInit() {
     this.loadDexList();
@@ -121,6 +136,31 @@ export class DashboardComponent implements OnInit {
   
   onDexCreated() {
     this.loadDexList();
+  }
+  
+  openTrainerManagement() {
+    this.showTrainerDialog.set(true);
+  }
+  
+  closeTrainerDialog() {
+    this.showTrainerDialog.set(false);
+  }
+  
+  async onDeleteDex(dex: Dex) {
+    if (!confirm(`Delete "${dex.name}"? This will permanently delete the Dex and all 200 boxes!`)) {
+      return;
+    }
+    
+    this.loading.set(true);
+    
+    try {
+      await this.firestoreService.deleteDex(dex.id);
+      this.loadDexList();
+    } catch (err) {
+      console.error('Failed to delete Dex:', err);
+      alert('Failed to delete Dex. Please try again.');
+      this.loading.set(false);
+    }
   }
   
   openDex(dex: Dex) {

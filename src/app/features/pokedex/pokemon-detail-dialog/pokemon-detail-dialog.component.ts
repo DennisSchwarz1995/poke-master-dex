@@ -2,6 +2,7 @@ import { Component, input, output, signal, OnInit, inject } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BoxSlot } from '../../../shared/models/dex.model';
+import { Trainer } from '../../../shared/models/trainer.model';
 import { PokeapiService } from '../../../core/api/services/pokeapi.service';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 
@@ -110,6 +111,25 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
               </select>
             </div>
             
+            <div class="bg-purple-50 p-4 rounded-lg">
+              <label class="block text-sm font-semibold mb-2">Quick Select Trainer Profile</label>
+              <select 
+                (change)="onTrainerSelect($event)"
+                class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500 bg-white"
+              >
+                <option value="">-- Select Saved Trainer --</option>
+                @for (trainer of trainers(); track trainer.id) {
+                  <option [value]="trainer.id">
+                    {{ trainer.name }} (TID: {{ trainer.trainerId }})
+                    @if (trainer.game) { - {{ trainer.game }} }
+                  </option>
+                }
+              </select>
+              <p class="text-xs text-gray-600 mt-1">
+                Select a saved trainer to auto-fill OT and TID below
+              </p>
+            </div>
+            
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-semibold mb-1">Original Trainer (OT)</label>
@@ -189,6 +209,7 @@ export class PokemonDetailDialogComponent implements OnInit {
   private firestoreService = inject(FirestoreService);
   
   pokemonName = signal('Loading...');
+  trainers = signal<Trainer[]>([]);
   saving = signal(false);
   
   isOwned = false;
@@ -209,11 +230,34 @@ export class PokemonDetailDialogComponent implements OnInit {
     this.customName = pkmn.customName || '';
     this.notes = pkmn.notes || '';
     
+    this.loadTrainers();
+    
     if (pkmn.pokemonId) {
       this.pokeapiService.getPokemonById(pkmn.pokemonId)
         .subscribe(pokemon => {
           this.pokemonName.set(pokemon.name);
         });
+    }
+  }
+  
+  loadTrainers() {
+    this.firestoreService.getUserTrainers()
+      .subscribe(trainers => this.trainers.set(trainers));
+  }
+  
+  onTrainerSelect(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const trainerId = select.value;
+    
+    if (!trainerId) return;
+    
+    const trainer = this.trainers().find(t => t.id === trainerId);
+    if (trainer) {
+      this.originalTrainer = trainer.name;
+      this.trainerId = trainer.trainerId;
+      if (trainer.game) {
+        this.originGame = trainer.game;
+      }
     }
   }
   

@@ -8,11 +8,13 @@ import {
   addDoc, 
   updateDoc, 
   writeBatch,
+  deleteDoc,
   Timestamp
 } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { AuthService } from '../../auth/services/auth.service';
 import { Dex, Box, BoxSlot } from '../../../shared/models/dex.model';
+import { Trainer } from '../../../shared/models/trainer.model';
 
 @Injectable({
   providedIn: 'root'
@@ -110,5 +112,53 @@ export class FirestoreService {
     
     const dexDoc = doc(this.firestore, `users/${userId}/dexes/${dexId}`);
     return docData(dexDoc, { idField: 'id' }) as Observable<Dex>;
+  }
+  
+  async deleteDex(dexId: string): Promise<void> {
+    const userId = this.authService.user()?.uid;
+    if (!userId) throw new Error('User not authenticated');
+    
+    const batch = writeBatch(this.firestore);
+    
+    for (let boxNum = 1; boxNum <= 200; boxNum++) {
+      const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNum}`);
+      batch.delete(boxRef);
+    }
+    
+    const dexRef = doc(this.firestore, `users/${userId}/dexes/${dexId}`);
+    batch.delete(dexRef);
+    
+    return batch.commit();
+  }
+  
+  getUserTrainers(): Observable<Trainer[]> {
+    const userId = this.authService.user()?.uid;
+    if (!userId) return of([]);
+    
+    const trainersCollection = collection(this.firestore, `users/${userId}/trainers`);
+    return collectionData(trainersCollection, { idField: 'id' }) as Observable<Trainer[]>;
+  }
+  
+  async createTrainer(trainer: Omit<Trainer, 'id' | 'userId' | 'createdAt'>): Promise<string> {
+    const userId = this.authService.user()?.uid;
+    if (!userId) throw new Error('User not authenticated');
+    
+    const trainersCollection = collection(this.firestore, `users/${userId}/trainers`);
+    const newTrainer = {
+      ...trainer,
+      userId,
+      createdAt: Timestamp.now()
+    };
+    
+    const docRef = await addDoc(trainersCollection, newTrainer);
+    return docRef.id;
+  }
+  
+  async deleteTrainer(trainerId: string): Promise<void> {
+    const userId = this.authService.user()?.uid;
+    if (!userId) throw new Error('User not authenticated');
+    
+    const trainerRef = doc(this.firestore, `users/${userId}/trainers/${trainerId}`);
+    return deleteDoc(trainerRef);
   }
 }
