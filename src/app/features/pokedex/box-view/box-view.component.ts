@@ -122,7 +122,14 @@ export class BoxViewComponent implements OnInit {
     this.firestoreService.getBox(this.dexId, this.currentBox())
       .subscribe({
         next: (boxData) => {
-          this.box.set(boxData);
+          const slots = Array.isArray(boxData.slots) 
+            ? boxData.slots 
+            : Object.values(boxData.slots || {});
+          
+          this.box.set({
+            ...boxData,
+            slots: slots as BoxSlot[]
+          });
           this.loading.set(false);
         },
         error: (err) => {
@@ -160,12 +167,18 @@ export class BoxViewComponent implements OnInit {
       );
       
       this.box.update(currentBox => {
-        if (!currentBox) return currentBox;
-        const newSlots = [...currentBox.slots];
-        const slotIndex = newSlots.findIndex(s => s.position === slot.position);
-        if (slotIndex !== -1) {
-          newSlots[slotIndex] = { ...newSlots[slotIndex], isOwned: newIsOwned };
-        }
+        if (!currentBox || !currentBox.slots) return currentBox;
+        
+        const slotsArray = Array.isArray(currentBox.slots) 
+          ? currentBox.slots 
+          : Object.values(currentBox.slots);
+        
+        const newSlots = slotsArray.map(s => 
+          s.position === slot.position 
+            ? { ...s, isOwned: newIsOwned } 
+            : s
+        );
+        
         return { ...currentBox, slots: newSlots };
       });
     } catch (err) {
@@ -173,8 +186,9 @@ export class BoxViewComponent implements OnInit {
     }
   }
   
-  getOwnedCount(slots: BoxSlot[]): number {
-    return slots.filter(s => s.isOwned).length;
+  getOwnedCount(slots: BoxSlot[] | Record<string, BoxSlot>): number {
+    const slotsArray = Array.isArray(slots) ? slots : Object.values(slots || {});
+    return slotsArray.filter(s => s.isOwned).length;
   }
   
   back() {
