@@ -59,8 +59,10 @@ export class PokemonSpriteComponent {
     const id = this.pokemonId();
     if (!id) return '';
     
-    const variant = this.isShiny() ? 'shiny' : 'default';
-    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${variant}/${id}.png`;
+    if (this.isShiny()) {
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`;
+    }
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
   });
   
   constructor() {
