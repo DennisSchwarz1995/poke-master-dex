@@ -1,4 +1,4 @@
-# Pokémon Dex - Portfolio Project
+# Poke-Master-Dex - Portfolio Project
 
 Eine professionelle Angular Pokémon Dex Webapplikation mit Firebase-Backend und PokéAPI-Integration.
 
