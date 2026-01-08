@@ -8,20 +8,14 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private auth = inject(Auth);
   
-  // Reactive state with Signals
   user = signal<User | null>(null);
   isAuthenticated = computed(() => !!this.user());
   
   constructor() {
-    // Subscribe to Firebase auth state changes
     authState(this.auth).subscribe(user => {
       this.user.set(user);
     });
   }
-  
-  /**
-   * Sign in with Google OAuth popup
-   */
   async signInWithGoogle(): Promise<UserCredential> {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
@@ -30,16 +24,10 @@ export class AuthService {
     return signInWithPopup(this.auth, provider);
   }
   
-  /**
-   * Sign out current user
-   */
   async signOut(): Promise<void> {
     return signOut(this.auth);
   }
-  
-  /**
-   * Get auth state as Observable (for guards)
-   */
+
   getAuthState(): Observable<User | null> {
     return authState(this.auth);
   }
