@@ -1,0 +1,183 @@
+import { Component, inject, signal, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FirestoreService } from '../../../core/api/services/firestore.service';
+import { PokemonSpriteComponent } from '../../../shared/components/pokemon-sprite/pokemon-sprite.component';
+import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
+
+@Component({
+  selector: 'app-box-view',
+  standalone: true,
+  imports: [CommonModule, PokemonSpriteComponent],
+  template: `
+    <div class="min-h-screen bg-gray-50">
+      <header class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4 py-4">
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <button 
+              (click)="back()"
+              class="text-blue-500 hover:text-blue-700 font-medium"
+            >
+              ← Back to Dashboard
+            </button>
+            
+            @if (dex(); as currentDex) {
+              <h2 class="text-xl font-bold">{{ currentDex.name }}</h2>
+            }
+            
+            <div class="flex items-center gap-4">
+              <button 
+                (click)="previousBox()"
+                [disabled]="currentBox() === 1"
+                class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                ←
+              </button>
+              
+              <span class="font-bold">
+                Box {{ currentBox() }} / 200
+              </span>
+              
+              <button 
+                (click)="nextBox()"
+                [disabled]="currentBox() === 200"
+                class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                →
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <main class="container mx-auto px-4 py-8">
+        @if (loading()) {
+          <div class="text-center py-12">
+            <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent mx-auto"></div>
+          </div>
+        } @else if (box(); as currentBoxData) {
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-bold">{{ currentBoxData.name }}</h3>
+              <span class="text-gray-500 text-sm">
+                {{ getOwnedCount(currentBoxData.slots) }} / 30 owned
+              </span>
+            </div>
+            
+            <div class="grid grid-cols-6 gap-3">
+              @for (slot of currentBoxData.slots; track slot.position) {
+                <div class="flex flex-col items-center">
+                  <app-pokemon-sprite
+                    [pokemonId]="slot.pokemonId"
+                    [isOwned]="slot.isOwned"
+                    [isShiny]="slot.isShiny"
+                    (clicked)="onSlotClick(slot)"
+                  />
+                  @if (slot.pokemonId) {
+                    <span class="text-xs text-gray-500 mt-1 font-mono">
+                      #{{ slot.pokemonId.toString().padStart(4, '0') }}
+                    </span>
+                  }
+                </div>
+              }
+            </div>
+            
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+              <p class="text-sm text-gray-700">
+                <strong>Tip:</strong> Click on a Pokemon sprite to mark it as owned/unowned. 
+                Owned Pokemon will appear in full color, unowned Pokemon are grayed out.
+              </p>
+            </div>
+          </div>
+        }
+      </main>
+    </div>
+  `,
+  styles: []
+})
+export class BoxViewComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private firestoreService = inject(FirestoreService);
+  
+  dexId = '';
+  currentBox = signal(1);
+  box = signal<Box | null>(null);
+  dex = signal<Dex | null>(null);
+  loading = signal(true);
+  
+  ngOnInit() {
+    this.dexId = this.route.snapshot.paramMap.get('id')!;
+    this.loadDex();
+    this.loadBox();
+  }
+  
+  loadDex() {
+    this.firestoreService.getDex(this.dexId)
+      .subscribe(dexData => this.dex.set(dexData));
+  }
+  
+  loadBox() {
+    this.loading.set(true);
+    this.firestoreService.getBox(this.dexId, this.currentBox())
+      .subscribe({
+        next: (boxData) => {
+          this.box.set(boxData);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error('Failed to load box:', err);
+          this.loading.set(false);
+        }
+      });
+  }
+  
+  previousBox() {
+    if (this.currentBox() > 1) {
+      this.currentBox.update(v => v - 1);
+      this.loadBox();
+    }
+  }
+  
+  nextBox() {
+    if (this.currentBox() < 200) {
+      this.currentBox.update(v => v + 1);
+      this.loadBox();
+    }
+  }
+  
+  async onSlotClick(slot: BoxSlot) {
+    if (!slot.pokemonId) return;
+    
+    const newIsOwned = !slot.isOwned;
+    
+    try {
+      await this.firestoreService.updateSlot(
+        this.dexId,
+        this.currentBox(),
+        slot.position,
+        { isOwned: newIsOwned }
+      );
+      
+      this.box.update(currentBox => {
+        if (!currentBox) return currentBox;
+        const newSlots = [...currentBox.slots];
+        const slotIndex = newSlots.findIndex(s => s.position === slot.position);
+        if (slotIndex !== -1) {
+          newSlots[slotIndex] = { ...newSlots[slotIndex], isOwned: newIsOwned };
+        }
+        return { ...currentBox, slots: newSlots };
+      });
+    } catch (err) {
+      console.error('Failed to update slot:', err);
+    }
+  }
+  
+  getOwnedCount(slots: BoxSlot[]): number {
+    return slots.filter(s => s.isOwned).length;
+  }
+  
+  back() {
+    this.router.navigate(['/dashboard']);
+  }
+}

@@ -55,9 +55,9 @@ export class PokeapiService {
   
   searchPokemon(query: string): Observable<PokemonListItem[]> {
     return this.getPokemonList().pipe(
-      map(list => list.filter(p => 
-        p.name.toLowerCase().includes(query.toLowerCase()) ||
-        p.id.toString() === query
+      map(pokemonList => pokemonList.filter(pokemonListItem => 
+        pokemonListItem.name.toLowerCase().includes(query.toLowerCase()) ||
+        pokemonListItem.id.toString() === query
       ))
     );
   }
@@ -73,15 +73,15 @@ export class PokeapiService {
         official: data.sprites.other['official-artwork']?.front_default,
         showdown: data.sprites.other.showdown?.front_default
       },
-      stats: data.stats.map(s => ({
-        baseStat: s.base_stat,
-        effort: s.effort,
-        stat: s.stat
+      stats: data.stats.map(stat => ({
+        baseStat: stat.base_stat,
+        effort: stat.effort,
+        stat: stat.stat
       })),
-      abilities: data.abilities.map(a => ({
-        ability: a.ability,
-        isHidden: a.is_hidden,
-        slot: a.slot
+      abilities: data.abilities.map(ability => ({
+        ability: ability.ability,
+        isHidden: ability.is_hidden,
+        slot: ability.slot
       })),
       species: {
         name: data.species.name,

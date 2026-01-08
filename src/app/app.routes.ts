@@ -25,6 +25,12 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'dex/:id',
+    loadComponent: () => import('./features/pokedex/box-view/box-view.component')
+      .then(m => m.BoxViewComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: '**',
     redirectTo: 'dashboard'
   }
