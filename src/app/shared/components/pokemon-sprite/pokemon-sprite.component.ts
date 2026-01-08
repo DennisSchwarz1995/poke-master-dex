@@ -1,7 +1,7 @@
 import { Component, input, computed, signal, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PokeapiService } from '../../../core/api/services/pokeapi.service';
-import { PokemonApiResponse } from '../../../core/api/models/pokeapi-response.model';
+import { PokeApiPokemonResponse } from '../../../core/api/models/pokeapi-response.model';
 
 @Component({
   selector: 'app-pokemon-sprite',
@@ -68,7 +68,7 @@ export class PokemonSpriteComponent {
       const id = this.pokemonId();
       if (id) {
         this.pokeapiService.getPokemonById(id).subscribe({
-          next: (pokemon: PokemonApiResponse) => this.pokemonName.set(pokemon.name),
+          next: (pokemon: PokeApiPokemonResponse) => this.pokemonName.set(pokemon.name),
           error: () => this.pokemonName.set('Unknown')
         });
       } else {
