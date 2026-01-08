@@ -1,3 +1,5 @@
+import { BoxSlot } from './dex.model';
+
 export interface PokemonDetail extends BoxSlot {
   level?: number;
   ball?: string;
