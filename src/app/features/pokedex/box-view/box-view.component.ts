@@ -171,9 +171,9 @@ export class BoxViewComponent implements OnInit {
         
         const slotsArray = Array.isArray(currentBox.slots) 
           ? currentBox.slots 
-          : Object.values(currentBox.slots);
+          : Object.values(currentBox.slots) as BoxSlot[];
         
-        const newSlots = slotsArray.map(s => 
+        const newSlots = slotsArray.map((s: BoxSlot) => 
           s.position === slot.position 
             ? { ...s, isOwned: newIsOwned } 
             : s
