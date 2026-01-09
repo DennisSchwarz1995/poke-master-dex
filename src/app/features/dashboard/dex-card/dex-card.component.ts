@@ -9,7 +9,7 @@ import { Dex, DexType } from '../../../shared/models/dex.model';
   template: `
     @if (dex(); as currentDex) {
       <div 
-        class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all relative group"
+        class="bg-white h-full rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all relative group min-h-[200px] flex flex-col"
       >
         <button
           (click)="onDelete($event)"
@@ -21,7 +21,7 @@ import { Dex, DexType } from '../../../shared/models/dex.model';
           ×
         </button>
         
-        <div (click)="onClick()" class="cursor-pointer">
+        <div (click)="onClick()" class="cursor-pointer flex-1 flex flex-col">
           <div class="flex items-start justify-between mb-4">
             <div>
               <span class="text-3xl">{{ getIcon(currentDex.type) }}</span>
@@ -34,7 +34,7 @@ import { Dex, DexType } from '../../../shared/models/dex.model';
           <h3 class="text-xl font-bold text-gray-800 mb-2">
             {{ currentDex.name }}
           </h3>
-          <p class="text-gray-600 text-sm mb-4">
+          <p class="text-gray-600 text-sm mb-4 flex-1">
             {{ currentDex.description }}
           </p>
           

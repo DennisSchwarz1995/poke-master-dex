@@ -48,21 +48,36 @@ export class FirestoreService {
     return docRef.id;
   }
   
-  async initializeBoxes(userId: string, dexId: string, startBox: number): Promise<void> {
+  async initializeBoxes(
+    userId: string, 
+    dexId: string, 
+    startBox: number,
+    pokemonList: Array<{ slug: string; position: number }>
+  ): Promise<void> {
     const batch = writeBatch(this.firestore);
+    
+    // Calculate how many boxes we need based on pokemon count
+    const totalPokemon = pokemonList.length;
+    const pokemonPerBox = 30;
+    const neededBoxes = Math.ceil(totalPokemon / pokemonPerBox);
     
     for (let boxNum = 1; boxNum <= 200; boxNum++) {
       const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNum}`);
       
-      const slots: BoxSlot[] = Array.from({ length: 30 }, (_, i) => {
-        const globalPosition = (boxNum - startBox) * 30 + i + 1;
-        const pokemonId = (globalPosition > 0 && globalPosition <= 1025) 
-          ? globalPosition 
+      
+      const slots: BoxSlot[] = Array.from({ length: pokemonPerBox }, (_, i) => {
+        const slotIndex = i + 1; // 1-30
+        const boxIndex = boxNum - startBox; // Offset from start box
+        const globalIndex = boxIndex * pokemonPerBox + i; // Global position in pokemon list
+        
+        // Get pokemon slug from the list if available
+        const pokemon = globalIndex >= 0 && globalIndex < pokemonList.length 
+          ? pokemonList[globalIndex] 
           : null;
         
         return {
-          position: i + 1,
-          pokemonId,
+          position: slotIndex,
+          pokemonSlug: pokemon?.slug || null,
           isShiny: false,
           isOwned: false
         };

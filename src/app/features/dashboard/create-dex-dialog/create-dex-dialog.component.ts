@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { DexType, DexTypeConfig } from '../../../shared/models/dex.model';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { DatasetService } from '../../../core/api/services/dataset.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-create-dex-dialog',
@@ -108,6 +110,7 @@ import { AuthService } from '../../../core/auth/services/auth.service';
 export class CreateDexDialogComponent {
   private firestoreService = inject(FirestoreService);
   private authService = inject(AuthService);
+  private datasetService = inject(DatasetService);
   
   closed = output<void>();
   dexCreated = output<void>();
@@ -179,6 +182,12 @@ export class CreateDexDialogComponent {
     
     try {
       const config = this.dexTypeConfigs.find(c => c.type === this.selectedType());
+      
+      // Get Pokemon mapping from dataset based on Dex type
+      const pokemonMapping = await firstValueFrom(
+        this.datasetService.createDexMapping(this.selectedType()!)
+      );
+      
       const dexId = await this.firestoreService.createDex({
         name: this.dexName,
         type: this.selectedType()!,
@@ -189,7 +198,12 @@ export class CreateDexDialogComponent {
       
       const userId = this.authService.user()?.uid;
       if (userId) {
-        await this.firestoreService.initializeBoxes(userId, dexId, this.startBox);
+        await this.firestoreService.initializeBoxes(
+          userId, 
+          dexId, 
+          this.startBox,
+          pokemonMapping
+        );
       }
       
       this.dexCreated.emit();

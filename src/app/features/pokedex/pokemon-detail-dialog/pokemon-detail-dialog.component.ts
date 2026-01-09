@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BoxSlot } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
-import { PokeapiService } from '../../../core/api/services/pokeapi.service';
+import { DatasetService } from '../../../core/api/services/dataset.service';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 
 @Component({
@@ -17,13 +17,13 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
           <div class="flex items-start justify-between mb-6">
             <div class="flex items-center gap-4">
               <img 
-                [src]="getSpriteUrl(pkmn.pokemonId!)"
+                [src]="spriteUrl()"
                 [alt]="pokemonName()"
                 class="w-24 h-24"
               />
               <div>
                 <h2 class="text-2xl font-bold capitalize">{{ pokemonName() }}</h2>
-                <span class="text-gray-500 font-mono">#{{ (pkmn.pokemonId || 0).toString().padStart(4, '0') }}</span>
+                <span class="text-gray-500 font-mono">{{ pokemonNid() }}</span>
               </div>
             </div>
             <button (click)="close()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
@@ -246,10 +246,12 @@ export class PokemonDetailDialogComponent implements OnInit {
   closed = output<void>();
   saved = output<void>();
   
-  private pokeapiService = inject(PokeapiService);
+  private datasetService = inject(DatasetService);
   private firestoreService = inject(FirestoreService);
   
   pokemonName = signal('Loading...');
+  pokemonNid = signal('');
+  spriteUrl = signal('');
   trainers = signal<Trainer[]>([]);
   saving = signal(false);
   
@@ -273,10 +275,12 @@ export class PokemonDetailDialogComponent implements OnInit {
     
     this.loadTrainers();
     
-    if (pkmn.pokemonId) {
-      this.pokeapiService.getPokemonById(pkmn.pokemonId)
+    if (pkmn.pokemonSlug) {
+      this.datasetService.loadPokemonBySlug(pkmn.pokemonSlug)
         .subscribe(pokemon => {
-          this.pokemonName.set(pokemon.name);
+          this.pokemonName.set(pokemon.names.deu || pokemon.names.eng);
+          this.pokemonNid.set(pokemon.nid);
+          this.spriteUrl.set(this.datasetService.getSpriteUrl(pokemon, this.isShiny));
         });
     }
   }
@@ -300,10 +304,6 @@ export class PokemonDetailDialogComponent implements OnInit {
         this.originGame = trainer.game;
       }
     }
-  }
-  
-  getSpriteUrl(id: number): string {
-    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
   }
   
   async save() {

@@ -59,6 +59,9 @@ import { Dex, Box } from '../../../shared/models/dex.model';
                   
                   <div class="text-center">
                     <div class="font-bold text-xs text-gray-800">{{ box.boxNumber }}</div>
+                    <div class="text-[10px] text-gray-600 font-medium truncate max-w-[60px]" [title]="box.name">
+                      {{ box.name }}
+                    </div>
                     <div class="text-[10px] text-gray-500">
                       {{ getOwnedCount(box) }}/30
                     </div>

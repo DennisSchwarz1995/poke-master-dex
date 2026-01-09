@@ -22,6 +22,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*.json",
+                "input": "dataset/data",
+                "output": "/dataset/data"
               }
             ],
             "styles": [
@@ -75,6 +80,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*.json",
+                "input": "dataset/data",
+                "output": "/dataset/data"
               }
             ],
             "styles": [

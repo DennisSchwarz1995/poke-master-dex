@@ -59,13 +59,13 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
         </div>
       </header>
       
-      <main class="container mx-auto px-4 py-8">
+      <main class="container mx-auto px-4 py-8 flex-1 flex flex-col">
         @if (loading()) {
           <div class="text-center py-12">
             <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent mx-auto"></div>
           </div>
         } @else if (box(); as currentBoxData) {
-          <div class="bg-white rounded-xl shadow-lg p-6">
+          <div class="bg-white rounded-xl shadow-lg p-6 flex-1 flex flex-col">
             <div class="flex items-center justify-between mb-6">
               @if (editingBoxName()) {
                 <div class="flex items-center gap-2">
@@ -108,14 +108,14 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
               </div>
             </div>
             
-            <div class="grid grid-cols-6 gap-2">
+            <div class="grid grid-cols-6 gap-2 flex-1 content-start">
               @for (slot of slots(); track slot.position) {
                 <div 
                   (click)="onSlotClick(slot)"
                   class="cursor-pointer"
                 >
                   <app-pokemon-sprite
-                    [pokemonId]="slot.pokemonId"
+                    [pokemonSlug]="slot.pokemonSlug"
                     [isOwned]="slot.isOwned"
                     [isShiny]="slot.isShiny"
                   />

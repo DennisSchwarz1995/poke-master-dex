@@ -20,7 +20,7 @@ export interface Dex {
 
 export interface BoxSlot {
   position: number;
-  pokemonId: number | null;
+  pokemonSlug: string | null;  // Changed from pokemonId to pokemonSlug
   isShiny: boolean;
   isOwned: boolean;
   customName?: string;
