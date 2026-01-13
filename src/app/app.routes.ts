@@ -31,6 +31,12 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'dex/:id/gallery',
+    loadComponent: () => import('./features/pokedex/box-gallery/box-gallery.component')
+      .then(m => m.BoxGalleryComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'dex/:id/box/:boxNum',
     loadComponent: () => import('./features/pokedex/box-view/box-view.component')
       .then(m => m.BoxViewComponent),

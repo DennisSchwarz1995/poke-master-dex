@@ -2,44 +2,27 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
+import { DexNavigationComponent } from '../../../shared/components/dex-navigation/dex-navigation.component';
 import { Dex, Box } from '../../../shared/models/dex.model';
 
 @Component({
   selector: 'app-dex-overview',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DexNavigationComponent],
   template: `
-    <div class="min-h-screen bg-gray-50">
-      <header class="bg-white shadow-sm border-b sticky top-0 z-10">
-        <div class="container mx-auto px-4 py-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-4">
-              <button 
-                (click)="backToDashboard()"
-                class="text-blue-500 hover:text-blue-700 font-medium"
-              >
-                ← Back to Dashboard
-              </button>
-              
-              @if (dex(); as currentDex) {
-                <h1 class="text-xl font-bold border-l pl-4 border-gray-300">
-                  {{ currentDex.name }}
-                </h1>
-              }
-            </div>
-            
-            <div class="text-sm text-gray-500">
-              Overview
-            </div>
-          </div>
-        </div>
-      </header>
+    <div class="min-h-screen bg-secondary">
+      <app-dex-navigation
+        [dexId]="dexId()"
+        [dexName]="dex()?.name || 'Loading...'"
+        currentView="overview"
+        (editNameRequested)="openEditNameDialog()"
+      />
       
       <main class="container mx-auto px-4 py-8">
         @if (loading()) {
           <div class="text-center py-12">
             <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent mx-auto mb-4"></div>
-            <p class="text-gray-500">Loading Boxes...</p>
+            <p class="text-secondary">Loading Boxes...</p>
           </div>
         } @else {
           <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2">
@@ -58,11 +41,11 @@ import { Dex, Box } from '../../../shared/models/dex.model';
                   </div>
                   
                   <div class="text-center">
-                    <div class="font-bold text-xs text-gray-800">{{ box.boxNumber }}</div>
-                    <div class="text-[10px] text-gray-600 font-medium truncate max-w-[60px]" [title]="box.name">
+                    <div class="font-bold text-xs text-primary">{{ box.boxNumber }}</div>
+                    <div class="text-[10px] text-secondary font-medium truncate max-w-[60px]" [title]="box.name">
                       {{ box.name }}
                     </div>
-                    <div class="text-[10px] text-gray-500">
+                    <div class="text-[10px] text-tertiary">
                       {{ getOwnedCount(box) }}/30
                     </div>
                   </div>
@@ -141,9 +124,9 @@ export class DexOverviewComponent implements OnInit {
     if (count === 30) {
       return 'bg-green-50 border-green-200 hover:shadow-green-100';
     } else if (count > 0) {
-      return 'bg-white border-gray-200 hover:shadow-md';
+      return 'bg-surface border-theme hover:shadow-md';
     } else {
-      return 'bg-gray-50 opacity-80 hover:opacity-100 hover:bg-white';
+      return 'bg-secondary opacity-80 hover:opacity-100 hover:bg-surface border-theme';
     }
   }
   
@@ -154,7 +137,7 @@ export class DexOverviewComponent implements OnInit {
     } else if (count > 0) {
       return 'bg-green-100 text-green-700';
     } else {
-      return 'bg-gray-200 text-gray-400 grayscale';
+      return 'bg-secondary text-tertiary grayscale border border-theme';
     }
   }
   
@@ -162,7 +145,8 @@ export class DexOverviewComponent implements OnInit {
     this.router.navigate(['/dex', this.dexId(), 'box', boxNumber]);
   }
   
-  backToDashboard() {
-    this.router.navigate(['/dashboard']);
+  openEditNameDialog() {
+    // TODO: Implement Dex renaming
+    console.log('Edit Dex name');
   }
 }

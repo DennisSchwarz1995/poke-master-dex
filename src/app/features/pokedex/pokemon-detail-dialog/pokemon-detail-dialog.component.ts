@@ -1,4 +1,4 @@
-import { Component, input, output, signal, OnInit, inject } from '@angular/core';
+import { Component, input, output, signal, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BoxSlot } from '../../../shared/models/dex.model';
@@ -12,7 +12,7 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" (click)="close()">
-      <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+      <div class="bg-surface rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-theme" (click)="$event.stopPropagation()">
         @if (pokemon(); as pkmn) {
           <div class="flex items-start justify-between mb-6">
             <div class="flex items-center gap-4">
@@ -22,22 +22,22 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
                 class="w-24 h-24"
               />
               <div>
-                <h2 class="text-2xl font-bold capitalize">{{ pokemonName() }}</h2>
-                <span class="text-gray-500 font-mono">{{ pokemonNid() }}</span>
+                <h2 class="text-2xl font-bold capitalize text-primary">{{ pokemonName() }}</h2>
+                <span class="text-secondary font-mono">#{{ pokemonNid() }}</span>
               </div>
             </div>
             <button (click)="close()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
           </div>
           
           <div class="space-y-4">
-            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+            <div class="flex items-center gap-4 p-4 bg-secondary rounded-lg">
               <label class="flex items-center gap-2 cursor-pointer">
                 <input 
                   type="checkbox"
                   [(ngModel)]="isOwned"
                   class="w-5 h-5"
                 />
-                <span class="font-semibold">Mark as Owned</span>
+                <span class="font-semibold text-primary">Mark as Owned</span>
               </label>
               
               <label class="flex items-center gap-2 cursor-pointer ml-4">
@@ -46,28 +46,28 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
                   [(ngModel)]="isShiny"
                   class="w-5 h-5"
                 />
-                <span class="font-semibold">Shiny</span>
+                <span class="font-semibold text-primary">Shiny</span>
               </label>
             </div>
             
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-semibold mb-1">Level</label>
+                <label class="block text-sm font-semibold mb-1 text-secondary">Level</label>
                 <input 
                   type="number"
                   [(ngModel)]="level"
                   min="1"
                   max="100"
-                  class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-theme rounded focus:outline-none focus:border-blue-500 bg-surface text-primary"
                   placeholder="1-100"
                 />
               </div>
               
               <div>
-                <label class="block text-sm font-semibold mb-1">Ball Type</label>
+                <label class="block text-sm font-semibold mb-1 text-secondary">Ball Type</label>
                 <select 
                   [(ngModel)]="ball"
-                  class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-theme rounded focus:outline-none focus:border-blue-500 bg-surface text-primary"
                 >
                   <option value="">Select Ball</option>
                   <option value="poke">Poke Ball</option>
@@ -82,10 +82,10 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
             </div>
             
             <div>
-              <label class="block text-sm font-semibold mb-1">Origin Game</label>
+              <label class="block text-sm font-semibold mb-1 text-secondary">Origin Game</label>
               <select 
                 [(ngModel)]="originGame"
-                class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                class="w-full px-3 py-2 border border-theme rounded focus:outline-none focus:border-blue-500 bg-surface text-primary"
               >
                 <option value="">Select Game</option>
                 <optgroup label="Gen 1">
@@ -152,11 +152,11 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
               </select>
             </div>
             
-            <div class="bg-purple-50 p-4 rounded-lg">
-              <label class="block text-sm font-semibold mb-2">Quick Select Trainer Profile</label>
+            <div class="bg-secondary p-4 rounded-lg border border-theme">
+              <label class="block text-sm font-semibold mb-2 text-primary">Quick Select Trainer Profile</label>
               <select 
                 (change)="onTrainerSelect($event)"
-                class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500 bg-white"
+                class="w-full px-3 py-2 border border-theme rounded focus:outline-none focus:border-blue-500 bg-surface text-primary"
               >
                 <option value="">-- Select Saved Trainer --</option>
                 @for (trainer of trainers(); track trainer.id) {
@@ -166,52 +166,52 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
                   </option>
                 }
               </select>
-              <p class="text-xs text-gray-600 mt-1">
+              <p class="text-xs text-secondary mt-1">
                 Select a saved trainer to auto-fill OT and TID below
               </p>
             </div>
             
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-semibold mb-1">Original Trainer (OT)</label>
+                <label class="block text-sm font-semibold mb-1 text-secondary">Original Trainer (OT)</label>
                 <input 
                   type="text"
                   [(ngModel)]="originalTrainer"
                   maxlength="12"
-                  class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-theme rounded focus:outline-none focus:border-blue-500 bg-surface text-primary"
                   placeholder="Trainer name"
                 />
               </div>
               
               <div>
-                <label class="block text-sm font-semibold mb-1">Trainer ID (TID)</label>
+                <label class="block text-sm font-semibold mb-1 text-secondary">Trainer ID (TID)</label>
                 <input 
                   type="text"
                   [(ngModel)]="trainerId"
                   maxlength="6"
-                  class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-theme rounded focus:outline-none focus:border-blue-500 bg-surface text-primary"
                   placeholder="e.g., 30850"
                 />
               </div>
             </div>
             
             <div>
-              <label class="block text-sm font-semibold mb-1">Custom Name/Nickname</label>
+              <label class="block text-sm font-semibold mb-1 text-secondary">Custom Name/Nickname</label>
               <input 
                 type="text"
                 [(ngModel)]="customName"
                 maxlength="12"
-                class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                class="w-full px-3 py-2 border border-theme rounded focus:outline-none focus:border-blue-500 bg-surface text-primary"
                 placeholder="Optional nickname"
               />
             </div>
             
             <div>
-              <label class="block text-sm font-semibold mb-1">Notes</label>
+              <label class="block text-sm font-semibold mb-1 text-secondary">Notes</label>
               <textarea 
                 [(ngModel)]="notes"
                 rows="3"
-                class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                class="w-full px-3 py-2 border border-theme rounded focus:outline-none focus:border-blue-500 bg-surface text-primary"
                 placeholder="Additional notes..."
               ></textarea>
             </div>
@@ -347,5 +347,10 @@ export class PokemonDetailDialogComponent implements OnInit {
   
   close() {
     this.closed.emit();
+  }
+
+  @HostListener('window:keydown.escape')
+  onEscape() {
+    this.close();
   }
 }

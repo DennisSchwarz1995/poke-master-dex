@@ -1,4 +1,4 @@
-import { Component, signal, inject, output } from '@angular/core';
+import { Component, signal, inject, output, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DexType, DexTypeConfig } from '../../../shared/models/dex.model';
@@ -13,12 +13,12 @@ import { firstValueFrom } from 'rxjs';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" (click)="close()">
-      <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4" (click)="$event.stopPropagation()">
-        <h2 class="text-2xl font-bold mb-6">Create New Dex</h2>
+      <div class="bg-surface rounded-lg p-6 max-w-2xl w-full mx-4 border border-theme" (click)="$event.stopPropagation()">
+        <h2 class="text-2xl font-bold mb-6 text-primary">Create New Dex</h2>
         
         @if (step() === 1) {
           <div class="space-y-4">
-            <h3 class="font-semibold mb-4">Select Dex Type:</h3>
+            <h3 class="font-semibold mb-4 text-primary">Select Dex Type:</h3>
             
             @for (config of dexTypeConfigs; track config.type) {
               <button
@@ -31,15 +31,15 @@ import { firstValueFrom } from 'rxjs';
                 <div class="flex items-start gap-4">
                   <span class="text-3xl">{{ config.icon }}</span>
                   <div class="flex-1">
-                    <h4 class="font-bold text-lg">{{ config.name }}</h4>
-                    <p class="text-gray-600 text-sm">{{ config.description }}</p>
+                    <h4 class="font-bold text-lg text-primary">{{ config.name }}</h4>
+                    <p class="text-secondary text-sm">{{ config.description }}</p>
                   </div>
                 </div>
               </button>
             }
             
             <div class="flex justify-end gap-3 mt-6">
-              <button (click)="close()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+              <button (click)="close()" class="px-4 py-2 text-secondary hover:text-primary">
                 Cancel
               </button>
               <button 
@@ -56,7 +56,7 @@ import { firstValueFrom } from 'rxjs';
         @if (step() === 2) {
           <div class="space-y-4">
             <div>
-              <label class="block font-semibold mb-2">Dex Name:</label>
+              <label class="block font-semibold mb-2 text-primary">Dex Name:</label>
               <input 
                 [(ngModel)]="dexName"
                 type="text"
@@ -216,5 +216,10 @@ export class CreateDexDialogComponent {
   
   close() {
     this.closed.emit();
+  }
+
+  @HostListener('window:keydown.escape')
+  onEscape() {
+    this.close();
   }
 }

@@ -10,7 +10,6 @@ export interface AppPokemon {
   spriteUrl: string;      // URL to sprite image
   officialArtUrl?: string; // URL to official artwork
   
-  // Stats
   stats: {
     hp: number;
     atk: number;
@@ -19,14 +18,11 @@ export interface AppPokemon {
     spDef: number;
     speed: number;
   };
-  
-  // Metadata  
+   
   isForm: boolean;
   isMega: boolean;
   isGmax: boolean;
-  isShiny?: boolean;      // For display purposes
-  
-  // Additional info
+  isShiny?: boolean;
   height: number;
   weight: number;
   genus?: string;         // "Mouse Pokémon"
@@ -41,7 +37,6 @@ export interface PokemonListItem {
   spriteUrl: string;
 }
 
-// Legacy compatibility - for components still using old Pokemon interface
 export interface Pokemon {
   id: number;
   name: string;

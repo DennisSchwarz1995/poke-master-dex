@@ -218,4 +218,15 @@ export class FirestoreService {
     const trainerRef = doc(this.firestore, `users/${userId}/trainers/${trainerId}`);
     return deleteDoc(trainerRef);
   }
+  
+  async updateDexName(dexId: string, newName: string): Promise<void> {
+    const userId = this.authService.user()?.uid;
+    if (!userId) throw new Error('User not authenticated');
+    
+    const dexRef = doc(this.firestore, `users/${userId}/dexes/${dexId}`);
+    return updateDoc(dexRef, { 
+      name: newName,
+      updatedAt: Timestamp.now()
+    });
+  }
 }

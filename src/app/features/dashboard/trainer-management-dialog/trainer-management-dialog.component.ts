@@ -1,4 +1,4 @@
-import { Component, signal, inject, output } from '@angular/core';
+import { Component, signal, inject, output, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
@@ -10,19 +10,19 @@ import { Trainer } from '../../../shared/models/trainer.model';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" (click)="close()">
-      <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+      <div class="bg-surface rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-theme" (click)="$event.stopPropagation()">
         <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold">Trainer Profiles</h2>
+          <h2 class="text-2xl font-bold text-primary">Trainer Profiles</h2>
           <button (click)="close()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
         </div>
         
         @if (showForm()) {
-          <div class="bg-gray-50 p-4 rounded-lg mb-6">
-            <h3 class="font-semibold mb-4">Add New Trainer Profile</h3>
+          <div class="bg-secondary p-4 rounded-lg mb-6 border border-theme">
+            <h3 class="font-semibold mb-4 text-primary">Add New Trainer Profile</h3>
             
             <div class="space-y-3">
               <div>
-                <label class="block text-sm font-semibold mb-1">Trainer Name (OT)</label>
+                <label class="block text-sm font-semibold mb-1 text-secondary">Trainer Name (OT)</label>
                 <input 
                   [(ngModel)]="newTrainerName"
                   type="text"
@@ -33,7 +33,7 @@ import { Trainer } from '../../../shared/models/trainer.model';
               </div>
               
               <div>
-                <label class="block text-sm font-semibold mb-1">Trainer ID (TID)</label>
+                <label class="block text-sm font-semibold mb-1 text-secondary">Trainer ID (TID)</label>
                 <input 
                   [(ngModel)]="newTrainerId"
                   type="text"
@@ -44,7 +44,7 @@ import { Trainer } from '../../../shared/models/trainer.model';
               </div>
               
               <div>
-                <label class="block text-sm font-semibold mb-1">Game (Optional)</label>
+                <label class="block text-sm font-semibold mb-1 text-secondary">Game (Optional)</label>
                 <select 
                   [(ngModel)]="newTrainerGame"
                   class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
@@ -118,7 +118,7 @@ import { Trainer } from '../../../shared/models/trainer.model';
             <div class="flex justify-end gap-3 mt-4">
               <button 
                 (click)="cancelForm()"
-                class="px-4 py-2 text-gray-600 hover:text-gray-800"
+                class="px-4 py-2 text-secondary hover:text-primary"
               >
                 Cancel
               </button>
@@ -142,13 +142,13 @@ import { Trainer } from '../../../shared/models/trainer.model';
         
         @if (trainers().length > 0) {
           <div class="space-y-3">
-            <h3 class="font-semibold text-gray-700">Saved Trainers:</h3>
+            <h3 class="font-semibold text-secondary">Saved Trainers:</h3>
             
             @for (trainer of trainers(); track trainer.id) {
-              <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100">
+              <div class="flex items-center justify-between p-4 bg-secondary rounded-lg hover:bg-surface border border-theme">
                 <div>
-                  <div class="font-bold">{{ trainer.name }}</div>
-                  <div class="text-sm text-gray-600">
+                  <div class="font-bold text-primary">{{ trainer.name }}</div>
+                  <div class="text-sm text-secondary">
                     TID: {{ trainer.trainerId }}
                     @if (trainer.game) {
                       <span class="ml-2">• {{ trainer.game }}</span>
@@ -165,7 +165,7 @@ import { Trainer } from '../../../shared/models/trainer.model';
             }
           </div>
         } @else {
-          <p class="text-gray-500 text-center py-8">No trainer profiles saved yet.</p>
+          <p class="text-secondary text-center py-8">No trainer profiles saved yet.</p>
         }
       </div>
     </div>
@@ -238,5 +238,10 @@ export class TrainerManagementDialogComponent {
   
   close() {
     this.closed.emit();
+  }
+
+  @HostListener('window:keydown.escape')
+  onEscape() {
+    this.close();
   }
 }

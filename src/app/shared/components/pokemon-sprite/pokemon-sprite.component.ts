@@ -1,4 +1,4 @@
-import { Component, input, computed, signal, effect, inject } from '@angular/core';
+import { Component, input, computed, signal, effect, inject, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 
@@ -8,11 +8,12 @@ import { DatasetService } from '../../../core/api/services/dataset.service';
   imports: [CommonModule],
   template: `
     <div class="flex flex-col items-center p-2 rounded-lg transition-all duration-200 cursor-pointer border-2"
-         [style.border-color]="borderColor()"
-         [class.bg-white]="isHovered"
-         [class.shadow-lg]="isHovered"
-         [class.scale-105]="isHovered"
-         [class.z-20]="isHovered"
+         style="corner-shape: squircle;"
+         [ngStyle]="borderStyle()"
+         [class.bg-surface]="isHovered()"
+         [class.shadow-lg]="isHovered()"
+         [class.scale-105]="isHovered()"
+         [class.z-20]="isHovered()"
          [class.grayscale]="!isOwned()"
          [class.opacity-40]="!isOwned()"
          (mouseenter)="onHover()"
@@ -26,25 +27,25 @@ import { DatasetService } from '../../../core/api/services/dataset.service';
             loading="lazy"
           />
           @if (isShiny()) {
-            <div class="absolute top-0 right-0 text-yellow-400 text-lg" title="Shiny">✨</div>
+            <div class="absolute top-0 right-0 text-yellow-500 text-lg" title="Shiny">✨</div>
           }
         </div>
         
-        <div class="text-center mt-1">
+        <div class="text-center mt-1 w-full px-1">
           <div class="text-[10px] text-gray-400 font-mono">
             {{ pokemonNid() }}
           </div>
-          <div class="text-xs font-medium capitalize truncate max-w-[80px]" [title]="pokemonName()">
+          <div class="text-xs font-medium capitalize truncate w-full text-primary" [title]="pokemonName()">
             {{ pokemonName() }}
           </div>
         </div>
       } @else {
-        <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center">
-          <span class="text-gray-300 text-2xl">?</span>
+        <div class="w-16 h-16 rounded-lg bg-secondary flex items-center justify-center">
+          <span class="text-tertiary text-2xl">?</span>
         </div>
         <div class="text-center mt-1">
-          <div class="text-[10px] text-gray-300">—</div>
-          <div class="text-xs text-gray-300">Empty</div>
+          <div class="text-[10px] text-tertiary">—</div>
+          <div class="text-xs text-tertiary">Empty</div>
         </div>
       }
     </div>
@@ -62,24 +63,36 @@ export class PokemonSpriteComponent {
   pokemonNid = signal('');
   spriteUrl = signal('');
   pokemonTypes = signal<string[]>([]);
-  isHovered = false;
+  isHovered = signal(false);
   
-  borderColor = computed(() => {
-    if (!this.isHovered) return 'transparent';
+  borderStyle = computed(() => {
+    if (!this.isHovered()) return { 'border-color': 'transparent' };
     
     const types = this.pokemonTypes();
-    if (types.length === 0) return 'transparent';
+    if (types.length === 0) return { 'border-color': 'transparent' };
     
-    // Use primary type (type1) for border color
-    return this.getTypeColor(types[0]);
+    if (types.length === 1) {
+      return { 'border-color': this.getTypeColor(types[0]) };
+    }
+    
+    // Dual type: Gradient
+    const color1 = this.getTypeColor(types[0]);
+    const color2 = this.getTypeColor(types[1]);
+    
+    return {
+      'background-image': `linear-gradient(var(--color-surface), var(--color-surface)), linear-gradient(to right, ${color1}, ${color2})`,
+      'background-origin': 'border-box',
+      'background-clip': 'padding-box, border-box',
+      'border': '2px solid transparent'
+    };
   });
   
   onHover() {
-    this.isHovered = true;
+    this.isHovered.set(true);
   }
   
   onLeave() {
-    this.isHovered = false;
+    this.isHovered.set(false);
   }
   
   constructor() {
@@ -89,10 +102,9 @@ export class PokemonSpriteComponent {
         this.datasetService.loadPokemonBySlug(slug).subscribe({
           next: (pokemon) => {
             this.pokemonName.set(pokemon.names.deu || pokemon.names.eng);
-            this.pokemonNid.set(pokemon.nid);
+            this.pokemonNid.set(this.formatNid(pokemon.nid));
             this.spriteUrl.set(this.datasetService.getSpriteUrl(pokemon, this.isShiny()));
             
-            // Store types
             const types = [pokemon.type1];
             if (pokemon.type2) types.push(pokemon.type2);
             this.pokemonTypes.set(types);
@@ -111,6 +123,12 @@ export class PokemonSpriteComponent {
         this.pokemonTypes.set([]);
       }
     });
+  }
+  
+  private formatNid(nid: string | number): string {
+    return '#' + String(nid).split('-').map(part => 
+      part.charAt(0).toUpperCase() + part.slice(1)
+    ).join('-');
   }
   
   getTypeColor(typeName: string): string {
@@ -132,7 +150,7 @@ export class PokemonSpriteComponent {
       dragon: '#7038F8',
       dark: '#705848',
       steel: '#B8B8D0',
-      fairy: '#EE99AC',
+      'fairy': '#EE99AC',
     };
     return typeColors[typeName.toLowerCase()] || '#777';
   }

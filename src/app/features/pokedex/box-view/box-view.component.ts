@@ -5,59 +5,22 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { PokemonSpriteComponent } from '../../../shared/components/pokemon-sprite/pokemon-sprite.component';
 import { PokemonDetailDialogComponent } from '../pokemon-detail-dialog/pokemon-detail-dialog.component';
+import { DexNavigationComponent } from '../../../shared/components/dex-navigation/dex-navigation.component';
 import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
 
 @Component({
   selector: 'app-box-view',
   standalone: true,
-  imports: [CommonModule, FormsModule, PokemonSpriteComponent, PokemonDetailDialogComponent],
+  imports: [CommonModule, FormsModule, PokemonSpriteComponent, PokemonDetailDialogComponent, DexNavigationComponent],
   template: `
-    <div class="min-h-screen bg-gray-50">
-      <header class="bg-white shadow-sm border-b">
-        <div class="container mx-auto px-4 py-4">
-          <div class="flex items-center justify-between flex-wrap gap-4">
-            <button 
-              (click)="backToOverview()"
-              class="text-blue-500 hover:text-blue-700 font-medium"
-            >
-              ← Back to Overview
-            </button>
-            
-            @if (dex(); as currentDex) {
-              <h2 class="text-xl font-bold">{{ currentDex.name }}</h2>
-            }
-            
-            <div class="flex items-center gap-4">
-              <button
-                (click)="goToOverview()"
-                class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
-              >
-                📦 View All Boxes
-              </button>
-              
-              <button 
-                (click)="previousBox()"
-                [disabled]="currentBox() === 1"
-                class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                ←
-              </button>
-              
-              <span class="font-bold">
-                Box {{ currentBox() }} / 200
-              </span>
-              
-              <button 
-                (click)="nextBox()"
-                [disabled]="currentBox() === 200"
-                class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                →
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div class="min-h-screen bg-secondary flex flex-col">
+      <app-dex-navigation
+        [dexId]="dexId()"
+        [dexName]="dex()?.name || 'Loading...'"
+        currentView="box"
+        [currentBoxNumber]="currentBox()"
+        (editNameRequested)="openEditNameDialog()"
+      />
       
       <main class="container mx-auto px-4 py-8 flex-1 flex flex-col">
         @if (loading()) {
@@ -65,7 +28,7 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
             <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent mx-auto"></div>
           </div>
         } @else if (box(); as currentBoxData) {
-          <div class="bg-white rounded-xl shadow-lg p-6 flex-1 flex flex-col">
+          <div class="bg-surface rounded-xl shadow-lg p-6 flex-1 flex flex-col border border-theme">
             <div class="flex items-center justify-between mb-6">
               @if (editingBoxName()) {
                 <div class="flex items-center gap-2">
@@ -86,7 +49,7 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
                   </button>
                   <button 
                     (click)="cancelEditBoxName()"
-                    class="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                    class="px-3 py-1 bg-surface-hover text-secondary rounded border border-theme"
                   >
                     ✕
                   </button>
@@ -96,19 +59,19 @@ import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
                   <h2 class="text-2xl font-bold">{{ currentBoxData.name }}</h2>
                   <button
                     (click)="startEditBoxName(currentBoxData.name)"
-                    class="text-gray-400 hover:text-blue-500 px-2"
+                    class="text-tertiary hover:text-blue-500 px-2"
                     title="Rename Box"
                   >
                     ✏️
                   </button>
                 </div>
               }
-              <div class="text-sm text-gray-500">
+              <div class="text-sm text-secondary">
                 {{ getOwnedCount() }} / 30 owned
               </div>
             </div>
             
-            <div class="grid grid-cols-6 gap-2 flex-1 content-start">
+            <div class="grid grid-cols-6 gap-2 content-start">
               @for (slot of slots(); track slot.position) {
                 <div 
                   (click)="onSlotClick(slot)"
@@ -217,31 +180,14 @@ export class BoxViewComponent implements OnInit {
     this.loadBox(this.dexId(), this.currentBox());
   }
   
-  previousBox() {
-    if (this.currentBox() > 1) {
-      const newBox = this.currentBox() - 1;
-      this.router.navigate(['/dex', this.dexId(), 'box', newBox]);
-    }
-  }
-  
-  nextBox() {
-    if (this.currentBox() < 200) {
-      const newBox = this.currentBox() + 1;
-      this.router.navigate(['/dex', this.dexId(), 'box', newBox]);
-    }
-  }
-  
   getOwnedCount(): number {
     const slotsArray = this.slots();
     return slotsArray.filter(s => s.isOwned).length;
   }
   
-  backToOverview() {
-    if (this.dexId()) {
-      this.router.navigate(['/dex', this.dexId()]);
-    } else {
-      this.router.navigate(['/dashboard']);
-    }
+  openEditNameDialog() {
+    // TODO: Implement Dex renaming dialog
+    console.log('Edit Dex name');
   }
   
   startEditBoxName(currentName: string) {
@@ -274,7 +220,4 @@ export class BoxViewComponent implements OnInit {
     this.editingBoxName.set(false);
   }
   
-  goToOverview() {
-    this.router.navigate(['/dex', this.dexId()]);
-  }
 }

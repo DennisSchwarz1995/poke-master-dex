@@ -13,11 +13,11 @@ import { Dex } from '../../shared/models/dex.model';
   standalone: true,
   imports: [CommonModule, CreateDexDialogComponent, TrainerManagementDialogComponent, DexCardComponent],
   template: `
-    <div class="min-h-screen bg-gray-50">
-      <header class="bg-white shadow-sm border-b">
+    <div class="min-h-screen bg-secondary">
+      <header class="bg-surface shadow-sm border-b border-theme">
         <div class="container mx-auto px-4 py-4">
           <div class="flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-gray-800">Poke-Master-Dex</h1>
+            <h1 class="text-2xl font-bold text-primary">Poke-Master-Dex</h1>
             
             @if (user(); as currentUser) {
               <div class="flex items-center gap-4">
@@ -27,7 +27,7 @@ import { Dex } from '../../shared/models/dex.model';
                 >
                   Trainer Profiles
                 </button>
-                <span class="text-gray-600 hidden md:inline">{{ currentUser.displayName }}</span>
+                <span class="text-secondary hidden md:inline">{{ currentUser.displayName }}</span>
                 @if (currentUser.photoURL) {
                   <img 
                     [src]="currentUser.photoURL" 
@@ -50,8 +50,8 @@ import { Dex } from '../../shared/models/dex.model';
       
       <main class="container mx-auto px-4 py-8">
         <div class="mb-8">
-          <h2 class="text-3xl font-bold text-gray-800 mb-2">Your Dex Collection</h2>
-          <p class="text-gray-600">Manage your Pokemon collections</p>
+          <h2 class="text-3xl font-bold text-primary mb-2">Your Dex Collection</h2>
+          <p class="text-secondary">Manage your Pokemon collections</p>
         </div>
         
         @if (loading()) {
