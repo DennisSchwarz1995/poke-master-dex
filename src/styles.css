@@ -63,37 +63,52 @@
   .bg-surface {
     background-color: var(--color-surface);
   }
-  
+
   .bg-surface-hover:hover {
     background-color: var(--color-surface-hover);
   }
-  
+
   .bg-primary {
     background-color: var(--color-bg-primary);
   }
-  
+
   .bg-secondary {
     background-color: var(--color-bg-secondary);
   }
-  
+
   .text-primary {
     color: var(--color-text-primary);
   }
-  
+
   .text-secondary {
     color: var(--color-text-secondary);
   }
-  
+
   .text-tertiary {
     color: var(--color-text-tertiary);
   }
-  
+
   .border-theme {
     border-color: var(--color-border);
   }
-  
+
   .border-theme-hover:hover {
     border-color: var(--color-border-hover);
+  }
+
+  /* Input theme utilities */
+  .input-theme {
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+  }
+
+  .input-theme:focus {
+    border-color: var(--color-primary);
+  }
+
+  .input-theme::placeholder {
+    color: var(--color-text-tertiary);
   }
 
   .corner-squircle {
@@ -108,11 +123,13 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-bg-secondary);
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }

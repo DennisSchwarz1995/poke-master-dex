@@ -25,6 +25,19 @@ export interface BoxSlot {
   isOwned: boolean;
   customName?: string;
   notes?: string;
+  
+  // Advanced Pokemon Details
+  level?: number;
+  ball?: string;
+  item?: string;
+  ability?: string;
+  nature?: string;
+  originGame?: string;
+  originLanguage?: string;
+  originalTrainer?: string;
+  trainerId?: string;
+  mark?: string;  // e.g., "lunchtime", "rare"
+  ribbon?: string;  // e.g., "champion", "best-friends"
 }
 
 export interface Box {

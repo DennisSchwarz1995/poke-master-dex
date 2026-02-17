@@ -2,16 +2,17 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ThemeToggleComponent],
   template: `
     <div class="container mx-auto px-4 py-8 max-w-4xl">
       @if (user(); as currentUser) {
-        <div class="bg-white rounded-xl shadow-lg p-8">
-          <h2 class="text-2xl font-bold mb-6 text-gray-800">Profil</h2>
+        <div class="bg-surface rounded-xl shadow-lg p-8 border border-theme">
+          <h2 class="text-2xl font-bold mb-6 text-primary">Profile</h2>
           
           <div class="flex items-center gap-6 mb-8">
             @if (currentUser.photoURL) {
@@ -27,24 +28,35 @@ import { AuthService } from '../../../core/auth/services/auth.service';
             }
             
             <div>
-              <h3 class="text-3xl font-bold text-gray-800">{{ currentUser.displayName }}</h3>
-              <p class="text-gray-600 mt-1">{{ currentUser.email }}</p>
+              <h3 class="text-3xl font-bold text-primary">{{ currentUser.displayName }}</h3>
+              <p class="text-secondary mt-1">{{ currentUser.email }}</p>
               @if (currentUser.emailVerified) {
                 <span class="inline-block mt-2 bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">
-                  ✓ Verifiziert
+                  ✓ Verified
                 </span>
               }
             </div>
           </div>
           
-          <div class="border-t pt-6">
-            <h4 class="font-semibold text-gray-700 mb-3">Account-Informationen</h4>
+          <div class="border-t border-theme pt-6 mb-6">
+            <h4 class="font-semibold text-primary mb-3">Account Information</h4>
             <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <dt class="text-sm text-gray-500">User ID</dt>
-                <dd class="font-mono text-sm text-gray-800 break-all">{{ currentUser.uid }}</dd>
+                <dt class="text-sm text-secondary">User ID</dt>
+                <dd class="font-mono text-sm text-primary break-all">{{ currentUser.uid }}</dd>
               </div>
             </dl>
+          </div>
+          
+          <div class="border-t border-theme pt-6 mb-6">
+            <h4 class="font-semibold text-primary mb-3">Settings</h4>
+            <div class="flex items-center justify-between py-3">
+              <div>
+                <p class="font-medium text-primary">Theme</p>
+                <p class="text-sm text-secondary">Switch between light and dark mode</p>
+              </div>
+              <app-theme-toggle />
+            </div>
           </div>
           
           <div class="mt-8 flex gap-4">
@@ -52,13 +64,13 @@ import { AuthService } from '../../../core/auth/services/auth.service';
               (click)="goToDashboard()"
               class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition font-semibold"
             >
-              Zum Dashboard
+              Go to Dashboard
             </button>
             <button
               (click)="signOut()"
               class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition font-semibold"
             >
-              Abmelden
+              Sign Out
             </button>
           </div>
         </div>

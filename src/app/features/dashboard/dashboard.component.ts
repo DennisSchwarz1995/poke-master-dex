@@ -23,9 +23,10 @@ import { Dex } from '../../shared/models/dex.model';
               <div class="flex items-center gap-4">
                 <button
                   (click)="openTrainerManagement()"
-                  class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  class="px-4 py-2 rounded-lg transition-all font-medium bg-surface text-primary bg-surface-hover"
+                  title="Manage Trainers"
                 >
-                  Trainer Profiles
+                  👤 Trainers
                 </button>
                 <span class="text-secondary hidden md:inline">{{ currentUser.displayName }}</span>
                 @if (currentUser.photoURL) {

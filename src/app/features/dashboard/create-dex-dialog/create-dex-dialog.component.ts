@@ -25,8 +25,8 @@ import { firstValueFrom } from 'rxjs';
                 (click)="selectDexType(config.type)"
                 class="w-full text-left p-4 rounded-lg border-2 transition-all"
                 [class.border-blue-500]="selectedType() === config.type"
-                [class.bg-blue-50]="selectedType() === config.type"
-                [class.border-gray-200]="selectedType() !== config.type"
+                [class.bg-secondary/50]="selectedType() === config.type"
+                [class.border-theme]="selectedType() !== config.type"
               >
                 <div class="flex items-start gap-4">
                   <span class="text-3xl">{{ config.icon }}</span>
@@ -61,7 +61,7 @@ import { firstValueFrom } from 'rxjs';
                 [(ngModel)]="dexName"
                 type="text"
                 placeholder="My Living Dex"
-                class="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+                class="w-full px-4 py-2 bg-surface border-theme rounded text-primary placeholder:text-tertiary focus:outline-none focus:border-blue-500"
               />
             </div>
             
@@ -72,16 +72,16 @@ import { firstValueFrom } from 'rxjs';
                 type="number"
                 min="1"
                 max="200"
-                class="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+                class="w-full px-4 py-2 bg-surface border-theme rounded text-primary placeholder:text-tertiary focus:outline-none focus:border-blue-500"
               />
-              <p class="text-sm text-gray-600 mt-1">
+              <p class="text-sm text-secondary mt-1">
                 Pokemon will be populated starting from this box. 
                 Box {{ startBox }} will contain Pokemon #1-30.
               </p>
             </div>
             
-            <div class="bg-blue-50 p-4 rounded">
-              <p class="text-sm text-gray-700">
+            <div class="bg-secondary/50 border border-theme p-4 rounded">
+              <p class="text-sm text-primary">
                 <strong>Auto-population:</strong> All 1025 Pokemon will be filled 
                 across 35 boxes starting from Box {{ startBox }}.
                 All Pokemon will be grayed out until you mark them as owned.
@@ -89,7 +89,7 @@ import { firstValueFrom } from 'rxjs';
             </div>
             
             <div class="flex justify-end gap-3 mt-6">
-              <button (click)="prevStep()" class="px-4 py-2 text-gray-600">
+              <button (click)="prevStep()" class="px-4 py-2 text-secondary hover:text-primary">
                 Back
               </button>
               <button 
