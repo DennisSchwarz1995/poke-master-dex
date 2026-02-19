@@ -151,7 +151,7 @@ import Chart from 'chart.js/auto';
                 <div class="space-y-4">
                   <!-- Checkboxes -->
                   <div
-                    class="flex items-center gap-4 p-4 bg-secondary/50 rounded-xl border border-theme"
+                    class="flex items-center justify-between p-4 bg-secondary/50 rounded-xl border border-theme"
                   >
                     <label class="flex items-center gap-3 cursor-pointer group select-none">
                       <div class="relative flex items-center">
@@ -208,6 +208,9 @@ import Chart from 'chart.js/auto';
                         >Shiny</span
                       >
                     </label>
+
+                    <div class="w-px h-6 bg-theme"></div>
+
                     <label class="flex items-center gap-3 cursor-pointer group select-none">
                       <div class="relative flex items-center">
                         <input type="checkbox" [(ngModel)]="isEvent" class="peer sr-only" />
