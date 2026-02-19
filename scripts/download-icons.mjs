@@ -74,19 +74,36 @@ function slugToPokeApi(id) {
     'parkball': 'park-ball',
     'strangeball': 'strange-ball',
     // Hisuian balls not in PokeAPI, will be skipped
-    'pokeball-hisui': null,
-    'greatball-hisui': null,
-    'ultraball-hisui': null,
-    'heavyball-hisui': null,
-    'leadenball': null,
-    'gigatonball': null,
-    'featherball': null,
-    'wingball': null,
-    'jetball': null,
-    'originball': null,
+    'pokeball-hisui': 'poke-ball-hisui',
+    'greatball-hisui': 'great-ball-hisui',
+    'ultraball-hisui': 'ultra-ball-hisui',
+    'heavyball-hisui': 'heavy-ball-hisui',
+    'leadenball': 'leaden-ball',
+    'gigatonball': 'gigaton-ball',
+    'featherball': 'feather-ball',
+    'wingball': 'wing-ball',
+    'jetball': 'jet-ball',
+    'originball': 'origin-ball',
     'greenball': null,
+    'strangeball': null,
   };
   return map[id] !== undefined ? map[id] : id.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+function slugToPokeSprite(id) {
+  const map = {
+    'pokeball-hisui': 'poke-ball',
+    'greatball-hisui': 'great-ball',
+    'ultraball-hisui': 'ultra-ball',
+    'heavyball-hisui': 'safari-ball',
+    'leadenball': 'heavy-ball',
+    'gigatonball': 'master-ball',
+    'featherball': 'dive-ball',
+    'wingball': 'net-ball',
+    'jetball': 'quick-ball',
+    'originball': 'beast-ball',
+  };
+  return map[id] || null;
 }
 
 // ----- Pokéball icons -----
@@ -96,23 +113,34 @@ async function downloadPokeballIcons() {
 
   const ballsJson = JSON.parse(fs.readFileSync(path.join(ROOT, 'dataset', 'data', 'pokeballs.json'), 'utf8'));
   const BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items';
+  const POKESPRITE_BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/items/poke-ball';
 
   let ok = 0, skipped = 0, failed = [];
 
   for (const ball of ballsJson) {
     const apiId = slugToPokeApi(ball.id);
-    if (!apiId) {
-      skipped++;
-      continue; // No PokeAPI equivalent
-    }
-    const url = `${BASE}/${apiId}.png`;
     const dest = path.join(dir, `${ball.id}.png`);
+
+    if (apiId === null) {
+      skipped++;
+      continue;
+    }
+
+    const url = `${BASE}/${apiId}.png`;
     const res = await downloadFile(url, dest);
     if (res.ok) {
       if (res.skipped) skipped++;
       else ok++;
     } else {
-      failed.push({ id: ball.id, url, reason: res.status || res.err });
+      const spriteId = slugToPokeSprite(ball.id);
+      if (spriteId) {
+        const fallbackUrl = `${POKESPRITE_BASE}/${spriteId}.png`;
+        const res2 = await downloadFile(fallbackUrl, dest);
+        if (res2.ok && !res2.skipped) ok++;
+        else failed.push({ id: ball.id, url: fallbackUrl, reason: res2.status || res2.err });
+      } else {
+        failed.push({ id: ball.id, url, reason: res.status || res.err });
+      }
     }
   }
 
@@ -375,7 +403,7 @@ async function main() {
   await downloadBerryIcons();
   await downloadTypeIcons();
 
-  console.log('\n✅ Done! Icons saved to src/assets/images/');
+  console.log('\n✅ Done! Icons saved to public/assets/images/');
 }
 
 main().catch(console.error);
