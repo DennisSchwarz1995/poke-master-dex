@@ -151,8 +151,6 @@ export class BoxViewComponent implements OnInit {
           const slots = Array.isArray(boxData.slots) 
             ? boxData.slots 
             : Object.values(boxData.slots || {}) as BoxSlot[];
-          
-          // Sort by position to ensure correct display
           const sortedSlots = slots.sort((a, b) => a.position - b.position);
           
           this.box.set(boxData);
@@ -186,7 +184,6 @@ export class BoxViewComponent implements OnInit {
   }
   
   openEditNameDialog() {
-    // TODO: Implement Dex renaming dialog
     console.log('Edit Dex name');
   }
   

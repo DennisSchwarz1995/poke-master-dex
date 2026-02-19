@@ -9,6 +9,5 @@ import { ThemeService } from './core/services/theme.service';
   styleUrl: './app.css',
 })
 export class App {
-  // Inject ThemeService to ensure it initializes and loads saved theme on startup
   private themeService = inject(ThemeService);
 }

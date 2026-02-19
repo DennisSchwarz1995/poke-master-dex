@@ -300,8 +300,6 @@ export class BoxGalleryComponent implements OnInit, OnDestroy {
     
     this.pokemonNamesMap.forEach((data, slug) => {
       const names = data.names;
-      
-      // Check all language variations
       const nameValues = Object.values(names).filter((name): name is string => !!name);
       
       for (const name of nameValues) {
@@ -348,8 +346,6 @@ export class BoxGalleryComponent implements OnInit, OnDestroy {
     if (types.length === 1) {
       return { 'border-color': this.typeColorService.getTypeColor(types[0]) };
     } 
-    
-    // Dual type: Gradient
     const color1 = this.typeColorService.getTypeColor(types[0]);
     const color2 = this.typeColorService.getTypeColor(types[1]);
     

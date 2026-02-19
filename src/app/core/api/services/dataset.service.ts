@@ -159,7 +159,6 @@ export class DatasetService {
   }
 
   getSimplePokemonList(): Observable<SimplePokemon[]> {
-    // Load lightweight pokemon-names.json instead of individual files
     return this.http
       .get<PokemonNameIndex[]>(`${this.datasetBasePath}/indices/pokemon-names.json`)
       .pipe(
@@ -272,8 +271,6 @@ export class DatasetService {
 
           return false;
         });
-
-        // Convert to SimplePokemon (would need actual data loading)
         return matchingSlugs.map((slug) => ({
           slug,
           dexNum: 0, // Placeholder

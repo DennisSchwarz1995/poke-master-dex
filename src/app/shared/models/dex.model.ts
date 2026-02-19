@@ -26,8 +26,6 @@ export interface BoxSlot {
   isEvent?: boolean;
   customName?: string;
   notes?: string;
-
-  // Advanced Pokemon Details
   level?: number;
   ball?: string;
   item?: string;

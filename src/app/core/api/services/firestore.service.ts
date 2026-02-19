@@ -55,8 +55,6 @@ export class FirestoreService {
     pokemonList: Array<{ slug: string; position: number }>
   ): Promise<void> {
     const batch = writeBatch(this.firestore);
-    
-    // Calculate how many boxes we need based on pokemon count
     const totalPokemon = pokemonList.length;
     const pokemonPerBox = 30;
     const neededBoxes = Math.ceil(totalPokemon / pokemonPerBox);
@@ -69,8 +67,6 @@ export class FirestoreService {
         const slotIndex = i + 1; // 1-30
         const boxIndex = boxNum - startBox; // Offset from start box
         const globalIndex = boxIndex * pokemonPerBox + i; // Global position in pokemon list
-        
-        // Get pokemon slug from the list if available
         const pokemon = globalIndex >= 0 && globalIndex < pokemonList.length 
           ? pokemonList[globalIndex] 
           : null;
@@ -149,9 +145,6 @@ export class FirestoreService {
     if (!userId) return of([]);
     
     const boxesCollection = collection(this.firestore, `users/${userId}/dexes/${dexId}/boxes`);
-    // Order by boxNumber to ensure correct display order
-    // Requires an index in Firestore usually, but we can verify if simple query works
-    // For now, client-side sort might be safer without index creation block
     return collectionData(boxesCollection) as Observable<Box[]>;
   }
   

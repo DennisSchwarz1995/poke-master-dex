@@ -58,10 +58,9 @@ import Chart from 'chart.js/auto';
       >
         @if (pokemon(); as pkmn) {
           <div class="p-6">
-            <!-- Header -->
             <div class="flex items-start justify-between mb-8">
               <div class="flex items-center gap-6">
-                <!-- Sprite -->
+                
                 <div class="relative group">
                   <div
                     class="w-32 h-32 bg-secondary rounded-full flex items-center justify-center border-2 border-theme shadow-inner"
@@ -75,6 +74,19 @@ import Chart from 'chart.js/auto';
                       />
                     }
                   </div>
+                  @if (ball) {
+                    <div
+                      class="absolute bottom-0 left-0 w-7 h-7 bg-surface border border-theme rounded-full shadow flex items-center justify-center"
+                    >
+                      <img
+                        [src]="'assets/images/pokeballs/' + ball + '.png'"
+                        [alt]="ball"
+                        class="w-5 h-5 object-contain"
+                        style="image-rendering: pixelated"
+                        (error)="onImageError($event)"
+                      />
+                    </div>
+                  }
                   @if (pokemon().pokemonSlug) {
                     <button
                       (click)="toggleShinyPreview()"
@@ -86,9 +98,7 @@ import Chart from 'chart.js/auto';
                   }
                 </div>
 
-                <!-- Names & Info -->
                 <div class="flex-1">
-                  <!-- Pokemon Selection Dropdown -->
                   <div class="mb-3">
                     <label class="block text-xs font-bold text-secondary uppercase mb-2"
                       >Pokemon</label
@@ -104,10 +114,30 @@ import Chart from 'chart.js/auto';
                   @if (pokemon().pokemonSlug) {
                     <div class="flex flex-col gap-1 text-sm text-secondary">
                       <span class="flex items-center gap-2">
-                        🇬🇧 {{ pokemonName('eng') }} | 🇯🇵 {{ pokemonName('jap') }} | 🇫🇷
-                        {{ pokemonName('fra') }}
+                        🇬🇧 {{ pokemonName('eng') }} | 🇯🇵 {{ pokemonName('jap') }}
                       </span>
                       <span class="italic">{{ pokemonGenus() }}</span>
+                    </div>
+
+                    <div class="flex items-center gap-2 mt-2">
+                      @if (pokemonData()?.type1) {
+                        <img
+                          [src]="'assets/images/types/' + pokemonData()!.type1 + '.png'"
+                          [alt]="pokemonData()!.type1"
+                          class="h-5 object-contain"
+                          style="image-rendering: pixelated"
+                          (error)="onImageError($event)"
+                        />
+                      }
+                      @if (pokemonData()?.type2) {
+                        <img
+                          [src]="'assets/images/types/' + pokemonData()!.type2 + '.png'"
+                          [alt]="pokemonData()!.type2"
+                          class="h-5 object-contain"
+                          style="image-rendering: pixelated"
+                          (error)="onImageError($event)"
+                        />
+                      }
                     </div>
 
                     <div class="flex gap-2 mt-3">
@@ -129,7 +159,6 @@ import Chart from 'chart.js/auto';
                       >
                     </div>
                   } @else {
-                    <!-- Empty slot - just show placeholder -->
                     <div class="text-lg text-tertiary italic">Empty Slot</div>
                   }
                 </div>
@@ -145,11 +174,11 @@ import Chart from 'chart.js/auto';
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <!-- Left Column: Edit Form & Stats -->
+              
               <div class="space-y-6">
-                <!-- Main Edit Form -->
+                
                 <div class="space-y-4">
-                  <!-- Checkboxes -->
+                  
                   <div
                     class="flex items-center justify-between p-4 bg-secondary/50 rounded-xl border border-theme"
                   >
@@ -274,7 +303,7 @@ import Chart from 'chart.js/auto';
                       </select>
                     </div>
                   </div>
-                  <!-- Mark & Ribbon -->
+                  
                   <div class="grid grid-cols-2 gap-4">
                     <div
                       class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
@@ -305,8 +334,8 @@ import Chart from 'chart.js/auto';
                     </div>
                   </div>
 
-                  <!-- Notes -->
-                  <!-- Level & Origin Language -->
+                  
+                  
                 </div>
 
                 <div class="bg-secondary/30 p-4 rounded-xl border border-theme">
@@ -565,7 +594,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   allRibbons = signal<RibbonData[]>([]);
   allPokemon = signal<SimplePokemon[]>([]);
 
-  // Computed options for searchable dropdowns
   ribbonOptions = computed<SearchableOption[]>(() => {
     return this.allRibbons()
       .map((ribbon) => ({
@@ -573,17 +601,16 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
         name: ribbon.name,
         description: ribbon.shortDesc,
         category: `Gen ${ribbon.gen}`,
+        iconPath: `assets/images/ribbons/${ribbon.id}.png`,
       }))
       .sort((a, b) => {
-        // Sort by category (Gen) desc, then by name
         const genA = parseInt(a.category.replace('Gen ', ''));
         const genB = parseInt(b.category.replace('Gen ', ''));
-        if (genA !== genB) return genB - genA; // Newest gen first
+        if (genA !== genB) return genB - genA;
         return a.name.localeCompare(b.name);
       });
   });
 
-  // Also sort markOptions by gen desc
   markOptions = computed<SearchableOption[]>(() => {
     return this.allMarks()
       .map((mark) => ({
@@ -591,6 +618,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
         name: mark.name,
         description: mark.shortDesc,
         category: `Gen ${mark.gen}`,
+        iconPath: `assets/images/marks/${mark.id}.png`,
       }))
       .sort((a, b) => {
         const genA = parseInt(a.category.replace('Gen ', ''));
@@ -684,15 +712,11 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   saving = signal(false);
   currentSpriteUrl = signal('');
   statsView = signal<'base' | 'current'>('base');
-
-  // Get available games based on Pokemon's storableIn data
   availableGames = () => {
     const pokemon = this.pokemonData();
     if (!pokemon || !pokemon.storableIn) return [];
     return getAvailableGamesForPokemon(pokemon.storableIn);
   };
-
-  // Group available games by generation for optgroup display
   availableGamesByGen = () => {
     const games = this.availableGames();
     const grouped = new Map<number, GameDefinition[]>();
@@ -703,11 +727,8 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       }
       grouped.get(game.gen)!.push(game);
     });
-
-    // Convert to array and sort by generation (descending)
     return Array.from(grouped.entries())
       .sort((a, b) => {
-        // Special games (GO, HOME) with gen 0 go last
         if (a[0] === 0) return 1;
         if (b[0] === 0) return -1;
         return b[0] - a[0];
@@ -718,8 +739,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
         games,
       }));
   };
-
-  // Check if Pokemon is obtainable in a specific game (not via trade/breeding)
   isObtainableIn(gameCode: string): boolean {
     const pokemon = this.pokemonData();
     return pokemon?.obtainableIn?.includes(gameCode) || false;
@@ -757,8 +776,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     this.datasetService.loadNatures().subscribe((n) => this.allNatures.set(n));
     this.datasetService.loadMarks().subscribe((m) => this.allMarks.set(m));
     this.datasetService.loadRibbons().subscribe((r) => this.allRibbons.set(r));
-
-    // Load Pokemon list for search dropdown
     this.datasetService.getSimplePokemonList().subscribe((pokemonList) => {
       this.allPokemon.set(pokemonList);
     });
@@ -784,14 +801,10 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   }
 
   onCaughtChange() {
-    // Auto-fill when marking Pokemon as caught (isOwned = true)
     if (this.isOwned) {
-      // Set level to 5 if not already set
       if (!this.level) {
         this.level = 5;
       }
-
-      // Set language to current browser/app language if not already set
       if (!this.originLanguage) {
         const browserLang = navigator.language.toLowerCase();
         if (browserLang.startsWith('de')) {
@@ -808,12 +821,9 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
           this.originLanguage = 'ENG'; // Default to English
         }
       }
-
-      // Set ability to first ability in array if not already set
       if (!this.ability && this.pokemonData()) {
         const pokemon = this.pokemonData();
         if (pokemon?.ability1) {
-          // Use ability1 as the default ability
           this.ability = this.findAbilityName(pokemon.ability1);
         }
       }
@@ -841,9 +851,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     };
     return labels[stat] || stat;
   }
-
-  // Check if a trainer is compatible with the current Pokémon
-  // A trainer is compatible if their game is in the Pokémon's available games list
   isTrainerCompatible(trainer: Trainer): boolean {
     if (!trainer.game) return true; // No game set → always compatible
     return this.availableGames().some((g) => g.code === trainer.game);
@@ -886,7 +893,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     let chartColor: string;
 
     if (viewMode === 'current') {
-      // Calculate current stats based on level, IVs (assumed 31), EVs (assumed 0), nature
       const currentLevel = this.level || 50; // Default to 50 if no level set
       const nature = this.allNatures().find((n) => n.id === this.nature);
 
@@ -925,7 +931,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       ];
       chartColor = 'rgba(34, 197, 94, 0.8)'; // Green for current stats
     } else {
-      // Base stats
       statValues = [
         stats.baseHp,
         stats.baseAtk,
@@ -1028,8 +1033,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
         mark: this.mark || null,
         ribbon: this.ribbon || null,
       };
-
-      // Cleanup undefined
       Object.keys(updates).forEach((key) => updates[key] === undefined && delete updates[key]);
 
       await this.firestoreService.updateSlot(
@@ -1050,16 +1053,12 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
 
   onPokemonChange(newPokemonSlug: string | null) {
     if (!newPokemonSlug) {
-      // User cleared selection - reset to empty slot
       this.pokemonData.set(null);
       this.currentSpriteUrl.set('');
       return;
     }
-
-    // Load new Pokemon data
     this.datasetService.loadPokemonBySlug(newPokemonSlug).subscribe((data) => {
       this.pokemonData.set(data);
-      // Update the slot's pokemonSlug (will be saved when user clicks Save)
       const currentPokemon = this.pokemon();
       currentPokemon.pokemonSlug = newPokemonSlug;
       this.updateSpritePreview();
@@ -1068,7 +1067,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   }
 
   onImageError(event: Event) {
-    // Hide broken image icon by clearing display
     const img = event.target as HTMLImageElement;
     img.style.display = 'none';
   }

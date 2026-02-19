@@ -182,8 +182,6 @@ export class CreateDexDialogComponent {
     
     try {
       const config = this.dexTypeConfigs.find(c => c.type === this.selectedType());
-      
-      // Get Pokemon mapping from dataset based on Dex type
       const pokemonMapping = await firstValueFrom(
         this.datasetService.createDexMapping(this.selectedType()!)
       );

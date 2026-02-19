@@ -13,7 +13,7 @@ export type DexViewType = 'box' | 'gallery' | 'overview';
     <div class="bg-surface border-b border-theme shadow-sm sticky top-0 z-10">
       <div class="container mx-auto px-4 py-4">
         <div class="flex items-center justify-between flex-wrap gap-4">
-          <!-- Dex Name with Edit -->
+          
           <div class="flex items-center gap-2">
             <h1 class="text-xl font-bold">{{ dexName() }}</h1>
             <button 
@@ -25,7 +25,7 @@ export type DexViewType = 'box' | 'gallery' | 'overview';
             </button>
           </div>
           
-          <!-- Navigation Buttons -->
+          
           <div class="flex items-center gap-2">
             <button
               (click)="navigateToHome()"
@@ -83,7 +83,7 @@ export type DexViewType = 'box' | 'gallery' | 'overview';
           </div>
         </div>
         
-        <!-- Box Navigation (only shown in box view) -->
+        
         @if (currentView() === 'box' && currentBoxNumber()) {
           <div class="flex items-center justify-center gap-4 mt-4">
             <button 

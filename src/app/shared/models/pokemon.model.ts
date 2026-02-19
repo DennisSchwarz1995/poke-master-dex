@@ -1,6 +1,3 @@
-// Extended Pokemon model for the app
-// Combines dataset format with app-specific needs
-
 export interface AppPokemon {
   slug: string;           // "pikachu", "charizard-mega-x"
   dexNum: number;         // National Dex number

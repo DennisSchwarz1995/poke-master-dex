@@ -7,8 +7,8 @@ export interface SearchableOption {
   name: string;
   description?: string;
   category?: string;
-  searchTerms?: string[]; // Additional search terms (e.g., names in other languages)
-  iconPath?: string; // Optional local icon path
+  searchTerms?: string[];
+  iconPath?: string;
 }
 
 @Component({
@@ -17,8 +17,15 @@ export interface SearchableOption {
   imports: [CommonModule, FormsModule],
   template: `
     <div class="relative">
-      <!-- Selected Value Display / Search Input -->
-      <div class="relative">
+      <div class="relative flex items-center gap-2">
+        @if (selectedOption()?.iconPath) {
+          <img
+            [src]="selectedOption()!.iconPath"
+            [alt]="selectedOption()!.name"
+            class="w-5 h-5 object-contain flex-shrink-0 image-pixelated"
+            (error)="onImgError($event)"
+          />
+        }
         <input
           type="text"
           [(ngModel)]="searchQuery"
@@ -50,7 +57,6 @@ export interface SearchableOption {
         </button>
       </div>
 
-      <!-- Dropdown List -->
       @if (isOpen()) {
         <div
           class="absolute z-50 w-full mt-1 bg-surface border border-theme rounded-lg shadow-xl max-h-60 overflow-y-auto custom-scrollbar"
@@ -72,14 +78,24 @@ export interface SearchableOption {
                   (click)="selectOption(option)"
                   class="w-full text-left px-3 py-2 hover:bg-surface-hover transition-colors border-b border-theme last:border-b-0"
                 >
-                  <div class="font-medium text-primary">{{ option.name }}</div>
-                  @if (option.description) {
-                    <div class="text-xs text-secondary mt-0.5">{{ option.description }}</div>
-                  }
-                  @if (!group.label && option.category) {
-                    <!-- Fallback if not grouped but has category -->
-                    <div class="text-xs text-tertiary mt-0.5">{{ option.category }}</div>
-                  }
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex flex-col min-w-0">
+                      <span class="font-medium text-primary truncate">{{ option.name }}</span>
+                      @if (option.description) {
+                        <span class="text-xs text-secondary mt-0.5 truncate">{{
+                          option.description
+                        }}</span>
+                      }
+                    </div>
+                    @if (option.iconPath) {
+                      <img
+                        [src]="option.iconPath"
+                        [alt]="option.name"
+                        class="w-6 h-6 object-contain flex-shrink-0 image-pixelated"
+                        (error)="onImgError($event)"
+                      />
+                    }
+                  </div>
                 </button>
               }
             }
@@ -88,7 +104,14 @@ export interface SearchableOption {
       }
     </div>
   `,
-  styles: [],
+  styles: [
+    `
+      .image-pixelated {
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+    `,
+  ],
 })
 export class SearchableDropdownComponent {
   options = input.required<SearchableOption[]>();
@@ -100,7 +123,8 @@ export class SearchableDropdownComponent {
   searchQuery = signal('');
   isOpen = signal(false);
 
-  // Computed filtered options based on search
+  selectedOption = computed(() => this.options().find((opt) => opt.id === this.selectedId()));
+
   filteredOptions = computed(() => {
     const query = this.searchQuery().toLowerCase();
     if (!query) return this.options();
@@ -114,7 +138,6 @@ export class SearchableDropdownComponent {
     );
   });
 
-  // Group filtered options by category
   groupedOptions = computed(() => {
     const options = this.filteredOptions();
     const groups = new Map<string, SearchableOption[]>();
@@ -131,24 +154,11 @@ export class SearchableDropdownComponent {
       }
     });
 
-    const result = [];
+    const result: { label: string; items: SearchableOption[] }[] = [];
 
-    // Add non-categorized items first if any
     if (noCategory.length > 0) {
       result.push({ label: '', items: noCategory });
     }
-
-    // Add grouped items
-    // Sort keys if needed, or rely on insertion order (which usually mimics data order)
-    // For specific sorting (e.g. Generation 9, 8, 7...), the input options should be sorted,
-    // or we can sort the keys here.
-    // Let's sort keys to be safe, but generic string sort might not be perfect for "Gen 1" vs "Gen 10"
-    // Assuming categories are passed in a way that makes sense or we leave natural order?
-    // Let's simpler: use natural order of appearance in the filtered list if possible, OR
-    // explicitly sort.
-    // Given the requirement "like Origin", which is reverse Gen order usually.
-    // But this component is generic.
-    // Let's just iterate the Map entries.
 
     groups.forEach((items, label) => {
       result.push({ label, items });
@@ -158,7 +168,6 @@ export class SearchableDropdownComponent {
   });
 
   constructor() {
-    // Update search query to show selected option name
     effect(() => {
       const selected = this.options().find((opt) => opt.id === this.selectedId());
       if (selected && !this.isOpen()) {
@@ -172,7 +181,6 @@ export class SearchableDropdownComponent {
   toggleDropdown() {
     this.isOpen.set(!this.isOpen());
     if (!this.isOpen()) {
-      // Restore selected value when closing
       const selected = this.options().find((opt) => opt.id === this.selectedId());
       this.searchQuery.set(selected?.name || '');
     }
@@ -180,12 +188,10 @@ export class SearchableDropdownComponent {
 
   onFocus() {
     this.isOpen.set(true);
-    // Clear search on focus to allow typing
     this.searchQuery.set('');
   }
 
   onBlur() {
-    // Delay to allow click on option
     setTimeout(() => {
       this.isOpen.set(false);
       const selected = this.options().find((opt) => opt.id === this.selectedId());
@@ -197,5 +203,9 @@ export class SearchableDropdownComponent {
     this.valueChanged.emit(option.id);
     this.searchQuery.set(option.name);
     this.isOpen.set(false);
+  }
+
+  onImgError(event: Event) {
+    (event.target as HTMLImageElement).style.display = 'none';
   }
 }

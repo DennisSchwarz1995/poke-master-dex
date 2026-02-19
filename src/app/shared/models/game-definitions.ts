@@ -1,4 +1,3 @@
-// Game code to readable name mapping
 export interface GameDefinition {
   code: string;
   name: string;
@@ -9,7 +8,6 @@ export interface GameDefinition {
 }
 
 export const GAME_CODES: Record<string, GameDefinition> = {
-  // Generation 1
   'rby-r': {
     code: 'rby-r',
     name: 'Red',
@@ -34,8 +32,6 @@ export const GAME_CODES: Record<string, GameDefinition> = {
     region: 'kanto',
     year: 1998,
   },
-
-  // Generation 2
   'gsc-g': {
     code: 'gsc-g',
     name: 'Gold',
@@ -60,8 +56,6 @@ export const GAME_CODES: Record<string, GameDefinition> = {
     region: 'johto',
     year: 2000,
   },
-
-  // Generation 3
   'rse-r': {
     code: 'rse-r',
     name: 'Ruby',
@@ -102,8 +96,6 @@ export const GAME_CODES: Record<string, GameDefinition> = {
     region: 'kanto',
     year: 2004,
   },
-
-  // Generation 4
   'dp-d': {
     code: 'dp-d',
     name: 'Diamond',
@@ -144,8 +136,6 @@ export const GAME_CODES: Record<string, GameDefinition> = {
     region: 'johto',
     year: 2009,
   },
-
-  // Generation 5
   'bw-b': {
     code: 'bw-b',
     name: 'Black',
@@ -178,8 +168,6 @@ export const GAME_CODES: Record<string, GameDefinition> = {
     region: 'unova',
     year: 2012,
   },
-
-  // Generation 6
   'xy-x': { code: 'xy-x', name: 'X', fullName: 'Pokémon X', gen: 6, region: 'kalos', year: 2013 },
   'xy-y': { code: 'xy-y', name: 'Y', fullName: 'Pokémon Y', gen: 6, region: 'kalos', year: 2013 },
   'oras-or': {
@@ -198,8 +186,6 @@ export const GAME_CODES: Record<string, GameDefinition> = {
     region: 'hoenn',
     year: 2014,
   },
-
-  // Generation 7
   'sm-s': {
     code: 'sm-s',
     name: 'Sun',
@@ -248,8 +234,6 @@ export const GAME_CODES: Record<string, GameDefinition> = {
     region: 'kanto',
     year: 2018,
   },
-
-  // Generation 8
   'swsh-sw': {
     code: 'swsh-sw',
     name: 'Sword',
@@ -290,8 +274,6 @@ export const GAME_CODES: Record<string, GameDefinition> = {
     region: 'hisui',
     year: 2022,
   },
-
-  // Generation 9
   'sv-s': {
     code: 'sv-s',
     name: 'Scarlet',
@@ -316,8 +298,6 @@ export const GAME_CODES: Record<string, GameDefinition> = {
     region: 'kalos',
     year: 2025,
   },
-
-  // Special
   go: { code: 'go', name: 'Pokémon GO', fullName: 'Pokémon GO', gen: 0, region: 'all', year: 2016 },
   home: {
     code: 'home',

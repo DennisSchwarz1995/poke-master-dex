@@ -142,8 +142,6 @@ export class TrainerManagementDialogComponent {
   newTrainerName = '';
   newTrainerId = '';
   newTrainerGame = '';
-
-  // Computed property to group games by generation
   gameOptions = computed(() => {
     const games = Object.values(GAME_CODES);
     const grouped = new Map<number, GameDefinition[]>();
@@ -157,7 +155,6 @@ export class TrainerManagementDialogComponent {
 
     return Array.from(grouped.entries())
       .sort((a, b) => {
-        // Special games (GO, HOME) with gen 0 go last
         if (a[0] === 0) return 1;
         if (b[0] === 0) return -1;
         return b[0] - a[0];

@@ -46,7 +46,7 @@ import { TypeColorService } from '../../../core/services/type-color.service';
           </div>
         </div>
       } @else {
-        <!-- Empty slot - completely blank -->
+        
         <div class="w-16 h-16"></div>
         <div class="text-center mt-1">
           <div class="text-[10px]">&nbsp;</div>
@@ -80,8 +80,6 @@ export class PokemonSpriteComponent {
     if (types.length === 1) {
       return { 'border-color': this.typeColorService.getTypeColor(types[0]) };
     }
-
-    // Dual type: Gradient
     const color1 = this.typeColorService.getTypeColor(types[0]);
     const color2 = this.typeColorService.getTypeColor(types[1]);
 

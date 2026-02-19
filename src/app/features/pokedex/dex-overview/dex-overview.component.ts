@@ -89,13 +89,9 @@ export class DexOverviewComponent implements OnInit {
   
   loadDexData(id: string) {
     this.loading.set(true);
-    
-    // Load Dex Info
     this.firestoreService.getDex(id).subscribe(dex => {
       this.dex.set(dex);
     });
-    
-    // Load Boxes
     this.firestoreService.getDexBoxes(id).subscribe({
       next: (boxes) => {
         const sorted = boxes.sort((a, b) => a.boxNumber - b.boxNumber);
@@ -146,7 +142,6 @@ export class DexOverviewComponent implements OnInit {
   }
   
   openEditNameDialog() {
-    // TODO: Implement Dex renaming
     console.log('Edit Dex name');
   }
 }
