@@ -60,7 +60,6 @@ import Chart from 'chart.js/auto';
           <div class="p-6">
             <div class="flex items-start justify-between mb-8">
               <div class="flex items-center gap-6">
-                
                 <div class="relative group">
                   <div
                     class="w-32 h-32 bg-secondary rounded-full flex items-center justify-center border-2 border-theme shadow-inner"
@@ -174,11 +173,8 @@ import Chart from 'chart.js/auto';
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              
               <div class="space-y-6">
-                
                 <div class="space-y-4">
-                  
                   <div
                     class="flex items-center justify-between p-4 bg-secondary/50 rounded-xl border border-theme"
                   >
@@ -303,7 +299,7 @@ import Chart from 'chart.js/auto';
                       </select>
                     </div>
                   </div>
-                  
+
                   <div class="grid grid-cols-2 gap-4">
                     <div
                       class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
@@ -333,9 +329,6 @@ import Chart from 'chart.js/auto';
                       />
                     </div>
                   </div>
-
-                  
-                  
                 </div>
 
                 <div class="bg-secondary/30 p-4 rounded-xl border border-theme">
@@ -637,6 +630,36 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     }));
   });
 
+  private readonly POKEBALL_SPRITES = new Set([
+    'pokeball',
+    'greatball',
+    'ultraball',
+    'masterball',
+    'safariball',
+    'fastball',
+    'levelball',
+    'lureball',
+    'heavyball',
+    'loveball',
+    'friendball',
+    'moonball',
+    'sportball',
+    'netball',
+    'diveball',
+    'nestball',
+    'repeatball',
+    'timerball',
+    'luxuryball',
+    'premierball',
+    'duskball',
+    'healball',
+    'quickball',
+    'cherishball',
+    'parkball',
+    'dreamball',
+    'beastball',
+  ]);
+
   pokeballOptions = computed<SearchableOption[]>(() => {
     const categoryLabels: Record<string, string> = {
       regular: 'Regular',
@@ -649,7 +672,9 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       name: ball.name,
       description: ball.shortDesc,
       category: categoryLabels[ball.category] ?? ball.category,
-      iconPath: `assets/images/pokeballs/${ball.id}.png`,
+      iconPath: this.POKEBALL_SPRITES.has(ball.id)
+        ? `assets/images/pokeballs/${ball.id}.png`
+        : undefined,
     }));
   });
 
