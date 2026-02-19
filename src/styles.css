@@ -32,19 +32,19 @@
   --color-primary-hover: #3b82f6;
   --color-primary-light: #1e3a8a;
 
-  --color-bg-primary: #0f172a;
-  --color-bg-secondary: #1e293b;
-  --color-bg-tertiary: #334155;
+  --color-bg-primary: #000000;
+  --color-bg-secondary: #0f0f0f;
+  --color-bg-tertiary: #27272a;
 
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #cbd5e1;
-  --color-text-tertiary: #94a3b8;
+  --color-text-primary: #f2f2f2;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #71717a;
 
-  --color-border: #334155;
-  --color-border-hover: #475569;
+  --color-border: #27272a;
+  --color-border-hover: #3f3f46;
 
-  --color-surface: #1e293b;
-  --color-surface-hover: #334155;
+  --color-surface: #0f0f0f;
+  --color-surface-hover: #27272a;
 
   --color-success: #34d399;
   --color-error: #f87171;
