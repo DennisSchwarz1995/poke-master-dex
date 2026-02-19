@@ -208,6 +208,27 @@ import Chart from 'chart.js/auto';
                         >Shiny</span
                       >
                     </label>
+                    <label class="flex items-center gap-3 cursor-pointer group select-none">
+                      <div class="relative flex items-center">
+                        <input type="checkbox" [(ngModel)]="isEvent" class="peer sr-only" />
+                        <div
+                          class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-purple-500 peer-checked:border-purple-500 transition-all"
+                        ></div>
+                        <svg
+                          class="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 top-1 left-1"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"
+                          />
+                        </svg>
+                      </div>
+                      <span
+                        class="font-medium text-primary group-hover:text-purple-400 transition-colors"
+                        >Event</span
+                      >
+                    </label>
                   </div>
                   <div class="grid grid-cols-2 gap-4">
                     <div
@@ -327,7 +348,9 @@ import Chart from 'chart.js/auto';
                     [(ngModel)]="ability"
                     class="w-full bg-transparent text-primary font-medium focus:outline-none cursor-pointer appearance-none"
                   >
-                    <option value="" class="bg-surface text-secondary">Select Ability</option>
+                    <option value="" class="bg-surface text-secondary" hidden>
+                      Select Ability
+                    </option>
                     @for (ab of availableAbilities(); track ab.id) {
                       <option [value]="ab.name" class="bg-surface text-primary">
                         {{ ab.name }}
@@ -353,7 +376,7 @@ import Chart from 'chart.js/auto';
                     (change)="updateChart()"
                     class="w-full bg-transparent text-primary font-medium focus:outline-none cursor-pointer appearance-none"
                   >
-                    <option value="" class="bg-surface text-secondary">Select Nature</option>
+                    <option value="" class="bg-surface text-secondary" hidden>Select Nature</option>
                     @for (nat of allNatures(); track nat.id) {
                       <option [value]="nat.id" class="bg-surface text-primary">
                         {{ nat.name }}
@@ -544,22 +567,38 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   allPokemon = signal<SimplePokemon[]>([]);
 
   // Computed options for searchable dropdowns
-  markOptions = computed<SearchableOption[]>(() => {
-    return this.allMarks().map((mark) => ({
-      id: mark.id,
-      name: mark.name,
-      description: mark.shortDesc,
-      category: `Gen ${mark.gen}`,
-    }));
+  ribbonOptions = computed<SearchableOption[]>(() => {
+    return this.allRibbons()
+      .map((ribbon) => ({
+        id: ribbon.id,
+        name: ribbon.name,
+        description: ribbon.shortDesc,
+        category: `Gen ${ribbon.gen}`,
+      }))
+      .sort((a, b) => {
+        // Sort by category (Gen) desc, then by name
+        const genA = parseInt(a.category.replace('Gen ', ''));
+        const genB = parseInt(b.category.replace('Gen ', ''));
+        if (genA !== genB) return genB - genA; // Newest gen first
+        return a.name.localeCompare(b.name);
+      });
   });
 
-  ribbonOptions = computed<SearchableOption[]>(() => {
-    return this.allRibbons().map((ribbon) => ({
-      id: ribbon.id,
-      name: ribbon.name,
-      description: ribbon.shortDesc,
-      category: ribbon.category,
-    }));
+  // Also sort markOptions by gen desc
+  markOptions = computed<SearchableOption[]>(() => {
+    return this.allMarks()
+      .map((mark) => ({
+        id: mark.id,
+        name: mark.name,
+        description: mark.shortDesc,
+        category: `Gen ${mark.gen}`,
+      }))
+      .sort((a, b) => {
+        const genA = parseInt(a.category.replace('Gen ', ''));
+        const genB = parseInt(b.category.replace('Gen ', ''));
+        if (genA !== genB) return genB - genA;
+        return a.name.localeCompare(b.name);
+      });
   });
 
   pokemonSearchOptions = computed<SearchableOption[]>(() => {
@@ -597,6 +636,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   };
 
   isOwned = false;
+  isEvent = false;
   isShiny = false;
   level?: number;
   ball = '';
@@ -659,6 +699,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     const pkmn = this.pokemon();
     this.isOwned = pkmn.isOwned;
+    this.isEvent = pkmn.isEvent || false;
     this.isShiny = pkmn.isShiny;
     this.customName = pkmn.customName || '';
     this.notes = pkmn.notes || '';
@@ -935,6 +976,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     try {
       const updates: any = {
         isOwned: this.isOwned,
+        isEvent: this.isEvent,
         isShiny: this.isShiny,
         level: this.level || null,
         ball: this.ball || null,

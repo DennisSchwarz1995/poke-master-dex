@@ -57,20 +57,30 @@ export interface SearchableOption {
           @if (filteredOptions().length === 0) {
             <div class="px-3 py-2 text-secondary text-sm">No results found</div>
           } @else {
-            @for (option of filteredOptions(); track option.id) {
-              <button
-                type="button"
-                (click)="selectOption(option)"
-                class="w-full text-left px-3 py-2 hover:bg-surface-hover transition-colors border-b border-theme last:border-b-0"
-              >
-                <div class="font-medium text-primary">{{ option.name }}</div>
-                @if (option.description) {
-                  <div class="text-xs text-secondary mt-0.5">{{ option.description }}</div>
-                }
-                @if (option.category) {
-                  <div class="text-xs text-tertiary mt-0.5">{{ option.category }}</div>
-                }
-              </button>
+            @for (group of groupedOptions(); track group.label) {
+              @if (group.label) {
+                <div
+                  class="px-3 py-1 text-xs font-bold text-secondary bg-secondary/10 sticky top-0 backdrop-blur-sm"
+                >
+                  {{ group.label }}
+                </div>
+              }
+              @for (option of group.items; track option.id) {
+                <button
+                  type="button"
+                  (click)="selectOption(option)"
+                  class="w-full text-left px-3 py-2 hover:bg-surface-hover transition-colors border-b border-theme last:border-b-0"
+                >
+                  <div class="font-medium text-primary">{{ option.name }}</div>
+                  @if (option.description) {
+                    <div class="text-xs text-secondary mt-0.5">{{ option.description }}</div>
+                  }
+                  @if (!group.label && option.category) {
+                    <!-- Fallback if not grouped but has category -->
+                    <div class="text-xs text-tertiary mt-0.5">{{ option.category }}</div>
+                  }
+                </button>
+              }
             }
           }
         </div>
@@ -101,6 +111,49 @@ export class SearchableDropdownComponent {
         opt.id.toLowerCase().includes(query) ||
         opt.searchTerms?.some((term) => term.toLowerCase().includes(query)),
     );
+  });
+
+  // Group filtered options by category
+  groupedOptions = computed(() => {
+    const options = this.filteredOptions();
+    const groups = new Map<string, SearchableOption[]>();
+    const noCategory: SearchableOption[] = [];
+
+    options.forEach((opt) => {
+      if (opt.category) {
+        if (!groups.has(opt.category)) {
+          groups.set(opt.category, []);
+        }
+        groups.get(opt.category)!.push(opt);
+      } else {
+        noCategory.push(opt);
+      }
+    });
+
+    const result = [];
+
+    // Add non-categorized items first if any
+    if (noCategory.length > 0) {
+      result.push({ label: '', items: noCategory });
+    }
+
+    // Add grouped items
+    // Sort keys if needed, or rely on insertion order (which usually mimics data order)
+    // For specific sorting (e.g. Generation 9, 8, 7...), the input options should be sorted,
+    // or we can sort the keys here.
+    // Let's sort keys to be safe, but generic string sort might not be perfect for "Gen 1" vs "Gen 10"
+    // Assuming categories are passed in a way that makes sense or we leave natural order?
+    // Let's simpler: use natural order of appearance in the filtered list if possible, OR
+    // explicitly sort.
+    // Given the requirement "like Origin", which is reverse Gen order usually.
+    // But this component is generic.
+    // Let's just iterate the Map entries.
+
+    groups.forEach((items, label) => {
+      result.push({ label, items });
+    });
+
+    return result;
   });
 
   constructor() {

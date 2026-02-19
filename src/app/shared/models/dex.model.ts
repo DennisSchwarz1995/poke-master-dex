@@ -3,7 +3,7 @@ export enum DexType {
   LIVING = 'living',
   SHINY_LIVING = 'shiny-living',
   FORM = 'form',
-  ORIGIN = 'origin'
+  ORIGIN = 'origin',
 }
 
 export interface Dex {
@@ -20,12 +20,13 @@ export interface Dex {
 
 export interface BoxSlot {
   position: number;
-  pokemonSlug: string | null;  // Changed from pokemonId to pokemonSlug
+  pokemonSlug: string | null; // Changed from pokemonId to pokemonSlug
   isShiny: boolean;
   isOwned: boolean;
+  isEvent?: boolean;
   customName?: string;
   notes?: string;
-  
+
   // Advanced Pokemon Details
   level?: number;
   ball?: string;
@@ -36,8 +37,8 @@ export interface BoxSlot {
   originLanguage?: string;
   originalTrainer?: string;
   trainerId?: string;
-  mark?: string;  // e.g., "lunchtime", "rare"
-  ribbon?: string;  // e.g., "champion", "best-friends"
+  mark?: string; // e.g., "lunchtime", "rare"
+  ribbon?: string; // e.g., "champion", "best-friends"
 }
 
 export interface Box {
