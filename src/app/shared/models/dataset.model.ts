@@ -1,4 +1,3 @@
-
 export interface AbilityData {
   id: string;
   name: string;
@@ -11,16 +10,22 @@ export interface AbilityData {
 export interface ItemData {
   id: string;
   name: string;
+  psName?: string;
   category: string;
+  shortDesc: string;
   desc: string;
   gen: number;
+  unholdable?: boolean;
 }
 
 export interface PokeballData {
   id: string;
   name: string;
   gen: number;
+  shortDesc: string;
   desc: string;
+  category: string;
+  unusable?: boolean;
 }
 
 export interface NatureData {

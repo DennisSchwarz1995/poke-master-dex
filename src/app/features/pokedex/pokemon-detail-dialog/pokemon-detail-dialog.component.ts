@@ -246,7 +246,7 @@ import Chart from 'chart.js/auto';
                         (ngModelChange)="updateChart()"
                         min="1"
                         max="100"
-                        class="w-full bg-transparent text-primary font-mono text-lg focus:outline-none placeholder:text-tertiary"
+                        class="w-full bg-transparent text-primary font-mono text-lg focus:outline-none placeholder:text-tertiary no-spinners"
                         placeholder="--"
                       />
                     </div>
@@ -397,54 +397,50 @@ import Chart from 'chart.js/auto';
                   <div
                     class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors group"
                   >
-                    <label class="block text-xs font-bold text-secondary uppercase mb-1"
+                    <label class="block text-xs font-bold text-secondary uppercase mb-2"
                       >Poké Ball</label
                     >
-                    <input
-                      type="text"
-                      [(ngModel)]="ball"
-                      list="ballsList"
-                      placeholder="Search..."
-                      class="w-full bg-transparent text-primary font-medium focus:outline-none"
+                    <app-searchable-dropdown
+                      [options]="pokeballOptions()"
+                      [selectedId]="ball"
+                      [placeholder]="'Select Poké Ball'"
+                      (valueChanged)="ball = $event"
                     />
-                    <datalist id="ballsList">
-                      @for (ball of allPokeballs(); track ball.id) {
-                        <option [value]="ball.name"></option>
-                      }
-                    </datalist>
                   </div>
 
                   <div
                     class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
                   >
-                    <label class="block text-xs font-bold text-secondary uppercase mb-1"
+                    <label class="block text-xs font-bold text-secondary uppercase mb-2"
                       >Held Item</label
                     >
-                    <input
-                      type="text"
-                      [(ngModel)]="item"
-                      list="itemsList"
-                      placeholder="Search..."
-                      class="w-full bg-transparent text-primary font-medium focus:outline-none"
+                    <app-searchable-dropdown
+                      [options]="itemOptions()"
+                      [selectedId]="item"
+                      [placeholder]="'Select Held Item'"
+                      (valueChanged)="item = $event"
                     />
-                    <datalist id="itemsList">
-                      @for (itm of allItems(); track itm.id) {
-                        <option [value]="itm.name"></option>
-                      }
-                    </datalist>
                   </div>
                 </div>
 
                 <div class="bg-secondary/10 border border-theme rounded-xl p-4">
                   <div class="flex items-center justify-between mb-3">
-                    <h4 class="text-sm font-bold text-primary">Trainer Info</h4>
+                    <h4 class="text-sm font-bold text-primary">Original Trainer</h4>
                     <select
                       (change)="onTrainerSelect($event)"
                       class="text-xs bg-surface border border-theme rounded px-2 py-1 text-secondary focus:text-primary focus:border-blue-500 outline-none max-w-[150px]"
                     >
                       <option value="">Auto-fill...</option>
                       @for (tr of trainers(); track tr.id) {
-                        <option [value]="tr.id">{{ tr.name }} ({{ tr.game }})</option>
+                        <option
+                          [value]="tr.id"
+                          [disabled]="!isTrainerCompatible(tr)"
+                          [class]="!isTrainerCompatible(tr) ? 'text-tertiary' : ''"
+                        >
+                          {{ tr.name }} ({{ tr.game }}){{
+                            !isTrainerCompatible(tr) ? ' — incompatible' : ''
+                          }}
+                        </option>
                       }
                     </select>
                   </div>
@@ -609,8 +605,38 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       id: p.slug,
       name: p.name,
       description: p.nameGerman && p.nameGerman !== p.name ? p.nameGerman : '',
-      category: `#${p.dexNum.toString().padStart(4, '0')}`,
       searchTerms: p.allNames ? Object.values(p.allNames).filter((n) => n) : [],
+    }));
+  });
+
+  pokeballOptions = computed<SearchableOption[]>(() => {
+    const categoryLabels: Record<string, string> = {
+      regular: 'Regular',
+      special: 'Special',
+      hisuian: 'Hisuian',
+      other: 'Other',
+    };
+    return this.allPokeballs().map((ball) => ({
+      id: ball.id,
+      name: ball.name,
+      description: ball.shortDesc,
+      category: categoryLabels[ball.category] ?? ball.category,
+      iconPath: `assets/images/pokeballs/${ball.id}.png`,
+    }));
+  });
+
+  itemOptions = computed<SearchableOption[]>(() => {
+    const categoryLabels: Record<string, string> = {
+      ball: 'Poké Ball',
+      berry: 'Berry',
+      other: 'Item',
+    };
+    return this.allItems().map((item) => ({
+      id: item.id,
+      name: item.name,
+      description: item.shortDesc,
+      category: categoryLabels[item.category] ?? item.category,
+      iconPath: `assets/images/items/${item.id}.png`,
     }));
   });
 
@@ -814,6 +840,13 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       spe: 'Spe',
     };
     return labels[stat] || stat;
+  }
+
+  // Check if a trainer is compatible with the current Pokémon
+  // A trainer is compatible if their game is in the Pokémon's available games list
+  isTrainerCompatible(trainer: Trainer): boolean {
+    if (!trainer.game) return true; // No game set → always compatible
+    return this.availableGames().some((g) => g.code === trainer.game);
   }
 
   onTrainerSelect(event: Event) {

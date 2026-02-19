@@ -8,6 +8,7 @@ export interface SearchableOption {
   description?: string;
   category?: string;
   searchTerms?: string[]; // Additional search terms (e.g., names in other languages)
+  iconPath?: string; // Optional local icon path
 }
 
 @Component({
