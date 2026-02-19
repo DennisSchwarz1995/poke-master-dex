@@ -10,7 +10,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const ASSETS = path.join(ROOT, 'src', 'assets', 'images');
+const ASSETS = path.join(ROOT, 'public', 'assets', 'images');
 
 // ----- Helpers -----
 
