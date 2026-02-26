@@ -30,7 +30,13 @@ import { TypeColorService } from '../../../core/services/type-color.service';
             loading="lazy"
           />
           @if (isShiny()) {
-            <div class="absolute top-0 right-0 text-yellow-500 text-lg" title="Shiny">✨</div>
+            <div class="absolute top-0 right-0 text-yellow-500 text-lg" title="Shiny">
+              <img
+                src="assets/images/special_attributes/shiny-stars.png"
+                alt="Shiny"
+                class="w-5 h-5 object-contain"
+              />
+            </div>
           }
         </div>
 
@@ -46,7 +52,6 @@ import { TypeColorService } from '../../../core/services/type-color.service';
           </div>
         </div>
       } @else {
-        
         <div class="w-16 h-16"></div>
         <div class="text-center mt-1">
           <div class="text-[10px]">&nbsp;</div>
