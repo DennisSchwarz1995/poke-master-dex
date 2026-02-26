@@ -1,5 +1,5 @@
 /**
- * Download Pokémon icons from PokeAPI/sprites and PokéSprite
+ * Download PokÃ©mon icons from PokeAPI/sprites and PokÃ©Sprite
  * Run with: node scripts/download-icons.mjs
  */
 
@@ -106,7 +106,7 @@ function slugToPokeSprite(id) {
   return map[id] || null;
 }
 
-// ----- Pokéball icons -----
+// ----- PokÃ©ball icons -----
 async function downloadPokeballIcons() {
   const dir = path.join(ASSETS, 'pokeballs');
   mkdir(dir);
@@ -144,8 +144,8 @@ async function downloadPokeballIcons() {
     }
   }
 
-  console.log(`Pokéballs: ${ok} downloaded, ${skipped} skipped, ${failed.length} failed`);
-  if (failed.length) failed.forEach(f => console.log(`  ✗ ${f.id} -> ${f.url} (${f.reason})`));
+  console.log(`PokÃ©balls: ${ok} downloaded, ${skipped} skipped, ${failed.length} failed`);
+  if (failed.length) failed.forEach(f => console.log(`  âœ— ${f.id} -> ${f.url} (${f.reason})`));
 }
 
 // ----- Held Item icons (held items from items.json, excluding balls/berries) -----
@@ -211,14 +211,14 @@ async function downloadItemIcons() {
     'upgrade': 'upgrade',
     'prismscale': 'prism-scale',
     'wrathberry': null,
-    // Power items
+
     'poweranklet': 'power-anklet',
     'powerbelt': 'power-belt',
     'powerbracer': 'power-bracer',
     'powerlens': 'power-lens',
     'powerweight': 'power-weight',
     'powerband': 'power-band',
-    // Vitamins
+
     'carbos': 'carbos',
     'calcium': 'calcium',
     'iron': 'iron',
@@ -227,7 +227,7 @@ async function downloadItemIcons() {
     'ppup': 'pp-up',
     'ppmax': 'pp-max',
     'zinc': 'zinc',
-    // Plates
+
     'dracoplate': 'draco-plate',
     'dreadplate': 'dread-plate',
     'earthplate': 'earth-plate',
@@ -245,7 +245,7 @@ async function downloadItemIcons() {
     'stoneplate': 'stone-plate',
     'toxicplate': 'toxic-plate',
     'zapplate': 'zap-plate',
-    // Memory
+
     'bugmemory': 'bug-memory',
     'darkmemory': 'dark-memory',
     'dragonmemory': 'dragon-memory',
@@ -263,7 +263,7 @@ async function downloadItemIcons() {
     'rockmemory': 'rock-memory',
     'steelmemory': 'steel-memory',
     'watermemory': 'water-memory',
-    // Type gems
+
     'normalgem': 'normal-gem',
     'firegem': 'fire-gem',
     'watergem': 'water-gem',
@@ -281,7 +281,7 @@ async function downloadItemIcons() {
     'dragongem': 'dragon-gem',
     'darkgem': 'dark-gem',
     'steelgem': 'steel-gem',
-    // Misc popular items
+ 
     'magnet': 'magnet',
     'blackbelt': 'black-belt',
     'blackglasses': 'black-glasses',
@@ -309,7 +309,7 @@ async function downloadItemIcons() {
     if (ITEM_SLUG_MAP.hasOwnProperty(item.id)) {
       apiId = ITEM_SLUG_MAP[item.id];
     } else {
-      apiId = item.id; // Try as-is
+      apiId = item.id
     }
 
     if (!apiId) {
@@ -331,12 +331,11 @@ async function downloadItemIcons() {
   console.log(`Items: ${ok} downloaded, ${skipped} skipped, ${failed.length} failed`);
   if (failed.length > 0) {
     const shown = failed.slice(0, 10);
-    shown.forEach(f => console.log(`  ✗ ${f.id} (${f.reason})`));
+    shown.forEach(f => console.log(`  âœ— ${f.id} (${f.reason})`));
     if (failed.length > 10) console.log(`  ... and ${failed.length - 10} more`);
   }
 }
 
-// ----- Type icons (from PokéSprite) -----
 async function downloadTypeIcons() {
   const dir = path.join(ASSETS, 'types');
   mkdir(dir);
@@ -363,10 +362,9 @@ async function downloadTypeIcons() {
   }
 
   console.log(`Types: ${ok} downloaded, ${skipped} skipped, ${failed.length} failed`);
-  if (failed.length) failed.forEach(f => console.log(`  ✗ ${f.type} (${f.reason})`));
+  if (failed.length) failed.forEach(f => console.log(`  âœ— ${f.type} (${f.reason})`));
 }
 
-// ----- Berry icons -----
 async function downloadBerryIcons() {
   const dir = path.join(ASSETS, 'berries');
   mkdir(dir);
@@ -378,7 +376,7 @@ async function downloadBerryIcons() {
   let ok = 0, skipped = 0, failed = [];
 
   for (const berry of berries) {
-    const apiId = berry.id.replace(/berry$/, '-berry'); // e.g. cheriberry -> cheri-berry
+    const apiId = berry.id.replace(/berry$/, '-berry');
     const url = `${BASE}/${apiId}.png`;
     const dest = path.join(dir, `${berry.id}.png`);
     const res = await downloadFile(url, dest);
@@ -393,17 +391,70 @@ async function downloadBerryIcons() {
   console.log(`Berries: ${ok} downloaded, ${skipped} skipped, ${failed.length} failed`);
 }
 
-// ----- Main -----
+async function downloadMarkIcons() {
+  const dir = path.join(ASSETS, 'marks');
+  mkdir(dir);
+
+  const marks = JSON.parse(fs.readFileSync(path.join(ROOT, 'dataset', 'data', 'marks.json'), 'utf8'));
+  const BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/misc/mark';
+
+  let ok = 0, skipped = 0, failed = [];
+
+  for (const mark of marks) {
+    const spriteId = `${mark.id}-mark`;
+    const url = `${BASE}/${spriteId}.png`;
+    const dest = path.join(dir, `${mark.id}.png`);
+    const res = await downloadFile(url, dest);
+    if (res.ok) {
+      if (res.skipped) skipped++;
+      else ok++;
+    } else {
+      failed.push({ id: mark.id, url, reason: res.status || res.err });
+    }
+  }
+
+  console.log(`Marks: ${ok} downloaded, ${skipped} skipped, ${failed.length} failed`);
+  if (failed.length) failed.forEach(f => console.log(`  âœ— ${f.id} (${f.reason})`));
+}
+
+async function downloadRibbonIcons() {
+  const dir = path.join(ASSETS, 'ribbons');
+  mkdir(dir);
+
+  const ribbons = JSON.parse(fs.readFileSync(path.join(ROOT, 'dataset', 'data', 'ribbons.json'), 'utf8'));
+  const BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/misc/ribbon';
+
+  let ok = 0, skipped = 0, failed = [];
+
+  for (const ribbon of ribbons) {
+    const spriteId = `${ribbon.id}-ribbon`;
+    const url = `${BASE}/${spriteId}.png`;
+    const dest = path.join(dir, `${ribbon.id}.png`);
+    const res = await downloadFile(url, dest);
+    if (res.ok) {
+      if (res.skipped) skipped++;
+      else ok++;
+    } else {
+      failed.push({ id: ribbon.id, url, reason: res.status || res.err });
+    }
+  }
+
+  console.log(`Ribbons: ${ok} downloaded, ${skipped} skipped, ${failed.length} failed`);
+  if (failed.length) failed.forEach(f => console.log(`  âœ— ${f.id} (${f.reason})`));
+}
+
 async function main() {
-  console.log('📦 Downloading Pokémon icons...\n');
+  console.log('ðŸ“¦ Downloading PokÃ©mon icons...\n');
   mkdir(ASSETS);
 
   await downloadPokeballIcons();
   await downloadItemIcons();
   await downloadBerryIcons();
   await downloadTypeIcons();
+  await downloadMarkIcons();
+  await downloadRibbonIcons();
 
-  console.log('\n✅ Done! Icons saved to public/assets/images/');
+  console.log('\nâœ… Done! Icons saved to public/assets/images/');
 }
 
 main().catch(console.error);
