@@ -12,6 +12,7 @@ import {
   ElementRef,
   AfterViewInit,
 } from '@angular/core';
+import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -37,15 +38,15 @@ import {
   RibbonData,
 } from '../../../shared/models/dataset.model';
 import {
-  SearchableDropdownComponent,
-  SearchableOption,
-} from '../../../shared/components/searchable-dropdown/searchable-dropdown.component';
+  CustomDropdownComponent,
+  CustomDropdownOption,
+} from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 import Chart from 'chart.js/auto';
 
 @Component({
   selector: 'app-pokemon-detail-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, SearchableDropdownComponent],
+  imports: [CommonModule, FormsModule, CustomDropdownComponent],
   template: `
     <div
       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
@@ -54,47 +55,71 @@ import Chart from 'chart.js/auto';
       aria-labelledby="dialog-title"
     >
       <div
-        class="bg-surface border border-theme rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col relative animate-fade-in custom-scrollbar"
+        class="bg-surface border border-theme rounded-2xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl overflow-hidden"
       >
         @if (pokemon(); as pkmn) {
-          <div class="p-6">
-            <div class="flex items-start justify-between mb-8">
+          <div class="p-6 pb-4 relative flex-none border-b border-theme bg-surface z-20">
+            <div class="flex items-start justify-between">
               <div class="flex items-center gap-6">
-                <div class="relative group">
-                  <div
-                    class="w-32 h-32 bg-secondary rounded-full flex items-center justify-center border-2 border-theme shadow-inner"
-                  >
-                    @if (pokemon().pokemonSlug && currentSpriteUrl()) {
+                <div class="flex flex-col items-center">
+                  <div class="relative group">
+                    <div
+                      class="w-32 h-32 bg-secondary rounded-full flex items-center justify-center border-2 border-theme shadow-inner"
+                    >
+                      @if (localPokemonSlug() && currentSpriteUrl()) {
+                        <img
+                          [src]="currentSpriteUrl()"
+                          [alt]="pokemonName('eng')"
+                          class="w-28 h-28 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110"
+                          (error)="onImageError($event)"
+                        />
+                      }
+                    </div>
+                    @if (ball) {
+                      <div
+                        class="absolute bottom-0 left-0 w-7 h-7 bg-surface border border-theme rounded-full shadow flex items-center justify-center"
+                      >
+                        <img
+                          [src]="'assets/images/pokeballs/' + ball + '.png'"
+                          [alt]="ball"
+                          class="w-5 h-5 object-contain"
+                          style="image-rendering: pixelated"
+                          (error)="onImageError($event)"
+                        />
+                      </div>
+                    }
+                    @if (localPokemonSlug()) {
+                      <button
+                        (click)="toggleShinyPreview()"
+                        class="absolute bottom-0 right-0 p-1 bg-surface border border-theme rounded-full shadow hover:bg-surface-hover transition-colors flex items-center justify-center w-7 h-7"
+                        title="Toggle Shiny Preview"
+                      >
+                        <img
+                          src="assets/images/special_attributes/shiny-stars.png"
+                          alt="Shiny"
+                          class="w-5 h-5 object-contain"
+                        />
+                      </button>
+                    }
+                  </div>
+                  <div class="flex items-center gap-2 mt-2">
+                    @if (pokemonData()?.type1) {
                       <img
-                        [src]="currentSpriteUrl()"
-                        [alt]="pokemonName('eng')"
-                        class="w-28 h-28 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110"
+                        [src]="'assets/images/types/' + pokemonData()!.type1 + '.png'"
+                        [alt]="pokemonData()!.type1"
+                        class="h-5 object-contain"
+                        (error)="onImageError($event)"
+                      />
+                    }
+                    @if (pokemonData()?.type2) {
+                      <img
+                        [src]="'assets/images/types/' + pokemonData()!.type2 + '.png'"
+                        [alt]="pokemonData()!.type2"
+                        class="h-5 object-contain"
                         (error)="onImageError($event)"
                       />
                     }
                   </div>
-                  @if (ball) {
-                    <div
-                      class="absolute bottom-0 left-0 w-7 h-7 bg-surface border border-theme rounded-full shadow flex items-center justify-center"
-                    >
-                      <img
-                        [src]="'assets/images/pokeballs/' + ball + '.png'"
-                        [alt]="ball"
-                        class="w-5 h-5 object-contain"
-                        style="image-rendering: pixelated"
-                        (error)="onImageError($event)"
-                      />
-                    </div>
-                  }
-                  @if (pokemon().pokemonSlug) {
-                    <button
-                      (click)="toggleShinyPreview()"
-                      class="absolute bottom-0 right-0 p-1.5 bg-surface border border-theme rounded-full shadow hover:bg-surface-hover transition-colors"
-                      title="Toggle Shiny Preview"
-                    >
-                      ✨
-                    </button>
-                  }
                 </div>
 
                 <div class="flex-1">
@@ -102,41 +127,20 @@ import Chart from 'chart.js/auto';
                     <label class="block text-xs font-bold text-secondary uppercase mb-2"
                       >Pokemon</label
                     >
-                    <app-searchable-dropdown
+                    <app-custom-dropdown
                       [options]="pokemonSearchOptions()"
-                      [selectedId]="pokemon().pokemonSlug || ''"
+                      [selectedId]="localPokemonSlug() || ''"
                       [placeholder]="'Search Pokemon...'"
                       (valueChanged)="onPokemonChange($event)"
                     />
                   </div>
 
-                  @if (pokemon().pokemonSlug) {
+                  @if (localPokemonSlug()) {
                     <div class="flex flex-col gap-1 text-sm text-secondary">
                       <span class="flex items-center gap-2">
                         🇬🇧 {{ pokemonName('eng') }} | 🇯🇵 {{ pokemonName('jap') }}
                       </span>
                       <span class="italic">{{ pokemonGenus() }}</span>
-                    </div>
-
-                    <div class="flex items-center gap-2 mt-2">
-                      @if (pokemonData()?.type1) {
-                        <img
-                          [src]="'assets/images/types/' + pokemonData()!.type1 + '.png'"
-                          [alt]="pokemonData()!.type1"
-                          class="h-5 object-contain"
-                          style="image-rendering: pixelated"
-                          (error)="onImageError($event)"
-                        />
-                      }
-                      @if (pokemonData()?.type2) {
-                        <img
-                          [src]="'assets/images/types/' + pokemonData()!.type2 + '.png'"
-                          [alt]="pokemonData()!.type2"
-                          class="h-5 object-contain"
-                          style="image-rendering: pixelated"
-                          (error)="onImageError($event)"
-                        />
-                      }
                     </div>
 
                     <div class="flex gap-2 mt-3">
@@ -171,10 +175,12 @@ import Chart from 'chart.js/auto';
                 ×
               </button>
             </div>
+          </div>
 
+          <div class="flex-1 overflow-y-auto custom-scrollbar p-6">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div class="space-y-6">
-                <div class="space-y-4">
+              <div class="flex flex-col gap-[18px]">
+                <div class="flex flex-col gap-[18px]">
                   <div
                     class="flex items-center justify-between p-4 bg-secondary/50 rounded-xl border border-theme"
                   >
@@ -257,77 +263,123 @@ import Chart from 'chart.js/auto';
                         >Event</span
                       >
                     </label>
+
+                    <div class="w-px h-6 bg-theme"></div>
+
+                    <label
+                      class="flex items-center gap-3 cursor-pointer group select-none relative"
+                      [class.opacity-50]="!pokemonData()?.canGmax && !pokemonData()?.isGmax"
+                    >
+                      <div class="relative flex items-center">
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="isGmax"
+                          [disabled]="!pokemonData()?.canGmax && !pokemonData()?.isGmax"
+                          class="peer sr-only"
+                        />
+                        <div
+                          class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-red-600 peer-checked:border-red-600 transition-all peer-disabled:bg-surface-hover peer-disabled:border-theme"
+                        ></div>
+                        <svg
+                          class="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 top-1 left-1"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"
+                          />
+                        </svg>
+                      </div>
+                      <span
+                        class="font-medium text-primary transition-colors"
+                        [ngClass]="
+                          pokemonData()?.canGmax || pokemonData()?.isGmax
+                            ? 'group-hover:text-red-400'
+                            : ''
+                        "
+                        >Gigantamax</span
+                      >
+                    </label>
+
+                    <div class="w-px h-6 bg-theme"></div>
+
+                    <label
+                      class="flex items-center gap-3 cursor-pointer group select-none relative"
+                      [class.opacity-50]="!pokemonData()?.canBeAlpha"
+                    >
+                      <div class="relative flex items-center">
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="isAlpha"
+                          [disabled]="!pokemonData()?.canBeAlpha"
+                          class="peer sr-only"
+                        />
+                        <div
+                          class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-orange-600 peer-checked:border-orange-600 transition-all peer-disabled:bg-surface-hover peer-disabled:border-theme"
+                        ></div>
+                        <svg
+                          class="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 top-1 left-1"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"
+                          />
+                        </svg>
+                      </div>
+                      <span
+                        class="font-medium text-primary transition-colors"
+                        [ngClass]="pokemonData()?.canBeAlpha ? 'group-hover:text-orange-400' : ''"
+                        >Alpha</span
+                      >
+                    </label>
                   </div>
                   <div class="grid grid-cols-2 gap-4">
-                    <div
-                      class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
-                    >
-                      <label class="block text-xs font-bold text-secondary uppercase mb-1"
-                        >Level</label
-                      >
+                    <div class="relative group">
                       <input
                         type="number"
                         [(ngModel)]="level"
-                        (ngModelChange)="updateChart()"
+                        (ngModelChange)="onLevelChange($event)"
                         min="1"
                         max="100"
-                        class="w-full bg-transparent text-primary font-mono text-lg focus:outline-none placeholder:text-tertiary no-spinners"
-                        placeholder="--"
+                        class="w-full h-[50px] bg-surface border-2 border-theme rounded-lg px-3 py-3 text-primary font-mono text-lg focus:border-blue-500 outline-none transition-colors peer placeholder-transparent no-spinners"
+                        placeholder="Level"
                       />
+                      <label
+                        class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
+                      >
+                        Level
+                      </label>
                     </div>
 
-                    <div
-                      class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
-                    >
-                      <label class="block text-xs font-bold text-secondary uppercase mb-1"
-                        >Language</label
-                      >
-                      <select
-                        [(ngModel)]="originLanguage"
-                        class="w-full bg-transparent text-primary font-medium focus:outline-none cursor-pointer appearance-none"
-                      >
-                        <option value="" class="bg-surface text-secondary">None</option>
-                        <option value="ENG" class="bg-surface">ENG - English</option>
-                        <option value="DEU" class="bg-surface">DEU - German</option>
-                        <option value="JPN" class="bg-surface">JPN - Japanese</option>
-                        <option value="FRA" class="bg-surface">FRA - French</option>
-                        <option value="ITA" class="bg-surface">ITA - Italian</option>
-                        <option value="ESP" class="bg-surface">ESP - Spanish</option>
-                        <option value="KOR" class="bg-surface">KOR - Korean</option>
-                        <option value="CHS" class="bg-surface">CHS - Chinese (Simp)</option>
-                        <option value="CHT" class="bg-surface">CHT - Chinese (Trad)</option>
-                      </select>
+                    <div class="relative group">
+                      <app-custom-dropdown
+                        [label]="'Language'"
+                        [options]="languageOptions()"
+                        [selectedId]="originLanguage"
+                        [placeholder]="'Select Language'"
+                        [searchable]="false"
+                        (valueChanged)="originLanguage = $event"
+                      />
                     </div>
                   </div>
 
-                  <div class="grid grid-cols-2 gap-4">
-                    <div
-                      class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
-                    >
-                      <label class="block text-xs font-bold text-secondary uppercase mb-2"
-                        >Mark</label
-                      >
-                      <app-searchable-dropdown
-                        [options]="markOptions()"
-                        [selectedId]="mark"
-                        [placeholder]="'Select Mark'"
-                        (valueChanged)="mark = $event"
-                      />
-                    </div>
+                  <div class="flex flex-col gap-[18px]">
+                    <app-custom-dropdown
+                      [options]="pokeballOptions()"
+                      [selectedId]="ball"
+                      [label]="'Poké Ball'"
+                      [placeholder]="'Select Poké Ball'"
+                      (valueChanged)="ball = $event"
+                    />
 
-                    <div
-                      class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
-                    >
-                      <label class="block text-xs font-bold text-secondary uppercase mb-2"
-                        >Ribbon</label
-                      >
-                      <app-searchable-dropdown
-                        [options]="ribbonOptions()"
-                        [selectedId]="ribbon"
-                        [placeholder]="'Select Ribbon'"
-                        (valueChanged)="ribbon = $event"
-                      />
-                    </div>
+                    <app-custom-dropdown
+                      [options]="itemOptions()"
+                      [selectedId]="item"
+                      [label]="'Held Item'"
+                      [placeholder]="'Select Held Item'"
+                      (valueChanged)="item = $event"
+                    />
                   </div>
                 </div>
 
@@ -362,167 +414,122 @@ import Chart from 'chart.js/auto';
                 </div>
               </div>
 
-              <div class="space-y-6">
-                <div
-                  class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
-                >
-                  <label class="block text-xs font-bold text-secondary uppercase mb-1"
-                    >Ability</label
-                  >
-                  <select
-                    [(ngModel)]="ability"
-                    class="w-full bg-transparent text-primary font-medium focus:outline-none cursor-pointer appearance-none"
-                  >
-                    <option value="" class="bg-surface text-secondary" hidden>
-                      Select Ability
-                    </option>
-                    @for (ab of availableAbilities(); track ab.id) {
-                      <option [value]="ab.name" class="bg-surface text-primary">
-                        {{ ab.name }}
-                        @if (ab.isHidden) {
-                          (Hidden)
-                        }
-                      </option>
-                    }
-                  </select>
-                  <p class="text-xs text-secondary mt-1 min-h-[1.25rem] truncate">
-                    {{ getAbilityDescription() }}
-                  </p>
-                </div>
-
-                <div
-                  class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
-                >
-                  <label class="block text-xs font-bold text-secondary uppercase mb-1"
-                    >Nature</label
-                  >
-                  <select
-                    [(ngModel)]="nature"
-                    (change)="updateChart()"
-                    class="w-full bg-transparent text-primary font-medium focus:outline-none cursor-pointer appearance-none"
-                  >
-                    <option value="" class="bg-surface text-secondary" hidden>Select Nature</option>
-                    @for (nat of allNatures(); track nat.id) {
-                      <option [value]="nat.id" class="bg-surface text-primary">
-                        {{ nat.name }}
-                        @if (nat.raises && nat.lowers) {
-                          (+{{ getNatureStatLabel(nat.raises) }} -{{
-                            getNatureStatLabel(nat.lowers)
-                          }})
-                        }
-                      </option>
-                    }
-                  </select>
-                </div>
-
+              <div class="flex flex-col gap-[18px]">
                 <div class="grid grid-cols-2 gap-4">
-                  <div
-                    class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors group"
-                  >
-                    <label class="block text-xs font-bold text-secondary uppercase mb-2"
-                      >Poké Ball</label
-                    >
-                    <app-searchable-dropdown
-                      [options]="pokeballOptions()"
-                      [selectedId]="ball"
-                      [placeholder]="'Select Poké Ball'"
-                      (valueChanged)="ball = $event"
+                  <div class="relative group">
+                    <app-custom-dropdown
+                      [label]="'Ability'"
+                      [options]="abilityOptions()"
+                      [selectedId]="ability"
+                      [placeholder]="'Select Ability'"
+                      [searchable]="false"
+                      (valueChanged)="ability = $event"
                     />
+                    <p class="text-xs text-secondary mt-1 min-h-[1.25rem] truncate">
+                      {{ getAbilityDescription() }}
+                    </p>
                   </div>
 
-                  <div
-                    class="bg-secondary/20 p-3 rounded-lg border border-theme hover:border-blue-500/50 transition-colors"
-                  >
-                    <label class="block text-xs font-bold text-secondary uppercase mb-2"
-                      >Held Item</label
-                    >
-                    <app-searchable-dropdown
-                      [options]="itemOptions()"
-                      [selectedId]="item"
-                      [placeholder]="'Select Held Item'"
-                      (valueChanged)="item = $event"
+                  <div class="relative group">
+                    <app-custom-dropdown
+                      [label]="'Nature'"
+                      [options]="natureOptions()"
+                      [selectedId]="nature"
+                      [placeholder]="'Select Nature'"
+                      (valueChanged)="onNatureChange($event)"
                     />
                   </div>
+                </div>
+
+                <div class="flex flex-col gap-[18px]">
+                  <app-custom-dropdown
+                    [options]="ribbonOptions()"
+                    [selectedId]="ribbon"
+                    [label]="'Ribbon'"
+                    [placeholder]="'Select Ribbon'"
+                    (valueChanged)="ribbon = $event"
+                  />
+
+                  <app-custom-dropdown
+                    [options]="markOptions()"
+                    [selectedId]="mark"
+                    [label]="'Mark'"
+                    [placeholder]="'Select Mark'"
+                    (valueChanged)="mark = $event"
+                  />
                 </div>
 
                 <div class="bg-secondary/10 border border-theme rounded-xl p-4">
                   <div class="flex items-center justify-between mb-3">
                     <h4 class="text-sm font-bold text-primary">Original Trainer</h4>
-                    <select
-                      (change)="onTrainerSelect($event)"
-                      class="text-xs bg-surface border border-theme rounded px-2 py-1 text-secondary focus:text-primary focus:border-blue-500 outline-none max-w-[150px]"
-                    >
-                      <option value="">Auto-fill...</option>
-                      @for (tr of trainers(); track tr.id) {
-                        <option
-                          [value]="tr.id"
-                          [disabled]="!isTrainerCompatible(tr)"
-                          [class]="!isTrainerCompatible(tr) ? 'text-tertiary' : ''"
-                        >
-                          {{ tr.name }} ({{ tr.game }}){{
-                            !isTrainerCompatible(tr) ? ' — incompatible' : ''
-                          }}
-                        </option>
-                      }
-                    </select>
+                    <div class="w-40">
+                      <app-custom-dropdown
+                        [options]="trainerOptions()"
+                        [selectedId]="''"
+                        [label]="''"
+                        [placeholder]="'Auto-fill...'"
+                        [searchable]="false"
+                        (valueChanged)="onTrainerSelect($event)"
+                      />
+                    </div>
                   </div>
 
                   <div class="grid grid-cols-2 gap-3 mb-3">
-                    <div>
+                    <div class="relative group">
                       <input
                         [(ngModel)]="originalTrainer"
                         placeholder="OT Name"
-                        class="w-full bg-surface border border-theme rounded px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-blue-500 outline-none transition-colors"
+                        class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none transition-colors peer"
                       />
+                      <label
+                        class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
+                      >
+                        OT Name
+                      </label>
                     </div>
-                    <div>
+                    <div class="relative group">
                       <input
                         [(ngModel)]="trainerId"
                         placeholder="ID No."
-                        class="w-full bg-surface border border-theme rounded px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-blue-500 outline-none transition-colors"
+                        class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none transition-colors peer"
                       />
+                      <label
+                        class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
+                      >
+                        ID No.
+                      </label>
                     </div>
                   </div>
 
-                  <div class="relative">
-                    <select
-                      [(ngModel)]="originGame"
-                      class="w-full bg-surface border border-theme rounded px-3 py-2 text-sm text-primary appearance-none focus:border-blue-500 outline-none cursor-pointer"
-                    >
-                      <option value="" class="text-secondary">Select Origin Game</option>
-                      @for (genGroup of availableGamesByGen(); track genGroup.gen) {
-                        <optgroup [label]="genGroup.label">
-                          @for (game of genGroup.games; track game.code) {
-                            <option [value]="game.code">
-                              {{ game.fullName }}
-                              @if (!isObtainableIn(game.code)) {
-                                (via Trade/Breeding)
-                              }
-                            </option>
-                          }
-                        </optgroup>
-                      }
-                    </select>
-                    <div
-                      class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
-                    >
-                      ▼
-                    </div>
-                  </div>
+                  <app-custom-dropdown
+                    [label]="'Origin Game'"
+                    [options]="originGameOptions()"
+                    [selectedId]="originGame"
+                    [placeholder]="'Select Origin Game'"
+                    (valueChanged)="onOriginGameChange($event)"
+                  />
                 </div>
 
-                <div>
+                <div class="relative group">
                   <textarea
                     [(ngModel)]="notes"
                     rows="2"
-                    class="w-full bg-surface border border-theme rounded-xl px-4 py-3 text-sm text-primary placeholder:text-tertiary focus:border-blue-500 outline-none resize-none"
-                    placeholder="Add specific notes about this Pokémon..."
+                    class="w-full bg-surface border-2 border-theme rounded-lg px-4 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none resize-none transition-colors peer"
+                    placeholder="Notes"
                   ></textarea>
+                  <label
+                    class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
+                  >
+                    Notes
+                  </label>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="flex justify-between items-center mt-8 pt-4 border-t border-theme">
+          <!-- Footer (Static) -->
+          <div class="p-6 pt-4 border-t border-theme flex-none bg-surface z-10">
+            <div class="flex justify-between items-center">
               <div class="text-xs text-secondary">Last updated: {{ 'Just now' }}</div>
               <div class="flex gap-3">
                 <button
@@ -560,6 +567,16 @@ import Chart from 'chart.js/auto';
       .custom-scrollbar::-webkit-scrollbar-thumb:hover {
         background-color: var(--color-text-secondary);
       }
+
+      /* Hide arrows/spinners for number inputs */
+      .no-spinners::-webkit-outer-spin-button,
+      .no-spinners::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .no-spinners {
+        -moz-appearance: textfield;
+      }
     `,
   ],
 })
@@ -570,6 +587,8 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
 
   closed = output<void>();
   saved = output<void>();
+
+  localPokemonSlug = signal<string | null>(null);
 
   @ViewChild('statsChart') statsChartRef!: ElementRef<HTMLCanvasElement>;
   chartInstance: Chart | null = null;
@@ -587,14 +606,16 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   allRibbons = signal<RibbonData[]>([]);
   allPokemon = signal<SimplePokemon[]>([]);
 
-  ribbonOptions = computed<SearchableOption[]>(() => {
+  ribbonOptions = computed<CustomDropdownOption[]>(() => {
     return this.allRibbons()
       .map((ribbon) => ({
         id: ribbon.id,
         name: ribbon.name,
         description: ribbon.shortDesc,
         category: `Gen ${ribbon.gen}`,
-        iconPath: `assets/images/ribbons/${ribbon.id}.png`,
+        iconPath: AVAILABLE_SPRITES.ribbons.has(ribbon.id)
+          ? `assets/images/ribbons/${ribbon.id}.png`
+          : undefined,
       }))
       .sort((a, b) => {
         const genA = parseInt(a.category.replace('Gen ', ''));
@@ -604,14 +625,16 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       });
   });
 
-  markOptions = computed<SearchableOption[]>(() => {
+  markOptions = computed<CustomDropdownOption[]>(() => {
     return this.allMarks()
       .map((mark) => ({
         id: mark.id,
         name: mark.name,
         description: mark.shortDesc,
         category: `Gen ${mark.gen}`,
-        iconPath: `assets/images/marks/${mark.id}.png`,
+        iconPath: AVAILABLE_SPRITES.marks.has(mark.id)
+          ? `assets/images/marks/${mark.id}.png`
+          : undefined,
       }))
       .sort((a, b) => {
         const genA = parseInt(a.category.replace('Gen ', ''));
@@ -621,7 +644,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       });
   });
 
-  pokemonSearchOptions = computed<SearchableOption[]>(() => {
+  pokemonSearchOptions = computed<CustomDropdownOption[]>(() => {
     return this.allPokemon().map((p) => ({
       id: p.slug,
       name: p.name,
@@ -630,37 +653,56 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     }));
   });
 
-  private readonly POKEBALL_SPRITES = new Set([
-    'pokeball',
-    'greatball',
-    'ultraball',
-    'masterball',
-    'safariball',
-    'fastball',
-    'levelball',
-    'lureball',
-    'heavyball',
-    'loveball',
-    'friendball',
-    'moonball',
-    'sportball',
-    'netball',
-    'diveball',
-    'nestball',
-    'repeatball',
-    'timerball',
-    'luxuryball',
-    'premierball',
-    'duskball',
-    'healball',
-    'quickball',
-    'cherishball',
-    'parkball',
-    'dreamball',
-    'beastball',
-  ]);
+  abilityOptions = computed<CustomDropdownOption[]>(() => {
+    return this.availableAbilities().map((abil) => ({
+      id: abil.id,
+      name: abil.name,
+      description: abil.isHidden ? 'Hidden Ability' : 'Standard Ability',
+    }));
+  });
 
-  pokeballOptions = computed<SearchableOption[]>(() => {
+  natureOptions = computed<CustomDropdownOption[]>(() => {
+    return this.allNatures().map((nat) => {
+      let desc = '';
+      let descHtml = '';
+      if (nat.raises && nat.lowers) {
+        desc = `(+${this.getNatureStatLabel(nat.raises)} -${this.getNatureStatLabel(nat.lowers)})`;
+        descHtml = `(<span class="text-[#e46787] font-bold">+${this.getNatureStatLabel(nat.raises)}</span> <span class="text-[#3babdf] font-bold">-${this.getNatureStatLabel(nat.lowers)}</span>)`;
+      }
+      return {
+        id: nat.id,
+        name: nat.name,
+        description: desc,
+        descriptionHtml: descHtml,
+      };
+    });
+  });
+
+  languageOptions = computed<CustomDropdownOption[]>(() => {
+    return [
+      { id: '', name: 'None' },
+      { id: 'ENG', name: 'ENG', description: 'English' },
+      { id: 'DEU', name: 'DEU', description: 'German' },
+      { id: 'JPN', name: 'JPN', description: 'Japanese' },
+      { id: 'FRA', name: 'FRA', description: 'French' },
+      { id: 'ITA', name: 'ITA', description: 'Italian' },
+      { id: 'ESP', name: 'ESP', description: 'Spanish' },
+      { id: 'KOR', name: 'KOR', description: 'Korean' },
+      { id: 'CHS', name: 'CHS', description: 'Chinese (Simp)' },
+      { id: 'CHT', name: 'CHT', description: 'Chinese (Trad)' },
+    ];
+  });
+
+  trainerOptions = computed<CustomDropdownOption[]>(() => {
+    return this.trainers().map((tr) => ({
+      id: tr.id,
+      name: tr.name,
+      description: `(${tr.game})${!this.isTrainerCompatible(tr) ? ' — incompatible' : ''}`,
+      category: !this.isTrainerCompatible(tr) ? 'Incompatible' : 'Compatible',
+    }));
+  });
+
+  pokeballOptions = computed<CustomDropdownOption[]>(() => {
     const categoryLabels: Record<string, string> = {
       regular: 'Regular',
       special: 'Special',
@@ -672,13 +714,13 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       name: ball.name,
       description: ball.shortDesc,
       category: categoryLabels[ball.category] ?? ball.category,
-      iconPath: this.POKEBALL_SPRITES.has(ball.id)
+      iconPath: AVAILABLE_SPRITES.pokeballs.has(ball.id)
         ? `assets/images/pokeballs/${ball.id}.png`
         : undefined,
     }));
   });
 
-  itemOptions = computed<SearchableOption[]>(() => {
+  itemOptions = computed<CustomDropdownOption[]>(() => {
     const categoryLabels: Record<string, string> = {
       ball: 'Poké Ball',
       berry: 'Berry',
@@ -689,7 +731,9 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       name: item.name,
       description: item.shortDesc,
       category: categoryLabels[item.category] ?? item.category,
-      iconPath: `assets/images/items/${item.id}.png`,
+      iconPath: AVAILABLE_SPRITES.items.has(item.id)
+        ? `assets/images/items/${item.id}.png`
+        : undefined,
     }));
   });
 
@@ -720,6 +764,8 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   isOwned = false;
   isEvent = false;
   isShiny = false;
+  isGmax = false;
+  isAlpha = false;
   level?: number;
   ball = '';
   item = '';
@@ -739,8 +785,23 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   statsView = signal<'base' | 'current'>('base');
   availableGames = () => {
     const pokemon = this.pokemonData();
-    if (!pokemon || !pokemon.storableIn) return [];
-    return getAvailableGamesForPokemon(pokemon.storableIn);
+    if (!pokemon) return [];
+
+    // Always include games where it can be naturally caught or received via event
+    const validGames = new Set<string>([
+      ...(pokemon.obtainableIn || []),
+      ...(pokemon.eventOnlyIn || []),
+    ]);
+
+    // If it can breed, it can also be hatched in any game it can be transferred to.
+    const cannotBreed =
+      pokemon.isLegendary || pokemon.isMythical || pokemon.isUltraBeast || pokemon.isParadox;
+
+    if (!cannotBreed && pokemon.storableIn) {
+      pokemon.storableIn.forEach((game) => validGames.add(game));
+    }
+
+    return getAvailableGamesForPokemon(Array.from(validGames));
   };
   availableGamesByGen = () => {
     const games = this.availableGames();
@@ -764,6 +825,75 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
         games,
       }));
   };
+
+  originGameOptions = computed<CustomDropdownOption[]>(() => {
+    const GAME_ICON_MAP: Record<string, string> = {
+      'rby-r': 'red.png',
+      'rby-b': 'blue.png',
+      'rby-y': 'yellow.png',
+      'gsc-g': 'gold.png',
+      'gsc-s': 'silver.png',
+      'gsc-c': 'crystal.png',
+      'rse-r': 'ruby.png',
+      'rse-s': 'sapphire.png',
+      'rse-e': 'emerald.png',
+      'frlg-fr': 'fireredwebp.png',
+      'frlg-lg': 'leafgreen.png',
+      'dp-d': 'diamond.png',
+      'dp-p': 'pearl.png',
+      pt: 'platin.png',
+      'hgss-hg': 'heartgold.png',
+      'hgss-ss': 'soulsilver.png',
+      'xy-x': 'x.png',
+      'xy-y': 'y.png',
+      'oras-or': 'omega_ruby.png',
+      'oras-as': 'alpha_sapphire.png',
+      'sm-s': 'sun.png',
+      'sm-m': 'moon.png',
+      'usum-us': 'ultra_sun.png',
+      'usum-um': 'ultra_moon.png',
+      'lgpe-lgp': "let's_go_pikachu.png",
+      'lgpe-lge': "let's_go_eevee.png",
+      'swsh-sw': 'sword.png',
+      'swsh-sh': 'shield.png',
+      'bdsp-bd': 'brilliant_diamond.png',
+      'bdsp-sp': 'shining_pearl.png',
+      la: 'legends_arceus.png',
+      'sv-s': 'scarlet.png',
+      'sv-v': 'violet.png',
+      lza: 'legends_z-a.png',
+      go: 'go.png',
+      home: 'home.png',
+      bank: 'bank.png',
+    };
+
+    const options: CustomDropdownOption[] = [];
+    options.push({
+      id: '',
+      name: 'None',
+      description: 'No Origin Game selected',
+      category: 'Options',
+    });
+
+    this.availableGamesByGen().forEach((group) => {
+      group.games.forEach((game) => {
+        const iconFilename = GAME_ICON_MAP[game.code];
+        options.push({
+          id: game.code,
+          name: game.fullName,
+          category: group.label,
+          iconPath: iconFilename ? `assets/images/games/${iconFilename}` : undefined,
+        });
+      });
+    });
+
+    return options;
+  });
+
+  onOriginGameChange(gameCode: string) {
+    this.originGame = gameCode;
+  }
+
   isObtainableIn(gameCode: string): boolean {
     const pokemon = this.pokemonData();
     return pokemon?.obtainableIn?.includes(gameCode) || false;
@@ -771,9 +901,12 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     const pkmn = this.pokemon();
+    this.localPokemonSlug.set(pkmn.pokemonSlug);
     this.isOwned = pkmn.isOwned;
     this.isEvent = pkmn.isEvent || false;
     this.isShiny = pkmn.isShiny;
+    this.isGmax = pkmn.isGmax || false;
+    this.isAlpha = pkmn.isAlpha || false;
     this.customName = pkmn.customName || '';
     this.notes = pkmn.notes || '';
     this.level = pkmn.level;
@@ -805,8 +938,8 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       this.allPokemon.set(pokemonList);
     });
 
-    if (this.pokemon().pokemonSlug) {
-      this.datasetService.loadPokemonBySlug(this.pokemon().pokemonSlug!).subscribe((data) => {
+    if (this.localPokemonSlug()) {
+      this.datasetService.loadPokemonBySlug(this.localPokemonSlug()!).subscribe((data) => {
         this.pokemonData.set(data);
         this.updateSpritePreview();
         setTimeout(() => this.initChart(), 100);
@@ -851,6 +984,9 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
         if (pokemon?.ability1) {
           this.ability = this.findAbilityName(pokemon.ability1);
         }
+        if (pokemon?.isGmax) {
+          this.isGmax = true;
+        }
       }
     }
   }
@@ -881,19 +1017,38 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     return this.availableGames().some((g) => g.code === trainer.game);
   }
 
-  onTrainerSelect(event: Event) {
-    const select = event.target as HTMLSelectElement;
-    const tId = select.value;
-    const trainer = this.trainers().find((t) => t.id === tId);
+  onTrainerSelect(trainerId: string) {
+    if (!trainerId) return;
+    const trainer = this.trainers().find((t) => t.id === trainerId);
     if (trainer) {
+      if (!this.isTrainerCompatible(trainer)) return;
+
       this.originalTrainer = trainer.name;
       this.trainerId = trainer.trainerId;
-      if (trainer.game) this.originGame = trainer.game;
+      if (trainer.game && this.isObtainableIn(trainer.game)) {
+        this.originGame = trainer.game;
+      }
     }
   }
 
   updateChart() {
     setTimeout(() => this.initChart(), 50);
+  }
+
+  onLevelChange(newLevel: number | null) {
+    if (newLevel !== null && newLevel !== undefined) {
+      if (newLevel < 1) this.level = 1;
+      else if (newLevel > 100) this.level = 100;
+      else this.level = newLevel;
+    } else {
+      this.level = undefined;
+    }
+    this.updateChart();
+  }
+
+  onNatureChange(natureId: string) {
+    this.nature = natureId;
+    this.updateChart();
   }
 
   switchStatsView(view: 'base' | 'current') {
@@ -913,6 +1068,24 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
     const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
     const textColor = isDarkMode ? '#cbd5e1' : '#4b5563';
+
+    const getStatColor = (stat: string) => {
+      if (!this.nature) return textColor;
+      const nature = this.allNatures().find((n) => n.id === this.nature);
+      if (!nature) return textColor;
+      if (nature.raises === stat) return '#e46787'; // Red for increased stat
+      if (nature.lowers === stat) return '#3babdf'; // Blue for decreased stat
+      return textColor;
+    };
+
+    const pointLabelColors = [
+      textColor, // HP
+      getStatColor('atk'), // Atk
+      getStatColor('def'), // Def
+      getStatColor('spe'), // Spe
+      getStatColor('spd'), // SpD
+      getStatColor('spa'), // SpA
+    ];
 
     let statValues: number[];
     let chartColor: string;
@@ -998,7 +1171,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
             max: viewMode === 'current' ? Math.max(400, ...statValues) : 200,
             grid: { color: gridColor },
             pointLabels: {
-              color: textColor,
+              color: pointLabelColors as any,
               font: { size: 11, weight: 'bold' },
               padding: 8,
             },
@@ -1041,9 +1214,12 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     this.saving.set(true);
     try {
       const updates: any = {
+        pokemonSlug: this.localPokemonSlug() || null,
         isOwned: this.isOwned,
         isEvent: this.isEvent,
         isShiny: this.isShiny,
+        isGmax: this.isGmax,
+        isAlpha: this.isAlpha,
         level: this.level || null,
         ball: this.ball || null,
         item: this.item || null,
@@ -1080,12 +1256,12 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     if (!newPokemonSlug) {
       this.pokemonData.set(null);
       this.currentSpriteUrl.set('');
+      this.localPokemonSlug.set(null);
       return;
     }
+    this.localPokemonSlug.set(newPokemonSlug);
     this.datasetService.loadPokemonBySlug(newPokemonSlug).subscribe((data) => {
       this.pokemonData.set(data);
-      const currentPokemon = this.pokemon();
-      currentPokemon.pokemonSlug = newPokemonSlug;
       this.updateSpritePreview();
       setTimeout(() => this.initChart(), 100);
     });
