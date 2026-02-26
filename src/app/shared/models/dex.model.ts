@@ -24,6 +24,8 @@ export interface BoxSlot {
   isShiny: boolean;
   isOwned: boolean;
   isEvent?: boolean;
+  isGmax?: boolean;
+  isAlpha?: boolean;
   customName?: string;
   notes?: string;
   level?: number;

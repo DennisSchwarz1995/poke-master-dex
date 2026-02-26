@@ -29,8 +29,13 @@ export interface DatasetPokemon {
   isForm: boolean;
   isLegendary: boolean;
   isMythical: boolean;
+  isBaby?: boolean;
+  isUltraBeast?: boolean;
+  isParadox?: boolean;
   isMega: boolean;
   isGmax: boolean;
+  canGmax?: boolean;
+  canBeAlpha?: boolean;
   isRegional: boolean;
   baseHp: number;
   baseAtk: number;
