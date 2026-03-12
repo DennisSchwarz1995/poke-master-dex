@@ -342,7 +342,7 @@ import Chart from 'chart.js/auto';
                         (ngModelChange)="onLevelChange($event)"
                         min="1"
                         max="100"
-                        class="w-full h-[50px] bg-surface border-2 border-theme rounded-lg px-3 py-3 text-primary font-mono text-lg focus:border-blue-500 outline-none transition-colors peer placeholder-transparent no-spinners"
+                        class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary focus:border-blue-500 outline-none transition-colors peer placeholder-transparent no-spinners"
                         placeholder="Level"
                       />
                       <label
@@ -787,13 +787,11 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     const pokemon = this.pokemonData();
     if (!pokemon) return [];
 
-    // Always include games where it can be naturally caught or received via event
     const validGames = new Set<string>([
       ...(pokemon.obtainableIn || []),
       ...(pokemon.eventOnlyIn || []),
     ]);
 
-    // If it can breed, it can also be hatched in any game it can be transferred to.
     const cannotBreed =
       pokemon.isLegendary || pokemon.isMythical || pokemon.isUltraBeast || pokemon.isParadox;
 
@@ -803,6 +801,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
 
     return getAvailableGamesForPokemon(Array.from(validGames));
   };
+
   availableGamesByGen = () => {
     const games = this.availableGames();
     const grouped = new Map<number, GameDefinition[]>();
@@ -837,13 +836,17 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       'rse-r': 'ruby.png',
       'rse-s': 'sapphire.png',
       'rse-e': 'emerald.png',
-      'frlg-fr': 'fireredwebp.png',
+      'frlg-fr': 'firered.png',
       'frlg-lg': 'leafgreen.png',
       'dp-d': 'diamond.png',
       'dp-p': 'pearl.png',
       pt: 'platin.png',
       'hgss-hg': 'heartgold.png',
       'hgss-ss': 'soulsilver.png',
+      'bw-b': 'black.png',
+      'bw-w': 'white.png',
+      'b2w2-b2': 'black2.png',
+      'b2w2-w2': 'white2.png',
       'xy-x': 'x.png',
       'xy-y': 'y.png',
       'oras-or': 'omega_ruby.png',
@@ -1013,7 +1016,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     return labels[stat] || stat;
   }
   isTrainerCompatible(trainer: Trainer): boolean {
-    if (!trainer.game) return true; // No game set → always compatible
+    if (!trainer.game) return true;
     return this.availableGames().some((g) => g.code === trainer.game);
   }
 
@@ -1073,8 +1076,8 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       if (!this.nature) return textColor;
       const nature = this.allNatures().find((n) => n.id === this.nature);
       if (!nature) return textColor;
-      if (nature.raises === stat) return '#e46787'; // Red for increased stat
-      if (nature.lowers === stat) return '#3babdf'; // Blue for decreased stat
+      if (nature.raises === stat) return '#e46787';
+      if (nature.lowers === stat) return '#3babdf';
       return textColor;
     };
 
@@ -1127,7 +1130,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
           nature?.lowers === 'spa',
         ),
       ];
-      chartColor = 'rgba(34, 197, 94, 0.8)'; // Green for current stats
+      chartColor = 'rgba(34, 197, 94, 0.8)';
     } else {
       statValues = [
         stats.baseHp,
@@ -1137,7 +1140,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
         stats.baseSpDef,
         stats.baseSpAtk,
       ];
-      chartColor = 'rgba(59, 130, 246, 0.8)'; // Blue for base stats
+      chartColor = 'rgba(59, 130, 246, 0.8)';
     }
 
     this.chartInstance = new Chart(ctx, {

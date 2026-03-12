@@ -1,4 +1,4 @@
-import { Component, signal, inject, output, HostListener } from '@angular/core';
+import { Component, signal, computed, inject, output, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DexType, DexTypeConfig } from '../../../shared/models/dex.model';
@@ -12,21 +12,29 @@ import { firstValueFrom } from 'rxjs';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" (click)="close()">
-      <div class="bg-surface rounded-lg p-6 max-w-2xl w-full mx-4 border border-theme" (click)="$event.stopPropagation()">
+    <div
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      (click)="close()"
+    >
+      <div
+        class="bg-surface rounded-lg p-6 max-w-2xl w-full mx-4 border border-theme"
+        (click)="$event.stopPropagation()"
+      >
         <h2 class="text-2xl font-bold mb-6 text-primary">Create New Dex</h2>
-        
+
         @if (step() === 1) {
           <div class="space-y-4">
             <h3 class="font-semibold mb-4 text-primary">Select Dex Type:</h3>
-            
+
             @for (config of dexTypeConfigs; track config.type) {
               <button
                 (click)="selectDexType(config.type)"
                 class="w-full text-left p-4 rounded-lg border-2 transition-all"
-                [class.border-blue-500]="selectedType() === config.type"
-                [class.bg-secondary/50]="selectedType() === config.type"
-                [class.border-theme]="selectedType() !== config.type"
+                [ngClass]="
+                  selectedType() === config.type
+                    ? 'border-blue-500 bg-secondary/50'
+                    : 'border-theme'
+                "
               >
                 <div class="flex items-start gap-4">
                   <span class="text-3xl">{{ config.icon }}</span>
@@ -37,12 +45,12 @@ import { firstValueFrom } from 'rxjs';
                 </div>
               </button>
             }
-            
+
             <div class="flex justify-end gap-3 mt-6">
               <button (click)="close()" class="px-4 py-2 text-secondary hover:text-primary">
                 Cancel
               </button>
-              <button 
+              <button
                 (click)="nextStep()"
                 [disabled]="!selectedType()"
                 class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
@@ -52,22 +60,22 @@ import { firstValueFrom } from 'rxjs';
             </div>
           </div>
         }
-        
+
         @if (step() === 2) {
           <div class="space-y-4">
             <div>
               <label class="block font-semibold mb-2 text-primary">Dex Name:</label>
-              <input 
+              <input
                 [(ngModel)]="dexName"
                 type="text"
                 placeholder="My Living Dex"
                 class="w-full px-4 py-2 bg-surface border-theme rounded text-primary placeholder:text-tertiary focus:outline-none focus:border-blue-500"
               />
             </div>
-            
+
             <div>
               <label class="block font-semibold mb-2">Start Box (1-200):</label>
-              <input 
+              <input
                 [(ngModel)]="startBox"
                 type="number"
                 min="1"
@@ -75,24 +83,33 @@ import { firstValueFrom } from 'rxjs';
                 class="w-full px-4 py-2 bg-surface border-theme rounded text-primary placeholder:text-tertiary focus:outline-none focus:border-blue-500"
               />
               <p class="text-sm text-secondary mt-1">
-                Pokemon will be populated starting from this box. 
-                Box {{ startBox }} will contain Pokemon #1-30.
+                Pokemon will be populated starting from this box. Box {{ startBox }} will contain
+                Pokemon #1-30.
               </p>
             </div>
-            
+
             <div class="bg-secondary/50 border border-theme p-4 rounded">
-              <p class="text-sm text-primary">
-                <strong>Auto-population:</strong> All 1025 Pokemon will be filled 
-                across 35 boxes starting from Box {{ startBox }}.
-                All Pokemon will be grayed out until you mark them as owned.
-              </p>
+              @if (loadingCount()) {
+                <p class="text-sm text-primary flex items-center gap-2">
+                  <span
+                    class="animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"
+                  ></span>
+                  Calculating population data...
+                </p>
+              } @else {
+                <p class="text-sm text-primary">
+                  <strong>Auto-population:</strong> All {{ expectedPokemonCount() }} Pokemon will be
+                  filled across {{ expectedBoxCount() }} boxes starting from Box {{ startBox }}. All
+                  Pokemon will be grayed out until you mark them as owned.
+                </p>
+              }
             </div>
-            
+
             <div class="flex justify-end gap-3 mt-6">
               <button (click)="prevStep()" class="px-4 py-2 text-secondary hover:text-primary">
                 Back
               </button>
-              <button 
+              <button
                 (click)="createDex()"
                 [disabled]="!dexName || creating()"
                 class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
@@ -105,105 +122,128 @@ import { firstValueFrom } from 'rxjs';
       </div>
     </div>
   `,
-  styles: []
+  styles: [],
 })
 export class CreateDexDialogComponent {
   private firestoreService = inject(FirestoreService);
   private authService = inject(AuthService);
   private datasetService = inject(DatasetService);
-  
+
   closed = output<void>();
   dexCreated = output<void>();
-  
+
   step = signal(1);
   selectedType = signal<DexType | null>(null);
   dexName = '';
   startBox = 1;
   creating = signal(false);
-  
+
+  expectedPokemonCount = signal<number>(0);
+  expectedSlotCount = signal<number>(0);
+  expectedBoxCount = computed(() => Math.ceil(this.expectedSlotCount() / 30));
+  loadingCount = signal<boolean>(false);
+
   dexTypeConfigs: DexTypeConfig[] = [
     {
       type: DexType.STANDARD,
-      name: 'Standard Dex',
-      description: 'Basic Pokemon collection without restrictions',
+      name: 'Personal Pokedex',
+      description: 'Your own custom Pokemon collection without restrictions',
       icon: '📋',
-      color: 'blue'
+      color: 'blue',
     },
     {
       type: DexType.LIVING,
       name: 'Living Dex',
       description: 'One Pokemon of each species (1025 total)',
       icon: '🌱',
-      color: 'green'
+      color: 'green',
     },
     {
       type: DexType.SHINY_LIVING,
       name: 'Shiny Living Dex',
       description: 'Shiny version of each species',
       icon: '✨',
-      color: 'yellow'
+      color: 'yellow',
     },
     {
       type: DexType.FORM,
       name: 'Form Dex',
       description: 'All forms and variants of each Pokemon',
       icon: '🔄',
-      color: 'purple'
+      color: 'purple',
     },
     {
       type: DexType.ORIGIN,
       name: 'Origin Dex',
       description: 'Collection of Pokemon you caught as Original Trainer',
       icon: '🏆',
-      color: 'red'
-    }
+      color: 'red',
+    },
   ];
-  
+
   selectDexType(type: DexType) {
     this.selectedType.set(type);
   }
-  
-  nextStep() {
+
+  async nextStep() {
     if (this.selectedType()) {
-      this.step.set(2);
-      const config = this.dexTypeConfigs.find(c => c.type === this.selectedType());
+      const config = this.dexTypeConfigs.find((c) => c.type === this.selectedType());
       this.dexName = config?.name || '';
+
+      this.loadingCount.set(true);
+      this.step.set(2);
+
+      try {
+        const mapping = await firstValueFrom(
+          this.datasetService.createDexMapping(this.selectedType()!),
+        );
+        this.expectedPokemonCount.set(mapping.filter((m) => m !== null).length);
+        this.expectedSlotCount.set(mapping.length);
+      } catch (err) {
+        console.error('Failed to calculate dex size', err);
+      } finally {
+        this.loadingCount.set(false);
+      }
     }
   }
-  
+
   prevStep() {
     this.step.set(1);
   }
-  
+
   async createDex() {
     if (!this.selectedType() || !this.dexName) return;
-    
+
     this.creating.set(true);
-    
+
     try {
-      const config = this.dexTypeConfigs.find(c => c.type === this.selectedType());
-      const pokemonMapping = await firstValueFrom(
-        this.datasetService.createDexMapping(this.selectedType()!)
-      );
-      
+      const config = this.dexTypeConfigs.find((c) => c.type === this.selectedType());
+      const selectedType = this.selectedType()!;
+
+      const [pokemonMapping, boxNames] = await Promise.all([
+        firstValueFrom(this.datasetService.createDexMapping(selectedType)),
+        firstValueFrom(this.datasetService.getDexBoxNames(selectedType)),
+      ]);
+
       const dexId = await this.firestoreService.createDex({
         name: this.dexName,
-        type: this.selectedType()!,
+        type: selectedType,
         description: config!.description,
         startBox: this.startBox,
-        totalBoxes: 200
+        totalBoxes: 200,
       });
-      
+
       const userId = this.authService.user()?.uid;
       if (userId) {
         await this.firestoreService.initializeBoxes(
-          userId, 
-          dexId, 
+          userId,
+          dexId,
           this.startBox,
-          pokemonMapping
+          pokemonMapping,
+          boxNames,
         );
       }
-      
+
       this.dexCreated.emit();
       this.close();
     } catch (err) {
@@ -211,7 +251,7 @@ export class CreateDexDialogComponent {
       this.creating.set(false);
     }
   }
-  
+
   close() {
     this.closed.emit();
   }

@@ -49,3 +49,13 @@ Thumbs.db
 
 # Dev scripts
 /scripts
+/scripts/download-icons.mjs
+analyze-form-dex.mjs
+analyze-regions.mjs
+analyze-shiny-dex.mjs
+analyze-living-dex.mjs
+analyze-standard-dex.mjs
+analyze-boxes.mjs
+test-regions.mjs
+box-contents-utf8.txt
+box-contents.txt

@@ -9,10 +9,9 @@ import { TypeColorService } from '../../../core/services/type-color.service';
   imports: [CommonModule],
   template: `
     <div
-      class="flex flex-col items-center p-2 rounded-lg transition-all duration-200 cursor-pointer border-2"
+      class="flex flex-col items-center p-2 rounded-lg transition-all duration-200 cursor-pointer border-2 bg-surface-raised"
       style="corner-shape: squircle;"
       [ngStyle]="borderStyle()"
-      [class.bg-surface]="isHovered()"
       [class.shadow-lg]="isHovered()"
       [class.scale-105]="isHovered()"
       [class.z-20]="isHovered()"
@@ -89,7 +88,7 @@ export class PokemonSpriteComponent {
     const color2 = this.typeColorService.getTypeColor(types[1]);
 
     return {
-      'background-image': `linear-gradient(var(--color-surface), var(--color-surface)), linear-gradient(to right, ${color1}, ${color2})`,
+      'background-image': `linear-gradient(var(--color-surface-raised), var(--color-surface-raised)), linear-gradient(to right, ${color1}, ${color2})`,
       'background-origin': 'border-box',
       'background-clip': 'padding-box, border-box',
       border: '2px solid transparent',

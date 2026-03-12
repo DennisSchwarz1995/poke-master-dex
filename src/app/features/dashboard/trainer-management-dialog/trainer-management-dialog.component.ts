@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { Trainer } from '../../../shared/models/trainer.model';
 import { GAME_CODES, GameDefinition } from '../../../shared/models/game-definitions';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-trainer-management-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConfirmDialogComponent],
   template: `
     <div
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -127,6 +128,18 @@ import { GAME_CODES, GameDefinition } from '../../../shared/models/game-definiti
         }
       </div>
     </div>
+
+    @if (trainerToDelete()) {
+      <app-confirm-dialog
+        title="Delete Trainer Profile"
+        message="Are you sure you want to delete this trainer profile? This action cannot be undone."
+        icon="⚠️"
+        confirmText="Delete"
+        cancelText="Cancel"
+        (confirmed)="confirmDeleteTrainer()"
+        (cancelled)="cancelDeleteTrainer()"
+      />
+    }
   `,
   styles: [],
 })
@@ -138,6 +151,7 @@ export class TrainerManagementDialogComponent {
   trainers = signal<Trainer[]>([]);
   showForm = signal(false);
   saving = signal(false);
+  trainerToDelete = signal<string | null>(null);
 
   newTrainerName = '';
   newTrainerId = '';
@@ -198,8 +212,19 @@ export class TrainerManagementDialogComponent {
     }
   }
 
-  async deleteTrainer(trainerId: string) {
-    if (!confirm('Delete this trainer profile?')) return;
+  deleteTrainer(trainerId: string) {
+    this.trainerToDelete.set(trainerId);
+  }
+
+  cancelDeleteTrainer() {
+    this.trainerToDelete.set(null);
+  }
+
+  async confirmDeleteTrainer() {
+    const trainerId = this.trainerToDelete();
+    if (!trainerId) return;
+
+    this.trainerToDelete.set(null);
 
     try {
       await this.firestoreService.deleteTrainer(trainerId);

@@ -185,76 +185,83 @@ export class DatasetService {
       );
   }
 
-  createDexMapping(dexType: DexType): Observable<DexPokemonMapping[]> {
+  getDexBoxNames(dexType: DexType): Observable<string[] | undefined> {
+    if (dexType === DexType.FORM) {
+      return this.http.get<string[]>(`${this.datasetBasePath}/indices/form-dex-boxes.json`).pipe(
+        catchError((err) => {
+          console.error('Failed to load form dex box names.', err);
+          return of(undefined);
+        }),
+      );
+    }
+
+    if (dexType === DexType.STANDARD) {
+      return this.http
+        .get<string[]>(`${this.datasetBasePath}/indices/personal-dex-boxes.json`)
+        .pipe(
+          catchError((err) => {
+            console.error('Failed to load personal dex box names.', err);
+            return of(undefined);
+          }),
+        );
+    }
+
+    if (dexType === DexType.LIVING || dexType === DexType.SHINY_LIVING) {
+      return this.http
+        .get<string[]>(`${this.datasetBasePath}/indices/standard-dex-boxes.json`)
+        .pipe(
+          catchError((err) => {
+            console.error('Failed to load living dex box names.', err);
+            return of(undefined);
+          }),
+        );
+    }
+
+    return of(undefined);
+  }
+
+  createDexMapping(dexType: DexType): Observable<(DexPokemonMapping | null)[]> {
+    if (dexType === DexType.FORM) {
+      return this.http
+        .get<(DexPokemonMapping | null)[]>(`${this.datasetBasePath}/indices/form-dex-mapping.json`)
+        .pipe(
+          catchError((err) => {
+            console.error('Failed to load form dex mapping.', err);
+            return of([]);
+          }),
+        );
+    }
+
+    if (dexType === DexType.LIVING || dexType === DexType.SHINY_LIVING) {
+      return this.http
+        .get<
+          (DexPokemonMapping | null)[]
+        >(`${this.datasetBasePath}/indices/standard-dex-mapping.json`)
+        .pipe(
+          catchError((err) => {
+            console.error('Failed to load standard dex mapping.', err);
+            return of([]);
+          }),
+        );
+    }
+
+    if (dexType === DexType.STANDARD) {
+      // Personal Pokedex starts completely empty, we just need to determine the number of boxes
+      return this.getDexBoxNames(DexType.STANDARD).pipe(
+        map((boxNames) => {
+          const totalBoxes = boxNames ? boxNames.length : 40; // Default to 40 boxes if not found
+          const emptySlots = new Array(totalBoxes * 30).fill(null);
+          return emptySlots;
+        }),
+      );
+    }
+
     return this.loadPokemonIndex().pipe(
       map((allSlugs) => {
-        let filteredSlugs: string[];
+        let filteredSlugs: string[] = [];
 
-        switch (dexType) {
-          case DexType.FORM:
-            filteredSlugs = allSlugs;
-            break;
-
-          case DexType.STANDARD:
-          case DexType.LIVING:
-          case DexType.SHINY_LIVING:
-            filteredSlugs = allSlugs.filter((slug) => {
-              if (slug.includes('-')) {
-                const specialCases = [
-                  'mr-mime',
-                  'mime-jr',
-                  'ho-oh',
-                  'porygon-z',
-                  'jangmo-o',
-                  'hakamo-o',
-                  'kommo-o',
-                  'tapu-koko',
-                  'tapu-lele',
-                  'tapu-bulu',
-                  'tapu-fini',
-                  'type-null',
-                  'chi-yu',
-                  'chien-pao',
-                  'ting-lu',
-                  'wo-chien',
-                  'great-tusk',
-                  'scream-tail',
-                  'brute-bonnet',
-                  'flutter-mane',
-                  'slither-wing',
-                  'sandy-shocks',
-                  'iron-treads',
-                  'iron-bundle',
-                  'iron-hands',
-                  'iron-jugulis',
-                  'iron-moth',
-                  'iron-thorns',
-                  'roaring-moon',
-                  'iron-valiant',
-                  'walking-wake',
-                  'iron-leaves',
-                  'gouging-fire',
-                  'raging-bolt',
-                  'iron-boulder',
-                  'iron-crown',
-                ];
-
-                if (specialCases.includes(slug)) {
-                  return true;
-                }
-
-                return false;
-              }
-              return true;
-            });
-            break;
-
-          case DexType.ORIGIN:
-            filteredSlugs = [];
-            break;
-
-          default:
-            filteredSlugs = [];
+        if (dexType === DexType.ORIGIN) {
+          filteredSlugs = [];
         }
 
         return filteredSlugs.map((slug, index) => ({
