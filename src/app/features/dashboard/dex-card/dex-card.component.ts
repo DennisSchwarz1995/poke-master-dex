@@ -34,9 +34,14 @@ import { Dex, DexType } from '../../../shared/models/dex.model';
           <h3 class="text-xl font-bold text-primary mb-2">
             {{ currentDex.name }}
           </h3>
-          <p class="text-secondary text-sm mb-4 flex-1">
+          <p class="text-secondary text-sm flex-1">
             {{ currentDex.description }}
           </p>
+          
+          <div class="mb-4">
+             <span class="text-xs text-secondary font-medium">Type: </span>
+             <span class="text-sm font-semibold text-primary pl-1">{{ getTypeName(currentDex.type) }}</span>
+          </div>
           
           <div class="flex items-center justify-between text-sm">
             <span class="text-secondary">

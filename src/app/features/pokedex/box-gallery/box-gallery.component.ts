@@ -29,7 +29,7 @@ interface BoxWithSprites {
         [dexId]="dexId()"
         [dexName]="dex()?.name || 'Loading...'"
         currentView="gallery"
-        (editNameRequested)="openEditNameDialog()"
+        (nameSaved)="onDexNameSaved($event)"
       />
       
       <div class="container mx-auto px-4 pt-6 pb-2">
@@ -98,7 +98,7 @@ interface BoxWithSprites {
                 <div class="grid grid-cols-6 gap-0.5 bg-secondary rounded p-1">
                   @for (sprite of boxData.sprites; track $index) {
                     <div 
-                      class="bg-surface rounded aspect-square flex items-center justify-center relative group cursor-pointer transition-all hover:z-10 border-2 border-transparent"
+                      class="bg-surface-raised rounded aspect-square flex items-center justify-center relative group cursor-pointer transition-all hover:z-10 border-2 border-transparent"
                       [class.grayscale]="!boxData.box.slots[$index]?.isOwned"
                       [class.opacity-40]="!boxData.box.slots[$index]?.isOwned"
                       [title]="boxData.names[$index] || ''"
@@ -280,8 +280,17 @@ export class BoxGalleryComponent implements OnInit, OnDestroy {
     this.router.navigate(['/dex', this.dexId(), 'box', boxNumber]);
   }
   
-  openEditNameDialog() {
-    console.log('Edit Dex name');
+  async onDexNameSaved(newName: string) {
+    try {
+      await this.firestoreService.updateDexName(this.dexId(), newName);
+      
+      const currentDex = this.dex();
+      if (currentDex) {
+        this.dex.set({ ...currentDex, name: newName });
+      }
+    } catch (err) {
+      console.error('Failed to update Dex name:', err);
+    }
   }
   
   onSearchChange(query: string) {
@@ -350,7 +359,7 @@ export class BoxGalleryComponent implements OnInit, OnDestroy {
     const color2 = this.typeColorService.getTypeColor(types[1]);
     
     return {
-      'background-image': `linear-gradient(var(--color-surface), var(--color-surface)), linear-gradient(to right, ${color1}, ${color2})`,
+      'background-image': `linear-gradient(var(--color-surface-raised), var(--color-surface-raised)), linear-gradient(to right, ${color1}, ${color2})`,
       'background-origin': 'border-box',
       'background-clip': 'padding-box, border-box',
       'border': '2px solid transparent'

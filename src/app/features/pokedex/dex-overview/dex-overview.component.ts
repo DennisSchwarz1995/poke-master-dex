@@ -15,7 +15,7 @@ import { Dex, Box } from '../../../shared/models/dex.model';
         [dexId]="dexId()"
         [dexName]="dex()?.name || 'Loading...'"
         currentView="overview"
-        (editNameRequested)="openEditNameDialog()"
+        (nameSaved)="onDexNameSaved($event)"
       />
       
       <main class="container mx-auto px-4 py-8">
@@ -141,7 +141,16 @@ export class DexOverviewComponent implements OnInit {
     this.router.navigate(['/dex', this.dexId(), 'box', boxNumber]);
   }
   
-  openEditNameDialog() {
-    console.log('Edit Dex name');
+  async onDexNameSaved(newName: string) {
+    try {
+      await this.firestoreService.updateDexName(this.dexId(), newName);
+      
+      const currentDex = this.dex();
+      if (currentDex) {
+        this.dex.set({ ...currentDex, name: newName });
+      }
+    } catch (err) {
+      console.error('Failed to update Dex name:', err);
+    }
   }
 }

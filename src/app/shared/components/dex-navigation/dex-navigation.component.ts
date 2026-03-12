@@ -1,5 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TrainerManagementDialogComponent } from '../../../features/dashboard/trainer-management-dialog/trainer-management-dialog.component';
 
@@ -8,21 +9,47 @@ export type DexViewType = 'box' | 'gallery' | 'overview';
 @Component({
   selector: 'app-dex-navigation',
   standalone: true,
-  imports: [CommonModule, TrainerManagementDialogComponent],
+  imports: [CommonModule, TrainerManagementDialogComponent, FormsModule],
   template: `
     <div class="bg-surface border-b border-theme shadow-sm sticky top-0 z-10">
       <div class="container mx-auto px-4 py-4">
         <div class="flex items-center justify-between flex-wrap gap-4">
           
           <div class="flex items-center gap-2">
-            <h1 class="text-xl font-bold">{{ dexName() }}</h1>
-            <button 
-              (click)="onEditName()"
-              class="text-tertiary hover:text-blue-500 transition-colors"
-              title="Rename Dex"
-            >
-              ✏️
-            </button>
+            @if (isEditingName()) {
+              <div class="flex items-center gap-2">
+                <input 
+                  #dexNameInput
+                  [(ngModel)]="editNameValue"
+                  type="text"
+                  maxlength="30"
+                  class="text-xl font-bold px-2 py-1 border-2 border-theme bg-surface text-primary rounded focus:outline-none focus:border-blue-500 w-[250px]"
+                  (keyup.enter)="saveName()"
+                  (keyup.escape)="cancelEdit()"
+                />
+                <button 
+                  (click)="saveName()"
+                  class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
+                >
+                  ✓
+                </button>
+                <button 
+                  (click)="cancelEdit()"
+                  class="px-2 py-1 bg-surface-hover text-secondary rounded border border-theme text-sm"
+                >
+                  ✕
+                </button>
+              </div>
+            } @else {
+              <h1 class="text-xl font-bold">{{ dexName() }}</h1>
+              <button 
+                (click)="startEdit()"
+                class="text-tertiary hover:text-blue-500 transition-colors"
+                title="Rename Dex"
+              >
+                ✏️
+              </button>
+            }
           </div>
           
           
@@ -122,8 +149,10 @@ export class DexNavigationComponent {
   currentView = input.required<DexViewType>();
   currentBoxNumber = input<number>();
   
-  editNameRequested = output<void>();
+  nameSaved = output<string>();
   showTrainerDialog = signal(false);
+  isEditingName = signal(false);
+  editNameValue = '';
   
   constructor(private router: Router) {}
   
@@ -160,8 +189,27 @@ export class DexNavigationComponent {
     this.router.navigate(['/dex', this.dexId(), 'box', nextBox]);
   }
   
-  onEditName() {
-    this.editNameRequested.emit();
+  startEdit() {
+    this.editNameValue = this.dexName();
+    this.isEditingName.set(true);
+  }
+  
+  saveName() {
+    if (!this.editNameValue.trim() || this.editNameValue.length > 30) {
+      this.cancelEdit();
+      return;
+    }
+    
+    if (this.editNameValue.trim() !== this.dexName()) {
+      this.nameSaved.emit(this.editNameValue.trim());
+    }
+    
+    this.isEditingName.set(false);
+  }
+  
+  cancelEdit() {
+    this.editNameValue = '';
+    this.isEditingName.set(false);
   }
 }
 
