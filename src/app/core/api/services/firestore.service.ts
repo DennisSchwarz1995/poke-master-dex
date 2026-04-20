@@ -13,9 +13,11 @@ import {
   Timestamp,
 } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AuthService } from '../../auth/services/auth.service';
 import { Dex, Box, BoxSlot } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +25,7 @@ import { Trainer } from '../../../shared/models/trainer.model';
 export class FirestoreService {
   private firestore = inject(Firestore);
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   getUserDexList(): Observable<Dex[]> {
     const userId = this.authService.user()?.uid;
@@ -45,6 +48,7 @@ export class FirestoreService {
     };
 
     const docRef = await addDoc(dexCollection, newDex);
+    this.toastService.success(`Dex ${dex.name} created successfully`);
     return docRef.id;
   }
 
@@ -145,6 +149,14 @@ export class FirestoreService {
     return collectionData(boxesCollection) as Observable<Box[]>;
   }
 
+  getDexBox(dexId: string, boxNumber: number): Observable<Box | undefined> {
+    const userId = this.authService.user()?.uid;
+    if (!userId) return of(undefined);
+
+    const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
+    return (docData(boxRef) as Observable<Box | undefined>).pipe(take(1));
+  }
+
   async updateBoxName(dexId: string, boxNumber: number, newName: string): Promise<void> {
     const userId = this.authService.user()?.uid;
     if (!userId) throw new Error('User not authenticated');
@@ -217,7 +229,7 @@ export class FirestoreService {
     boxNumber: number,
     startBox: number,
     pokemonList: Array<{ slug: string; position: number } | null>,
-    targetedNativeBoxNumber: number
+    targetedNativeBoxNumber: number,
   ): Promise<void> {
     const userId = this.authService.user()?.uid;
     if (!userId) throw new Error('User not authenticated');
@@ -277,7 +289,7 @@ export class FirestoreService {
 
     const dexRef = doc(this.firestore, `users/${userId}/dexes/${dexId}`);
     batch.delete(dexRef);
-
+    this.toastService.success(`Dex ${dexId} deleted successfully`);
     return batch.commit();
   }
 
