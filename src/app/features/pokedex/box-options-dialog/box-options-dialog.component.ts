@@ -53,9 +53,6 @@ export interface AutoFillOption {
           <!-- Auto-Fill Box Section -->
           <div>
             <label class="block font-semibold mb-2 text-primary">Auto-Fill Box</label>
-            <p class="text-sm text-secondary mb-3">
-              Automatically populate this box with the correct Pokemon for your "{{ typeName() }}" starting from Box {{ startBox() }}.
-            </p>
             <div class="mb-4">
               <label class="block text-sm text-secondary mb-1">Preset Selection</label>
               <select
@@ -73,23 +70,27 @@ export interface AutoFillOption {
               class="w-full py-2.5 px-4 bg-blue-500/10 text-blue-500 border border-blue-500/50 rounded-lg hover:bg-blue-500 hover:text-white transition-colors font-semibold flex items-center justify-center gap-2"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                />
               </svg>
               Auto-Fill Box
             </button>
+            <p class="text-sm text-secondary mt-3">
+              Automatically populate this box with the correct Pokemon for your "{{ typeName() }}"
+              starting from Box {{ startBox() }}.
+            </p>
           </div>
 
           <div class="h-px bg-theme w-full"></div>
 
           <div>
-            <label class="block font-semibold mb-2 text-red-500">Danger Zone</label>
-            <p class="text-sm text-secondary mb-3">
-              This action will unmark all Pokemon in Box {{ boxNumber() }} named
-              {{ currentName() }} as owned and remove all their Data.
-            </p>
             <button
               (click)="showEmptyConfirm.set(true)"
-              class="w-full py-2.5 px-4 bg-red-500/10 text-red-500 border border-red-500/50 rounded-lg hover:bg-red-500 hover:text-white transition-colors font-semibold flex items-center justify-center gap-2 mb-4"
+              class="w-full py-2.5 px-4 bg-red-500/10 text-red-500 border border-red-500/50 rounded-lg hover:bg-red-500 hover:text-white transition-colors font-semibold flex items-center justify-center gap-2"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -101,9 +102,11 @@ export interface AutoFillOption {
               </svg>
               Clear Box Data
             </button>
-            <p class="text-sm text-secondary mb-3">
-              This action will completely remove all Pokemon from Box {{ boxNumber() }}, leaving all slots completely empty.
+            <p class="text-sm text-secondary mt-3 mb-6">
+              This action will unmark all Pokemon in Box {{ boxNumber() }} named
+              {{ currentName() }} as owned and remove all their Data.
             </p>
+
             <button
               (click)="showRemoveAllConfirm.set(true)"
               class="w-full py-2.5 px-4 bg-red-500/10 text-red-500 border border-red-500/50 rounded-lg hover:bg-red-500 hover:text-white transition-colors font-semibold flex items-center justify-center gap-2"
@@ -118,6 +121,10 @@ export interface AutoFillOption {
               </svg>
               Remove All Pokemon
             </button>
+            <p class="text-sm text-secondary mt-3">
+              This action will completely remove all Pokemon from Box {{ boxNumber() }}, leaving all
+              slots completely empty.
+            </p>
           </div>
         </div>
 
@@ -142,7 +149,9 @@ export interface AutoFillOption {
     @if (showAutoFillConfirm()) {
       <app-confirm-dialog
         title="Auto-Fill Box"
-        message="Are you sure you want to auto-fill Box {{ boxNumber() }}?&#10;Pokemon slots will be updated to match the correct sequence."
+        message="Are you sure you want to auto-fill Box {{
+          boxNumber()
+        }}?&#10;Pokemon slots will be updated to match the correct sequence."
         icon="✨"
         confirmText="Auto-Fill"
         cancelText="Cancel"
@@ -193,12 +202,18 @@ export class BoxOptionsDialogComponent implements OnInit {
 
   typeName = computed(() => {
     switch (this.dexType()) {
-      case 'STANDARD': return 'Standard Dex';
-      case 'LIVING': return 'Living Dex';
-      case 'SHINY_LIVING': return 'Shiny Living Dex';
-      case 'FORM': return 'Form Dex';
-      case 'ORIGIN': return 'Origin Dex';
-      default: return 'Dex';
+      case 'STANDARD':
+        return 'Standard Dex';
+      case 'LIVING':
+        return 'Living Dex';
+      case 'SHINY_LIVING':
+        return 'Shiny Living Dex';
+      case 'FORM':
+        return 'Form Dex';
+      case 'ORIGIN':
+        return 'Origin Dex';
+      default:
+        return 'Dex';
     }
   });
 

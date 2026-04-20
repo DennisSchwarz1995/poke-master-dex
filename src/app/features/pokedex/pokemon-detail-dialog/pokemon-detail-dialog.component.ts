@@ -8,8 +8,6 @@ import {
   inject,
   HostListener,
   effect,
-  ViewChild,
-  ElementRef,
   AfterViewInit,
 } from '@angular/core';
 import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites';
@@ -17,11 +15,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   getAvailableGamesForPokemon,
-  getGameName,
   GameDefinition,
-  GAME_CODES,
 } from '../../../shared/models/game-definitions';
-import { BoxSlot } from '../../../shared/models/dex.model';
+import { BoxSlot, StatsMap } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
 import {
   DatasetService,
@@ -41,8 +37,8 @@ import {
   CustomDropdownComponent,
   CustomDropdownOption,
 } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
-import Chart from 'chart.js/auto';
-
+import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
+import { ToastService } from '../../../core/api/services/toast.service';
 @Component({
   selector: 'app-pokemon-detail-dialog',
   standalone: true,
@@ -53,9 +49,11 @@ import Chart from 'chart.js/auto';
       role="dialog"
       aria-modal="true"
       aria-labelledby="dialog-title"
+      (click)="close()"
     >
       <div
         class="bg-surface border border-theme rounded-2xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+        (click)="$event.stopPropagation()"
       >
         @if (pokemon(); as pkmn) {
           <div class="p-6 pb-4 relative flex-none border-b border-theme bg-surface z-20">
@@ -69,7 +67,7 @@ import Chart from 'chart.js/auto';
                       @if (localPokemonSlug() && currentSpriteUrl()) {
                         <img
                           [src]="currentSpriteUrl()"
-                          [alt]="pokemonName('eng')"
+                          [alt]="getLocalizedName()"
                           class="w-28 h-28 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110"
                           (error)="onImageError($event)"
                         />
@@ -138,28 +136,10 @@ import Chart from 'chart.js/auto';
                   @if (localPokemonSlug()) {
                     <div class="flex flex-col gap-1 text-sm text-secondary">
                       <span class="flex items-center gap-2">
-                        🇬🇧 {{ pokemonName('eng') }} | 🇯🇵 {{ pokemonName('jap') }}
+                        🇬🇧 {{ pokemonName('eng') }} | 🇯🇵 {{ pokemonName('jap') }} | {{ langFlag }}
+                        {{ getLocalizedName() }}
                       </span>
                       <span class="italic">{{ pokemonGenus() }}</span>
-                    </div>
-
-                    <div class="flex gap-2 mt-3">
-                      <a
-                        [href]="'https://www.serebii.net/pokedex-sv/' + pokemonSlug()"
-                        target="_blank"
-                        class="px-2 py-0.5 bg-green-900/30 text-green-400 border border-green-800 rounded text-xs hover:bg-green-900/50"
-                        >Serebii</a
-                      >
-                      <a
-                        [href]="
-                          'https://bulbapedia.bulbagarden.net/wiki/' +
-                          pokemonName('eng').replace(' ', '_') +
-                          '_(Pokémon)'
-                        "
-                        target="_blank"
-                        class="px-2 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 rounded text-xs hover:bg-blue-900/50"
-                        >Bulbapedia</a
-                      >
                     </div>
                   } @else {
                     <div class="text-lg text-tertiary italic">Empty Slot</div>
@@ -339,7 +319,6 @@ import Chart from 'chart.js/auto';
                       <input
                         type="number"
                         [(ngModel)]="level"
-                        (ngModelChange)="onLevelChange($event)"
                         min="1"
                         max="100"
                         class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary focus:border-blue-500 outline-none transition-colors peer placeholder-transparent no-spinners"
@@ -364,6 +343,71 @@ import Chart from 'chart.js/auto';
                     </div>
                   </div>
 
+                  <div class="flex flex-col gap-1.5 mb-[18px]">
+                    <label class="text-[10px] font-bold text-secondary uppercase pl-2 z-10"
+                      >Gender</label
+                    >
+                    <div
+                      class="flex w-full h-11 bg-surface border-2 border-theme rounded-lg overflow-hidden relative shadow-sm"
+                    >
+                      <div class="absolute left-1/2 top-0 bottom-0 w-px bg-theme z-10"></div>
+
+                      <button
+                        (click)="genderState().canMale ? (gender = 'male') : null"
+                        [disabled]="!genderState().canMale"
+                        class="flex-1 flex items-center justify-center gap-2 transition-all font-bold text-sm z-0 relative"
+                        [ngClass]="[
+                          gender === 'male'
+                            ? 'bg-blue-100/50 text-primary dark:bg-blue-900/30'
+                            : 'text-secondary hover:bg-surface-hover',
+                          !genderState().canMale
+                            ? 'opacity-40 cursor-not-allowed bg-secondary/10 hover:bg-secondary/10'
+                            : 'cursor-pointer',
+                        ]"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24px"
+                          viewBox="0 -960 960 960"
+                          width="24px"
+                          fill="#4285f4"
+                        >
+                          <path
+                            d="M797.5-797.5v235h-75V-669L558-505.5q19 28 29.25 59.66Q597.5-414.18 597.5-380q0 90.95-63.28 154.23-63.28 63.27-154.25 63.27t-154.22-63.28q-63.25-63.28-63.25-154.25t63.27-154.22Q289.05-597.5 380-597.5q33.5 0 65.5 10T505-558l164-164.5H562.5v-75h235ZM279.25-480.78q-41.75 41.73-41.75 100.75 0 59.03 41.72 100.78 41.73 41.75 100.75 41.75 59.03 0 100.78-41.72 41.75-41.73 41.75-100.75 0-59.03-41.72-100.78-41.73-41.75-100.75-41.75-59.03 0-100.78 41.72Z"
+                          />
+                        </svg>
+                        Male
+                      </button>
+
+                      <button
+                        (click)="genderState().canFemale ? (gender = 'female') : null"
+                        [disabled]="!genderState().canFemale"
+                        class="flex-1 flex items-center justify-center gap-2 transition-all font-bold text-sm z-0 relative"
+                        [ngClass]="[
+                          gender === 'female'
+                            ? 'bg-pink-100/50 text-primary dark:bg-pink-900/30'
+                            : 'text-secondary hover:bg-surface-hover',
+                          !genderState().canFemale
+                            ? 'opacity-40 cursor-not-allowed bg-secondary/10 hover:bg-secondary/10'
+                            : 'cursor-pointer',
+                        ]"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24px"
+                          viewBox="0 -960 960 960"
+                          width="24px"
+                          fill="#d6428c"
+                        >
+                          <path
+                            d="M442.5-122.5v-80h-80v-75h80V-366q-78.5-14-129.25-74.6Q262.5-501.19 262.5-581q0-90.37 63.5-153.44 63.5-63.06 154-63.06t154 63.06q63.5 63.07 63.5 153.44 0 79.81-50.75 140.4Q596-380 517.5-366v88.5h80v75h-80v80h-75Zm138.25-356.72q41.75-41.73 41.75-100.75 0-59.03-41.72-100.78-41.73-41.75-100.75-41.75-59.03 0-100.78 41.72-41.75 41.73-41.75 100.75 0 59.03 41.72 100.78 41.73 41.75 100.75 41.75 59.03 0 100.78-41.72Z"
+                          />
+                        </svg>
+                        Female
+                      </button>
+                    </div>
+                  </div>
+
                   <div class="flex flex-col gap-[18px]">
                     <app-custom-dropdown
                       [options]="pokeballOptions()"
@@ -384,32 +428,120 @@ import Chart from 'chart.js/auto';
                 </div>
 
                 <div class="bg-secondary/30 p-4 rounded-xl border border-theme">
-                  <div class="flex items-center justify-between mb-4">
-                    <div class="flex gap-2">
-                      <button
-                        (click)="switchStatsView('base')"
-                        [class]="
-                          statsView() === 'base'
-                            ? 'px-3 py-1 text-xs font-bold bg-blue-600 text-white rounded'
-                            : 'px-3 py-1 text-xs font-medium text-secondary hover:text-primary rounded'
-                        "
-                      >
-                        Base Stats
-                      </button>
-                      <button
-                        (click)="switchStatsView('current')"
-                        [class]="
-                          statsView() === 'current'
-                            ? 'px-3 py-1 text-xs font-bold bg-green-600 text-white rounded'
-                            : 'px-3 py-1 text-xs font-medium text-secondary hover:text-primary rounded'
-                        "
-                      >
-                        Current Stats
-                      </button>
-                    </div>
+                  <div
+                    class="grid grid-cols-7 gap-2 text-center text-[10px] font-bold text-secondary mb-1"
+                  >
+                    <div class="text-left">Stat</div>
+                    <div>HP</div>
+                    <div>Atk</div>
+                    <div>Def</div>
+                    <div>SpA</div>
+                    <div>SpD</div>
+                    <div>Spe</div>
                   </div>
-                  <div class="h-56 w-full flex items-center justify-center relative">
-                    <canvas #statsChart></canvas>
+
+                  <div class="grid grid-cols-7 gap-2 mb-2 items-center">
+                    <div class="text-[10px] font-bold text-secondary text-left">IVs</div>
+                    <input
+                      type="number"
+                      [(ngModel)]="ivs.hp"
+                      min="0"
+                      max="31"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="HP IV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="ivs.atk"
+                      min="0"
+                      max="31"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="Atk IV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="ivs.def"
+                      min="0"
+                      max="31"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="Def IV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="ivs.spa"
+                      min="0"
+                      max="31"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="SpA IV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="ivs.spd"
+                      min="0"
+                      max="31"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="SpD IV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="ivs.spe"
+                      min="0"
+                      max="31"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="Spe IV"
+                    />
+                  </div>
+
+                  <div class="grid grid-cols-7 gap-2 items-center">
+                    <div class="text-[10px] font-bold text-secondary text-left">EVs</div>
+                    <input
+                      type="number"
+                      [(ngModel)]="evs.hp"
+                      min="0"
+                      max="252"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="HP EV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="evs.atk"
+                      min="0"
+                      max="252"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="Atk EV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="evs.def"
+                      min="0"
+                      max="252"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="Def EV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="evs.spa"
+                      min="0"
+                      max="252"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="SpA EV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="evs.spd"
+                      min="0"
+                      max="252"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="SpD EV"
+                    />
+                    <input
+                      type="number"
+                      [(ngModel)]="evs.spe"
+                      min="0"
+                      max="252"
+                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
+                      title="Spe EV"
+                    />
                   </div>
                 </div>
               </div>
@@ -436,7 +568,7 @@ import Chart from 'chart.js/auto';
                       [options]="natureOptions()"
                       [selectedId]="nature"
                       [placeholder]="'Select Nature'"
-                      (valueChanged)="onNatureChange($event)"
+                      (valueChanged)="nature = $event"
                     />
                   </div>
                 </div>
@@ -551,6 +683,38 @@ import Chart from 'chart.js/auto';
         }
       </div>
     </div>
+
+    @if (showTrainerPromptDialog()) {
+      <div
+        class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+        role="dialog"
+      >
+        <div
+          class="bg-surface border border-theme rounded-xl w-full max-w-sm p-6 shadow-2xl flex flex-col gap-4"
+        >
+          <h3 class="text-xl font-bold text-primary">Unbekannter Trainer</h3>
+          <p class="text-secondary text-sm">
+            Der Trainer "<span class="font-bold">{{ originalTrainer }}</span
+            >" ist noch nicht gespeichert. Möchten Sie diesen Trainer für die Schnellauswahl
+            speichern?
+          </p>
+          <div class="flex justify-end gap-3 mt-2">
+            <button
+              (click)="declineTrainerSave()"
+              class="px-4 py-2 rounded-lg font-medium text-secondary hover:bg-secondary/50 transition-colors"
+            >
+              Nein
+            </button>
+            <button
+              (click)="acceptTrainerSave()"
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all"
+            >
+              Ja, Speichern
+            </button>
+          </div>
+        </div>
+      </div>
+    }
   `,
   styles: [
     `
@@ -589,12 +753,40 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   saved = output<void>();
 
   localPokemonSlug = signal<string | null>(null);
-
-  @ViewChild('statsChart') statsChartRef!: ElementRef<HTMLCanvasElement>;
-  chartInstance: Chart | null = null;
+  showTrainerPromptDialog = signal(false);
 
   private datasetService = inject(DatasetService);
   private firestoreService = inject(FirestoreService);
+  private toastService = inject(ToastService);
+  langService = inject(PokemonLanguageService);
+
+  genderState = computed(() => {
+    const data = this.pokemonData();
+    if (!data) return { canMale: true, canFemale: true };
+
+    const mRate = data.maleRate ?? -1;
+    const fRate = data.femaleRate ?? -1;
+
+    if (mRate === 0 && fRate === 0) return { canMale: false, canFemale: false };
+    if (mRate === 100 && fRate === 0) return { canMale: true, canFemale: false };
+    if (fRate === 100 && mRate === 0) return { canMale: false, canFemale: true };
+    return { canMale: true, canFemale: true };
+  });
+
+  constructor() {
+    effect(() => {
+      const state = this.genderState();
+      setTimeout(() => {
+        if (!state.canMale && !state.canFemale) {
+          if (this.gender !== '') this.gender = '';
+        } else if (state.canMale && !state.canFemale) {
+          if (this.gender !== 'male') this.gender = 'male';
+        } else if (!state.canMale && state.canFemale) {
+          if (this.gender !== 'female') this.gender = 'female';
+        }
+      });
+    });
+  }
 
   pokemonData = signal<DatasetPokemon | null>(null);
   trainers = signal<Trainer[]>([]);
@@ -738,7 +930,30 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   });
 
   pokemonName = (lang: string) => this.pokemonData()?.names[lang] || '';
-  pokemonGenus = () => this.pokemonData()?.genus['eng'] || 'Pokémon'; // Fallback
+  pokemonGenus = () => {
+    const data = this.pokemonData();
+    if (!data) return 'Pokémon';
+    const lang = this.langService.currentLang();
+    return data.genus?.[lang] || data.genus?.['eng'] || 'Pokémon';
+  };
+  getLocalizedName = (): string => {
+    const data = this.pokemonData();
+    if (!data) return '';
+    return this.langService.getName(data);
+  };
+  get langFlag(): string {
+    const lang = this.langService.currentLang();
+    const flags: Record<string, string> = {
+      eng: '🇬🇧',
+      deu: '🇩🇪',
+      fra: '🇫🇷',
+      jap: '🇯🇵',
+      kor: '🇰🇷',
+      chs: '🇨🇳',
+      cht: '🇹🇼',
+    };
+    return flags[lang] || '';
+  }
   pokemonNid = () => this.pokemonData()?.nid || '???';
   pokemonSlug = () => this.pokemonData()?.id || '';
 
@@ -779,10 +994,12 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   nature = '';
   mark = '';
   ribbon = '';
+  gender = '';
+  ivs: StatsMap = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+  evs: StatsMap = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 
   saving = signal(false);
   currentSpriteUrl = signal('');
-  statsView = signal<'base' | 'current'>('base');
   availableGames = () => {
     const pokemon = this.pokemonData();
     if (!pokemon) return [];
@@ -923,6 +1140,9 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     this.nature = pkmn.nature || '';
     this.mark = pkmn.mark || '';
     this.ribbon = pkmn.ribbon || '';
+    this.gender = pkmn.gender || '';
+    if (pkmn.ivs) this.ivs = { ...pkmn.ivs };
+    if (pkmn.evs) this.evs = { ...pkmn.evs };
 
     this.loadData();
   }
@@ -945,7 +1165,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       this.datasetService.loadPokemonBySlug(this.localPokemonSlug()!).subscribe((data) => {
         this.pokemonData.set(data);
         this.updateSpritePreview();
-        setTimeout(() => this.initChart(), 100);
       });
     }
   }
@@ -1034,187 +1253,52 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     }
   }
 
-  updateChart() {
-    setTimeout(() => this.initChart(), 50);
-  }
-
-  onLevelChange(newLevel: number | null) {
-    if (newLevel !== null && newLevel !== undefined) {
-      if (newLevel < 1) this.level = 1;
-      else if (newLevel > 100) this.level = 100;
-      else this.level = newLevel;
-    } else {
-      this.level = undefined;
-    }
-    this.updateChart();
-  }
-
-  onNatureChange(natureId: string) {
-    this.nature = natureId;
-    this.updateChart();
-  }
-
-  switchStatsView(view: 'base' | 'current') {
-    this.statsView.set(view);
-    this.updateChart();
-  }
-
-  initChart() {
-    if (!this.statsChartRef || !this.pokemonData()) return;
-
-    const ctx = this.statsChartRef.nativeElement;
-    const stats = this.pokemonData()!;
-    const viewMode = this.statsView();
-
-    if (this.chartInstance) this.chartInstance.destroy();
-
-    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    const textColor = isDarkMode ? '#cbd5e1' : '#4b5563';
-
-    const getStatColor = (stat: string) => {
-      if (!this.nature) return textColor;
-      const nature = this.allNatures().find((n) => n.id === this.nature);
-      if (!nature) return textColor;
-      if (nature.raises === stat) return '#e46787';
-      if (nature.lowers === stat) return '#3babdf';
-      return textColor;
-    };
-
-    const pointLabelColors = [
-      textColor, // HP
-      getStatColor('atk'), // Atk
-      getStatColor('def'), // Def
-      getStatColor('spe'), // Spe
-      getStatColor('spd'), // SpD
-      getStatColor('spa'), // SpA
-    ];
-
-    let statValues: number[];
-    let chartColor: string;
-
-    if (viewMode === 'current') {
-      const currentLevel = this.level || 50; // Default to 50 if no level set
-      const nature = this.allNatures().find((n) => n.id === this.nature);
-
-      statValues = [
-        this.calculateHP(stats.baseHp, currentLevel),
-        this.calculateStat(
-          stats.baseAtk,
-          currentLevel,
-          nature?.raises === 'atk',
-          nature?.lowers === 'atk',
-        ),
-        this.calculateStat(
-          stats.baseDef,
-          currentLevel,
-          nature?.raises === 'def',
-          nature?.lowers === 'def',
-        ),
-        this.calculateStat(
-          stats.baseSpeed,
-          currentLevel,
-          nature?.raises === 'spe',
-          nature?.lowers === 'spe',
-        ),
-        this.calculateStat(
-          stats.baseSpDef,
-          currentLevel,
-          nature?.raises === 'spd',
-          nature?.lowers === 'spd',
-        ),
-        this.calculateStat(
-          stats.baseSpAtk,
-          currentLevel,
-          nature?.raises === 'spa',
-          nature?.lowers === 'spa',
-        ),
-      ];
-      chartColor = 'rgba(34, 197, 94, 0.8)';
-    } else {
-      statValues = [
-        stats.baseHp,
-        stats.baseAtk,
-        stats.baseDef,
-        stats.baseSpeed,
-        stats.baseSpDef,
-        stats.baseSpAtk,
-      ];
-      chartColor = 'rgba(59, 130, 246, 0.8)';
-    }
-
-    this.chartInstance = new Chart(ctx, {
-      type: 'radar',
-      data: {
-        labels: [
-          `HP (${statValues[0]})`,
-          `Atk (${statValues[1]})`,
-          `Def (${statValues[2]})`,
-          `Spe (${statValues[3]})`,
-          `SpD (${statValues[4]})`,
-          `SpA (${statValues[5]})`,
-        ],
-        datasets: [
-          {
-            label: viewMode === 'current' ? 'Current Stats' : 'Base Stats',
-            data: statValues,
-            backgroundColor: chartColor.replace('0.8', '0.2'),
-            borderColor: chartColor,
-            borderWidth: 2,
-            pointBackgroundColor: chartColor,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          r: {
-            beginAtZero: true,
-            max: viewMode === 'current' ? Math.max(400, ...statValues) : 200,
-            grid: { color: gridColor },
-            pointLabels: {
-              color: pointLabelColors as any,
-              font: { size: 11, weight: 'bold' },
-              padding: 8,
-            },
-            ticks: { display: false, count: 5 },
-          },
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            enabled: true,
-            callbacks: {
-              label: (context) => `${context.label.split(' ')[0]}: ${context.parsed.r}`,
-            },
-          },
-        },
-        maintainAspectRatio: false,
-      },
-    });
-  }
-
-  calculateHP(base: number, level: number, iv: number = 31, ev: number = 0): number {
-    return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10;
-  }
-
-  calculateStat(
-    base: number,
-    level: number,
-    isRaised: boolean,
-    isLowered: boolean,
-    iv: number = 31,
-    ev: number = 0,
-  ): number {
-    let stat = Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5;
-    if (isRaised) stat = Math.floor(stat * 1.1);
-    if (isLowered) stat = Math.floor(stat * 0.9);
-    return stat;
-  }
-
   async save() {
     this.saving.set(true);
+
+    if (this.originalTrainer.trim() !== '') {
+      const promptDisabled = localStorage.getItem('disableAutoTrainerPrompt') === 'true';
+      if (!promptDisabled) {
+        const trainerExists = this.trainers().some(
+          (t) => t.name.toLowerCase() === this.originalTrainer.trim().toLowerCase(),
+        );
+        if (!trainerExists) {
+          this.saving.set(false);
+          this.showTrainerPromptDialog.set(true);
+          return;
+        }
+      }
+    }
+
+    await this.executeSave();
+  }
+
+  async acceptTrainerSave() {
+    this.showTrainerPromptDialog.set(false);
+    this.saving.set(true);
+    try {
+      await this.firestoreService.createTrainer({
+        name: this.originalTrainer.trim(),
+        trainerId: this.trainerId?.trim() || '',
+        game: this.originGame || '',
+      });
+      // Trainer saved, now fetch updated list locally or wait for subscription
+      this.toastService.success('Trainer saved successfully!');
+    } catch (e) {
+      console.error(e);
+      this.toastService.error('Error saving trainer.');
+    }
+    await this.executeSave();
+  }
+
+  async declineTrainerSave() {
+    this.showTrainerPromptDialog.set(false);
+    this.toastService.info('Note: You can disable this prompt in the profile settings.');
+    this.saving.set(true);
+    await this.executeSave();
+  }
+
+  async executeSave() {
     try {
       const updates: any = {
         pokemonSlug: this.localPokemonSlug() || null,
@@ -1236,6 +1320,9 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
         nature: this.nature || null,
         mark: this.mark || null,
         ribbon: this.ribbon || null,
+        gender: this.gender || null,
+        ivs: { ...this.ivs },
+        evs: { ...this.evs },
       };
       Object.keys(updates).forEach((key) => updates[key] === undefined && delete updates[key]);
 
@@ -1248,8 +1335,9 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
 
       this.saved.emit();
       this.close();
+      this.toastService.success('Pokemon saved successfully');
     } catch (e) {
-      console.error('Error saving Pokemon data', e);
+      this.toastService.error(`Error ${e} saving Pokemon`);
     } finally {
       this.saving.set(false);
     }
@@ -1266,7 +1354,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     this.datasetService.loadPokemonBySlug(newPokemonSlug).subscribe((data) => {
       this.pokemonData.set(data);
       this.updateSpritePreview();
-      setTimeout(() => this.initChart(), 100);
     });
   }
 

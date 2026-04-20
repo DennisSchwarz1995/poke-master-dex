@@ -2,23 +2,16 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
-import { DexNavigationComponent } from '../../../shared/components/dex-navigation/dex-navigation.component';
+import { DexStateService } from '../../../core/services/dex-state.service';
 import { Dex, Box } from '../../../shared/models/dex.model';
 
 @Component({
   selector: 'app-dex-overview',
   standalone: true,
-  imports: [CommonModule, DexNavigationComponent],
+  imports: [CommonModule],
   template: `
     <div class="min-h-screen bg-secondary">
-      <app-dex-navigation
-        [dexId]="dexId()"
-        [dexName]="dex()?.name || 'Loading...'"
-        currentView="overview"
-        (nameSaved)="onDexNameSaved($event)"
-      />
-      
-      <main class="container mx-auto px-4 py-8">
+      <main class="container mx-auto px-4 py-8 pt-6">
         @if (loading()) {
           <div class="text-center py-12">
             <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent mx-auto mb-4"></div>
@@ -69,6 +62,7 @@ export class DexOverviewComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private firestoreService = inject(FirestoreService);
+  private dexStateService = inject(DexStateService);
   
   dexId = signal<string>('');
   dex = signal<Dex | undefined>(undefined);
@@ -91,6 +85,7 @@ export class DexOverviewComponent implements OnInit {
     this.loading.set(true);
     this.firestoreService.getDex(id).subscribe(dex => {
       this.dex.set(dex);
+      this.dexStateService.setCurrentDex(dex);
     });
     this.firestoreService.getDexBoxes(id).subscribe({
       next: (boxes) => {
@@ -139,18 +134,5 @@ export class DexOverviewComponent implements OnInit {
   
   openBox(boxNumber: number) {
     this.router.navigate(['/dex', this.dexId(), 'box', boxNumber]);
-  }
-  
-  async onDexNameSaved(newName: string) {
-    try {
-      await this.firestoreService.updateDexName(this.dexId(), newName);
-      
-      const currentDex = this.dex();
-      if (currentDex) {
-        this.dex.set({ ...currentDex, name: newName });
-      }
-    } catch (err) {
-      console.error('Failed to update Dex name:', err);
-    }
   }
 }

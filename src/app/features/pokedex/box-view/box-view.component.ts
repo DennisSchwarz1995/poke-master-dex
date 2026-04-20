@@ -5,12 +5,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { DexStateService } from '../../../core/services/dex-state.service';
 import { PokemonSpriteComponent } from '../../../shared/components/pokemon-sprite/pokemon-sprite.component';
 import { PokemonDetailDialogComponent } from '../pokemon-detail-dialog/pokemon-detail-dialog.component';
-import { DexNavigationComponent } from '../../../shared/components/dex-navigation/dex-navigation.component';
-import { BoxOptionsDialogComponent, AutoFillOption } from '../box-options-dialog/box-options-dialog.component';
+import { PokemonViewDialogComponent } from '../pokemon-view-dialog/pokemon-view-dialog.component';
+import {
+  BoxOptionsDialogComponent,
+  AutoFillOption,
+} from '../box-options-dialog/box-options-dialog.component';
 import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
 import { firstValueFrom } from 'rxjs';
+import {
+  QuickEditBarComponent,
+  QuickEditState,
+} from '../../../shared/components/quick-edit-bar/quick-edit-bar.component';
+import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 
 @Component({
   selector: 'app-box-view',
@@ -20,35 +29,62 @@ import { firstValueFrom } from 'rxjs';
     FormsModule,
     PokemonSpriteComponent,
     PokemonDetailDialogComponent,
-    DexNavigationComponent,
     BoxOptionsDialogComponent,
+    QuickEditBarComponent,
+    PokemonViewDialogComponent,
   ],
   template: `
-    <div class="min-h-screen bg-secondary flex flex-col">
-      <app-dex-navigation
-        [dexId]="dexId()"
-        [dexName]="dex()?.name || 'Loading...'"
-        currentView="box"
-        [currentBoxNumber]="currentBox()"
-        (nameSaved)="onDexNameSaved($event)"
-      />
+    <div class="min-h-[calc(100vh-16rem)] bg-secondary flex flex-col">
+      <main class="container mx-auto px-4 py-8 flex-1 flex flex-col pt-6">
+        @if (box()) {
+          <app-quick-edit-bar (modeChanged)="onQuickEditModeChanged($event)" />
+        }
 
-      <main class="container mx-auto px-4 py-8 flex-1 flex flex-col">
-        @if (loading()) {
+        @if (!box() && loading()) {
           <div class="text-center py-12">
             <div
               class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent mx-auto"
             ></div>
           </div>
         } @else if (box(); as currentBoxData) {
-          <div class="bg-surface rounded-xl shadow-lg p-6 flex-1 flex flex-col border border-theme">
-            <div class="flex items-center justify-between mb-6">
-              <div class="flex items-center align-center gap-2">
-                <h2 class="text-2xl font-bold">{{ currentBoxData.name }}</h2>
+          <div
+            class="bg-surface rounded-xl shadow-lg p-6 flex-1 flex flex-col border border-theme mt-2 transition-opacity duration-300"
+            [class.opacity-50]="loading()"
+            [class.pointer-events-none]="loading()"
+          >
+            <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+              <div class="flex items-center justify-center md:justify-start gap-2 overflow-hidden">
+                <h2 class="text-xl sm:text-2xl font-bold truncate" [title]="currentBoxData.name">
+                  {{ currentBoxData.name }}
+                </h2>
               </div>
-              
-              <div class="flex items-center gap-4">
-                <div class="text-sm text-secondary">{{ getOwnedCount() }} / 30 owned</div>
+
+              <div class="flex items-center justify-center gap-2 sm:gap-4 order-last md:order-none">
+                <button
+                  (click)="onPreviousBox()"
+                  class="px-2 sm:px-4 py-1 sm:py-2 bg-secondary rounded hover:bg-surface-hover transition-colors font-bold text-lg"
+                  title="Previous Box"
+                >
+                  ←
+                </button>
+                <div
+                  class="px-3 font-bold text-sm sm:text-base text-center whitespace-nowrap text-text-primary"
+                >
+                  Box {{ currentBox() }} / 200
+                </div>
+                <button
+                  (click)="onNextBox()"
+                  class="px-2 sm:px-4 py-1 sm:py-2 bg-secondary rounded hover:bg-surface-hover transition-colors font-bold text-lg"
+                  title="Next Box"
+                >
+                  →
+                </button>
+              </div>
+
+              <div class="flex items-center justify-center md:justify-end gap-4">
+                <div class="text-sm text-secondary whitespace-nowrap">
+                  {{ getOwnedCount() }} / 30 owned
+                </div>
                 <button
                   (click)="showOptionsDialog.set(true)"
                   class="text-tertiary hover:text-blue-500 px-2 flex items-center justify-center transition-colors"
@@ -93,6 +129,18 @@ import { firstValueFrom } from 'rxjs';
       />
     }
 
+    @if (showViewDialog() && selectedSlot()) {
+      <app-pokemon-view-dialog
+        [pokemon]="selectedSlot()!"
+        [dexId]="dexId()"
+        [boxNumber]="currentBox()"
+        (closed)="closeViewDialog()"
+        (previous)="onViewPrevious()"
+        (next)="onViewNext()"
+        (edit)="onViewEdit()"
+      />
+    }
+
     @if (showOptionsDialog()) {
       <app-box-options-dialog
         [currentName]="box()?.name || ''"
@@ -115,7 +163,9 @@ export class BoxViewComponent implements OnInit {
   private router = inject(Router);
   private firestoreService = inject(FirestoreService);
   private datasetService = inject(DatasetService);
+  private dexStateService = inject(DexStateService);
   themeService = inject(ThemeService);
+  private pokemonLangService = inject(PokemonLanguageService);
 
   dexId = signal('');
   currentBox = signal(1);
@@ -124,9 +174,21 @@ export class BoxViewComponent implements OnInit {
   dex = signal<Dex | null>(null);
   loading = signal(true);
   showDetailDialog = signal(false);
+  showViewDialog = signal(false);
   selectedSlot = signal<BoxSlot | null>(null);
   showOptionsDialog = signal(false);
   autoFillOptions = signal<AutoFillOption[]>([]);
+  pendingSelectPosition: number | null = null;
+
+  onPreviousBox() {
+    const prevBox = this.currentBox() === 1 ? 200 : this.currentBox() - 1;
+    this.router.navigate(['/dex', this.dexId(), 'box', prevBox]);
+  }
+
+  onNextBox() {
+    const nextBox = this.currentBox() === 200 ? 1 : this.currentBox() + 1;
+    this.router.navigate(['/dex', this.dexId(), 'box', nextBox]);
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -149,8 +211,10 @@ export class BoxViewComponent implements OnInit {
   }
 
   loadDexInfo(dexId: string) {
-    this.firestoreService.getDex(dexId).subscribe((dexData) => {
+    this.firestoreService.getDex(dexId).subscribe((dexData: Dex) => {
+      if (!dexData) return;
       this.dex.set(dexData);
+      this.dexStateService.setCurrentDex(dexData);
       this.generateAutoFillOptions(dexData);
     });
   }
@@ -159,6 +223,10 @@ export class BoxViewComponent implements OnInit {
     this.loading.set(true);
     this.firestoreService.getBox(dexId, boxNum).subscribe({
       next: (boxData) => {
+        if (!boxData) {
+          this.loading.set(false);
+          return;
+        }
         const slots = Array.isArray(boxData.slots)
           ? boxData.slots
           : (Object.values(boxData.slots || {}) as BoxSlot[]);
@@ -167,6 +235,12 @@ export class BoxViewComponent implements OnInit {
         this.box.set(boxData);
         this.slots.set(sortedSlots);
         this.loading.set(false);
+
+        if (this.pendingSelectPosition !== null) {
+          const target = sortedSlots.find((s) => s.position === this.pendingSelectPosition);
+          if (target) this.selectedSlot.set(target);
+          this.pendingSelectPosition = null;
+        }
       },
       error: (err) => {
         console.error('Failed to load box:', err);
@@ -175,14 +249,99 @@ export class BoxViewComponent implements OnInit {
     });
   }
 
-  onSlotClick(slot: BoxSlot) {
-    this.selectedSlot.set(slot);
-    this.showDetailDialog.set(true);
+  currentQuickEditState = signal<QuickEditState>({ active: false, mode: 'None' });
+
+  onQuickEditModeChanged(state: QuickEditState) {
+    this.currentQuickEditState.set(state);
+  }
+
+  async onSlotClick(slot: BoxSlot) {
+    if (this.currentQuickEditState().active && this.currentQuickEditState().mode !== 'None') {
+      const mode = this.currentQuickEditState().mode;
+      const updates: any = {};
+
+      if (mode === 'Edit') {
+        this.selectedSlot.set(slot);
+        this.showDetailDialog.set(true);
+        return;
+      }
+
+      if (mode === 'Owned') {
+        updates.isOwned = !slot.isOwned;
+        if (updates.isOwned && this.currentQuickEditState().ball) {
+          updates.ball = this.currentQuickEditState().ball;
+        }
+      }
+      if (mode === 'Shiny') updates.isShiny = !slot.isShiny;
+      if (mode === 'Gmax') updates.isGmax = !slot.isGmax;
+      if (mode === 'Alpha') updates.isAlpha = !slot.isAlpha;
+      if (mode === 'Trainer' && this.currentQuickEditState().trainerId) {
+        updates.trainerId = this.currentQuickEditState().trainerId;
+        updates.originalTrainer = this.currentQuickEditState().originalTrainer;
+      }
+
+      const currentSlots = [...this.slots()];
+      const slotIndex = currentSlots.findIndex((s) => s.position === slot.position);
+      if (slotIndex !== -1) {
+        currentSlots[slotIndex] = { ...slot, ...updates };
+        this.slots.set(currentSlots);
+      }
+
+      await this.firestoreService.updateSlot(
+        this.dexId(),
+        this.currentBox(),
+        slot.position,
+        updates,
+      );
+    } else {
+      this.selectedSlot.set(slot);
+      this.showViewDialog.set(true);
+    }
   }
 
   closeDetailDialog() {
     this.showDetailDialog.set(false);
     this.selectedSlot.set(null);
+  }
+
+  closeViewDialog() {
+    this.showViewDialog.set(false);
+    this.selectedSlot.set(null);
+  }
+
+  onViewPrevious() {
+    const current = this.selectedSlot();
+    if (!current) return;
+    let newPos = current.position - 1;
+    if (newPos < 1) {
+      this.pendingSelectPosition = 30;
+      let newBoxNum = this.currentBox() - 1;
+      if (newBoxNum < 1) newBoxNum = 200;
+      this.router.navigate(['/dex', this.dexId(), 'box', newBoxNum]);
+      return;
+    }
+    const prevSlot = this.slots().find((s) => s.position === newPos);
+    if (prevSlot) this.selectedSlot.set(prevSlot);
+  }
+
+  onViewNext() {
+    const current = this.selectedSlot();
+    if (!current) return;
+    let newPos = current.position + 1;
+    if (newPos > 30) {
+      this.pendingSelectPosition = 1;
+      let newBoxNum = this.currentBox() + 1;
+      if (newBoxNum > 200) newBoxNum = 1;
+      this.router.navigate(['/dex', this.dexId(), 'box', newBoxNum]);
+      return;
+    }
+    const nextSlot = this.slots().find((s) => s.position === newPos);
+    if (nextSlot) this.selectedSlot.set(nextSlot);
+  }
+
+  onViewEdit() {
+    this.showViewDialog.set(false);
+    this.showDetailDialog.set(true);
   }
 
   onDetailSaved() {
@@ -209,13 +368,9 @@ export class BoxViewComponent implements OnInit {
 
   async onBoxNameSavedFromDialog(newName: string) {
     this.showOptionsDialog.set(false);
-    
+
     try {
-      await this.firestoreService.updateBoxName(
-        this.dexId(),
-        this.currentBox(),
-        newName
-      );
+      await this.firestoreService.updateBoxName(this.dexId(), this.currentBox(), newName);
       this.loadBox(this.dexId(), this.currentBox());
     } catch (err) {
       console.error('Failed to rename box:', err);
@@ -224,27 +379,25 @@ export class BoxViewComponent implements OnInit {
 
   async generateAutoFillOptions(currentDex: Dex) {
     try {
-      const mapping = await firstValueFrom(
-        this.datasetService.createDexMapping(currentDex.type)
-      );
+      const mapping = await firstValueFrom(this.datasetService.createDexMapping(currentDex.type));
 
       const options: AutoFillOption[] = [];
       const totalPokemon = mapping.length;
       const pokemonPerBox = 30;
       const neededBoxes = Math.ceil(totalPokemon / pokemonPerBox);
 
-      // Get basic english/german names to make the labels nicer.
-      // We rely on getSimplePokemonList since we just need the localized names
+      // Get localized names from SimplePokemon map
       const basePokemonList = await firstValueFrom(this.datasetService.getSimplePokemonList());
       const nameMap = new Map<string, string>();
-      basePokemonList.forEach(p => {
-        nameMap.set(p.slug, p.nameGerman || p.name);
+      const lang = this.pokemonLangService.currentLang();
+      basePokemonList.forEach((p) => {
+        nameMap.set(p.slug, p.allNames?.[lang] || p.name);
       });
 
       for (let offset = 0; offset < neededBoxes; offset++) {
         const startIndex = offset * pokemonPerBox;
         const endIndex = Math.min(startIndex + pokemonPerBox - 1, totalPokemon - 1);
-        
+
         const firstPoke = mapping[startIndex];
         const lastPoke = mapping[endIndex];
 
@@ -252,18 +405,18 @@ export class BoxViewComponent implements OnInit {
 
         const numStart = String(firstPoke.dexNum).padStart(4, '0');
         const numEnd = String(lastPoke.dexNum).padStart(4, '0');
-        
+
         const nameStart = nameMap.get(firstPoke.slug) || this.capitalize(firstPoke.slug);
         const nameEnd = nameMap.get(lastPoke.slug) || this.capitalize(lastPoke.slug);
 
         options.push({
           offset: offset,
-          label: `#${numStart} - #${numEnd} | ${nameStart} - ${nameEnd}`
+          label: `#${numStart} - #${numEnd} | ${nameStart} - ${nameEnd}`,
         });
       }
-      
+
       this.autoFillOptions.set(options);
-    } catch(err) {
+    } catch (err) {
       console.error('Failed to generate autofill options:', err);
     }
   }
@@ -275,27 +428,23 @@ export class BoxViewComponent implements OnInit {
   async onAutoFillRequested(selectedOffset: number) {
     this.showOptionsDialog.set(false);
     this.loading.set(true);
-    
+
     try {
       const currentDex = this.dex();
       if (!currentDex) throw new Error('Dex info not loaded');
 
       const pokemonMapping = await firstValueFrom(
-        this.datasetService.createDexMapping(currentDex.type)
+        this.datasetService.createDexMapping(currentDex.type),
       );
-      
-      // Compute the box number the targeted autofill subset would normally live in
-      // if using the user's chosen startBox layout.
-      // E.g., if startBox=1 and we chose preset offset=1 (which is Box 2 natively),
-      // we tell our firestore autoFill method "act like the current BoxNumber IS that box, using startBox".
+
       const targetedNativeBoxNumber = ((currentDex.startBox - 1 + selectedOffset) % 200) + 1;
 
       await this.firestoreService.autoFillBox(
         this.dexId(),
-        this.currentBox(), // This specific box
+        this.currentBox(),
         currentDex.startBox,
         pokemonMapping,
-        targetedNativeBoxNumber // Pass the explicitly requested chunk
+        targetedNativeBoxNumber,
       );
       this.loadBox(this.dexId(), this.currentBox());
     } catch (err) {
@@ -307,12 +456,9 @@ export class BoxViewComponent implements OnInit {
   async onEmptyBoxRequested() {
     this.showOptionsDialog.set(false);
     this.loading.set(true);
-    
+
     try {
-      await this.firestoreService.emptyBox(
-        this.dexId(),
-        this.currentBox()
-      );
+      await this.firestoreService.emptyBox(this.dexId(), this.currentBox());
       this.loadBox(this.dexId(), this.currentBox());
     } catch (err) {
       console.error('Failed to empty box:', err);
@@ -323,12 +469,9 @@ export class BoxViewComponent implements OnInit {
   async onRemoveAllRequested() {
     this.showOptionsDialog.set(false);
     this.loading.set(true);
-    
+
     try {
-      await this.firestoreService.removeAllPokemon(
-        this.dexId(),
-        this.currentBox()
-      );
+      await this.firestoreService.removeAllPokemon(this.dexId(), this.currentBox());
       this.loadBox(this.dexId(), this.currentBox());
     } catch (err) {
       console.error('Failed to remove all Pokemon:', err);
