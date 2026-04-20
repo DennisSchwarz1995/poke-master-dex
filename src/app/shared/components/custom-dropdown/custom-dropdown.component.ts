@@ -109,8 +109,11 @@ export interface CustomDropdownOption {
                   [disabled]="option.id === undefined"
                   class="w-full text-left px-3 py-2 transition-colors border-b border-theme last:border-b-0"
                   [ngClass]="{
-                    'hover:bg-surface-hover cursor-pointer': option.id !== undefined,
+                    'hover:bg-surface-hover cursor-pointer':
+                      option.id !== undefined && option.id !== selectedId(),
                     'opacity-50 cursor-not-allowed bg-surface-hover': option.id === undefined,
+                    'bg-blue-500/10 text-blue-500 dark:text-blue-400 font-semibold':
+                      option.id !== undefined && option.id === selectedId(),
                   }"
                 >
                   <div class="flex items-center justify-between gap-2">
@@ -256,6 +259,12 @@ export class CustomDropdownComponent {
 
   onFocus() {
     this.calculateDirection();
+    if (this.isOpen()) {
+      this.isOpen.set(false);
+      const selected = this.options().find((opt) => opt.id === this.selectedId());
+      this.searchQuery.set(selected?.name || '');
+      return;
+    }
     this.isOpen.set(true);
     if (!this.searchable()) {
       const selected = this.options().find((opt) => opt.id === this.selectedId());

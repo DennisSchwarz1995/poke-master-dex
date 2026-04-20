@@ -16,7 +16,6 @@ import { CommonModule } from '@angular/common';
       >
         <div class="flex items-center justify-between p-4 border-b border-theme bg-secondary/30">
           <div class="flex items-center gap-3">
-            <span class="text-xl">{{ icon() }}</span>
             <h2 class="text-lg font-bold text-primary">{{ title() }}</h2>
           </div>
           <button
@@ -61,11 +60,9 @@ import { CommonModule } from '@angular/common';
 export class ConfirmDialogComponent {
   title = input.required<string>();
   message = input.required<string>();
-  icon = input<string>('⚠️');
   confirmText = input<string>('Confirm');
   cancelText = input<string>('Cancel');
 
-  // E.g. bg-red-600 hover:bg-red-500 shadow-red-500/20
   confirmButtonClass = input<string>('bg-red-600 hover:bg-red-500 shadow-red-500/20');
 
   confirmed = output<void>();
