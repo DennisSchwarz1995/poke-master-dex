@@ -5,6 +5,7 @@ import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { Trainer } from '../../../shared/models/trainer.model';
 import { GAME_CODES, GameDefinition } from '../../../shared/models/game-definitions';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ToastService } from '../../../core/api/services/toast.service';
 
 @Component({
   selector: 'app-trainer-management-dialog',
@@ -145,6 +146,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 })
 export class TrainerManagementDialogComponent {
   private firestoreService = inject(FirestoreService);
+  private toastService = inject(ToastService);
 
   closed = output<void>();
 
@@ -206,6 +208,7 @@ export class TrainerManagementDialogComponent {
       this.showForm.set(false);
       this.saving.set(false);
       this.loadTrainers();
+      this.toastService.success('Trainer saved successfully');
     } catch (err) {
       console.error('Failed to save trainer:', err);
       this.saving.set(false);
@@ -229,8 +232,9 @@ export class TrainerManagementDialogComponent {
     try {
       await this.firestoreService.deleteTrainer(trainerId);
       this.loadTrainers();
+      this.toastService.success(`Trainer deleted successfully`);
     } catch (err) {
-      console.error('Failed to delete trainer:', err);
+      this.toastService.error('Failed to delete trainer');
     }
   }
 
