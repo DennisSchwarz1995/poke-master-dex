@@ -1,0 +1,1053 @@
+import {
+  Component,
+  inject,
+  OnInit,
+  signal,
+  computed,
+  effect,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  HostListener,
+  Signal,
+} from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { forkJoin, of } from 'rxjs';
+import { catchError, switchMap, debounceTime, tap, take } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import {
+  DatasetService,
+  DatasetPokemon,
+  PokemonNameIndex,
+  SimplePokemon,
+} from '../../../core/api/services/dataset.service';
+import { ThemeService } from '../../../core/services/theme.service';
+import { TypeColorService } from '../../../core/services/type-color.service';
+import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
+import {
+  CustomDropdownComponent,
+  CustomDropdownOption,
+} from '../../../shared/components/custom-dropdown/custom-dropdown.component';
+import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-pokemon-card/dataset-pokemon-card.component';
+
+@Component({
+  selector: 'app-pokemon-list',
+  standalone: true,
+  imports: [CommonModule, FormsModule, CustomDropdownComponent, DatasetPokemonCardComponent],
+  template: `
+    <div class="h-full flex flex-col bg-bg-secondary px-4 pb-8 sm:px-6 lg:px-8">
+      <div class="max-w-[1600px] mx-auto w-full">
+        <div class="z-40 bg-bg-secondary/95 pt-6 space-y-4 mb-6">
+          <div class="flex justify-center">
+            <div
+              class="bg-surface border border-theme p-1 rounded-2xl flex max-w-md w-full shadow-sm"
+            >
+              <button
+                (click)="viewMode.set('national')"
+                class="flex-1 py-1.5 px-4 rounded-xl font-bold transition-all shadow-sm"
+                [ngClass]="
+                  viewMode() === 'national'
+                    ? 'bg-blue-500/10 text-blue-500 dark:bg-blue-500/20 dark:text-blue-400'
+                    : 'text-secondary hover:text-primary font-medium bg-transparent'
+                "
+              >
+                National Pokédex
+              </button>
+              <button
+                (click)="viewMode.set('games')"
+                class="flex-1 py-1.5 px-4 rounded-xl font-bold transition-all shadow-sm"
+                [ngClass]="
+                  viewMode() === 'games'
+                    ? 'bg-blue-500/10 text-blue-500 dark:bg-blue-500/20 dark:text-blue-400'
+                    : 'text-secondary hover:text-primary font-medium bg-transparent'
+                "
+              >
+                By Games
+              </button>
+            </div>
+          </div>
+
+          @if (viewMode() === 'games') {
+            <div class="mt-8 mb-6 animation-fade-in max-w-3xl mx-auto w-full">
+              <h1 class="text-3xl font-extrabold text-primary mb-2">See what you can catch</h1>
+              <p class="text-secondary mb-6 leading-relaxed">
+                Add every game you currently own to highlight which Pokémon are obtainable across
+                the combined adventures. We will still list every Pokémon in National Dex order, but
+                unavailable ones are greyed out.
+              </p>
+
+              <div class="flex flex-wrap gap-3 items-center mb-6">
+                @for (gameId of selectedGames(); track gameId) {
+                  @if (getGameOption(gameId); as option) {
+                    <div
+                      class="flex items-center gap-2 px-3 py-1.5 bg-surface border border-theme rounded-xl shadow-sm"
+                    >
+                      <img [src]="option.iconPath" class="w-6 h-6 object-contain" />
+                      <span class="font-bold text-sm text-primary">{{
+                        option.name.replace('Pokémon ', '')
+                      }}</span>
+                      <button
+                        (click)="removeGame(gameId)"
+                        class="ml-1 text-tertiary hover:text-primary transition-colors"
+                      >
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  }
+                }
+
+                <div class="relative min-w-[200px]" #addGameContainer>
+                  <app-custom-dropdown
+                    [options]="availableGameOptions()"
+                    [searchable]="true"
+                    placeholder="+ Add a game"
+                    (valueChanged)="addGame($event)"
+                    [selectedId]="''"
+                  />
+                </div>
+              </div>
+
+              @if (selectedGames().length > 0) {
+                <div class="flex justify-between items-end mb-4">
+                  <span class="text-secondary tracking-tight"
+                    >Tracking {{ selectedGames().length }} game{{
+                      selectedGames().length === 1 ? '' : 's'
+                    }}.</span
+                  >
+                  <div
+                    class="flex gap-4 text-sm font-bold text-blue-500 underline underline-offset-4 decoration-dotted"
+                  >
+                    <button
+                      class="hover:text-blue-400 transition-colors cursor-pointer"
+                      (click)="selectedGames.set([])"
+                    >
+                      Clear games
+                    </button>
+                  </div>
+                </div>
+
+                <div class="bg-surface rounded-2xl border border-theme p-5 sm:p-6 shadow-md mb-8">
+                  <h3 class="text-lg font-bold text-primary mb-1">Pokémon availability</h3>
+                  <p class="text-secondary text-sm mb-6">
+                    Choose how the Pokédex responds to the games you own.
+                  </p>
+
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button
+                      (click)="gameFilterMode.set('all')"
+                      class="flex flex-col text-left p-4 rounded-xl border transition-all md:h-full group"
+                      [ngClass]="
+                        gameFilterMode() === 'all'
+                          ? 'border-primary bg-blue-500/5'
+                          : 'border-theme hover:border-primary/50 hover:bg-surface-hover'
+                      "
+                    >
+                      <div class="flex items-center gap-3 mb-2">
+                        <div
+                          class="w-4 h-4 rounded-full border flex items-center justify-center transition-colors flex-shrink-0"
+                          [ngClass]="
+                            gameFilterMode() === 'all'
+                              ? 'border-blue-500'
+                              : 'border-tertiary group-hover:border-blue-500/50'
+                          "
+                        >
+                          @if (gameFilterMode() === 'all') {
+                            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                          }
+                        </div>
+                        <span class="font-bold text-primary truncate">Show all Pokémon</span>
+                      </div>
+                      <span class="text-sm text-secondary pl-7"
+                        >Default view – keep every Pokémon visible.</span
+                      >
+                    </button>
+
+                    <button
+                      (click)="gameFilterMode.set('obtainable')"
+                      class="flex flex-col text-left p-4 rounded-xl border transition-all md:h-full group"
+                      [ngClass]="
+                        gameFilterMode() === 'obtainable'
+                          ? 'border-primary bg-blue-500/5'
+                          : 'border-theme hover:border-primary/50 hover:bg-surface-hover'
+                      "
+                    >
+                      <div class="flex items-center gap-3 mb-2">
+                        <div
+                          class="w-4 h-4 rounded-full border flex items-center justify-center transition-colors flex-shrink-0"
+                          [ngClass]="
+                            gameFilterMode() === 'obtainable'
+                              ? 'border-blue-500'
+                              : 'border-tertiary group-hover:border-blue-500/50'
+                          "
+                        >
+                          @if (gameFilterMode() === 'obtainable') {
+                            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                          }
+                        </div>
+                        <span class="font-bold text-primary truncate">Show only obtainable</span>
+                      </div>
+                      <span class="text-sm text-secondary pl-7"
+                        >Hide Pokémon you cannot currently catch.</span
+                      >
+                    </button>
+
+                    <button
+                      (click)="gameFilterMode.set('unobtainable')"
+                      class="flex flex-col text-left p-4 rounded-xl border transition-all md:h-full group"
+                      [ngClass]="
+                        gameFilterMode() === 'unobtainable'
+                          ? 'border-primary bg-blue-500/5'
+                          : 'border-theme hover:border-primary/50 hover:bg-surface-hover'
+                      "
+                    >
+                      <div class="flex items-center gap-3 mb-2">
+                        <div
+                          class="w-4 h-4 rounded-full border flex items-center justify-center transition-colors flex-shrink-0"
+                          [ngClass]="
+                            gameFilterMode() === 'unobtainable'
+                              ? 'border-blue-500'
+                              : 'border-tertiary group-hover:border-blue-500/50'
+                          "
+                        >
+                          @if (gameFilterMode() === 'unobtainable') {
+                            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                          }
+                        </div>
+                        <span class="font-bold text-primary truncate">Show only unobtainable</span>
+                      </div>
+                      <span class="text-sm text-secondary pl-7"
+                        >Focus on the Pokémon your games are missing.</span
+                      >
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          <div class="max-w-3xl w-full mx-auto relative flex flex-col gap-2">
+            <div class="flex gap-3">
+              <div class="relative flex-1">
+                <input
+                  type="text"
+                  [(ngModel)]="searchQuery"
+                  (ngModelChange)="onSearchChange()"
+                  placeholder="Search Pokémon..."
+                  class="w-full pl-11 pr-4 py-2.5 bg-surface text-text-primary border border-theme rounded-3xl shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder:text-text-tertiary font-medium bg-surface-hover"
+                />
+                <svg
+                  class="absolute left-4 top-3 w-5 h-5 text-text-tertiary"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+
+              <button
+                #filterBtn
+                (click)="showFilters.set(!showFilters())"
+                class="px-5 py-2.5 bg-surface text-primary border border-theme rounded-3xl shadow-sm hover:shadow-md transition-all flex items-center gap-2 font-bold bg-surface-hover"
+                [class.bg-surface-raised]="showFilters()"
+              >
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                  />
+                </svg>
+                <span class="hidden sm:inline">Filters</span>
+              </button>
+            </div>
+
+            <div class="px-2 text-sm font-medium text-tertiary">
+              Showing {{ activePokemonCount() }} of {{ allSimplePokemon().length }} Pokémon.
+            </div>
+
+            @if (showFilters()) {
+              <div
+                #filterContainer
+                class="absolute top-full mt-2 right-0 w-120 bg-surface border border-theme rounded-2xl shadow-2xl p-5 z-50"
+              >
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-5 mb-5">
+                  <div>
+                    <app-custom-dropdown
+                      [options]="typeOptions()"
+                      [selectedId]="selectedType()"
+                      [searchable]="false"
+                      (valueChanged)="selectedType.set($event); displayedCount.set(30)"
+                      placeholder="ALL"
+                      label="Type"
+                    />
+                  </div>
+                  <div>
+                    <app-custom-dropdown
+                      [options]="colorOptions()"
+                      [selectedId]="selectedColor()"
+                      [searchable]="false"
+                      (valueChanged)="selectedColor.set($event)"
+                      placeholder="ALL"
+                      label="Color"
+                    />
+                  </div>
+                  <div>
+                    <app-custom-dropdown
+                      [options]="generationOptions()"
+                      [selectedId]="selectedGeneration()"
+                      [searchable]="false"
+                      (valueChanged)="selectedGeneration.set($event); displayedCount.set(30)"
+                      placeholder="ALL"
+                      label="Generation"
+                    />
+                  </div>
+                  <div>
+                    <app-custom-dropdown
+                      [options]="regionOptions()"
+                      [selectedId]="selectedRegion()"
+                      [searchable]="false"
+                      (valueChanged)="selectedRegion.set($event); displayedCount.set(30)"
+                      placeholder="ALL"
+                      label="Region"
+                    />
+                  </div>
+                </div>
+
+                <div class="border-t border-theme pt-4 mb-4">
+                  <p class="text-xs font-bold uppercase tracking-wider text-tertiary mb-3">
+                    Options
+                  </p>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label
+                      class="flex items-center justify-between gap-3 cursor-pointer select-none group"
+                    >
+                      <span
+                        class="text-sm font-medium text-primary group-hover:text-blue-400 transition-colors"
+                        >Exclude forms</span
+                      >
+                      <button
+                        type="button"
+                        (click)="excludeForms.set(!excludeForms()); displayedCount.set(30)"
+                        class="relative w-11 h-6 rounded-full transition-all duration-300 focus:outline-none flex-shrink-0"
+                        [class.bg-blue-500]="excludeForms()"
+                        [class.bg-[var(--color-surface-raised)]]="!excludeForms()"
+                        [attr.aria-checked]="excludeForms()"
+                        role="switch"
+                      >
+                        <span
+                          class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-300"
+                          [class.translate-x-5]="excludeForms()"
+                        ></span>
+                      </button>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="flex justify-end">
+                  <button
+                    type="button"
+                    (click)="resetFilters()"
+                    [disabled]="!hasActiveFilters()"
+                    class="px-4 py-1.5 text-sm font-bold rounded-xl border border-theme text-secondary hover:text-primary hover:border-blue-500 hover:bg-blue-500/5 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        @if (isLoadingList()) {
+          <div class="flex justify-center items-center h-64">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          </div>
+        } @else {
+          <div
+            class="grid grid-cols-1 min-[450px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-6 pb-8"
+          >
+            @for (pkmn of displayedPokemon(); track pkmn.id) {
+              <div class="h-full">
+                <app-dataset-pokemon-card
+                  [pokemon]="pkmn"
+                  [isGreyedOut]="isPokemonGreyedOut(pkmn)"
+                ></app-dataset-pokemon-card>
+              </div>
+            }
+          </div>
+
+          <div #scrollTarget class="h-20 w-full flex items-center justify-center">
+            @if (isPageLoading()) {
+              <div class="animate-pulse flex space-x-2">
+                <div class="h-3 w-3 bg-blue-500 rounded-full"></div>
+                <div class="h-3 w-3 bg-blue-500 rounded-full animation-delay-200"></div>
+                <div class="h-3 w-3 bg-blue-500 rounded-full animation-delay-400"></div>
+              </div>
+            }
+          </div>
+
+          @if (!isPageLoading() && displayedPokemon().length === 0) {
+            <div class="text-center py-20 text-secondary">
+              <svg
+                class="w-16 h-16 mx-auto text-tertiary mb-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p class="text-xl font-medium">No Pokémon found matching your search.</p>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  `,
+  styles: [
+    `
+      .animation-delay-200 {
+        animation-delay: 200ms;
+      }
+      .animation-delay-400 {
+        animation-delay: 400ms;
+      }
+    `,
+  ],
+})
+export class PokemonListComponent implements OnInit, AfterViewInit, OnDestroy {
+  datasetService = inject(DatasetService);
+  themeService = inject(ThemeService);
+  typeColorService = inject(TypeColorService);
+  langService = inject(PokemonLanguageService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  allSlugs = signal<string[]>([]);
+  allSimplePokemon = signal<SimplePokemon[]>([]);
+  searchQuery = signal('');
+
+  @ViewChild('scrollTarget') scrollTarget!: ElementRef;
+  @ViewChild('filterBtn') filterBtn!: ElementRef;
+  @ViewChild('filterContainer') filterContainer!: ElementRef;
+  private observer: IntersectionObserver | null = null;
+
+  showFilters = signal(false);
+  selectedType = signal<string>('');
+  selectedColor = signal<string>('');
+  selectedGeneration = signal<string>('');
+  showShinyOnly = signal(false);
+  excludeForms = signal(false);
+
+  typeOptions = signal<CustomDropdownOption[]>([
+    { id: '', name: 'ALL' },
+    ...[
+      'normal',
+      'fire',
+      'water',
+      'grass',
+      'electric',
+      'ice',
+      'fighting',
+      'poison',
+      'ground',
+      'flying',
+      'psychic',
+      'bug',
+      'rock',
+      'ghost',
+      'dragon',
+      'dark',
+      'steel',
+      'fairy',
+    ].map((type) => ({
+      id: type,
+      name: type.charAt(0).toUpperCase() + type.slice(1),
+      iconPath: `assets/images/types/${type}.png`,
+    })),
+  ]);
+
+  private colorDot(hex: string): string {
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><circle cx='5' cy='5' r='4' fill='${hex}' stroke='rgba(128,128,128,0.35)' stroke-width='1'/></svg>`;
+    return `data:image/svg+xml;base64,${btoa(svg)}`;
+  }
+
+  colorOptions = signal<CustomDropdownOption[]>([
+    { id: '', name: 'ALL' },
+    { id: 'red', name: 'Red', iconPath: this.colorDot('#ef4444') },
+    { id: 'blue', name: 'Blue', iconPath: this.colorDot('#3b82f6') },
+    { id: 'yellow', name: 'Yellow', iconPath: this.colorDot('#eab308') },
+    { id: 'green', name: 'Green', iconPath: this.colorDot('#22c55e') },
+    { id: 'black', name: 'Black', iconPath: this.colorDot('#374151') },
+    { id: 'brown', name: 'Brown', iconPath: this.colorDot('#92400e') },
+    { id: 'purple', name: 'Purple', iconPath: this.colorDot('#a855f7') },
+    { id: 'gray', name: 'Gray', iconPath: this.colorDot('#9ca3af') },
+    { id: 'white', name: 'White', iconPath: this.colorDot('#e5e7eb') },
+    { id: 'pink', name: 'Pink', iconPath: this.colorDot('#ec4899') },
+  ]);
+
+  generationOptions = signal<CustomDropdownOption[]>([
+    { id: '', name: 'ALL' },
+    { id: '1', name: 'Generation I', description: 'Kanto (#1–151)' },
+    { id: '2', name: 'Generation II', description: 'Johto (#152–251)' },
+    { id: '3', name: 'Generation III', description: 'Hoenn (#252–386)' },
+    { id: '4', name: 'Generation IV', description: 'Sinnoh (#387–493)' },
+    { id: '5', name: 'Generation V', description: 'Unova (#494–649)' },
+    { id: '6', name: 'Generation VI', description: 'Kalos (#650–721)' },
+    { id: '7', name: 'Generation VII', description: 'Alola (#722–809)' },
+    { id: '8', name: 'Generation VIII', description: 'Galar (#810–905)' },
+    { id: '9', name: 'Generation IX', description: 'Paldea (#906–1025)' },
+  ]);
+
+  regionOptions = signal<CustomDropdownOption[]>([
+    { id: '', name: 'ALL' },
+    { id: 'kanto', name: 'Kanto', description: 'Gen I' },
+    { id: 'johto', name: 'Johto', description: 'Gen II' },
+    { id: 'hoenn', name: 'Hoenn', description: 'Gen III' },
+    { id: 'sinnoh', name: 'Sinnoh', description: 'Gen IV' },
+    { id: 'unova', name: 'Unova', description: 'Gen V' },
+    { id: 'kalos', name: 'Kalos', description: 'Gen VI' },
+    { id: 'alola', name: 'Alola', description: 'Gen VII' },
+    { id: 'galar', name: 'Galar', description: 'Gen VIII' },
+    { id: 'hisui', name: 'Hisui', description: 'Gen VIII' },
+    { id: 'paldea', name: 'Paldea', description: 'Gen IX' },
+  ]);
+
+  selectedRegion = signal<string>('');
+
+  private generationRanges: Record<string, [number, number]> = {
+    '1': [1, 151],
+    '2': [152, 251],
+    '3': [252, 386],
+    '4': [387, 493],
+    '5': [494, 649],
+    '6': [650, 721],
+    '7': [722, 809],
+    '8': [810, 905],
+    '9': [906, 1025],
+  };
+
+  private regionRanges: Record<string, [number, number][]> = {
+    kanto: [[1, 151]],
+    johto: [[152, 251]],
+    hoenn: [[252, 386]],
+    sinnoh: [[387, 493]],
+    unova: [[494, 649]],
+    kalos: [[650, 721]],
+    alola: [[722, 809]],
+    galar: [[810, 905]],
+    hisui: [[899, 905]], // Hisuian forms share Sinnoh dex but hisui-specific range roughly
+    paldea: [[906, 1025]],
+  };
+
+  hasActiveFilters = computed(
+    () =>
+      !!this.selectedType() ||
+      !!this.selectedColor() ||
+      !!this.selectedGeneration() ||
+      !!this.selectedRegion() ||
+      this.excludeForms(),
+  );
+
+  displayedCount = signal(30);
+
+  isLoadingList = signal(true);
+  isPageLoading = signal(false);
+
+  displayedPokemon = signal<DatasetPokemon[]>([]);
+
+  viewMode = signal<'national' | 'games'>('national');
+  selectedGames = signal<string[]>([]);
+  gameFilterMode = signal<'all' | 'obtainable' | 'unobtainable'>('all');
+
+  availableGameOptions = computed(() => {
+    return this.gameOptions().filter((g) => !this.selectedGames().includes(g.id));
+  });
+
+  gameOptions = signal<CustomDropdownOption[]>([
+    {
+      id: 'lza',
+      name: 'Pokémon Legends: Z-A',
+      iconPath: 'assets/images/games/legends_z-a.png',
+      category: 'Generation 9',
+    },
+    {
+      id: 'sv-v',
+      name: 'Pokémon Violet',
+      iconPath: 'assets/images/games/violet.png',
+      category: 'Generation 9',
+    },
+    {
+      id: 'sv-s',
+      name: 'Pokémon Scarlet',
+      iconPath: 'assets/images/games/scarlet.png',
+      category: 'Generation 9',
+    },
+    {
+      id: 'pla',
+      name: 'Pokémon Legends: Arceus',
+      iconPath: 'assets/images/games/legends_arceus.png',
+      category: 'Generation 8',
+    },
+    {
+      id: 'bdsp-sp',
+      name: 'Pokémon Shining Pearl',
+      iconPath: 'assets/images/games/shining_pearl.png',
+      category: 'Generation 8',
+    },
+    {
+      id: 'bdsp-bd',
+      name: 'Pokémon Brilliant Diamond',
+      iconPath: 'assets/images/games/brilliant_diamond.png',
+      category: 'Generation 8',
+    },
+    {
+      id: 'swsh-sh',
+      name: 'Pokémon Shield',
+      iconPath: 'assets/images/games/shield.png',
+      category: 'Generation 8',
+    },
+    {
+      id: 'swsh-sw',
+      name: 'Pokémon Sword',
+      iconPath: 'assets/images/games/sword.png',
+      category: 'Generation 8',
+    },
+    {
+      id: 'lgpe-lge',
+      name: "Pokémon Let's Go Eevee!",
+      iconPath: "assets/images/games/let's_go_eevee.png",
+      category: 'Generation 7',
+    },
+    {
+      id: 'lgpe-lgp',
+      name: "Pokémon Let's Go Pikachu!",
+      iconPath: "assets/images/games/let's_go_pikachu.png",
+      category: 'Generation 7',
+    },
+    {
+      id: 'usum-um',
+      name: 'Pokémon Ultra Moon',
+      iconPath: 'assets/images/games/ultra_moon.png',
+      category: 'Generation 7',
+    },
+    {
+      id: 'usum-us',
+      name: 'Pokémon Ultra Sun',
+      iconPath: 'assets/images/games/ultra_sun.png',
+      category: 'Generation 7',
+    },
+    {
+      id: 'sm-m',
+      name: 'Pokémon Moon',
+      iconPath: 'assets/images/games/moon.png',
+      category: 'Generation 7',
+    },
+    {
+      id: 'sm-s',
+      name: 'Pokémon Sun',
+      iconPath: 'assets/images/games/sun.png',
+      category: 'Generation 7',
+    },
+    {
+      id: 'oras-as',
+      name: 'Pokémon Alpha Sapphire',
+      iconPath: 'assets/images/games/alpha_sapphire.png',
+      category: 'Generation 6',
+    },
+    {
+      id: 'oras-or',
+      name: 'Pokémon Omega Ruby',
+      iconPath: 'assets/images/games/omega_ruby.png',
+      category: 'Generation 6',
+    },
+    {
+      id: 'xy-y',
+      name: 'Pokémon Y',
+      iconPath: 'assets/images/games/y.png',
+      category: 'Generation 6',
+    },
+    {
+      id: 'xy-x',
+      name: 'Pokémon X',
+      iconPath: 'assets/images/games/x.png',
+      category: 'Generation 6',
+    },
+    {
+      id: 'b2w2-w2',
+      name: 'Pokémon White 2',
+      iconPath: 'assets/images/games/white2.png',
+      category: 'Generation 5',
+    },
+    {
+      id: 'b2w2-b2',
+      name: 'Pokémon Black 2',
+      iconPath: 'assets/images/games/black2.png',
+      category: 'Generation 5',
+    },
+    {
+      id: 'bw-w',
+      name: 'Pokémon White',
+      iconPath: 'assets/images/games/white.png',
+      category: 'Generation 5',
+    },
+    {
+      id: 'bw-b',
+      name: 'Pokémon Black',
+      iconPath: 'assets/images/games/black.png',
+      category: 'Generation 5',
+    },
+    {
+      id: 'hgss-ss',
+      name: 'Pokémon SoulSilver',
+      iconPath: 'assets/images/games/soulsilver.png',
+      category: 'Generation 4',
+    },
+    {
+      id: 'hgss-hg',
+      name: 'Pokémon HeartGold',
+      iconPath: 'assets/images/games/heartgold.png',
+      category: 'Generation 4',
+    },
+    {
+      id: 'dppt-pt',
+      name: 'Pokémon Platinum',
+      iconPath: 'assets/images/games/platin.png',
+      category: 'Generation 4',
+    },
+    {
+      id: 'dppt-p',
+      name: 'Pokémon Pearl',
+      iconPath: 'assets/images/games/pearl.png',
+      category: 'Generation 4',
+    },
+    {
+      id: 'dppt-d',
+      name: 'Pokémon Diamond',
+      iconPath: 'assets/images/games/diamond.png',
+      category: 'Generation 4',
+    },
+    {
+      id: 'frlg-lg',
+      name: 'Pokémon LeafGreen',
+      iconPath: 'assets/images/games/leafgreen.png',
+      category: 'Generation 3',
+    },
+    {
+      id: 'frlg-fr',
+      name: 'Pokémon FireRed',
+      iconPath: 'assets/images/games/firered.png',
+      category: 'Generation 3',
+    },
+    {
+      id: 'rse-e',
+      name: 'Pokémon Emerald',
+      iconPath: 'assets/images/games/emerald.png',
+      category: 'Generation 3',
+    },
+    {
+      id: 'rse-s',
+      name: 'Pokémon Sapphire',
+      iconPath: 'assets/images/games/sapphire.png',
+      category: 'Generation 3',
+    },
+    {
+      id: 'rse-r',
+      name: 'Pokémon Ruby',
+      iconPath: 'assets/images/games/ruby.png',
+      category: 'Generation 3',
+    },
+    {
+      id: 'gsc-c',
+      name: 'Pokémon Crystal',
+      iconPath: 'assets/images/games/crystal.png',
+      category: 'Generation 2',
+    },
+    {
+      id: 'gsc-s',
+      name: 'Pokémon Silver',
+      iconPath: 'assets/images/games/silver.png',
+      category: 'Generation 2',
+    },
+    {
+      id: 'gsc-g',
+      name: 'Pokémon Gold',
+      iconPath: 'assets/images/games/gold.png',
+      category: 'Generation 2',
+    },
+    {
+      id: 'y',
+      name: 'Pokémon Yellow',
+      iconPath: 'assets/images/games/yellow.png',
+      category: 'Generation 1',
+    },
+    {
+      id: 'rb-b',
+      name: 'Pokémon Blue',
+      iconPath: 'assets/images/games/blue.png',
+      category: 'Generation 1',
+    },
+    {
+      id: 'rb-r',
+      name: 'Pokémon Red',
+      iconPath: 'assets/images/games/red.png',
+      category: 'Generation 1',
+    },
+  ]);
+
+  filteredSlugs = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const typeFilter = this.selectedType();
+    const genFilter = this.selectedGeneration();
+    const regionFilter = this.selectedRegion();
+    const excludeForms = this.excludeForms();
+    const mode = this.viewMode();
+    const games = this.selectedGames();
+    const gameMode = this.gameFilterMode();
+    let slugs = this.allSlugs();
+
+    const genRange = genFilter ? this.generationRanges[genFilter] : null;
+    const regionRange = regionFilter ? this.regionRanges[regionFilter] : null;
+
+    const allPokemon = this.allSimplePokemon();
+    if (allPokemon.length > 0) {
+      const matchingIds = new Set<string>();
+      for (const p of allPokemon) {
+        if (typeFilter && p.type1 !== typeFilter && p.type2 !== typeFilter) continue;
+
+        if (genRange && (p.dexNum < genRange[0] || p.dexNum > genRange[1])) continue;
+
+        if (regionRange) {
+          const inRegion = regionRange.some(([lo, hi]) => p.dexNum >= lo && p.dexNum <= hi);
+          if (!inRegion) continue;
+        }
+
+        if (excludeForms && p.isForm) continue;
+
+        if (mode === 'games' && games.length > 0) {
+          const isObtainable = games.some((g) => p.obtainableIn?.includes(g));
+          if (gameMode === 'obtainable' && !isObtainable) continue;
+          if (gameMode === 'unobtainable' && isObtainable) continue;
+        }
+
+        if (!query) {
+          matchingIds.add(p.slug);
+          continue;
+        }
+
+        if (p.slug.includes(query)) {
+          matchingIds.add(p.slug);
+          continue;
+        }
+
+        for (const name of Object.values(p.allNames || {})) {
+          if (name && name.toLowerCase().includes(query)) {
+            matchingIds.add(p.slug);
+            break;
+          }
+        }
+      }
+      return slugs.filter((s) => matchingIds.has(s));
+    }
+
+    // Fallback: slug-only search if dataset isn't fully loaded
+    return slugs.filter((s) => s.includes(query) || s.replace(/-/g, ' ').includes(query));
+  });
+
+  activePokemonCount = computed(() => {
+    const slugs = this.filteredSlugs();
+    const mode = this.viewMode();
+    const games = this.selectedGames();
+    const gameMode = this.gameFilterMode();
+
+    if (mode === 'games' && games.length > 0 && gameMode === 'all') {
+      const all = this.allSimplePokemon();
+      return slugs.filter((slug) => {
+        const p = all.find((ap) => ap.slug === slug);
+        return p && games.some((g) => p.obtainableIn?.includes(g));
+      }).length;
+    }
+
+    return slugs.length;
+  });
+
+  @HostListener('document:click', ['$event'])
+  onGlobalClick(event: MouseEvent) {
+    if (!this.showFilters()) return;
+
+    const target = event.target as Node;
+    const isClickInsideContainer = this.filterContainer?.nativeElement.contains(target);
+    const isClickOnButton = this.filterBtn?.nativeElement.contains(target);
+
+    if (!isClickInsideContainer && !isClickOnButton) {
+      this.showFilters.set(false);
+    }
+  }
+
+  visibleSlugs = computed(() => {
+    return this.filteredSlugs().slice(0, this.displayedCount());
+  });
+
+  constructor() {
+    toObservable(this.visibleSlugs)
+      .pipe(
+        tap(() => this.isPageLoading.set(true)),
+        debounceTime(300),
+        switchMap((currentList) => {
+          if (currentList.length === 0) return of([]);
+
+          const requests = currentList.map((slug) =>
+            this.datasetService.loadPokemonBySlug(slug).pipe(catchError(() => of(null))),
+          );
+
+          return forkJoin(requests);
+        }),
+      )
+      .subscribe((results) => {
+        const validResults = results.filter((r): r is DatasetPokemon => r !== null);
+        this.displayedPokemon.set(validResults);
+        setTimeout(() => this.isPageLoading.set(false), 50); // slight delay to prevent flicker
+      });
+
+    // Sync all active filters → URL query params
+    effect(() => {
+      const params: Record<string, string> = {};
+      if (this.selectedType()) params['type'] = this.selectedType();
+      if (this.selectedColor()) params['color'] = this.selectedColor();
+      if (this.selectedGeneration()) params['generation'] = this.selectedGeneration();
+      if (this.selectedRegion()) params['region'] = this.selectedRegion();
+      if (this.excludeForms()) params['excludeForms'] = '1';
+
+      this.router.navigate([], {
+        queryParams: Object.keys(params).length > 0 ? params : {},
+        replaceUrl: true,
+      });
+    });
+  }
+
+  ngOnInit() {
+    this.datasetService.loadPokemonIndex().subscribe({
+      next: (slugs) => {
+        this.allSlugs.set(slugs);
+        this.isLoadingList.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load pokemon indices', err);
+        this.isLoadingList.set(false);
+      },
+    });
+
+    this.datasetService.getSimplePokemonList().subscribe({
+      next: (list) => {
+        this.allSimplePokemon.set(list);
+      },
+    });
+
+    this.route.queryParams
+      .pipe(take(1))
+      .subscribe(({ type, color, generation, region, excludeForms }) => {
+        if (type) this.selectedType.set(type);
+        if (color) this.selectedColor.set(color);
+        if (generation) this.selectedGeneration.set(generation);
+        if (region) this.selectedRegion.set(region);
+        if (excludeForms === '1') this.excludeForms.set(true);
+      });
+  }
+
+  ngAfterViewInit() {
+    this.setupIntersectionObserver();
+  }
+
+  ngOnDestroy() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  setupIntersectionObserver() {
+    const options = {
+      root: null,
+      rootMargin: '400px',
+      threshold: 0,
+    };
+
+    this.observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !this.isPageLoading() && !this.isLoadingList()) {
+        const totalFiltered = this.filteredSlugs().length;
+        if (this.displayedCount() < totalFiltered) {
+          this.displayedCount.update((c) => c + 30);
+        }
+      }
+    }, options);
+
+    const checkTarget = setInterval(() => {
+      if (this.scrollTarget?.nativeElement) {
+        this.observer?.observe(this.scrollTarget.nativeElement);
+        clearInterval(checkTarget);
+      }
+    }, 500);
+  }
+
+  onSearchChange() {
+    this.displayedCount.set(30);
+  }
+
+  resetFilters() {
+    this.selectedType.set('');
+    this.selectedColor.set('');
+    this.selectedGeneration.set('');
+    this.selectedRegion.set('');
+    this.showShinyOnly.set(false);
+    this.excludeForms.set(false);
+    this.displayedCount.set(30);
+  }
+
+  getGameOption(id: string): CustomDropdownOption | undefined {
+    return this.gameOptions().find((g) => g.id === id);
+  }
+
+  addGame(id: string) {
+    if (id && !this.selectedGames().includes(id)) {
+      this.selectedGames.update((games) => [...games, id]);
+    }
+  }
+
+  removeGame(id: string) {
+    this.selectedGames.update((games) => games.filter((g) => g !== id));
+  }
+
+  isPokemonGreyedOut(pkmn: DatasetPokemon | Pick<SimplePokemon, 'slug'> | any): boolean {
+    if (
+      this.viewMode() !== 'games' ||
+      this.selectedGames().length === 0 ||
+      this.gameFilterMode() !== 'all'
+    ) {
+      return false;
+    }
+    const simple = this.allSimplePokemon().find((p) => p.slug === (pkmn.slug || pkmn.id));
+    if (!simple) return false;
+
+    return !this.selectedGames().some((g) => simple.obtainableIn?.includes(g));
+  }
+}
