@@ -56,3 +56,18 @@ export interface RibbonData {
   title: string;
   category: string;
 }
+
+export interface GameData {
+  id: string;
+  name: string;
+  nameSlug: string;
+  gen: number;
+  codename: string | null;
+  type: string;
+  series: string;
+  releaseDate: string | null;
+  region: string;
+  platforms: string[];
+  pokedexes: string[];
+}
+

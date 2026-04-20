@@ -18,9 +18,18 @@ export interface Dex {
   updatedAt: Date;
 }
 
+export interface StatsMap {
+  hp: number;
+  atk: number;
+  def: number;
+  spa: number;
+  spd: number;
+  spe: number;
+}
+
 export interface BoxSlot {
   position: number;
-  pokemonSlug: string | null; // Changed from pokemonId to pokemonSlug
+  pokemonSlug: string | null;
   isShiny: boolean;
   isOwned: boolean;
   isEvent?: boolean;
@@ -37,8 +46,11 @@ export interface BoxSlot {
   originLanguage?: string;
   originalTrainer?: string;
   trainerId?: string;
-  mark?: string; // e.g., "lunchtime", "rare"
-  ribbon?: string; // e.g., "champion", "best-friends"
+  mark?: string;
+  ribbon?: string;
+  ivs?: StatsMap;
+  evs?: StatsMap;
+  gender?: string;
 }
 
 export interface Box {

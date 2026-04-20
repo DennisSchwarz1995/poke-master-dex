@@ -10,6 +10,7 @@ import {
   NatureData,
   MarkData,
   RibbonData,
+  GameData,
 } from '../../../shared/models/dataset.model';
 
 export interface DatasetPokemon {
@@ -86,6 +87,7 @@ export interface SimplePokemon {
   nameGerman?: string;
   type1: string;
   type2?: string;
+  obtainableIn?: string[];
   isForm: boolean;
   spriteId: string;
   allNames?: { [lang: string]: string }; // All language names for searching
@@ -120,10 +122,11 @@ export class DatasetService {
   private naturesCache: Observable<NatureData[]> | null = null;
   private marksCache: Observable<MarkData[]> | null = null;
   private ribbonsCache: Observable<RibbonData[]> | null = null;
+  private gamesCache: Observable<GameData[]> | null = null;
 
   constructor(private http: HttpClient) {}
 
-  private loadPokemonIndex(): Observable<string[]> {
+  loadPokemonIndex(): Observable<string[]> {
     if (!this.pokemonIndexCache) {
       this.pokemonIndexCache = this.http
         .get<string[]>(`${this.datasetBasePath}/indices/pokemon.json`)
@@ -169,14 +172,16 @@ export class DatasetService {
       .pipe(
         map((pokemonList) =>
           pokemonList.map(
-            (p) =>
+            (p: any) =>
               ({
                 slug: p.id,
                 name: p.names?.['eng'] || p.id,
                 nameGerman: p.names?.['deu'],
                 dexNum: p.dexNum,
-                type1: 'normal',
-                type2: undefined,
+                type1: p.type1 || 'normal',
+                type2: p.type2,
+                obtainableIn: p.obtainableIn || [],
+                isForm: p.isDefault === false,
                 allNames: p.names,
               }) as SimplePokemon,
           ),
@@ -246,10 +251,9 @@ export class DatasetService {
     }
 
     if (dexType === DexType.STANDARD) {
-      // Personal Pokedex starts completely empty, we just need to determine the number of boxes
       return this.getDexBoxNames(DexType.STANDARD).pipe(
         map((boxNames) => {
-          const totalBoxes = boxNames ? boxNames.length : 40; // Default to 40 boxes if not found
+          const totalBoxes = boxNames ? boxNames.length : 40;
           const emptySlots = new Array(totalBoxes * 30).fill(null);
           return emptySlots;
         }),
@@ -359,5 +363,14 @@ export class DatasetService {
         .pipe(shareReplay(1));
     }
     return this.ribbonsCache;
+  }
+
+  loadGames(): Observable<GameData[]> {
+    if (!this.gamesCache) {
+      this.gamesCache = this.http
+        .get<GameData[]>(`${this.datasetBasePath}/games/games.json`)
+        .pipe(shareReplay(1));
+    }
+    return this.gamesCache;
   }
 }
