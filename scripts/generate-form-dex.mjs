@@ -22,17 +22,17 @@ const CUSTOM_BOX_NAMES = {
   22: "Sinnoh 1", 23: "Sinnoh 2", 24: "Sinnoh 3", 25: "Sinnoh 4",
   26: "Sinnoh Females 1", 27: "Sinnoh Females 2", 28: "Sinnoh Altern.",
   29: "Unova 1", 30: "Unova 2", 31: "Unova 3", 32: "Unova 4", 33: "Unova 5", 34: "Unova 6",
-  35: "Unova Females", 36: "Unova Alternate",
-  37: "Kalos 1", 38: "Kalos 2", 39: "Kalos 3",
-  40: "Kalos Females", 41: "Vivillon", 42: "Kalos Altern. 2",
-  43: "Alola 1", 44: "Alola 2", 45: "Alola 3",
-  46: "Alola Alternate", 47: "Alolan Form",
-  48: "Galar 1", 49: "Galar 2", 50: "Galar 3", 51: "Hisui",
-  52: "Galar / Hisui Females",
-  53: "Alcremie 1", 54: "Alcremie 2", 55: "Galar Alternate",
-  56: "Galarian Form", 57: "Hisuian Form",
-  58: "Paldea 1", 59: "Paldea 2", 60: "Paldea 3", 61: "Paldea 4",
-  62: "Paldea Females", 63: "Paldea Alternate", 64: "Paldean Form"
+  35: "Unova Alternate",
+  36: "Kalos 1", 37: "Kalos 2", 38: "Kalos 3",
+  39: "Kalos Altern. 1", 40: "Kalos Altern. 2", 41: "Vivillon",
+  42: "Alola 1", 43: "Alola 2", 44: "Alola 3",
+  45: "Alola Alternate", 46: "Alolan Forms", 47: "Unknown Region",
+  48: "Galar 1", 49: "Galar 2", 50: "Galar 3", 51: "Galar Alternate",
+  52: "Galarian Forms",
+  53: "Alcremie 1", 54: "Alcremie 2", 55: "Alcremie 3",
+  56: "Gigantamax 1", 57: "Gigantamax 2", 58: "Hisui",
+  59: "Hisuian Forms", 60: "Paldea 1", 61: "Paldea 2", 62: "Paldea 3", 63: "Paldea 4",
+  64: "Paldea Alternate", 65: "Paldean Forms"
 };
 
 console.log('Generating Form Dex Mapping...');

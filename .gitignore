@@ -58,3 +58,6 @@ analyze-boxes.mjs
 test-regions.mjs
 box-contents-utf8.txt
 box-contents.txt
+rename.py
+restructure.py
+verify_boxes.py
