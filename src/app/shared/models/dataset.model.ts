@@ -65,6 +65,8 @@ export interface GameData {
   codename: string | null;
   type: string;
   series: string;
+  gameSet?: string | null;
+  gameSuperSet?: string | null;
   releaseDate: string | null;
   region: string;
   platforms: string[];

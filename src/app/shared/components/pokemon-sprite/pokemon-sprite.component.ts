@@ -2,11 +2,13 @@ import { Component, input, computed, signal, effect, inject, Signal } from '@ang
 import { CommonModule } from '@angular/common';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { TypeColorService } from '../../../core/services/type-color.service';
+import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
+import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 
 @Component({
   selector: 'app-pokemon-sprite',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TooltipDirective],
   template: `
     <div
       class="flex flex-col items-center p-2 rounded-lg transition-all duration-200 cursor-pointer border-2 bg-surface-raised"
@@ -19,6 +21,8 @@ import { TypeColorService } from '../../../core/services/type-color.service';
       [class.opacity-40]="!isOwned()"
       (mouseenter)="onHover()"
       (mouseleave)="onLeave()"
+      [appTooltip]="pokemonName() + ' ' + pokemonNid()"
+      tooltipPosition="top"
     >
       @if (pokemonSlug()) {
         <div class="relative w-16 h-16">
@@ -64,6 +68,7 @@ import { TypeColorService } from '../../../core/services/type-color.service';
 export class PokemonSpriteComponent {
   private datasetService = inject(DatasetService);
   private typeColorService = inject(TypeColorService);
+  private pokemonLangService = inject(PokemonLanguageService);
 
   pokemonSlug = input<string | null>(null);
   isOwned = input<boolean>(false);
@@ -106,10 +111,11 @@ export class PokemonSpriteComponent {
   constructor() {
     effect(() => {
       const slug = this.pokemonSlug();
+      const lang = this.pokemonLangService.currentLang(); // Track language changes
       if (slug) {
         this.datasetService.loadPokemonBySlug(slug).subscribe({
           next: (pokemon) => {
-            this.pokemonName.set(pokemon.names.deu || pokemon.names.eng);
+            this.pokemonName.set(this.pokemonLangService.getName(pokemon));
             this.pokemonNid.set(this.formatNid(pokemon.nid));
             this.spriteUrl.set(this.datasetService.getSpriteUrl(pokemon, this.isShiny()));
 

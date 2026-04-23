@@ -6,13 +6,21 @@ import { AuthService } from '../../../core/auth/services/auth.service';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { Trainer } from '../../models/trainer.model';
 import { PokeballData } from '../../models/dataset.model';
-import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites';
+import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.constants';
 import {
   CustomDropdownComponent,
   CustomDropdownOption,
 } from '../custom-dropdown/custom-dropdown.component';
 
-export type QuickEditMode = 'None' | 'Edit' | 'Owned' | 'Pokeball' | 'Shiny' | 'Gmax' | 'Alpha' | 'Trainer';
+export type QuickEditMode =
+  | 'None'
+  | 'Edit'
+  | 'Owned'
+  | 'Pokeball'
+  | 'Shiny'
+  | 'Gmax'
+  | 'Alpha'
+  | 'Trainer';
 
 export interface QuickEditState {
   active: boolean;
@@ -28,7 +36,7 @@ export interface QuickEditState {
   imports: [CommonModule, FormsModule, CustomDropdownComponent],
   template: `
     <div
-      class="bg-surface border border-theme rounded-2xl p-3 mb-4 flex items-center gap-4 shadow-sm relative z-20"
+      class="bg-surface border border-theme rounded-2xl p-3 flex items-center gap-4 shadow-sm relative z-20"
     >
       <div class="flex gap-2 flex-wrap items-center">
         @for (mode of availableModes; track mode.value) {
@@ -69,9 +77,7 @@ export interface QuickEditState {
             </button>
 
             @if (mode.value === 'Trainer' && currentMode() === 'Trainer') {
-              <div
-                class="absolute top-[120%] left-0 z-50 animate-in fade-in zoom-in-95 w-64"
-              >
+              <div class="absolute top-[120%] left-0 z-50 animate-in fade-in zoom-in-95 w-64">
                 <app-custom-dropdown
                   [options]="trainerDropdownOptions()"
                   [selectedId]="selectedTrainerId()"

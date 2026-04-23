@@ -20,36 +20,13 @@ import { TrainerManagementDialogComponent } from '../../../features/dashboard/tr
         <div class="flex items-center gap-6">
           @if (!getDexIdFromUrl()) {
             <a routerLink="/" class="flex items-center gap-2" title="Poke Master Dex">
-              <div
-                class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-inner"
-              >
-                <span class="text-white font-bold text-xl tracking-tighter">PMD</span>
-              </div>
+              <img src="/favicon.ico" alt="" class="size-10 rounded-xl" />
+
               <span
                 class="hidden sm:block font-extrabold text-xl tracking-tight bg-gradient-to-br from-primary to-blue-400 bg-clip-text text-transparent"
               >
                 Master Dex
               </span>
-            </a>
-          } @else {
-            <a
-              routerLink="/pokedex"
-              class="flex items-center gap-2 text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme px-3 py-1.5 rounded-xl border border-theme hover:shadow-sm"
-            >
-              <svg
-                class="w-5 h-5 flex-shrink-0"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2.5"
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              <span class="hidden sm:inline">Back to Pokedex</span>
             </a>
           }
         </div>

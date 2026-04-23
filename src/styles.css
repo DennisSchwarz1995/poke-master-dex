@@ -146,3 +146,80 @@ body {
     background-color 0.3s ease,
     color 0.3s ease;
 }
+
+
+.app-custom-tooltip {
+  position: absolute;
+  background-color: var(--color-text-primary, #333);
+  color: var(--color-bg-primary, #fff);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: var(--shadow-md);
+  letter-spacing: 0.02em;
+}
+
+.tooltip-top { animation: tooltipFadeInTop 0.15s ease-out forwards; }
+.tooltip-bottom { animation: tooltipFadeInBottom 0.15s ease-out forwards; }
+.tooltip-left { animation: tooltipFadeInLeft 0.15s ease-out forwards; }
+.tooltip-right { animation: tooltipFadeInRight 0.15s ease-out forwards; }
+
+@keyframes tooltipFadeInTop {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes tooltipFadeInBottom {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes tooltipFadeInLeft {
+  from { opacity: 0; transform: translateX(4px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes tooltipFadeInRight {
+  from { opacity: 0; transform: translateX(-4px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.app-custom-tooltip::after {
+  content: "";
+  position: absolute;
+  border-style: solid;
+}
+
+.tooltip-top::after {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0 5px;
+  border-color: var(--color-text-primary, #333) transparent transparent transparent;
+}
+
+.tooltip-bottom::after {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 5px 5px 5px;
+  border-color: transparent transparent var(--color-text-primary, #333) transparent;
+}
+
+.tooltip-left::after {
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  border-width: 5px 0 5px 5px;
+  border-color: transparent transparent transparent var(--color-text-primary, #333);
+}
+
+.tooltip-right::after {
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+  border-width: 5px 5px 5px 0;
+  border-color: transparent var(--color-text-primary, #333) transparent transparent;
+}
