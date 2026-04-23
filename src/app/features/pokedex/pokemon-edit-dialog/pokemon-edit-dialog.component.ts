@@ -10,7 +10,7 @@ import {
   effect,
   AfterViewInit,
 } from '@angular/core';
-import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites';
+import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.constants';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -38,7 +38,9 @@ import {
   CustomDropdownOption,
 } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
-import { ToastService } from '../../../core/api/services/toast.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { getGameIconPath } from '../../../core/constants/game-data.constants';
+
 @Component({
   selector: 'app-pokemon-detail-dialog',
   standalone: true,
@@ -67,7 +69,7 @@ import { ToastService } from '../../../core/api/services/toast.service';
                       @if (localPokemonSlug() && currentSpriteUrl()) {
                         <img
                           [src]="currentSpriteUrl()"
-                          [alt]="getLocalizedName()"
+                          [alt]="localizedName()"
                           class="w-28 h-28 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110"
                           (error)="onImageError($event)"
                         />
@@ -136,8 +138,7 @@ import { ToastService } from '../../../core/api/services/toast.service';
                   @if (localPokemonSlug()) {
                     <div class="flex flex-col gap-1 text-sm text-secondary">
                       <span class="flex items-center gap-2">
-                        🇬🇧 {{ pokemonName('eng') }} | 🇯🇵 {{ pokemonName('jap') }} | {{ langFlag }}
-                        {{ getLocalizedName() }}
+                        {{ localizedName() }}
                       </span>
                       <span class="italic">{{ pokemonGenus() }}</span>
                     </div>
@@ -555,10 +556,10 @@ import { ToastService } from '../../../core/api/services/toast.service';
                       [selectedId]="ability"
                       [placeholder]="'Select Ability'"
                       [searchable]="false"
-                      (valueChanged)="ability = $event"
+                      (valueChanged)="onAbilityChange($event)"
                     />
                     <p class="text-xs text-secondary mt-1 min-h-[1.25rem] truncate">
-                      {{ getAbilityDescription() }}
+                      {{ currentAbilityDescription }}
                     </p>
                   </div>
 
@@ -659,7 +660,6 @@ import { ToastService } from '../../../core/api/services/toast.service';
             </div>
           </div>
 
-          <!-- Footer (Static) -->
           <div class="p-6 pt-4 border-t border-theme flex-none bg-surface z-10">
             <div class="flex justify-between items-center">
               <div class="text-xs text-secondary">Last updated: {{ 'Just now' }}</div>
@@ -760,19 +760,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   private toastService = inject(ToastService);
   langService = inject(PokemonLanguageService);
 
-  genderState = computed(() => {
-    const data = this.pokemonData();
-    if (!data) return { canMale: true, canFemale: true };
-
-    const mRate = data.maleRate ?? -1;
-    const fRate = data.femaleRate ?? -1;
-
-    if (mRate === 0 && fRate === 0) return { canMale: false, canFemale: false };
-    if (mRate === 100 && fRate === 0) return { canMale: true, canFemale: false };
-    if (fRate === 100 && mRate === 0) return { canMale: false, canFemale: true };
-    return { canMale: true, canFemale: true };
-  });
-
   constructor() {
     effect(() => {
       const state = this.genderState();
@@ -797,6 +784,19 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   allMarks = signal<MarkData[]>([]);
   allRibbons = signal<RibbonData[]>([]);
   allPokemon = signal<SimplePokemon[]>([]);
+
+  genderState = computed(() => {
+    const data = this.pokemonData();
+    if (!data) return { canMale: true, canFemale: true };
+
+    const mRate = data.maleRate ?? -1;
+    const fRate = data.femaleRate ?? -1;
+
+    if (mRate === 0 && fRate === 0) return { canMale: false, canFemale: false };
+    if (mRate === 100 && fRate === 0) return { canMale: true, canFemale: false };
+    if (fRate === 100 && mRate === 0) return { canMale: false, canFemale: true };
+    return { canMale: true, canFemale: true };
+  });
 
   ribbonOptions = computed<CustomDropdownOption[]>(() => {
     return this.allRibbons()
@@ -929,33 +929,17 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     }));
   });
 
-  pokemonName = (lang: string) => this.pokemonData()?.names[lang] || '';
-  pokemonGenus = () => {
+  pokemonGenus = computed(() => {
     const data = this.pokemonData();
     if (!data) return 'Pokémon';
     const lang = this.langService.currentLang();
     return data.genus?.[lang] || data.genus?.['eng'] || 'Pokémon';
-  };
-  getLocalizedName = (): string => {
+  });
+
+  localizedName = computed(() => {
     const data = this.pokemonData();
-    if (!data) return '';
-    return this.langService.getName(data);
-  };
-  get langFlag(): string {
-    const lang = this.langService.currentLang();
-    const flags: Record<string, string> = {
-      eng: '🇬🇧',
-      deu: '🇩🇪',
-      fra: '🇫🇷',
-      jap: '🇯🇵',
-      kor: '🇰🇷',
-      chs: '🇨🇳',
-      cht: '🇹🇼',
-    };
-    return flags[lang] || '';
-  }
-  pokemonNid = () => this.pokemonData()?.nid || '???';
-  pokemonSlug = () => this.pokemonData()?.id || '';
+    return data ? this.langService.getName(data) : '';
+  });
 
   availableAbilities = () => {
     const p = this.pokemonData();
@@ -976,6 +960,16 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
     return abs;
   };
 
+  onAbilityChange(newAbility: string) {
+    this.ability = newAbility;
+    if (!newAbility) {
+      this.currentAbilityDescription = '';
+      return;
+    }
+    const match = this.allAbilities().find((ability) => ability.name === newAbility);
+    this.currentAbilityDescription = match ? match.shortDesc : '';
+  }
+
   isOwned = false;
   isEvent = false;
   isShiny = false;
@@ -995,12 +989,15 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   mark = '';
   ribbon = '';
   gender = '';
+  currentAbilityDescription = '';
+
   ivs: StatsMap = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
   evs: StatsMap = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 
   saving = signal(false);
   currentSpriteUrl = signal('');
-  availableGames = () => {
+
+  availableGames = computed(() => {
     const pokemon = this.pokemonData();
     if (!pokemon) return [];
 
@@ -1011,98 +1008,43 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
 
     const cannotBreed =
       pokemon.isLegendary || pokemon.isMythical || pokemon.isUltraBeast || pokemon.isParadox;
-
     if (!cannotBreed && pokemon.storableIn) {
       pokemon.storableIn.forEach((game) => validGames.add(game));
     }
-
     return getAvailableGamesForPokemon(Array.from(validGames));
-  };
+  });
 
-  availableGamesByGen = () => {
+  availableGamesByGen = computed(() => {
     const games = this.availableGames();
     const grouped = new Map<number, GameDefinition[]>();
 
     games.forEach((game) => {
-      if (!grouped.has(game.gen)) {
-        grouped.set(game.gen, []);
-      }
+      if (!grouped.has(game.gen)) grouped.set(game.gen, []);
       grouped.get(game.gen)!.push(game);
     });
+
     return Array.from(grouped.entries())
-      .sort((a, b) => {
-        if (a[0] === 0) return 1;
-        if (b[0] === 0) return -1;
-        return b[0] - a[0];
-      })
+      .sort((gameA, gameB) => (gameA[0] === 0 ? 1 : gameB[0] === 0 ? -1 : gameB[0] - gameA[0]))
       .map(([gen, games]) => ({
         gen,
         label: gen === 0 ? 'Special' : `Generation ${gen}`,
         games,
       }));
-  };
+  });
 
   originGameOptions = computed<CustomDropdownOption[]>(() => {
-    const GAME_ICON_MAP: Record<string, string> = {
-      'rby-r': 'red.png',
-      'rby-b': 'blue.png',
-      'rby-y': 'yellow.png',
-      'gsc-g': 'gold.png',
-      'gsc-s': 'silver.png',
-      'gsc-c': 'crystal.png',
-      'rse-r': 'ruby.png',
-      'rse-s': 'sapphire.png',
-      'rse-e': 'emerald.png',
-      'frlg-fr': 'firered.png',
-      'frlg-lg': 'leafgreen.png',
-      'dp-d': 'diamond.png',
-      'dp-p': 'pearl.png',
-      pt: 'platin.png',
-      'hgss-hg': 'heartgold.png',
-      'hgss-ss': 'soulsilver.png',
-      'bw-b': 'black.png',
-      'bw-w': 'white.png',
-      'b2w2-b2': 'black2.png',
-      'b2w2-w2': 'white2.png',
-      'xy-x': 'x.png',
-      'xy-y': 'y.png',
-      'oras-or': 'omega_ruby.png',
-      'oras-as': 'alpha_sapphire.png',
-      'sm-s': 'sun.png',
-      'sm-m': 'moon.png',
-      'usum-us': 'ultra_sun.png',
-      'usum-um': 'ultra_moon.png',
-      'lgpe-lgp': "let's_go_pikachu.png",
-      'lgpe-lge': "let's_go_eevee.png",
-      'swsh-sw': 'sword.png',
-      'swsh-sh': 'shield.png',
-      'bdsp-bd': 'brilliant_diamond.png',
-      'bdsp-sp': 'shining_pearl.png',
-      la: 'legends_arceus.png',
-      'sv-s': 'scarlet.png',
-      'sv-v': 'violet.png',
-      lza: 'legends_z-a.png',
-      go: 'go.png',
-      home: 'home.png',
-      bank: 'bank.png',
-    };
-
-    const options: CustomDropdownOption[] = [];
-    options.push({
-      id: '',
-      name: 'None',
-      description: 'No Origin Game selected',
-      category: 'Options',
-    });
+    const options: CustomDropdownOption[] = [
+      { id: '', name: 'None', description: 'No Origin Game selected', category: 'Options' },
+    ];
 
     this.availableGamesByGen().forEach((group) => {
       group.games.forEach((game) => {
-        const iconFilename = GAME_ICON_MAP[game.code];
         options.push({
           id: game.code,
           name: game.fullName,
           category: group.label,
-          iconPath: iconFilename ? `assets/images/games/${iconFilename}` : undefined,
+
+          iconPath: getGameIconPath(game.code) || undefined,
         });
       });
     });
@@ -1185,6 +1127,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       if (!this.level) {
         this.level = 5;
       }
+      this.onAbilityChange(this.ability);
       if (!this.originLanguage) {
         const browserLang = navigator.language.toLowerCase();
         if (browserLang.startsWith('de')) {
@@ -1216,12 +1159,6 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
   findAbilityName(slug: string): string {
     const match = this.allAbilities().find((a) => a.id === slug);
     return match ? match.name : slug;
-  }
-
-  getAbilityDescription(): string {
-    if (!this.ability) return '';
-    const match = this.allAbilities().find((a) => a.name === this.ability);
-    return match ? match.shortDesc : '';
   }
 
   getNatureStatLabel(stat: string): string {
@@ -1260,7 +1197,7 @@ export class PokemonDetailDialogComponent implements OnInit, AfterViewInit {
       const promptDisabled = localStorage.getItem('disableAutoTrainerPrompt') === 'true';
       if (!promptDisabled) {
         const trainerExists = this.trainers().some(
-          (t) => t.name.toLowerCase() === this.originalTrainer.trim().toLowerCase(),
+          (trainer) => trainer.name.toLowerCase() === this.originalTrainer.trim().toLowerCase(),
         );
         if (!trainerExists) {
           this.saving.set(false);

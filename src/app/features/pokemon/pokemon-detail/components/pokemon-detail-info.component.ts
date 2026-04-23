@@ -1,12 +1,17 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DatasetPokemon, DatasetService } from '../../../../core/api/services/dataset.service';
+import { TooltipDirective } from '../../../../shared/directives/tooltip/tooltip.directive';
+import { CapitalizePipe } from '../../../../shared/pipes/capitalize-pipe';
+import { PokemonLanguageService } from '../../../../core/services/pokemon-language.service';
+import { FormatAbilityPipe } from '../../../../shared/pipes/ability-pipe';
+import { getShortGameName, getGameIconPath } from '../../../../core/constants/game-data.constants';
 
 @Component({
   selector: 'app-pokemon-detail-info',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TooltipDirective, CapitalizePipe, FormatAbilityPipe],
   template: `
     <div
       class="bg-[var(--color-bg-secondary)] rounded-3xl border border-theme p-6 sm:p-10 shadow-md"
@@ -34,7 +39,7 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                   Region
                 </h3>
                 <p class="text-base font-medium">
-                  {{ capitalize(pokemon.region) || '?' }}
+                  {{ pokemon().region | capitalize }}
                 </p>
               </div>
             </div>
@@ -50,7 +55,7 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                 >
                   Generation
                 </h3>
-                <p class="text-base font-medium">{{ pokemon.gen }}</p>
+                <p class="text-base font-medium">{{ pokemon().gen }}</p>
               </div>
             </div>
             <div class="flex items-start gap-1.5">
@@ -70,7 +75,7 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                 >
                   Height
                 </h3>
-                <p class="text-base font-medium">{{ formatHeight(pokemon.height) }}</p>
+                <p class="text-base font-medium">{{ height() }}</p>
               </div>
             </div>
             <div class="flex items-start gap-1.5">
@@ -90,7 +95,7 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                 >
                   Weight
                 </h3>
-                <p class="text-base font-medium">{{ formatWeight(pokemon.weight) }}</p>
+                <p class="text-base font-medium">{{ weight() }}</p>
               </div>
             </div>
             <div class="flex items-start gap-1.5">
@@ -111,7 +116,7 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                   Color
                 </h3>
                 <p class="text-base font-medium">
-                  {{ pokemon.color.slice(0, 1).toUpperCase() + pokemon.color.slice(1) }}
+                  {{ color() }}
                 </p>
               </div>
             </div>
@@ -133,20 +138,18 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                   Abilities
                 </h3>
                 <div class="flex flex-col gap-1 text-sm">
-                  @if (pokemon.ability1) {
-                    <span class="text-base font-medium text-text-primary">{{
-                      formatAbility(pokemon.ability1)
-                    }}</span>
-                  }
-                  @if (pokemon.ability2) {
-                    <span class="text-base font-medium text-text-primary">{{
-                      formatAbility(pokemon.ability2)
-                    }}</span>
-                  }
-                  @if (pokemon.abilityHidden) {
-                    <span class="text-base font-medium text-text-secondary" title="Hidden Ability">
-                      {{ formatAbility(pokemon.abilityHidden) }}
-                      <span class="opacity-70 text-xs ml-1">(Hidden)</span>
+                  @for (ability of pokemonAbilities(); track ability.name) {
+                    <span
+                      class="text-base font-medium"
+                      [class.text-text-primary]="!ability.isHidden"
+                      [class.text-text-secondary]="ability.isHidden"
+                      [title]="ability.isHidden ? 'Hidden Ability' : ''"
+                    >
+                      {{ ability.name | formatAbility }}
+
+                      @if (ability.isHidden) {
+                        <span class="opacity-70 text-xs ml-1">(Hidden)</span>
+                      }
                     </span>
                   }
                 </div>
@@ -178,7 +181,7 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                   Gender Ratio
                 </h3>
                 <div class="w-full mt-2">
-                  @if (pokemon.maleRate === -1) {
+                  @if (pokemon().maleRate === -1) {
                     <span class="text-text-secondary italic">Genderless</span>
                   } @else {
                     <div class="flex items-center justify-between text-sm font-bold w-full mb-3">
@@ -194,7 +197,7 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                             d="M797.5-797.5v235h-75V-669L558-505.5q19 28 29.25 59.66Q597.5-414.18 597.5-380q0 90.95-63.28 154.23-63.28 63.27-154.25 63.27t-154.22-63.28q-63.25-63.28-63.25-154.25t63.27-154.22Q289.05-597.5 380-597.5q33.5 0 65.5 10T505-558l164-164.5H562.5v-75h235ZM279.25-480.78q-41.75 41.73-41.75 100.75 0 59.03 41.72 100.78 41.73 41.75 100.75 41.75 59.03 0 100.78-41.72 41.75-41.73 41.75-100.75 0-59.03-41.72-100.78-41.73-41.75-100.75-41.75-59.03 0-100.78 41.72Z"
                           />
                         </svg>
-                        {{ formatRate(pokemon.maleRate) }}% Male
+                        {{ maleRate() }}% Male
                       </span>
                       <span class="flex items-center text-pink-500">
                         <svg
@@ -208,7 +211,7 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                             d="M442.5-122.5v-80h-80v-75h80V-366q-78.5-14-129.25-74.6Q262.5-501.19 262.5-581q0-90.37 63.5-153.44 63.5-63.06 154-63.06t154 63.06q63.5 63.07 63.5 153.44 0 79.81-50.75 140.4Q596-380 517.5-366v88.5h80v75h-80v80h-75Zm138.25-356.72q41.75-41.73 41.75-100.75 0-59.03-41.72-100.78-41.73-41.75-100.75-41.75-59.03 0-100.78 41.72-41.75 41.73-41.75 100.75 0 59.03 41.72 100.78 41.73 41.75 100.75 41.75 59.03 0 100.78-41.72Z"
                           />
                         </svg>
-                        {{ formatRate(pokemon.femaleRate) }}% Female
+                        {{ femaleRate() }}% Female
                       </span>
                     </div>
                     <div
@@ -216,11 +219,11 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
                     >
                       <div
                         class="h-full bg-blue-500/90 transition-all duration-700"
-                        [style.width.%]="pokemon.maleRate"
+                        [style.width.%]="maleRate()"
                       ></div>
                       <div
                         class="h-full bg-pink-500/90 transition-all duration-700"
-                        [style.width.%]="pokemon.femaleRate"
+                        [style.width.%]="femaleRate()"
                       ></div>
                     </div>
                   }
@@ -234,30 +237,32 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
 
           <div class="bg-secondary/20 h-full min-h-[250px] mt-0">
             <p class="text-sm text-text-secondary mb-4">
-              <span class="font-semibold text-text-primary">{{ getPrimaryName(pokemon) }}</span> can
-              be obtained in the following games (or their DLCs) through regular gameplay:
+              <span class="font-semibold text-text-primary">{{ primaryName() }}</span> can be
+              obtained in the following games (or their DLCs) through regular gameplay:
             </p>
 
             <div class="flex flex-wrap gap-4">
-              @for (game of pokemon.obtainableIn || []; track game) {
-                @if (getGameIconUrl(game)) {
+              @for (game of obtainableGames(); track game.code) {
+                @if (game.iconUrl) {
                   <img
-                    (click)="navigateToGame(game)"
-                    [src]="getGameIconUrl(game)"
-                    [alt]="formatFullGameName(game)"
-                    [title]="formatFullGameName(game)"
+                    (click)="navigateToGame(game.code)"
+                    [src]="game.iconUrl"
+                    [alt]="game.name"
+                    [appTooltip]="game.name"
                     class="h-14 w-14 sm:h-16 sm:w-16 object-contain drop-shadow hover:scale-110 transition-transform duration-200 ease-in-out cursor-pointer"
                     draggable="false"
                   />
                 } @else {
                   <span
+                    (click)="navigateToGame(game.code)"
                     class="px-2 py-1 text-text-secondary rounded text-xs uppercase font-bold tracking-wider flex items-center cursor-pointer transition-colors duration-200"
                   >
-                    {{ formatFullGameName(game) }}
+                    {{ game.name }}
                   </span>
                 }
               }
-              @if (!pokemon.obtainableIn.length && !pokemon.eventOnlyIn.length) {
+
+              @if (!obtainableGames().length && !pokemon().eventOnlyIn.length) {
                 <span class="text-sm text-text-tertiary italic">Data not available</span>
               }
             </div>
@@ -268,32 +273,67 @@ import { DatasetPokemon, DatasetService } from '../../../../core/api/services/da
   `,
 })
 export class PokemonDetailInfoComponent {
-  @Input({ required: true }) pokemon!: DatasetPokemon;
   private readonly router = inject(Router);
   private readonly datasetService = inject(DatasetService);
+  private readonly languageService = inject(PokemonLanguageService);
 
-  getPrimaryName(pkmn: DatasetPokemon): string {
-    return pkmn.names?.['eng'] || pkmn.formNames?.['eng'] || pkmn.id;
-  }
+  pokemon = input.required<DatasetPokemon>();
 
-  capitalize(s: string | undefined): string {
-    if (!s) return '';
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  }
+  primaryName = computed(() => {
+    return this.languageService.getName(this.pokemon());
+  });
 
-  formatAbility(abilityStr: string): string {
-    if (!abilityStr) return '';
-    return abilityStr
-      .split('-')
-      .map((word) => this.capitalize(word))
-      .join(' ');
-  }
+  pokemonAbilities = computed(() => {
+    const pkmn = this.pokemon();
+    const abilities = [];
 
-  formatGame(gameCode: string): string {
-    return gameCode
-      .split('-')
-      .map((part) => part.toUpperCase())
-      .join(' ');
+    if (pkmn.ability1) {
+      abilities.push({ name: pkmn.ability1, isHidden: false });
+    }
+    if (pkmn.ability2) {
+      abilities.push({ name: pkmn.ability2, isHidden: false });
+    }
+    if (pkmn.abilityHidden) {
+      abilities.push({ name: pkmn.abilityHidden, isHidden: true });
+    }
+
+    return abilities;
+  });
+
+  height = computed(() => {
+    if (!this.pokemon().height) return '? m';
+    return `${this.pokemon().height} m`;
+  });
+
+  weight = computed(() => {
+    if (!this.pokemon().weight) return '? kg';
+    return `${this.pokemon().weight} kg`;
+  });
+
+  color = computed(() => {
+    return this.pokemon().color.slice(0, 1).toUpperCase() + this.pokemon().color.slice(1);
+  });
+
+  maleRate = computed(() => {
+    return this.formatGenderRate(this.pokemon().maleRate);
+  });
+
+  femaleRate = computed(() => {
+    return this.formatGenderRate(this.pokemon().femaleRate);
+  });
+
+  obtainableGames = computed(() => {
+    const games = this.pokemon().obtainableIn || [];
+
+    return games.map((gameCode) => ({
+      code: gameCode,
+      name: getShortGameName(gameCode),
+      iconUrl: getGameIconPath(gameCode),
+    }));
+  });
+
+  formatGenderRate(rate: number): string {
+    return Number(rate).toFixed(1).replace('.0', '');
   }
 
   navigateToGame(gameId: string) {
@@ -305,128 +345,5 @@ export class PokemonDetailInfoComponent {
         this.router.navigate(['/games']);
       }
     });
-  }
-
-  formatHeight(heightMeters: number): string {
-    if (heightMeters === undefined || heightMeters === null) return '? m';
-    return `${heightMeters} m`;
-  }
-
-  formatFullGameName(gameCode: string): string {
-    const gameNames: Record<string, string> = {
-      'rb-r': 'Red',
-      'rb-b': 'Blue',
-      y: 'Yellow',
-      'gsc-g': 'Gold',
-      'gsc-s': 'Silver',
-      'gsc-c': 'Crystal',
-      'gs-g': 'Gold',
-      'gs-s': 'Silver',
-      c: 'Crystal',
-      'rs-r': 'Ruby',
-      'rs-s': 'Sapphire',
-      e: 'Emerald',
-      'frlg-fr': 'FireRed',
-      'frlg-lg': 'LeafGreen',
-      'dp-d': 'Diamond',
-      'dp-p': 'Pearl',
-      'dppt-pt': 'Platinum',
-      pt: 'Platinum',
-      'hgss-hg': 'HeartGold',
-      'hgss-ss': 'SoulSilver',
-      'bw-b': 'Black',
-      'bw-w': 'White',
-      'b2w2-b2': 'Black 2',
-      'b2w2-w2': 'White 2',
-      'xy-x': 'X',
-      'xy-y': 'Y',
-      'oras-or': 'Omega Ruby',
-      'oras-as': 'Alpha Sapphire',
-      'sm-s': 'Sun',
-      'sm-m': 'Moon',
-      'usum-us': 'Ultra Sun',
-      'usum-um': 'Ultra Moon',
-      'lgpe-lgp': "Let's Go, Pikachu!",
-      'lgpe-lge': "Let's Go, Eevee!",
-      'swsh-sw': 'Sword',
-      'swsh-sh': 'Shield',
-      'bdsp-bd': 'Brilliant Diamond',
-      'bdsp-sp': 'Shining Pearl',
-      la: 'Legends: Arceus',
-      pla: 'Legends: Arceus',
-      'sv-s': 'Scarlet',
-      'sv-v': 'Violet',
-      lza: 'Legends: Z-A',
-      go: 'Pokémon GO',
-      home: 'Pokémon HOME',
-      bank: 'Pokémon Bank',
-      xd: 'Pokémon XD',
-      colosseum: 'Pokémon Colosseum',
-    };
-    return gameNames[gameCode.toLowerCase()] || this.formatGame(gameCode);
-  }
-
-  formatWeight(weightKg: number): string {
-    if (weightKg === undefined || weightKg === null) return '? kg';
-    return `${weightKg} kg`;
-  }
-
-  formatRate(rate: number): string {
-    return Number(rate).toFixed(1).replace('.0', '');
-  }
-
-  getGameIconUrl(gameCode: string): string {
-    const map: Record<string, string> = {
-      'rb-r': 'red.png',
-      'rb-b': 'blue.png',
-      y: 'yellow.png',
-      'gsc-g': 'gold.png',
-      'gsc-s': 'silver.png',
-      'gsc-c': 'crystal.png',
-      'gs-g': 'gold.png',
-      'gs-s': 'silver.png',
-      c: 'crystal.png',
-      'rs-r': 'ruby.png',
-      'rs-s': 'sapphire.png',
-      e: 'emerald.png',
-      'frlg-fr': 'firered.png',
-      'frlg-lg': 'leafgreen.png',
-      'dp-d': 'diamond.png',
-      'dp-p': 'pearl.png',
-      'dppt-pt': 'platin.png',
-      pt: 'platin.png',
-      'hgss-hg': 'heartgold.png',
-      'hgss-ss': 'soulsilver.png',
-      'bw-b': 'black.png',
-      'bw-w': 'white.png',
-      'b2w2-b2': 'black2.png',
-      'b2w2-w2': 'white2.png',
-      'xy-x': 'x.png',
-      'xy-y': 'y.png',
-      'oras-or': 'omega_ruby.png',
-      'oras-as': 'alpha_sapphire.png',
-      'sm-s': 'sun.png',
-      'sm-m': 'moon.png',
-      'usum-us': 'ultra_sun.png',
-      'usum-um': 'ultra_moon.png',
-      'lgpe-lgp': "let's_go_pikachu.png",
-      'lgpe-lge': "let's_go_eevee.png",
-      'swsh-sw': 'sword.png',
-      'swsh-sh': 'shield.png',
-      'bdsp-bd': 'brilliant_diamond.png',
-      'bdsp-sp': 'shining_pearl.png',
-      la: 'legends_arceus.png',
-      pla: 'legends_arceus.png',
-      'sv-s': 'scarlet.png',
-      'sv-v': 'violet.png',
-      lza: 'legends_z-a.png',
-      go: 'go.png',
-      home: 'home.png',
-      bank: 'bank.png',
-      xd: 'xd.png',
-      colosseum: 'coloseum.png',
-    };
-    const filename = map[gameCode.toLowerCase()];
-    return filename ? `assets/images/games/${filename}` : '';
   }
 }

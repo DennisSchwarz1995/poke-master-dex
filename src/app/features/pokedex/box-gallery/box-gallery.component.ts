@@ -12,14 +12,14 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, filter } from 'rxjs/operators';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { TypeColorService } from '../../../core/services/type-color.service';
 import { DexStateService } from '../../../core/services/dex-state.service';
-import { PokemonDetailDialogComponent } from '../pokemon-detail-dialog/pokemon-detail-dialog.component';
+import { PokemonDetailDialogComponent } from '../pokemon-edit-dialog/pokemon-edit-dialog.component';
 import { PokemonViewDialogComponent } from '../pokemon-view-dialog/pokemon-view-dialog.component';
 import { Dex, Box, BoxSlot } from '../../../shared/models/dex.model';
 import {
@@ -27,6 +27,7 @@ import {
   QuickEditState,
 } from '../../../shared/components/quick-edit-bar/quick-edit-bar.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
+import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 
 interface BoxWithSprites {
   box: Box;
@@ -51,10 +52,34 @@ interface BoxWithSprites {
     PokemonDetailDialogComponent,
     PokemonViewDialogComponent,
     QuickEditBarComponent,
+    RouterLink,
+    TooltipDirective,
   ],
   template: `
     <div class="min-h-screen bg-secondary">
       <div class="container mx-auto px-4 pt-6 pb-2">
+        <nav class="flex items-center justify-start gap-4">
+          <a
+            routerLink="/pokedex"
+            class="flex items-center gap-2 text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme px-3 py-1.5 rounded-xl border border-theme hover:shadow-sm"
+          >
+            <svg
+              class="w-5 h-5 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            <span class="hidden sm:inline">Back to Pokédex</span>
+          </a>
+        </nav>
+
         <app-quick-edit-bar (modeChanged)="onQuickEditModeChanged($event)" />
 
         <div class="max-w-2xl mx-auto">
@@ -70,7 +95,8 @@ interface BoxWithSprites {
               <button
                 (click)="clearSearch()"
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-tertiary hover:text-secondary transition-colors"
-                title="Clear search"
+                [appTooltip]="'Clear Search'"
+                appTooltipPosition="top"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -147,13 +173,14 @@ interface BoxWithSprites {
                         [class.search-match-border]="
                           searchQuery() && matchedPokemonSlugs().has(boxData.slugs[$index])
                         "
-                        [title]="boxData.names[$index] || ''"
                         [style.--c1]="boxData.colors[$index]?.[0] || 'transparent'"
                         [style.--c2]="boxData.colors[$index]?.[1] || 'transparent'"
                         (click)="onPokemonClick(boxData.box, $index)"
                       >
                         @if (sprite) {
                           <img
+                            [appTooltip]="boxData.names[$index] || ''"
+                            [tooltipPosition]="'top'"
                             [src]="sprite"
                             class="w-full h-full object-contain p-0.5 group-hover:scale-110 transition-transform"
                           />

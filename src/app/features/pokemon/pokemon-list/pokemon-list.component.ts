@@ -10,7 +10,6 @@ import {
   AfterViewInit,
   OnDestroy,
   HostListener,
-  Signal,
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { forkJoin, of } from 'rxjs';
@@ -21,7 +20,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
   DatasetService,
   DatasetPokemon,
-  PokemonNameIndex,
   SimplePokemon,
 } from '../../../core/api/services/dataset.service';
 import { ThemeService } from '../../../core/services/theme.service';
@@ -32,6 +30,7 @@ import {
   CustomDropdownOption,
 } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-pokemon-card/dataset-pokemon-card.component';
+import { getGameDropdownOptions } from '../../../core/constants/game-data.constants';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -80,33 +79,7 @@ import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-
               </p>
 
               <div class="flex flex-wrap gap-3 items-center mb-6">
-                @for (gameId of selectedGames(); track gameId) {
-                  @if (getGameOption(gameId); as option) {
-                    <div
-                      class="flex items-center gap-2 px-3 py-1.5 bg-surface border border-theme rounded-xl shadow-sm"
-                    >
-                      <img [src]="option.iconPath" class="w-6 h-6 object-contain" />
-                      <span class="font-bold text-sm text-primary">{{
-                        option.name.replace('Pokémon ', '')
-                      }}</span>
-                      <button
-                        (click)="removeGame(gameId)"
-                        class="ml-1 text-tertiary hover:text-primary transition-colors"
-                      >
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  }
-                }
-
-                <div class="relative min-w-[200px]" #addGameContainer>
+                <div class="relative max-w-sm w-[300px]" #addGameContainer>
                   <app-custom-dropdown
                     [options]="availableGameOptions()"
                     [searchable]="true"
@@ -115,6 +88,39 @@ import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-
                     [selectedId]="''"
                   />
                 </div>
+
+                @for (gameId of selectedGames(); track gameId) {
+                  <div class="flex flex-wrap gap-3 items-center mb-6">
+                    <div class="relative max-w-sm w-[300px]" #addGameContainer>...</div>
+
+                    @for (game of selectedGameObjects(); track game.id) {
+                      <div
+                        class="flex items-center gap-2 px-3 py-1.5 bg-surface border border-theme rounded-xl shadow-sm"
+                      >
+                        <img [src]="game.iconPath" class="w-6 h-6 object-contain" />
+                        <span class="font-bold text-sm text-primary">{{ game.shortName }}</span>
+                        <button
+                          (click)="removeGame(game.id!)"
+                          class="ml-1 text-tertiary hover:text-primary transition-colors"
+                        >
+                          <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                }
               </div>
 
               @if (selectedGames().length > 0) {
@@ -278,7 +284,7 @@ import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-
               </button>
             </div>
 
-            <div class="px-2 text-sm font-medium text-tertiary">
+            <div class="py-2 flex justify-center text-md font-medium text-tertiary">
               Showing {{ activePokemonCount() }} of {{ allSimplePokemon().length }} Pokémon.
             </div>
 
@@ -383,12 +389,10 @@ import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-
           <div
             class="grid grid-cols-1 min-[450px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-6 pb-8"
           >
-            @for (pkmn of displayedPokemon(); track pkmn.id) {
+            @for (item of processedDisplayedPokemon(); track item.pokemon.id) {
               <div class="h-full">
-                <app-dataset-pokemon-card
-                  [pokemon]="pkmn"
-                  [isGreyedOut]="isPokemonGreyedOut(pkmn)"
-                ></app-dataset-pokemon-card>
+                <app-dataset-pokemon-card [pokemon]="item.pokemon" [isGreyedOut]="item.isGreyedOut">
+                </app-dataset-pokemon-card>
               </div>
             }
           </div>
@@ -585,236 +589,44 @@ export class PokemonListComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.gameOptions().filter((g) => !this.selectedGames().includes(g.id));
   });
 
-  gameOptions = signal<CustomDropdownOption[]>([
-    {
-      id: 'lza',
-      name: 'Pokémon Legends: Z-A',
-      iconPath: 'assets/images/games/legends_z-a.png',
-      category: 'Generation 9',
-    },
-    {
-      id: 'sv-v',
-      name: 'Pokémon Violet',
-      iconPath: 'assets/images/games/violet.png',
-      category: 'Generation 9',
-    },
-    {
-      id: 'sv-s',
-      name: 'Pokémon Scarlet',
-      iconPath: 'assets/images/games/scarlet.png',
-      category: 'Generation 9',
-    },
-    {
-      id: 'pla',
-      name: 'Pokémon Legends: Arceus',
-      iconPath: 'assets/images/games/legends_arceus.png',
-      category: 'Generation 8',
-    },
-    {
-      id: 'bdsp-sp',
-      name: 'Pokémon Shining Pearl',
-      iconPath: 'assets/images/games/shining_pearl.png',
-      category: 'Generation 8',
-    },
-    {
-      id: 'bdsp-bd',
-      name: 'Pokémon Brilliant Diamond',
-      iconPath: 'assets/images/games/brilliant_diamond.png',
-      category: 'Generation 8',
-    },
-    {
-      id: 'swsh-sh',
-      name: 'Pokémon Shield',
-      iconPath: 'assets/images/games/shield.png',
-      category: 'Generation 8',
-    },
-    {
-      id: 'swsh-sw',
-      name: 'Pokémon Sword',
-      iconPath: 'assets/images/games/sword.png',
-      category: 'Generation 8',
-    },
-    {
-      id: 'lgpe-lge',
-      name: "Pokémon Let's Go Eevee!",
-      iconPath: "assets/images/games/let's_go_eevee.png",
-      category: 'Generation 7',
-    },
-    {
-      id: 'lgpe-lgp',
-      name: "Pokémon Let's Go Pikachu!",
-      iconPath: "assets/images/games/let's_go_pikachu.png",
-      category: 'Generation 7',
-    },
-    {
-      id: 'usum-um',
-      name: 'Pokémon Ultra Moon',
-      iconPath: 'assets/images/games/ultra_moon.png',
-      category: 'Generation 7',
-    },
-    {
-      id: 'usum-us',
-      name: 'Pokémon Ultra Sun',
-      iconPath: 'assets/images/games/ultra_sun.png',
-      category: 'Generation 7',
-    },
-    {
-      id: 'sm-m',
-      name: 'Pokémon Moon',
-      iconPath: 'assets/images/games/moon.png',
-      category: 'Generation 7',
-    },
-    {
-      id: 'sm-s',
-      name: 'Pokémon Sun',
-      iconPath: 'assets/images/games/sun.png',
-      category: 'Generation 7',
-    },
-    {
-      id: 'oras-as',
-      name: 'Pokémon Alpha Sapphire',
-      iconPath: 'assets/images/games/alpha_sapphire.png',
-      category: 'Generation 6',
-    },
-    {
-      id: 'oras-or',
-      name: 'Pokémon Omega Ruby',
-      iconPath: 'assets/images/games/omega_ruby.png',
-      category: 'Generation 6',
-    },
-    {
-      id: 'xy-y',
-      name: 'Pokémon Y',
-      iconPath: 'assets/images/games/y.png',
-      category: 'Generation 6',
-    },
-    {
-      id: 'xy-x',
-      name: 'Pokémon X',
-      iconPath: 'assets/images/games/x.png',
-      category: 'Generation 6',
-    },
-    {
-      id: 'b2w2-w2',
-      name: 'Pokémon White 2',
-      iconPath: 'assets/images/games/white2.png',
-      category: 'Generation 5',
-    },
-    {
-      id: 'b2w2-b2',
-      name: 'Pokémon Black 2',
-      iconPath: 'assets/images/games/black2.png',
-      category: 'Generation 5',
-    },
-    {
-      id: 'bw-w',
-      name: 'Pokémon White',
-      iconPath: 'assets/images/games/white.png',
-      category: 'Generation 5',
-    },
-    {
-      id: 'bw-b',
-      name: 'Pokémon Black',
-      iconPath: 'assets/images/games/black.png',
-      category: 'Generation 5',
-    },
-    {
-      id: 'hgss-ss',
-      name: 'Pokémon SoulSilver',
-      iconPath: 'assets/images/games/soulsilver.png',
-      category: 'Generation 4',
-    },
-    {
-      id: 'hgss-hg',
-      name: 'Pokémon HeartGold',
-      iconPath: 'assets/images/games/heartgold.png',
-      category: 'Generation 4',
-    },
-    {
-      id: 'dppt-pt',
-      name: 'Pokémon Platinum',
-      iconPath: 'assets/images/games/platin.png',
-      category: 'Generation 4',
-    },
-    {
-      id: 'dppt-p',
-      name: 'Pokémon Pearl',
-      iconPath: 'assets/images/games/pearl.png',
-      category: 'Generation 4',
-    },
-    {
-      id: 'dppt-d',
-      name: 'Pokémon Diamond',
-      iconPath: 'assets/images/games/diamond.png',
-      category: 'Generation 4',
-    },
-    {
-      id: 'frlg-lg',
-      name: 'Pokémon LeafGreen',
-      iconPath: 'assets/images/games/leafgreen.png',
-      category: 'Generation 3',
-    },
-    {
-      id: 'frlg-fr',
-      name: 'Pokémon FireRed',
-      iconPath: 'assets/images/games/firered.png',
-      category: 'Generation 3',
-    },
-    {
-      id: 'rse-e',
-      name: 'Pokémon Emerald',
-      iconPath: 'assets/images/games/emerald.png',
-      category: 'Generation 3',
-    },
-    {
-      id: 'rse-s',
-      name: 'Pokémon Sapphire',
-      iconPath: 'assets/images/games/sapphire.png',
-      category: 'Generation 3',
-    },
-    {
-      id: 'rse-r',
-      name: 'Pokémon Ruby',
-      iconPath: 'assets/images/games/ruby.png',
-      category: 'Generation 3',
-    },
-    {
-      id: 'gsc-c',
-      name: 'Pokémon Crystal',
-      iconPath: 'assets/images/games/crystal.png',
-      category: 'Generation 2',
-    },
-    {
-      id: 'gsc-s',
-      name: 'Pokémon Silver',
-      iconPath: 'assets/images/games/silver.png',
-      category: 'Generation 2',
-    },
-    {
-      id: 'gsc-g',
-      name: 'Pokémon Gold',
-      iconPath: 'assets/images/games/gold.png',
-      category: 'Generation 2',
-    },
-    {
-      id: 'y',
-      name: 'Pokémon Yellow',
-      iconPath: 'assets/images/games/yellow.png',
-      category: 'Generation 1',
-    },
-    {
-      id: 'rb-b',
-      name: 'Pokémon Blue',
-      iconPath: 'assets/images/games/blue.png',
-      category: 'Generation 1',
-    },
-    {
-      id: 'rb-r',
-      name: 'Pokémon Red',
-      iconPath: 'assets/images/games/red.png',
-      category: 'Generation 1',
-    },
-  ]);
+  selectedGameObjects = computed(() => {
+    const allGames = this.gameOptions();
+    return this.selectedGames()
+      .map((gameId) => {
+        const game = allGames.find((game) => game.id === gameId);
+        return {
+          ...game,
+          shortName: game?.name.replace('Pokémon ', '') || '',
+        };
+      })
+      .filter((game) => game.id);
+  });
+
+  processedDisplayedPokemon = computed(() => {
+    const pokemons = this.displayedPokemon();
+    const mode = this.viewMode();
+    const games = this.selectedGames();
+    const gameMode = this.gameFilterMode();
+    const allSimple = this.allSimplePokemon();
+
+    return pokemons.map((pkmn) => {
+      let greyedOut = false;
+
+      if (mode === 'games' && games.length > 0 && gameMode === 'all') {
+        const simple = allSimple.find((p) => p.slug === pkmn.id);
+        if (simple) {
+          greyedOut = !games.some((g) => simple.obtainableIn?.includes(g));
+        }
+      }
+
+      return {
+        pokemon: pkmn,
+        isGreyedOut: greyedOut,
+      };
+    });
+  });
+
+  gameOptions = signal<CustomDropdownOption[]>(getGameDropdownOptions());
 
   filteredSlugs = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
@@ -930,7 +742,6 @@ export class PokemonListComponent implements OnInit, AfterViewInit, OnDestroy {
         setTimeout(() => this.isPageLoading.set(false), 50); // slight delay to prevent flicker
       });
 
-    // Sync all active filters → URL query params
     effect(() => {
       const params: Record<string, string> = {};
       if (this.selectedType()) params['type'] = this.selectedType();
@@ -1023,10 +834,6 @@ export class PokemonListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.displayedCount.set(30);
   }
 
-  getGameOption(id: string): CustomDropdownOption | undefined {
-    return this.gameOptions().find((g) => g.id === id);
-  }
-
   addGame(id: string) {
     if (id && !this.selectedGames().includes(id)) {
       this.selectedGames.update((games) => [...games, id]);
@@ -1035,19 +842,5 @@ export class PokemonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removeGame(id: string) {
     this.selectedGames.update((games) => games.filter((g) => g !== id));
-  }
-
-  isPokemonGreyedOut(pkmn: DatasetPokemon | Pick<SimplePokemon, 'slug'> | any): boolean {
-    if (
-      this.viewMode() !== 'games' ||
-      this.selectedGames().length === 0 ||
-      this.gameFilterMode() !== 'all'
-    ) {
-      return false;
-    }
-    const simple = this.allSimplePokemon().find((p) => p.slug === (pkmn.slug || pkmn.id));
-    if (!simple) return false;
-
-    return !this.selectedGames().some((g) => simple.obtainableIn?.includes(g));
   }
 }

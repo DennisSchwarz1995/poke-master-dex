@@ -7,7 +7,7 @@ import { DatasetService } from '../../../core/api/services/dataset.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { DexStateService } from '../../../core/services/dex-state.service';
 import { PokemonSpriteComponent } from '../../../shared/components/pokemon-sprite/pokemon-sprite.component';
-import { PokemonDetailDialogComponent } from '../pokemon-detail-dialog/pokemon-detail-dialog.component';
+import { PokemonDetailDialogComponent } from '../pokemon-edit-dialog/pokemon-edit-dialog.component';
 import { PokemonViewDialogComponent } from '../pokemon-view-dialog/pokemon-view-dialog.component';
 import {
   BoxOptionsDialogComponent,
@@ -20,6 +20,7 @@ import {
   QuickEditState,
 } from '../../../shared/components/quick-edit-bar/quick-edit-bar.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-box-view',
@@ -32,10 +33,32 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
     BoxOptionsDialogComponent,
     QuickEditBarComponent,
     PokemonViewDialogComponent,
+    RouterLink,
   ],
   template: `
     <div class="min-h-[calc(100vh-16rem)] bg-secondary flex flex-col">
-      <main class="container mx-auto px-4 py-8 flex-1 flex flex-col pt-6">
+      <main class="container mx-auto px-4 flex-1 flex flex-col pt-6 gap-6">
+        <nav class="flex items-center justify-start gap-4">
+          <a
+            routerLink="/pokedex"
+            class="flex items-center gap-2 text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme px-3 py-1.5 rounded-xl border border-theme hover:shadow-sm"
+          >
+            <svg
+              class="w-5 h-5 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            <span class="hidden sm:inline">Back to Pokédex</span>
+          </a>
+        </nav>
         @if (box()) {
           <app-quick-edit-bar (modeChanged)="onQuickEditModeChanged($event)" />
         }
@@ -105,13 +128,12 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
 
             <div class="grid grid-cols-6 gap-2 content-start">
               @for (slot of slots(); track slot.position) {
-                <div (click)="onSlotClick(slot)" class="cursor-pointer">
-                  <app-pokemon-sprite
-                    [pokemonSlug]="slot.pokemonSlug"
-                    [isOwned]="slot.isOwned"
-                    [isShiny]="slot.isShiny"
-                  />
-                </div>
+                <app-pokemon-sprite
+                  (click)="onSlotClick(slot)"
+                  [pokemonSlug]="slot.pokemonSlug"
+                  [isOwned]="slot.isOwned"
+                  [isShiny]="slot.isShiny"
+                />
               }
             </div>
           </div>

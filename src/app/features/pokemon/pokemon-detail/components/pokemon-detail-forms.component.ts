@@ -1,14 +1,15 @@
-import { Component, Input, inject, signal, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, input, inject, signal, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DatasetPokemon, DatasetService } from '../../../../core/api/services/dataset.service';
 import { forkJoin, catchError, of, Observable } from 'rxjs';
 import { take, switchMap, map } from 'rxjs/operators';
 import { DatasetPokemonCardComponent } from '../../../../shared/components/dataset-pokemon-card/dataset-pokemon-card.component';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 interface EvoNode {
   speciesName: string;
-  id: string; // The PokeAPI species ID
+  id: string;
   datasetPokemon?: DatasetPokemon;
   evolvesTo: EvoNode[];
 }
@@ -62,35 +63,39 @@ interface EvoNode {
     </div>
   `,
 })
-export class PokemonDetailFormsComponent implements OnChanges {
+export class PokemonDetailFormsComponent {
   datasetService = inject(DatasetService);
   http = inject(HttpClient);
 
-  @Input({ required: true }) pokemon!: DatasetPokemon;
+  pokemon = input.required<DatasetPokemon>();
 
   formsData = signal<DatasetPokemon[]>([]);
   flatEvoPokemons = signal<DatasetPokemon[]>([]);
   evoChainLoading = signal<boolean>(false);
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['pokemon'] && this.pokemon) {
-      this.loadForms();
-      this.loadEvolutionChain();
-    }
+  constructor() {
+    toObservable(this.pokemon)
+      .pipe(takeUntilDestroyed())
+      .subscribe((pkmn) => {
+        if (pkmn) {
+          this.loadForms(pkmn);
+          this.loadEvolutionChain(pkmn);
+        }
+      });
   }
 
-  loadForms() {
+  loadForms(pkmn: DatasetPokemon) {
     const slugsToFetch = new Set<string>();
-    if (this.pokemon.baseSpecies) {
-      slugsToFetch.add(this.pokemon.baseSpecies);
+    if (pkmn.baseSpecies) {
+      slugsToFetch.add(pkmn.baseSpecies);
     }
-    if (this.pokemon.baseForms) {
-      this.pokemon.baseForms.forEach((slug) => slugsToFetch.add(slug));
+    if (pkmn.baseForms) {
+      pkmn.baseForms.forEach((slug) => slugsToFetch.add(slug));
     }
-    if (this.pokemon.forms) {
-      this.pokemon.forms.forEach((slug) => slugsToFetch.add(slug));
+    if (pkmn.forms) {
+      pkmn.forms.forEach((slug) => slugsToFetch.add(slug));
     }
-    slugsToFetch.delete(this.pokemon.id);
+    slugsToFetch.delete(pkmn.id);
 
     if (slugsToFetch.size > 0) {
       const fetchers = Array.from(slugsToFetch).map((slug) =>
@@ -104,9 +109,9 @@ export class PokemonDetailFormsComponent implements OnChanges {
     }
   }
 
-  loadEvolutionChain() {
+  loadEvolutionChain(pkmn: DatasetPokemon) {
     this.flatEvoPokemons.set([]);
-    const pkApiId = this.pokemon.refs?.pkApiId;
+    const pkApiId = pkmn.refs?.pkApiId;
     // IDs >= 10000 are form variants (Mega, Alola, etc.) and have no own species entry
     if (!pkApiId || Number(pkApiId) >= 10000) return;
 
@@ -134,7 +139,7 @@ export class PokemonDetailFormsComponent implements OnChanges {
             .subscribe((chainRes) => {
               if (chainRes && chainRes.chain) {
                 const rootNode = this.parseEvoChain(chainRes.chain);
-                this.resolveDatasetPokemonsForChain(rootNode);
+                this.resolveDatasetPokemonsForChain(rootNode, pkmn);
               } else {
                 this.evoChainLoading.set(false);
               }
@@ -156,17 +161,15 @@ export class PokemonDetailFormsComponent implements OnChanges {
     };
   }
 
-  private resolveDatasetPokemonsForChain(rootNode: EvoNode) {
+  private resolveDatasetPokemonsForChain(rootNode: EvoNode, pkmn: DatasetPokemon) {
     const names: string[] = [];
     this.collectSpeciesSlugs(rootNode, names);
 
     // Extract suffix from current pokemon if it's a form
     let suffix = '';
-    const currentBaseInChain = names.find(
-      (n) => this.pokemon.id === n || this.pokemon.id.startsWith(n + '-'),
-    );
-    if (currentBaseInChain && this.pokemon.id.length > currentBaseInChain.length) {
-      suffix = this.pokemon.id.substring(currentBaseInChain.length);
+    const currentBaseInChain = names.find((n) => pkmn.id === n || pkmn.id.startsWith(n + '-'));
+    if (currentBaseInChain && pkmn.id.length > currentBaseInChain.length) {
+      suffix = pkmn.id.substring(currentBaseInChain.length);
     }
 
     const fetchers = names.map((slug) =>
@@ -178,7 +181,7 @@ export class PokemonDetailFormsComponent implements OnChanges {
           const toFetch: Observable<DatasetPokemon | null>[] = [];
 
           if (slug === currentBaseInChain) {
-            toFetch.push(of(this.pokemon));
+            toFetch.push(of(pkmn));
           } else {
             if (suffix && suffix !== '') {
               toFetch.push(
@@ -204,13 +207,13 @@ export class PokemonDetailFormsComponent implements OnChanges {
 
           return forkJoin(toFetch).pipe(
             map((results) => {
-              const valids = results.filter((p): p is DatasetPokemon => p !== null);
+              const valids = results.filter((pkmn): pkmn is DatasetPokemon => pkmn !== null);
               const unique: DatasetPokemon[] = [];
               const ids = new Set<string>();
-              for (const p of valids) {
-                if (!ids.has(p.id)) {
-                  ids.add(p.id);
-                  unique.push(p);
+              for (const pkmn of valids) {
+                if (!ids.has(pkmn.id)) {
+                  ids.add(pkmn.id);
+                  unique.push(pkmn);
                 }
               }
               return unique;
@@ -221,7 +224,6 @@ export class PokemonDetailFormsComponent implements OnChanges {
     );
 
     forkJoin(fetchers).subscribe((pokemonArrays) => {
-      // Flatten the array of arrays
       const validPokemons = pokemonArrays.reduce((acc, curr) => acc.concat(curr), []);
       this.flatEvoPokemons.set(validPokemons);
       this.evoChainLoading.set(false);

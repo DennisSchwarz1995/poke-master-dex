@@ -2,12 +2,12 @@ import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { GameData } from '../../../shared/models/dataset.model';
-import { RouterLink } from '@angular/router';
+import { GameCard } from '../game-card/game-card.component';
 
 @Component({
   selector: 'app-games-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, GameCard],
   template: `
     <div class="h-full flex flex-col bg-bg-secondary px-4 pb-8 sm:px-6 lg:px-8">
       <div class="max-w-[1600px] mx-auto w-full">
@@ -21,32 +21,7 @@ import { RouterLink } from '@angular/router';
               class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 sm:gap-8 pb-8"
             >
               @for (game of sortedGames(); track game.id) {
-                <a
-                  [routerLink]="['/games', game.nameSlug]"
-                  class="bg-surface rounded-2xl border border-theme p-5 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 hover:border-[var(--color-primary-hover)] group flex flex-col h-full gap-4 cursor-pointer overflow-hidden relative"
-                >
-                  <div class="relative z-10 flex flex-col h-full">
-                    <div class="w-full flex items-center justify-center">
-                      <img
-                        [src]="getGameImage(game)"
-                        [alt]="game.name"
-                        class="rounded-2xl w-full h-full object-cover select-none pointer-events-none"
-                        (error)="onImageError($event)"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col gap-2 items-center">
-                    <h3 class="text-xl font-bold text-primary">
-                      {{ game.name }}
-                    </h3>
-
-                    <div class="flex items-center text-md font-semibold text-secondary">
-                      <span>{{ game.releaseDate | date: 'y' }}</span>
-                    </div>
-                  </div>
-                </a>
+                <app-game-card [game]="game"></app-game-card>
               }
             </div>
 
@@ -88,33 +63,5 @@ export class GamesList implements OnInit {
         this.isLoadingList.set(false);
       },
     });
-  }
-
-  getGameImage(game: GameData): string {
-    const specialCases: Record<string, string> = {
-      'legends-za': 'legends_z-a',
-      'letsgo-eevee': "let's_go_eevee",
-      'letsgo-pikachu': "let's_go_pikachu",
-      'omega-ruby': 'omega_ruby',
-      'alpha-sapphire': 'alpha_sapphire',
-      heartgold: 'heartgold',
-      soulsilver: 'soulsilver',
-      'brilliant-diamond': 'brilliant_diamond',
-      'shining-pearl': 'shining_pearl',
-      'ultra-sun': 'ultra_sun',
-      'ultra-moon': 'ultra_moon',
-      black2: 'black2',
-      white2: 'white2',
-      'legends-arceus': 'legends_arceus',
-      'legends-za-megadimension': 'mega_dimension',
-    };
-
-    const slug = specialCases[game.nameSlug] || game.nameSlug.replace(/-/g, '_');
-    return `assets/images/gametiles/${slug}.webp`;
-  }
-
-  onImageError(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.style.display = 'none';
   }
 }
