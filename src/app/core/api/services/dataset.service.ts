@@ -373,4 +373,35 @@ export class DatasetService {
     }
     return this.gamesCache;
   }
+
+  getPokedexesStats(dexNames: string[]): Observable<{ species: number; forms: number }> {
+    if (!dexNames || dexNames.length === 0) return of({ species: 0, forms: 0 });
+
+    const requests = dexNames.map((name) =>
+      this.http.get<{ entries: { pid: string; isForm: boolean }[] }>(
+        `${this.datasetBasePath}/pokedexes/${name}.json`,
+      ),
+    );
+
+    return forkJoin(requests).pipe(
+      map((allDexes) => {
+        const uniqueBases = new Set<string>();
+        const uniqueForms = new Set<string>();
+
+        for (const dex of allDexes) {
+          if (dex && dex.entries) {
+            for (const entry of dex.entries) {
+              if (entry.isForm) {
+                uniqueForms.add(entry.pid);
+              } else {
+                uniqueBases.add(entry.pid);
+              }
+            }
+          }
+        }
+        return { species: uniqueBases.size, forms: uniqueForms.size };
+      }),
+      catchError(() => of({ species: 0, forms: 0 })),
+    );
+  }
 }

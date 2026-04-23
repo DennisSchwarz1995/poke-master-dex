@@ -17,7 +17,7 @@ import { take } from 'rxjs/operators';
 import { AuthService } from '../../auth/services/auth.service';
 import { Dex, Box, BoxSlot } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
-import { ToastService } from './toast.service';
+import { ToastService } from '../../services/toast.service';
 
 @Injectable({
   providedIn: 'root',
