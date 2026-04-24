@@ -33,18 +33,24 @@ import {
   MarkData,
   RibbonData,
 } from '../../../shared/models/dataset.model';
-import {
-  CustomDropdownComponent,
-  CustomDropdownOption,
-} from '../../../shared/components/custom-dropdown/custom-dropdown.component';
+import { CustomDropdownOption } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { getGameIconPath } from '../../../core/constants/game-data.constants';
+import { PokemonEditHeaderComponent } from './components/pokemon-edit-header.component';
+import { PokemonEditStatsComponent } from './components/pokemon-edit-stats.component';
+import { PokemonEditAttributesComponent } from './components/pokemon-edit-attributes.component';
 
 @Component({
   selector: 'app-pokemon-detail-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomDropdownComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    PokemonEditHeaderComponent,
+    PokemonEditStatsComponent,
+    PokemonEditAttributesComponent,
+  ],
   template: `
     <div
       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
@@ -60,93 +66,17 @@ import { getGameIconPath } from '../../../core/constants/game-data.constants';
         @if (pokemon(); as pkmn) {
           <div class="p-6 pb-4 relative flex-none border-b border-theme bg-surface z-20">
             <div class="flex items-start justify-between">
-              <div class="flex items-center gap-6">
-                <div class="flex flex-col items-center">
-                  <div class="relative group">
-                    <div
-                      class="w-32 h-32 bg-secondary rounded-full flex items-center justify-center border-2 border-theme shadow-inner"
-                    >
-                      @if (localPokemonSlug() && currentSpriteUrl()) {
-                        <img
-                          [src]="currentSpriteUrl()"
-                          [alt]="localizedName()"
-                          class="w-28 h-28 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110"
-                          (error)="onImageError($event)"
-                        />
-                      }
-                    </div>
-                    @if (ball) {
-                      <div
-                        class="absolute bottom-0 left-0 w-7 h-7 bg-surface border border-theme rounded-full shadow flex items-center justify-center"
-                      >
-                        <img
-                          [src]="'assets/images/pokeballs/' + ball + '.png'"
-                          [alt]="ball"
-                          class="w-5 h-5 object-contain"
-                          style="image-rendering: pixelated"
-                          (error)="onImageError($event)"
-                        />
-                      </div>
-                    }
-                    @if (localPokemonSlug()) {
-                      <button
-                        (click)="toggleShinyPreview()"
-                        class="absolute bottom-0 right-0 p-1 bg-surface border border-theme rounded-full shadow hover:bg-surface-hover transition-colors flex items-center justify-center w-7 h-7"
-                        title="Toggle Shiny Preview"
-                      >
-                        <img
-                          src="assets/images/special_attributes/shiny-stars.png"
-                          alt="Shiny"
-                          class="w-5 h-5 object-contain"
-                        />
-                      </button>
-                    }
-                  </div>
-                  <div class="flex items-center gap-2 mt-2">
-                    @if (pokemonData()?.type1) {
-                      <img
-                        [src]="'assets/images/types/' + pokemonData()!.type1 + '.png'"
-                        [alt]="pokemonData()!.type1"
-                        class="h-5 object-contain"
-                        (error)="onImageError($event)"
-                      />
-                    }
-                    @if (pokemonData()?.type2) {
-                      <img
-                        [src]="'assets/images/types/' + pokemonData()!.type2 + '.png'"
-                        [alt]="pokemonData()!.type2"
-                        class="h-5 object-contain"
-                        (error)="onImageError($event)"
-                      />
-                    }
-                  </div>
-                </div>
-
-                <div class="flex-1">
-                  <div class="mb-3">
-                    <label class="block text-xs font-bold text-secondary uppercase mb-2"
-                      >Pokemon</label
-                    >
-                    <app-custom-dropdown
-                      [options]="pokemonSearchOptions()"
-                      [selectedId]="localPokemonSlug() || ''"
-                      [placeholder]="'Search Pokemon...'"
-                      (valueChanged)="onPokemonChange($event)"
-                    />
-                  </div>
-
-                  @if (localPokemonSlug()) {
-                    <div class="flex flex-col gap-1 text-sm text-secondary">
-                      <span class="flex items-center gap-2">
-                        {{ localizedName() }}
-                      </span>
-                      <span class="italic">{{ pokemonGenus() }}</span>
-                    </div>
-                  } @else {
-                    <div class="text-lg text-tertiary italic">Empty Slot</div>
-                  }
-                </div>
-              </div>
+              <app-pokemon-edit-header
+                [pokemonData]="pokemonData()"
+                [currentSpriteUrl]="currentSpriteUrl()"
+                [localPokemonSlug]="localPokemonSlug()"
+                [ball]="ball"
+                [pokemonSearchOptions]="pokemonSearchOptions()"
+                [localizedName]="localizedName()"
+                [pokemonGenus]="pokemonGenus()"
+                (pokemonChanged)="onPokemonChange($event)"
+                (shinyToggled)="toggleShinyPreview()"
+              ></app-pokemon-edit-header>
 
               <button
                 (click)="close()"
@@ -161,501 +91,65 @@ import { getGameIconPath } from '../../../core/constants/game-data.constants';
           <div class="flex-1 overflow-y-auto custom-scrollbar p-6">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div class="flex flex-col gap-[18px]">
-                <div class="flex flex-col gap-[18px]">
-                  <div
-                    class="flex items-center justify-between p-4 bg-secondary/50 rounded-xl border border-theme"
-                  >
-                    <label class="flex items-center gap-3 cursor-pointer group select-none">
-                      <div class="relative flex items-center">
-                        <input
-                          type="checkbox"
-                          [(ngModel)]="isOwned"
-                          (change)="onCaughtChange()"
-                          class="peer sr-only"
-                        />
-                        <div
-                          class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-all"
-                        ></div>
-                        <svg
-                          class="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 top-1 left-1"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                        >
-                          <path
-                            d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"
-                          />
-                        </svg>
-                      </div>
-                      <span
-                        class="font-medium text-primary group-hover:text-blue-400 transition-colors"
-                        >Caught</span
-                      >
-                    </label>
-
-                    <div class="w-px h-6 bg-theme"></div>
-
-                    <label class="flex items-center gap-3 cursor-pointer group select-none">
-                      <div class="relative flex items-center">
-                        <input
-                          type="checkbox"
-                          [(ngModel)]="isShiny"
-                          (change)="updateSpritePreview()"
-                          class="peer sr-only"
-                        />
-                        <div
-                          class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-yellow-500 peer-checked:border-yellow-500 transition-all"
-                        ></div>
-                        <svg
-                          class="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 top-1 left-1"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                        >
-                          <path
-                            d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"
-                          />
-                        </svg>
-                      </div>
-                      <span
-                        class="font-medium text-primary group-hover:text-yellow-400 transition-colors"
-                        >Shiny</span
-                      >
-                    </label>
-
-                    <div class="w-px h-6 bg-theme"></div>
-
-                    <label class="flex items-center gap-3 cursor-pointer group select-none">
-                      <div class="relative flex items-center">
-                        <input type="checkbox" [(ngModel)]="isEvent" class="peer sr-only" />
-                        <div
-                          class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-purple-500 peer-checked:border-purple-500 transition-all"
-                        ></div>
-                        <svg
-                          class="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 top-1 left-1"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                        >
-                          <path
-                            d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"
-                          />
-                        </svg>
-                      </div>
-                      <span
-                        class="font-medium text-primary group-hover:text-purple-400 transition-colors"
-                        >Event</span
-                      >
-                    </label>
-
-                    <div class="w-px h-6 bg-theme"></div>
-
-                    <label
-                      class="flex items-center gap-3 cursor-pointer group select-none relative"
-                      [class.opacity-50]="!pokemonData()?.canGmax && !pokemonData()?.isGmax"
-                    >
-                      <div class="relative flex items-center">
-                        <input
-                          type="checkbox"
-                          [(ngModel)]="isGmax"
-                          [disabled]="!pokemonData()?.canGmax && !pokemonData()?.isGmax"
-                          class="peer sr-only"
-                        />
-                        <div
-                          class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-red-600 peer-checked:border-red-600 transition-all peer-disabled:bg-surface-hover peer-disabled:border-theme"
-                        ></div>
-                        <svg
-                          class="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 top-1 left-1"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                        >
-                          <path
-                            d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"
-                          />
-                        </svg>
-                      </div>
-                      <span
-                        class="font-medium text-primary transition-colors"
-                        [ngClass]="
-                          pokemonData()?.canGmax || pokemonData()?.isGmax
-                            ? 'group-hover:text-red-400'
-                            : ''
-                        "
-                        >Gigantamax</span
-                      >
-                    </label>
-
-                    <div class="w-px h-6 bg-theme"></div>
-
-                    <label
-                      class="flex items-center gap-3 cursor-pointer group select-none relative"
-                      [class.opacity-50]="!pokemonData()?.canBeAlpha"
-                    >
-                      <div class="relative flex items-center">
-                        <input
-                          type="checkbox"
-                          [(ngModel)]="isAlpha"
-                          [disabled]="!pokemonData()?.canBeAlpha"
-                          class="peer sr-only"
-                        />
-                        <div
-                          class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-orange-600 peer-checked:border-orange-600 transition-all peer-disabled:bg-surface-hover peer-disabled:border-theme"
-                        ></div>
-                        <svg
-                          class="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 top-1 left-1"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                        >
-                          <path
-                            d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"
-                          />
-                        </svg>
-                      </div>
-                      <span
-                        class="font-medium text-primary transition-colors"
-                        [ngClass]="pokemonData()?.canBeAlpha ? 'group-hover:text-orange-400' : ''"
-                        >Alpha</span
-                      >
-                    </label>
-                  </div>
-                  <div class="grid grid-cols-2 gap-4">
-                    <div class="relative group">
-                      <input
-                        type="number"
-                        [(ngModel)]="level"
-                        min="1"
-                        max="100"
-                        class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary focus:border-blue-500 outline-none transition-colors peer placeholder-transparent no-spinners"
-                        placeholder="Level"
-                      />
-                      <label
-                        class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
-                      >
-                        Level
-                      </label>
-                    </div>
-
-                    <div class="relative group">
-                      <app-custom-dropdown
-                        [label]="'Language'"
-                        [options]="languageOptions()"
-                        [selectedId]="originLanguage"
-                        [placeholder]="'Select Language'"
-                        [searchable]="false"
-                        (valueChanged)="originLanguage = $event"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col gap-1.5 mb-[18px]">
-                    <label class="text-[10px] font-bold text-secondary uppercase pl-2 z-10"
-                      >Gender</label
-                    >
-                    <div
-                      class="flex w-full h-11 bg-surface border-2 border-theme rounded-lg overflow-hidden relative shadow-sm"
-                    >
-                      <div class="absolute left-1/2 top-0 bottom-0 w-px bg-theme z-10"></div>
-
-                      <button
-                        (click)="genderState().canMale ? (gender = 'male') : null"
-                        [disabled]="!genderState().canMale"
-                        class="flex-1 flex items-center justify-center gap-2 transition-all font-bold text-sm z-0 relative"
-                        [ngClass]="[
-                          gender === 'male'
-                            ? 'bg-blue-100/50 text-primary dark:bg-blue-900/30'
-                            : 'text-secondary hover:bg-surface-hover',
-                          !genderState().canMale
-                            ? 'opacity-40 cursor-not-allowed bg-secondary/10 hover:bg-secondary/10'
-                            : 'cursor-pointer',
-                        ]"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="24px"
-                          viewBox="0 -960 960 960"
-                          width="24px"
-                          fill="#4285f4"
-                        >
-                          <path
-                            d="M797.5-797.5v235h-75V-669L558-505.5q19 28 29.25 59.66Q597.5-414.18 597.5-380q0 90.95-63.28 154.23-63.28 63.27-154.25 63.27t-154.22-63.28q-63.25-63.28-63.25-154.25t63.27-154.22Q289.05-597.5 380-597.5q33.5 0 65.5 10T505-558l164-164.5H562.5v-75h235ZM279.25-480.78q-41.75 41.73-41.75 100.75 0 59.03 41.72 100.78 41.73 41.75 100.75 41.75 59.03 0 100.78-41.72 41.75-41.73 41.75-100.75 0-59.03-41.72-100.78-41.73-41.75-100.75-41.75-59.03 0-100.78 41.72Z"
-                          />
-                        </svg>
-                        Male
-                      </button>
-
-                      <button
-                        (click)="genderState().canFemale ? (gender = 'female') : null"
-                        [disabled]="!genderState().canFemale"
-                        class="flex-1 flex items-center justify-center gap-2 transition-all font-bold text-sm z-0 relative"
-                        [ngClass]="[
-                          gender === 'female'
-                            ? 'bg-pink-100/50 text-primary dark:bg-pink-900/30'
-                            : 'text-secondary hover:bg-surface-hover',
-                          !genderState().canFemale
-                            ? 'opacity-40 cursor-not-allowed bg-secondary/10 hover:bg-secondary/10'
-                            : 'cursor-pointer',
-                        ]"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="24px"
-                          viewBox="0 -960 960 960"
-                          width="24px"
-                          fill="#d6428c"
-                        >
-                          <path
-                            d="M442.5-122.5v-80h-80v-75h80V-366q-78.5-14-129.25-74.6Q262.5-501.19 262.5-581q0-90.37 63.5-153.44 63.5-63.06 154-63.06t154 63.06q63.5 63.07 63.5 153.44 0 79.81-50.75 140.4Q596-380 517.5-366v88.5h80v75h-80v80h-75Zm138.25-356.72q41.75-41.73 41.75-100.75 0-59.03-41.72-100.78-41.73-41.75-100.75-41.75-59.03 0-100.78 41.72-41.75 41.73-41.75 100.75 0 59.03 41.72 100.78 41.73 41.75 100.75 41.75 59.03 0 100.78-41.72Z"
-                          />
-                        </svg>
-                        Female
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col gap-[18px]">
-                    <app-custom-dropdown
-                      [options]="pokeballOptions()"
-                      [selectedId]="ball"
-                      [label]="'Poké Ball'"
-                      [placeholder]="'Select Poké Ball'"
-                      (valueChanged)="ball = $event"
-                    />
-
-                    <app-custom-dropdown
-                      [options]="itemOptions()"
-                      [selectedId]="item"
-                      [label]="'Held Item'"
-                      [placeholder]="'Select Held Item'"
-                      (valueChanged)="item = $event"
-                    />
-                  </div>
-                </div>
-
-                <div class="bg-secondary/30 p-4 rounded-xl border border-theme">
-                  <div
-                    class="grid grid-cols-7 gap-2 text-center text-[10px] font-bold text-secondary mb-1"
-                  >
-                    <div class="text-left">Stat</div>
-                    <div>HP</div>
-                    <div>Atk</div>
-                    <div>Def</div>
-                    <div>SpA</div>
-                    <div>SpD</div>
-                    <div>Spe</div>
-                  </div>
-
-                  <div class="grid grid-cols-7 gap-2 mb-2 items-center">
-                    <div class="text-[10px] font-bold text-secondary text-left">IVs</div>
-                    <input
-                      type="number"
-                      [(ngModel)]="ivs.hp"
-                      min="0"
-                      max="31"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="HP IV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="ivs.atk"
-                      min="0"
-                      max="31"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="Atk IV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="ivs.def"
-                      min="0"
-                      max="31"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="Def IV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="ivs.spa"
-                      min="0"
-                      max="31"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="SpA IV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="ivs.spd"
-                      min="0"
-                      max="31"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="SpD IV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="ivs.spe"
-                      min="0"
-                      max="31"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="Spe IV"
-                    />
-                  </div>
-
-                  <div class="grid grid-cols-7 gap-2 items-center">
-                    <div class="text-[10px] font-bold text-secondary text-left">EVs</div>
-                    <input
-                      type="number"
-                      [(ngModel)]="evs.hp"
-                      min="0"
-                      max="252"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="HP EV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="evs.atk"
-                      min="0"
-                      max="252"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="Atk EV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="evs.def"
-                      min="0"
-                      max="252"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="Def EV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="evs.spa"
-                      min="0"
-                      max="252"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="SpA EV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="evs.spd"
-                      min="0"
-                      max="252"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="SpD EV"
-                    />
-                    <input
-                      type="number"
-                      [(ngModel)]="evs.spe"
-                      min="0"
-                      max="252"
-                      class="w-full bg-surface border border-theme rounded px-0.5 py-1 text-xs text-primary text-center focus:border-blue-500 outline-none no-spinners"
-                      title="Spe EV"
-                    />
-                  </div>
-                </div>
+                <app-pokemon-edit-attributes
+                  [pokemonData]="pokemonData()"
+                  [isOwned]="isOwned"
+                  [isShiny]="isShiny"
+                  [isEvent]="isEvent"
+                  [isGmax]="isGmax"
+                  [isAlpha]="isAlpha"
+                  [level]="level"
+                  [languageOptions]="languageOptions()"
+                  [originLanguage]="originLanguage"
+                  [genderState]="genderState()"
+                  [gender]="gender"
+                  [pokeballOptions]="pokeballOptions()"
+                  [ball]="ball"
+                  [itemOptions]="itemOptions()"
+                  [item]="item"
+                  [abilityOptions]="abilityOptions()"
+                  [ability]="ability"
+                  [currentAbilityDescription]="currentAbilityDescription"
+                  [natureOptions]="natureOptions()"
+                  [nature]="nature"
+                  [ribbonOptions]="ribbonOptions()"
+                  [ribbon]="ribbon"
+                  [markOptions]="markOptions()"
+                  [mark]="mark"
+                  [trainerOptions]="trainerOptions()"
+                  [originalTrainer]="originalTrainer"
+                  [trainerId]="trainerId"
+                  [originGameOptions]="originGameOptions()"
+                  [originGame]="originGame"
+                  [notes]="notes"
+                  (isOwnedChanged)="isOwned = $event; onCaughtChange()"
+                  (isShinyChanged)="isShiny = $event; updateSpritePreview()"
+                  (isEventChanged)="isEvent = $event"
+                  (isGmaxChanged)="isGmax = $event"
+                  (isAlphaChanged)="isAlpha = $event"
+                  (levelChanged)="level = $event"
+                  (originLanguageChanged)="originLanguage = $event"
+                  (genderChanged)="gender = $event"
+                  (ballChanged)="ball = $event"
+                  (itemChanged)="item = $event"
+                  (abilityChanged)="onAbilityChange($event)"
+                  (natureChanged)="nature = $event"
+                  (ribbonChanged)="ribbon = $event"
+                  (markChanged)="mark = $event"
+                  (trainerSelected)="onTrainerSelect($event)"
+                  (originalTrainerChanged)="originalTrainer = $event"
+                  (trainerIdChanged)="trainerId = $event"
+                  (originGameChanged)="onOriginGameChange($event)"
+                  (notesChanged)="notes = $event"
+                ></app-pokemon-edit-attributes>
               </div>
-
               <div class="flex flex-col gap-[18px]">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="relative group">
-                    <app-custom-dropdown
-                      [label]="'Ability'"
-                      [options]="abilityOptions()"
-                      [selectedId]="ability"
-                      [placeholder]="'Select Ability'"
-                      [searchable]="false"
-                      (valueChanged)="onAbilityChange($event)"
-                    />
-                    <p class="text-xs text-secondary mt-1 min-h-[1.25rem] truncate">
-                      {{ currentAbilityDescription }}
-                    </p>
-                  </div>
-
-                  <div class="relative group">
-                    <app-custom-dropdown
-                      [label]="'Nature'"
-                      [options]="natureOptions()"
-                      [selectedId]="nature"
-                      [placeholder]="'Select Nature'"
-                      (valueChanged)="nature = $event"
-                    />
-                  </div>
-                </div>
-
-                <div class="flex flex-col gap-[18px]">
-                  <app-custom-dropdown
-                    [options]="ribbonOptions()"
-                    [selectedId]="ribbon"
-                    [label]="'Ribbon'"
-                    [placeholder]="'Select Ribbon'"
-                    (valueChanged)="ribbon = $event"
-                  />
-
-                  <app-custom-dropdown
-                    [options]="markOptions()"
-                    [selectedId]="mark"
-                    [label]="'Mark'"
-                    [placeholder]="'Select Mark'"
-                    (valueChanged)="mark = $event"
-                  />
-                </div>
-
-                <div class="bg-secondary/10 border border-theme rounded-xl p-4">
-                  <div class="flex items-center justify-between mb-3">
-                    <h4 class="text-sm font-bold text-primary">Original Trainer</h4>
-                    <div class="w-40">
-                      <app-custom-dropdown
-                        [options]="trainerOptions()"
-                        [selectedId]="''"
-                        [label]="''"
-                        [placeholder]="'Auto-fill...'"
-                        [searchable]="false"
-                        (valueChanged)="onTrainerSelect($event)"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="grid grid-cols-2 gap-3 mb-3">
-                    <div class="relative group">
-                      <input
-                        [(ngModel)]="originalTrainer"
-                        placeholder="OT Name"
-                        class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none transition-colors peer"
-                      />
-                      <label
-                        class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
-                      >
-                        OT Name
-                      </label>
-                    </div>
-                    <div class="relative group">
-                      <input
-                        [(ngModel)]="trainerId"
-                        placeholder="ID No."
-                        class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none transition-colors peer"
-                      />
-                      <label
-                        class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
-                      >
-                        ID No.
-                      </label>
-                    </div>
-                  </div>
-
-                  <app-custom-dropdown
-                    [label]="'Origin Game'"
-                    [options]="originGameOptions()"
-                    [selectedId]="originGame"
-                    [placeholder]="'Select Origin Game'"
-                    (valueChanged)="onOriginGameChange($event)"
-                  />
-                </div>
-
-                <div class="relative group">
-                  <textarea
-                    [(ngModel)]="notes"
-                    rows="2"
-                    class="w-full bg-surface border-2 border-theme rounded-lg px-4 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none resize-none transition-colors peer"
-                    placeholder="Notes"
-                  ></textarea>
-                  <label
-                    class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
-                  >
-                    Notes
-                  </label>
-                </div>
+                <app-pokemon-edit-stats
+                  [ivs]="ivs"
+                  [evs]="evs"
+                  (ivsChanged)="ivs = $event"
+                  (evsChanged)="evs = $event"
+                ></app-pokemon-edit-stats>
               </div>
             </div>
           </div>
