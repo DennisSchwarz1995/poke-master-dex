@@ -9,20 +9,27 @@ import {
   ViewChild,
   ElementRef,
   effect,
+  computed,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import Chart from 'chart.js/auto';
 import { BoxSlot } from '../../../shared/models/dex.model';
 import { ThemeService } from '../../../core/services/theme.service';
 import { NatureData } from '../../../shared/models/dataset.model';
 import { DatasetService, DatasetPokemon } from '../../../core/api/services/dataset.service';
-import { getAvailableGamesForPokemon } from '../../../shared/models/game-definitions';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
+import { CapitalizePipe } from '../../../shared/pipes/capitalize-pipe';
+import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
+import { PokemonStatchartComponent } from '../../../shared/components/pokemon-statchart/pokemon-statchart.component';
+import {
+  getFullGameName,
+  getGameIconPath,
+  getGameOriginMark,
+} from '../../../core/constants/game-data.constants';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-pokemon-view-dialog',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CapitalizePipe, TooltipDirective, PokemonStatchartComponent],
   template: `
     <div
       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
@@ -37,7 +44,6 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
         @if (pokemon(); as pkmn) {
           <div class="p-6 pb-4 relative flex-none border-b border-theme bg-surface z-20">
             <div class="flex items-center gap-5">
-              <!-- Sprite + Types -->
               <div class="flex flex-col items-center flex-none">
                 <div class="relative w-32 h-32 mb-2">
                   <div
@@ -45,7 +51,7 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                   >
                     @if (pokemonData()) {
                       <img
-                        [src]="datasetService.getSpriteUrl(pokemonData()!, pkmn.isShiny)"
+                        [src]="spriteUrl()"
                         [alt]="pokemonData()?.names?.['eng'] || 'Pokemon'"
                         class="w-28 h-28 object-contain drop-shadow-md z-0"
                         (error)="onImageError($event)"
@@ -60,8 +66,8 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                       @if (pokemonData()?.type1) {
                         <img
                           [src]="'assets/images/types/' + pokemonData()!.type1 + '.png'"
-                          [title]="capitalize(pokemonData()!.type1)"
-                          [alt]="capitalize(pokemonData()!.type1)"
+                          [appTooltip]="pokemonData()?.type1 | capitalize"
+                          [alt]="pokemonData()?.type1 | capitalize"
                           class="h-5 object-contain drop-shadow bg-surface rounded-full shadow-sm"
                           (error)="onImageError($event)"
                         />
@@ -69,8 +75,8 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                       @if (pokemonData()?.type2) {
                         <img
                           [src]="'assets/images/types/' + pokemonData()!.type2 + '.png'"
-                          [title]="capitalize(pokemonData()!.type2)"
-                          [alt]="capitalize(pokemonData()!.type2)"
+                          [appTooltip]="pokemonData()?.type2 | capitalize"
+                          [alt]="pokemonData()?.type2 | capitalize"
                           class="h-5 object-contain drop-shadow bg-surface rounded-full shadow-sm"
                           (error)="onImageError($event)"
                         />
@@ -79,53 +85,45 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                   }
                 </div>
               </div>
-
-              <!-- Right side: Pokeball + Name row -->
               <div class="flex flex-col justify-center flex-1 min-w-0">
                 <div class="flex items-center gap-3 flex-wrap">
-                  <!-- Pokeball -->
                   <div
                     class="w-10 h-10 bg-surface border border-theme rounded-full shadow flex items-center justify-center flex-none"
                   >
                     <img
                       [src]="'assets/images/pokeballs/' + (pkmn.ball || 'pokeball') + '.png'"
-                      [alt]="capitalize(pkmn.ball)"
-                      [title]="capitalize(pkmn.ball)"
+                      [alt]="pkmn.ball | capitalize"
+                      [appTooltip]="pkmn.ball | capitalize"
                       class="w-7 h-7 object-contain"
                       [class.grayscale]="!pkmn.ball"
                       (error)="onImageError($event)"
                     />
                   </div>
 
-                  <!-- Nickname / Name -->
                   <h2 class="text-2xl font-bold truncate">
-                    {{
-                      pkmn.customName || getLocalizedName() || pkmn.pokemonSlug || 'Empty Slot'
-                    }}
+                    {{ pkmn.customName || localizedName() || pkmn.pokemonSlug || 'Empty Slot' }}
                   </h2>
 
-                  <!-- Shiny sparks -->
                   @if (pkmn.isShiny) {
                     <div
                       class="p-1 bg-surface border border-theme rounded-full shadow flex items-center justify-center w-7 h-7 flex-none"
-                      title="Shiny"
+                      [appTooltip]="'Shiny'"
                     >
                       <img
                         src="assets/images/special_attributes/shiny-stars.png"
-                        alt="Shiny"
                         class="w-4 h-4 object-contain"
                       />
                     </div>
                   }
 
-                  <!-- Level -->
                   @if (pkmn.level) {
-                    <div class="font-bold text-primary flex items-center gap-1 opacity-80 flex-none">
+                    <div
+                      class="font-bold text-primary flex items-center gap-1 opacity-80 flex-none"
+                    >
                       <span class="text-sm">Lv.</span><span class="text-lg">{{ pkmn.level }}</span>
                     </div>
                   }
 
-                  <!-- Gender -->
                   @if (pkmn.gender === 'male') {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -159,14 +157,14 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                     <img
                       src="assets/images/special_attributes/gigantamax.png"
                       class="h-6 w-6 object-contain flex-none"
-                      title="Gigantamax"
+                      [appTooltip]="'Gigantamax'"
                     />
                   }
                   @if (pkmn.isAlpha) {
                     <img
                       src="assets/images/special_attributes/alpha.png"
                       class="h-6 w-6 object-contain flex-none"
-                      title="Alpha"
+                      [appTooltip]="'Alpha'"
                     />
                   }
                   @if (pkmn.isEvent) {
@@ -177,25 +175,24 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                   }
                 </div>
 
-                <!-- Origin Mark below the name row -->
                 @if (pkmn.pokemonSlug) {
                   <div class="flex items-center gap-2 mt-1">
-                    @if (getOriginMark(pkmn.originGame); as markId) {
+                    @if (originMark(); as markId) {
                       <div
                         class="w-5 h-5 flex items-center justify-center opacity-70"
-                        [title]="getOriginMarkName(markId)"
+                        [appTooltip]="originMark()!.name"
                       >
                         @if (themeService.currentTheme() === 'dark') {
                           <img
-                            [src]="'assets/images/origin_marks/' + markId + '-white.png'"
+                            [src]="'assets/images/origin_marks/' + originMark()!.id + '-white.png'"
                             class="w-5 h-5"
-                            alt="Origin Mark"
+                            [alt]="originMark()!.name"
                           />
                         } @else {
                           <img
-                            [src]="'assets/images/origin_marks/' + markId + '-black.png'"
+                            [src]="'assets/images/origin_marks/' + originMark()!.id + '-black.png'"
                             class="w-5 h-5"
-                            alt="Origin Mark"
+                            [alt]="originMark()!.name"
                           />
                         }
                       </div>
@@ -218,7 +215,8 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                     ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
                     : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
                 "
-                title="General"
+                [appTooltip]="'General'"
+                tooltipPosition="right"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +244,8 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                     ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
                     : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
                 "
-                title="Stats"
+                [appTooltip]="'Stats'"
+                tooltipPosition="right"
               >
                 <img
                   src="assets/images/icons/stats.png"
@@ -267,7 +266,8 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                     ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
                     : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
                 "
-                title="Ribbons & Marks"
+                [appTooltip]="'Ribbons & Marks'"
+                tooltipPosition="right"
               >
                 <img
                   src="assets/images/icons/ribbon.png"
@@ -295,10 +295,7 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                           <div class="flex justify-between items-center">
                             <span class="text-secondary text-sm">Pokemonname</span>
                             <div class="flex items-center gap-2">
-                              <span class="font-medium">{{ getLocalizedName() }}</span>
-                              @if (pkmn.mark) {
-                                <img [src]="markSpriteUrl()" class="w-6 h-6 object-contain drop-shadow-sm" [title]="markName() || pkmn.mark" />
-                              }
+                              <span class="font-medium">{{ localizedName() }}</span>
                             </div>
                           </div>
                           <div class="flex justify-between">
@@ -309,11 +306,11 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                           </div>
                           <div class="flex justify-between">
                             <span class="text-secondary text-sm">Species</span>
-                            <span class="font-medium">{{ getLocalizedGenus() }}</span>
+                            <span class="font-medium">{{ localizedGenus() }}</span>
                           </div>
                           <div class="flex justify-between">
                             <span class="text-secondary text-sm">Nature</span>
-                            <span class="font-medium">{{ getNatureName(pkmn.nature) || '—' }}</span>
+                            <span class="font-medium">{{ natureName() }}</span>
                           </div>
                         </div>
                       </div>
@@ -335,10 +332,15 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                           <div class="flex justify-between items-center">
                             <span class="text-secondary text-sm">Origin Game</span>
                             <div class="flex items-center gap-2">
-                              @if (getGameIconUrl(pkmn.originGame)) {
-                                <img [src]="getGameIconUrl(pkmn.originGame)" class="w-6 h-6 object-contain drop-shadow-sm" [title]="formatFullGameName(pkmn.originGame)" />
+                              @if (originGameIcon()) {
+                                <img
+                                  [src]="originGameIcon()"
+                                  class="w-6 h-6 object-contain drop-shadow-sm"
+                                  [appTooltip]="originGameName()"
+                                  [alt]="originGameName()"
+                                />
                               }
-                              <span class="font-medium">{{ formatFullGameName(pkmn.originGame) || '—' }}</span>
+                              <span class="font-medium">{{ originGameName() }}</span>
                             </div>
                           </div>
                         </div>
@@ -354,40 +356,10 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                 <div class="w-full h-full flex-shrink-0 overflow-y-auto custom-scrollbar p-6">
                   @if (pkmn.pokemonSlug) {
                     <div class="max-w-md mx-auto">
-                      <div>
-                        <div
-                          class="flex items-center justify-between mb-4 border-b border-theme pb-2"
-                        >
-                          <h3 class="text-sm font-bold text-secondary uppercase tracking-wider">
-                            Stats
-                          </h3>
-                          <div class="flex gap-2">
-                            <button
-                              (click)="switchStatsView('base')"
-                              [class]="
-                                statsView() === 'base'
-                                  ? 'px-2 py-0.5 text-[10px] font-bold bg-blue-600 text-white rounded'
-                                  : 'px-2 py-0.5 text-[10px] font-medium text-secondary hover:text-primary rounded'
-                              "
-                            >
-                              Base
-                            </button>
-                            <button
-                              (click)="switchStatsView('current')"
-                              [class]="
-                                statsView() === 'current'
-                                  ? 'px-2 py-0.5 text-[10px] font-bold bg-green-600 text-white rounded'
-                                  : 'px-2 py-0.5 text-[10px] font-medium text-secondary hover:text-primary rounded'
-                              "
-                            >
-                              Current
-                            </button>
-                          </div>
-                        </div>
-                        <div class="h-64 w-full flex items-center justify-center relative">
-                          <canvas #statsChart></canvas>
-                        </div>
-                      </div>
+                      <app-pokemon-statchart
+                        [pokemonData]="pokemonData()!"
+                        [pokemon]="pkmn"
+                      ></app-pokemon-statchart>
                     </div>
                   }
                 </div>
@@ -405,6 +377,7 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                           <div class="flex items-center gap-4 p-3 bg-secondary/10 rounded-lg">
                             <img
                               [src]="ribbonSpriteUrl()"
+                              [alt]="ribbonName() || pkmn.ribbon"
                               class="w-10 h-10 object-contain drop-shadow-md"
                             />
                             <span class="font-bold text-lg">{{ ribbonName() || pkmn.ribbon }}</span>
@@ -424,6 +397,7 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
                           <div class="flex items-center gap-4 p-3 bg-secondary/10 rounded-lg">
                             <img
                               [src]="markSpriteUrl()"
+                              [alt]="markName() || pkmn.mark"
                               class="w-10 h-10 object-contain drop-shadow-md"
                             />
                             <span class="font-bold text-lg">{{ markName() || pkmn.mark }}</span>
@@ -444,7 +418,8 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
               <button
                 class="px-3 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme"
                 (click)="previous.emit()"
-                title="Previous Pokémon"
+                [appTooltip]="'Previous Pokémon'"
+                tooltipPosition="top"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -458,7 +433,8 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
               <button
                 class="px-3 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme"
                 (click)="next.emit()"
-                title="Next Pokémon"
+                [appTooltip]="'Next Pokémon'"
+                tooltipPosition="top"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -490,25 +466,13 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
       </div>
     </div>
   `,
-  styles: [
-    `
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: var(--color-border);
-        border-radius: 3px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background-color: var(--color-text-secondary);
-      }
-    `,
-  ],
+  styles: [],
 })
-export class PokemonViewDialogComponent implements OnInit {
+export class PokemonViewDialogComponent {
+  datasetService = inject(DatasetService);
+  themeService = inject(ThemeService);
+  langService = inject(PokemonLanguageService);
+
   pokemon = input.required<BoxSlot>();
   dexId = input.required<string>();
   boxNumber = input.required<number>();
@@ -518,73 +482,13 @@ export class PokemonViewDialogComponent implements OnInit {
   next = output<void>();
   edit = output<void>();
 
-  datasetService = inject(DatasetService);
-  themeService = inject(ThemeService);
-  langService = inject(PokemonLanguageService);
-
   pokemonData = signal<DatasetPokemon | null>(null);
-
-  @ViewChild('statsChart') statsChartRef!: ElementRef<HTMLCanvasElement>;
-  chartInstance: Chart | null = null;
-  statsView = signal<'base' | 'current'>('base');
   allNatures = signal<NatureData[]>([]);
-
   activeTabIndex = signal<number>(0);
-
   ribbonName = signal('');
   ribbonSpriteUrl = signal('');
   markName = signal('');
   markSpriteUrl = signal('');
-  pokemonName = (lang: string) => this.pokemonData()?.names[lang] || '';
-  getOriginMarkName(markId: string | null): string {
-    if (!markId) return '';
-    const names: Record<string, string> = {
-      'virtual-console': 'GameBoy Mark',
-      kalos: 'Kalos Mark',
-      alola: 'Alola Mark',
-      'lets-go': 'Kanto Mark',
-      go: 'Go Mark',
-      galar: 'Galar Mark',
-      sinnoh: 'Sinnoh Mark',
-      hisui: 'Hisui Mark',
-      paldea: 'Paldea Mark',
-    };
-    return names[markId] || '';
-  }
-
-  getOriginMark(gameCode: string | undefined | null): string | null {
-    if (!gameCode) return null;
-
-    // Virtual Console (Gen 1 & 2)
-    if (gameCode.startsWith('rby-') || gameCode.startsWith('gsc-')) return 'virtual-console';
-
-    // Gen 6 (Pentagon)
-    if (gameCode.startsWith('xy-') || gameCode.startsWith('oras-')) return 'kalos';
-
-    // Gen 7 (Alola clover)
-    if (gameCode.startsWith('sm-') || gameCode.startsWith('usum-')) return 'alola';
-
-    // Let's Go
-    if (gameCode.startsWith('lgpe-')) return 'lets-go';
-
-    // Pokemon GO
-    if (gameCode === 'go') return 'go';
-
-    // Gen 8 (Galar)
-    if (gameCode.startsWith('swsh-')) return 'galar';
-
-    // BDSP (Sinnoh)
-    if (gameCode.startsWith('bdsp-')) return 'sinnoh';
-
-    // Legends Arceus (Hisui)
-    if (gameCode === 'la') return 'hisui';
-
-    // Gen 9 (Paldea)
-    if (gameCode.startsWith('sv-')) return 'paldea';
-
-    // Gen 3, Gen 4, Gen 5 and anything else has no mark
-    return null;
-  }
 
   constructor() {
     effect(() => {
@@ -592,19 +496,14 @@ export class PokemonViewDialogComponent implements OnInit {
       if (pkmn.pokemonSlug) {
         this.datasetService.loadPokemonBySlug(pkmn.pokemonSlug).subscribe((data) => {
           this.pokemonData.set(data);
-          setTimeout(() => this.initChart(), 100);
         });
       } else {
         this.pokemonData.set(null);
-        if (this.chartInstance) {
-          this.chartInstance.destroy();
-          this.chartInstance = null;
-        }
       }
 
       if (pkmn.ribbon) {
         this.datasetService.loadRibbons().subscribe((ribbons) => {
-          const found = ribbons.find((r) => r.id === pkmn.ribbon);
+          const found = ribbons.find((ribbon) => ribbon.id === pkmn.ribbon);
           if (found) {
             this.ribbonName.set(found.name);
             this.ribbonSpriteUrl.set(`assets/images/ribbons/${found.id}.png`);
@@ -617,7 +516,7 @@ export class PokemonViewDialogComponent implements OnInit {
 
       if (pkmn.mark) {
         this.datasetService.loadMarks().subscribe((marks) => {
-          const found = marks.find((m) => m.id === pkmn.mark);
+          const found = marks.find((mark) => mark.id === pkmn.mark);
           if (found) {
             this.markName.set(found.name);
             this.markSpriteUrl.set(`assets/images/marks/${found.id}.png`);
@@ -634,271 +533,56 @@ export class PokemonViewDialogComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  localizedName = computed(() => {
+    const data = this.pokemonData();
+    return data ? this.langService.getName(data) : '';
+  });
 
-  getNatureName(natureId: string | undefined): string {
-    if (!natureId) return '';
-    const nature = this.allNatures().find(n => n.id === natureId);
+  localizedGenus = computed(() => {
+    const data = this.pokemonData();
+    if (!data) return 'Pokémon';
+    const lang = this.langService.currentLang();
+    return data.genus?.[lang] || data.genus?.['eng'] || 'Pokémon';
+  });
+
+  natureName = computed(() => {
+    const natureId = this.pokemon().nature;
+    if (!natureId) return '—';
+    const nature = this.allNatures().find((n) => n.id === natureId);
     return nature ? this.capitalize(nature.name) : this.capitalize(natureId);
-  }
+  });
 
-  formatFullGameName(gameCode: string | undefined): string {
-    if (!gameCode) return '';
-    const code = gameCode.toLowerCase();
-    const gameNames: Record<string, string> = {
-      'rb-r': 'Red', 'rb-b': 'Blue', y: 'Yellow',
-      'rby-r': 'Red', 'rby-b': 'Blue', 'rby-y': 'Yellow',
-      'gsc-g': 'Gold', 'gsc-s': 'Silver', 'gsc-c': 'Crystal',
-      'gs-g': 'Gold', 'gs-s': 'Silver', c: 'Crystal',
-      'rs-r': 'Ruby', 'rs-s': 'Sapphire', e: 'Emerald',
-      'rse-r': 'Ruby', 'rse-s': 'Sapphire', 'rse-e': 'Emerald',
-      'frlg-fr': 'FireRed', 'frlg-lg': 'LeafGreen',
-      'dp-d': 'Diamond', 'dp-p': 'Pearl', 'dppt-pt': 'Platinum', pt: 'Platinum',
-      'hgss-hg': 'HeartGold', 'hgss-ss': 'SoulSilver',
-      'bw-b': 'Black', 'bw-w': 'White', 'b2w2-b2': 'Black 2', 'b2w2-w2': 'White 2',
-      'xy-x': 'X', 'xy-y': 'Y', 'oras-or': 'Omega Ruby', 'oras-as': 'Alpha Sapphire',
-      'sm-s': 'Sun', 'sm-m': 'Moon', 'usum-us': 'Ultra Sun', 'usum-um': 'Ultra Moon',
-      'lgpe-lgp': "Let's Go, Pikachu!", 'lgpe-lge': "Let's Go, Eevee!",
-      'swsh-sw': 'Sword', 'swsh-sh': 'Shield',
-      'bdsp-bd': 'Brilliant Diamond', 'bdsp-sp': 'Shining Pearl',
-      la: 'Legends: Arceus', pla: 'Legends: Arceus',
-      'sv-s': 'Scarlet', 'sv-v': 'Violet', lza: 'Legends: Z-A',
-      go: 'Pokémon GO', home: 'Pokémon HOME', bank: 'Pokémon Bank',
-      xd: 'Pokémon XD', colosseum: 'Pokémon Colosseum',
-    };
-    return gameNames[code] || this.formatGame(gameCode);
-  }
+  originGameName = computed(() => {
+    const gameCode = this.pokemon().originGame;
+    return gameCode ? getFullGameName(gameCode) : '—';
+  });
 
-  getGameIconUrl(gameCode: string | undefined): string {
-    if (!gameCode) return '';
-    const code = gameCode.toLowerCase();
-    const map: Record<string, string> = {
-      'rb-r': 'red.png', 'rb-b': 'blue.png', y: 'yellow.png',
-      'rby-r': 'red.png', 'rby-b': 'blue.png', 'rby-y': 'yellow.png',
-      'gsc-g': 'gold.png', 'gsc-s': 'silver.png', 'gsc-c': 'crystal.png',
-      'gs-g': 'gold.png', 'gs-s': 'silver.png', c: 'crystal.png',
-      'rs-r': 'ruby.png', 'rs-s': 'sapphire.png', e: 'emerald.png',
-      'rse-r': 'ruby.png', 'rse-s': 'sapphire.png', 'rse-e': 'emerald.png',
-      'frlg-fr': 'firered.png', 'frlg-lg': 'leafgreen.png',
-      'dp-d': 'diamond.png', 'dp-p': 'pearl.png', 'dppt-pt': 'platin.png', pt: 'platin.png',
-      'hgss-hg': 'heartgold.png', 'hgss-ss': 'soulsilver.png',
-      'bw-b': 'black.png', 'bw-w': 'white.png', 'b2w2-b2': 'black2.png', 'b2w2-w2': 'white2.png',
-      'xy-x': 'x.png', 'xy-y': 'y.png', 'oras-or': 'omega_ruby.png', 'oras-as': 'alpha_sapphire.png',
-      'sm-s': 'sun.png', 'sm-m': 'moon.png', 'usum-us': 'ultra_sun.png', 'usum-um': 'ultra_moon.png',
-      'lgpe-lgp': "let's_go_pikachu.png", 'lgpe-lge': "let's_go_eevee.png",
-      'swsh-sw': 'sword.png', 'swsh-sh': 'shield.png',
-      'bdsp-bd': 'brilliant_diamond.png', 'bdsp-sp': 'shining_pearl.png',
-      la: 'legends_arceus.png', pla: 'legends_arceus.png',
-      'sv-s': 'scarlet.png', 'sv-v': 'violet.png', lza: 'legends_z-a.png',
-      go: 'go.png', home: 'home.png', bank: 'bank.png',
-      xd: 'xd.png', colosseum: 'coloseum.png',
-    };
-    const filename = map[code];
-    return filename ? `assets/images/games/${filename}` : '';
-  }
+  originGameIcon = computed(() => {
+    const gameCode = this.pokemon().originGame;
+    return gameCode ? getGameIconPath(gameCode) : '';
+  });
 
-  formatGame(gameCode: string | undefined): string {
-    if (!gameCode) return '';
-    const parts = gameCode.split('-');
-    if (parts.length > 1) {
-      return parts[1].toUpperCase();
-    }
-    return gameCode.toUpperCase();
-  }
+  originMark = computed(() => {
+    const gameCode = this.pokemon().originGame;
+    return gameCode ? getGameOriginMark(gameCode) : null;
+  });
+
+  spriteUrl = computed(() => {
+    const data = this.pokemonData();
+    const isShiny = this.pokemon().isShiny;
+
+    if (!data) return '';
+    return this.datasetService.getSpriteUrl(data, isShiny);
+  });
 
   capitalize(str: string | undefined | null): string {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  getLocalizedName(): string {
-    const data = this.pokemonData();
-    if (!data) return '';
-    return this.langService.getName(data);
-  }
-
-  getLocalizedGenus(): string {
-    const data = this.pokemonData();
-    if (!data) return 'Pokémon';
-    const lang = this.langService.currentLang();
-    return data.genus?.[lang] || data.genus?.['eng'] || 'Pokémon';
-  }
-
   onImageError(event: Event) {
     const img = event.target as HTMLImageElement;
     img.style.display = 'none';
-  }
-
-  switchStatsView(view: 'base' | 'current') {
-    this.statsView.set(view);
-    setTimeout(() => this.initChart(), 50);
-  }
-
-  initChart() {
-    if (!this.statsChartRef || !this.pokemonData()) return;
-
-    const ctx = this.statsChartRef.nativeElement;
-    const stats = this.pokemonData()!;
-    const viewMode = this.statsView();
-    const pkmn = this.pokemon();
-
-    if (this.chartInstance) this.chartInstance.destroy();
-
-    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    const textColor = isDarkMode ? '#cbd5e1' : '#4b5563';
-
-    const getStatColor = (stat: string) => {
-      if (!pkmn.nature) return textColor;
-      const nature = this.allNatures().find((n) => n.id === pkmn.nature);
-      if (!nature) return textColor;
-      if (nature.raises === stat) return '#e46787';
-      if (nature.lowers === stat) return '#3babdf';
-      return textColor;
-    };
-
-    const pointLabelColors = [
-      textColor,
-      getStatColor('atk'),
-      getStatColor('def'),
-      getStatColor('spe'),
-      getStatColor('spd'),
-      getStatColor('spa'),
-    ];
-
-    let statValues: number[];
-    let chartColor: string;
-
-    if (viewMode === 'current') {
-      const currentLevel = pkmn.level || 50;
-      const nature = this.allNatures().find((n) => n.id === pkmn.nature);
-      const ivs = pkmn.ivs || { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
-      const evs = pkmn.evs || { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-
-      statValues = [
-        this.calculateHP(stats.baseHp, currentLevel, ivs.hp, evs.hp),
-        this.calculateStat(
-          stats.baseAtk,
-          currentLevel,
-          nature?.raises === 'atk',
-          nature?.lowers === 'atk',
-          ivs.atk,
-          evs.atk,
-        ),
-        this.calculateStat(
-          stats.baseDef,
-          currentLevel,
-          nature?.raises === 'def',
-          nature?.lowers === 'def',
-          ivs.def,
-          evs.def,
-        ),
-        this.calculateStat(
-          stats.baseSpeed,
-          currentLevel,
-          nature?.raises === 'spe',
-          nature?.lowers === 'spe',
-          ivs.spe,
-          evs.spe,
-        ),
-        this.calculateStat(
-          stats.baseSpDef,
-          currentLevel,
-          nature?.raises === 'spd',
-          nature?.lowers === 'spd',
-          ivs.spd,
-          evs.spd,
-        ),
-        this.calculateStat(
-          stats.baseSpAtk,
-          currentLevel,
-          nature?.raises === 'spa',
-          nature?.lowers === 'spa',
-          ivs.spa,
-          evs.spa,
-        ),
-      ];
-      chartColor = 'rgba(34, 197, 94, 0.8)';
-    } else {
-      statValues = [
-        stats.baseHp,
-        stats.baseAtk,
-        stats.baseDef,
-        stats.baseSpeed,
-        stats.baseSpDef,
-        stats.baseSpAtk,
-      ];
-      chartColor = 'rgba(59, 130, 246, 0.8)';
-    }
-
-    this.chartInstance = new Chart(ctx, {
-      type: 'radar',
-      data: {
-        labels: [
-          `HP (${statValues[0]})`,
-          `Atk (${statValues[1]})`,
-          `Def (${statValues[2]})`,
-          `Spe (${statValues[3]})`,
-          `SpD (${statValues[4]})`,
-          `SpA (${statValues[5]})`,
-        ],
-        datasets: [
-          {
-            label: viewMode === 'current' ? 'Current Stats' : 'Base Stats',
-            data: statValues,
-            backgroundColor: chartColor.replace('0.8', '0.2'),
-            borderColor: chartColor,
-            borderWidth: 2,
-            pointBackgroundColor: chartColor,
-            pointRadius: 3,
-            pointHoverRadius: 5,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          r: {
-            beginAtZero: true,
-            max: viewMode === 'current' ? Math.max(400, ...statValues) : 200,
-            grid: { color: gridColor },
-            pointLabels: {
-              color: pointLabelColors as any,
-              font: { size: 10, weight: 'bold' },
-              padding: 6,
-            },
-            ticks: { display: false, count: 5 },
-          },
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            enabled: true,
-            callbacks: {
-              label: (context) => `${context.label.split(' ')[0]}: ${context.parsed.r}`,
-            },
-          },
-        },
-        maintainAspectRatio: false,
-      },
-    });
-  }
-
-  calculateHP(base: number, level: number, iv: number, ev: number): number {
-    return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10;
-  }
-
-  calculateStat(
-    base: number,
-    level: number,
-    isRaised: boolean,
-    isLowered: boolean,
-    iv: number,
-    ev: number,
-  ): number {
-    let stat = Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5;
-    if (isRaised) stat = Math.floor(stat * 1.1);
-    if (isLowered) stat = Math.floor(stat * 0.9);
-    return stat;
   }
 
   close() {

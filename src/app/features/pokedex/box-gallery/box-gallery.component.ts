@@ -9,6 +9,7 @@ import {
   ViewChildren,
   QueryList,
   ChangeDetectionStrategy,
+  computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -29,15 +30,19 @@ import {
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 
-interface BoxWithSprites {
+export interface EnrichedSlot {
+  originalSlot: any;
+  sprite: string;
+  name: string;
+  colors: string[];
+  slug: string;
+  canGmax: boolean;
+  canBeAlpha: boolean;
+}
+
+export interface BoxWithSprites {
   box: Box;
-  sprites: string[];
-  names: string[];
-  types: string[][];
-  colors: string[][];
-  slugs: string[];
-  canGmax: boolean[];
-  canBeAlpha: boolean[];
+  slots: EnrichedSlot[];
   ownedCount: number;
   loaded: boolean;
 }
@@ -131,7 +136,7 @@ interface BoxWithSprites {
           </div>
         } @else {
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            @for (boxData of boxesWithSprites(); track boxData.box.boxNumber) {
+            @for (boxData of viewBoxes(); track boxData.box.boxNumber) {
               <div
                 #boxCard
                 [attr.data-box-number]="boxData.box.boxNumber"
@@ -160,28 +165,24 @@ interface BoxWithSprites {
 
                 <div class="grid grid-cols-6 gap-0.5 bg-secondary rounded p-1">
                   @if (boxData.loaded) {
-                    @for (sprite of boxData.sprites; track $index) {
+                    @for (slot of boxData.viewSlots; track $index) {
                       <div
                         class="hover-gradient-border bg-surface-raised rounded aspect-square flex items-center justify-center relative group cursor-pointer transition-all hover:z-10 border-2 border-transparent"
-                        [class.grayscale]="!boxData.box.slots[$index]?.isOwned"
-                        [class.opacity-40]="
-                          !boxData.box.slots[$index]?.isOwned && !isSlotDisabled(boxData, $index)
-                        "
-                        [class.opacity-20]="isSlotDisabled(boxData, $index)"
-                        [class.cursor-not-allowed]="isSlotDisabled(boxData, $index)"
-                        [class.pointer-events-none]="isSlotDisabled(boxData, $index)"
-                        [class.search-match-border]="
-                          searchQuery() && matchedPokemonSlugs().has(boxData.slugs[$index])
-                        "
-                        [style.--c1]="boxData.colors[$index]?.[0] || 'transparent'"
-                        [style.--c2]="boxData.colors[$index]?.[1] || 'transparent'"
+                        [class.grayscale]="!slot.originalSlot?.isOwned"
+                        [class.opacity-40]="!slot.originalSlot?.isOwned && !slot.isDisabled"
+                        [class.opacity-20]="slot.isDisabled"
+                        [class.cursor-not-allowed]="slot.isDisabled"
+                        [class.pointer-events-none]="slot.isDisabled"
+                        [class.search-match-border]="slot.isMatched"
+                        [style.--c1]="slot.colors[0] || 'transparent'"
+                        [style.--c2]="slot.colors[1] || 'transparent'"
                         (click)="onPokemonClick(boxData.box, $index)"
                       >
-                        @if (sprite) {
+                        @if (slot.sprite) {
                           <img
-                            [appTooltip]="boxData.names[$index] || ''"
+                            [appTooltip]="slot.name"
                             [tooltipPosition]="'top'"
-                            [src]="sprite"
+                            [src]="slot.sprite"
                             class="w-full h-full object-contain p-0.5 group-hover:scale-110 transition-transform"
                           />
                           <div
@@ -265,23 +266,50 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren('boxCard') boxCards!: QueryList<ElementRef>;
 
+  private pokemonNamesMap = new Map<string, { names: { [key: string]: string | undefined } }>();
+  private searchSubject = new Subject<string>();
+  private observer: IntersectionObserver | null = null;
+  private loadedBoxNumbers = new Set<number>();
+  placeholderSlots = new Array(30);
+
+  matchedPokemonSlugs = signal<Set<string>>(new Set());
+  selectedSlotForDetail = signal<BoxSlot | null>(null);
+  selectedSlotForView = signal<BoxSlot | null>(null);
+  selectedBoxNumber = signal<number>(1);
+  searchQuery = signal<string>('');
   dexId = signal<string>('');
   dex = signal<Dex | undefined>(undefined);
   boxes = signal<Box[]>([]);
   boxesWithSprites = signal<BoxWithSprites[]>([]);
   loading = signal(true);
 
-  selectedSlotForDetail = signal<BoxSlot | null>(null);
-  selectedSlotForView = signal<BoxSlot | null>(null);
-  selectedBoxNumber = signal<number>(1);
-  searchQuery = signal<string>('');
-  matchedPokemonSlugs = signal<Set<string>>(new Set());
-  private pokemonNamesMap = new Map<string, { names: { [key: string]: string | undefined } }>();
-  private searchSubject = new Subject<string>();
-  private observer: IntersectionObserver | null = null;
-  private loadedBoxNumbers = new Set<number>();
+  viewBoxes = computed(() => {
+    const loadedBoxes = this.boxesWithSprites();
+    const searchActive = !!this.searchQuery();
+    const matchedSlugs = this.matchedPokemonSlugs();
+    const quickEdit = this.currentQuickEditState();
 
-  placeholderSlots = new Array(30);
+    return loadedBoxes.map((boxData) => {
+      return {
+        ...boxData,
+        viewSlots: boxData.slots.map((slot) => {
+          const isMatched = searchActive ? matchedSlugs.has(slot.slug) : false;
+
+          let isDisabled = false;
+          if (quickEdit.active) {
+            if (quickEdit.mode === 'Gmax' && !slot.canGmax) isDisabled = true;
+            if (quickEdit.mode === 'Alpha' && !slot.canBeAlpha) isDisabled = true;
+          }
+
+          return {
+            ...slot,
+            isMatched,
+            isDisabled,
+          };
+        }),
+      };
+    });
+  });
 
   ngOnInit() {
     this.searchSubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe((query) => {
@@ -372,19 +400,19 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private prepareBoxShells(boxes: Box[]) {
-    const shells: BoxWithSprites[] = boxes.map((box) => ({
-      box,
-      sprites: new Array(30).fill(''),
-      names: new Array(30).fill(''),
-      types: new Array(30).fill([]),
-      colors: new Array(30).fill([]),
-      slugs: new Array(30).fill(''),
-      canGmax: new Array(30).fill(false),
-      canBeAlpha: new Array(30).fill(false),
-      ownedCount: this.calculateOwnedCount(box),
-      loaded: false,
-    }));
+    const shells: BoxWithSprites[] = boxes.map((box) => {
+      const slots = new Array(30).fill(null).map((_, i) => ({
+        originalSlot: box.slots ? Object.values(box.slots)[i] : null,
+        sprite: '',
+        name: '',
+        colors: [],
+        slug: '',
+        canGmax: false,
+        canBeAlpha: false,
+      }));
 
+      return { box, slots, ownedCount: this.calculateOwnedCount(box), loaded: false };
+    });
     this.boxesWithSprites.set(shells);
     this.loading.set(false);
   }
@@ -401,118 +429,75 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
     if (boxIndex === -1) return;
 
     const boxData = allBoxes[boxIndex];
-    const slots = Array.isArray(boxData.box.slots)
+    const rawSlots = Array.isArray(boxData.box.slots)
       ? boxData.box.slots
       : Object.values(boxData.box.slots || []);
 
-    const sprites: string[] = new Array(30).fill('');
-    const names: string[] = new Array(30).fill('');
-    const types: string[][] = new Array(30).fill([]);
-    const colors: string[][] = new Array(30).fill([]);
-    const slugs: string[] = new Array(30).fill('');
-    const canGmax: boolean[] = new Array(30).fill(false);
-    const canBeAlpha: boolean[] = new Array(30).fill(false);
+    const enrichedSlots: EnrichedSlot[] = [...boxData.slots];
 
     let pending = 0;
-    slots.forEach((slot: any, index: number) => {
-      if (slot.pokemonSlug) {
+    rawSlots.forEach((slot: any, index: number) => {
+      if (slot && slot.pokemonSlug) {
         pending++;
         this.datasetService.loadPokemonBySlug(slot.pokemonSlug).subscribe({
           next: (pokemon) => {
-            sprites[index] = this.datasetService.getSpriteUrl(pokemon, slot.isShiny);
-            const pokemonName = this.pokemonLangService.getName(pokemon);
-            const position = slot.position || index + 1;
-            names[index] = `${pokemonName} - #${pokemon.nid} - Slot ${position}`;
-
             const pTypes = [pokemon.type1, pokemon.type2].filter((t) => !!t) as string[];
-            types[index] = pTypes;
-
+            let colors: string[] = [];
             if (pTypes.length > 0) {
               const c1 = this.typeColorService.getTypeColor(pTypes[0]);
               const c2 = pTypes.length > 1 ? this.typeColorService.getTypeColor(pTypes[1]) : c1;
-              colors[index] = [c1, c2];
+              colors = [c1, c2];
             }
 
-            slugs[index] = slot.pokemonSlug;
-            canGmax[index] = !!(pokemon.canGmax || pokemon.isGmax);
-            canBeAlpha[index] = !!pokemon.canBeAlpha;
+            enrichedSlots[index] = {
+              originalSlot: slot,
+              sprite: this.datasetService.getSpriteUrl(pokemon, slot.isShiny),
+              name: `${this.pokemonLangService.getName(pokemon)} - #${pokemon.nid} - Slot ${slot.position || index + 1}`,
+              colors: colors,
+              slug: slot.pokemonSlug,
+              canGmax: !!(pokemon.canGmax || pokemon.isGmax),
+              canBeAlpha: !!pokemon.canBeAlpha,
+            };
+
             this.pokemonNamesMap.set(slot.pokemonSlug, { names: pokemon.names });
 
             pending--;
             if (pending <= 0) {
-              this.updateBoxData(
-                boxIndex,
-                sprites,
-                names,
-                types,
-                colors,
-                slugs,
-                canGmax,
-                canBeAlpha,
-                true,
-              );
+              this.updateBoxData(boxIndex, enrichedSlots);
             }
           },
           error: () => {
             pending--;
             if (pending <= 0) {
-              this.updateBoxData(
-                boxIndex,
-                sprites,
-                names,
-                types,
-                colors,
-                slugs,
-                canGmax,
-                canBeAlpha,
-                true,
-              );
+              this.updateBoxData(boxIndex, enrichedSlots);
             }
           },
         });
       }
     });
 
-    // If no pokemon in this box at all, mark as loaded immediately
     if (pending === 0) {
-      this.updateBoxData(boxIndex, sprites, names, types, colors, slugs, canGmax, canBeAlpha, true);
+      this.updateBoxData(boxIndex, enrichedSlots);
     }
   }
 
-  private updateBoxData(
-    boxIndex: number,
-    sprites: string[],
-    names: string[],
-    types: string[][],
-    colors: string[][],
-    slugs: string[],
-    canGmax: boolean[],
-    canBeAlpha: boolean[],
-    loaded: boolean,
-  ) {
+  private updateBoxData(boxIndex: number, slots: EnrichedSlot[]) {
     const allBoxes = [...this.boxesWithSprites()];
     allBoxes[boxIndex] = {
       ...allBoxes[boxIndex],
-      sprites,
-      names,
-      types,
-      colors,
-      slugs,
-      canGmax,
-      canBeAlpha,
-      loaded,
+      slots,
+      loaded: true,
     };
     this.boxesWithSprites.set(allBoxes);
   }
 
-  /** Reload only the single box that was edited */
   private reloadSingleBox(boxNumber: number) {
     this.firestoreService.getDexBox(this.dexId(), boxNumber).subscribe({
       next: (box) => {
         if (!box) return;
 
         const allBoxes = [...this.boxesWithSprites()];
-        const boxIndex = allBoxes.findIndex((b) => b.box.boxNumber === boxNumber);
+        const boxIndex = allBoxes.findIndex((boxData) => boxData.box.boxNumber === boxNumber);
         if (boxIndex === -1) return;
 
         allBoxes[boxIndex] = {
@@ -520,10 +505,18 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
           box,
           ownedCount: this.calculateOwnedCount(box),
           loaded: false,
+          slots: new Array(30).fill(null).map((_, i) => ({
+            originalSlot: box.slots ? Object.values(box.slots)[i] : null,
+            sprite: '',
+            name: '',
+            colors: [],
+            slug: '',
+            canGmax: false,
+            canBeAlpha: false,
+          })),
         };
         this.boxesWithSprites.set(allBoxes);
 
-        // Also update the boxes signal
         const currentBoxes = [...this.boxes()];
         const bi = currentBoxes.findIndex((b) => b.boxNumber === boxNumber);
         if (bi !== -1) {
@@ -531,7 +524,6 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
           this.boxes.set(currentBoxes);
         }
 
-        // Allow re-observation and reload sprites
         this.loadedBoxNumbers.delete(boxNumber);
         this.loadedBoxNumbers.add(boxNumber);
         this.loadSpritesForSingleBox(boxNumber);
@@ -561,11 +553,9 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
         return;
       }
 
-      if (mode === 'Owned') updates.isOwned = !slot.isOwned; // Toggle
+      if (mode === 'Owned') updates.isOwned = !slot.isOwned;
       if (mode === 'Pokeball' && this.currentQuickEditState().ball) {
         updates.ball = this.currentQuickEditState().ball;
-        // Optional: also set isOwned to true?
-        // updates.isOwned = true;
       }
       if (mode === 'Shiny') updates.isShiny = !slot.isShiny;
       if (mode === 'Gmax') updates.isGmax = !slot.isGmax;
@@ -689,13 +679,5 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
   clearSearch() {
     this.searchQuery.set('');
     this.matchedPokemonSlugs.set(new Set());
-  }
-
-  isSlotDisabled(boxData: BoxWithSprites, index: number): boolean {
-    if (!this.currentQuickEditState().active) return false;
-    const mode = this.currentQuickEditState().mode;
-    if (mode === 'Gmax' && !boxData.canGmax[index]) return true;
-    if (mode === 'Alpha' && !boxData.canBeAlpha[index]) return true;
-    return false;
   }
 }
