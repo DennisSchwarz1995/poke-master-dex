@@ -7,28 +7,32 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { DexStateService } from '../../../core/services/dex-state.service';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { TrainerManagementDialogComponent } from '../../../features/dashboard/trainer-management-dialog/trainer-management-dialog.component';
+import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule, TrainerManagementDialogComponent],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    TrainerManagementDialogComponent,
+    TooltipDirective,
+  ],
   template: `
     <header
       class="h-16 top-0 z-50 w-full backdrop-blur-md bg-surface/80 border-b border-theme shadow-sm supports-[backdrop-filter]:bg-surface/60"
     >
       <div class="container mx-auto px-4 h-16 flex items-center justify-between relative">
         <div class="flex items-center gap-6">
-          @if (!getDexIdFromUrl()) {
-            <a routerLink="/" class="flex items-center gap-2" title="Poke Master Dex">
-              <img src="/favicon.ico" alt="" class="size-10 rounded-xl" />
-
-              <span
-                class="hidden sm:block font-extrabold text-xl tracking-tight bg-gradient-to-br from-primary to-blue-400 bg-clip-text text-transparent"
-              >
-                Master Dex
-              </span>
-            </a>
-          }
+          <a
+            routerLink="/"
+            class="flex items-center gap-2"
+            [appTooltip]="'Home'"
+            tooltipPosition="right"
+          >
+            <img src="/favicon.ico" alt="Poke Master Dex" class="size-10 rounded-xl" />
+          </a>
         </div>
 
         @if (!getDexIdFromUrl()) {
@@ -113,7 +117,7 @@ import { TrainerManagementDialogComponent } from '../../../features/dashboard/tr
                     width="24"
                     height="24"
                     stroke="currentColor"
-                    stroke-width="0.4"
+                    stroke-width="0.3"
                   >
                     <path
                       d="M0 0 C5.28 0 10.56 0 16 0 C16 7.92 16 15.84 16 24 C10.72 24 5.44 24 0 24 C0 16.08 0 8.16 0 0 Z M1 1 C1 2.98 1 4.96 1 7 C2.32 6.67 3.64 6.34 5 6 C4.01 6 3.02 6 2 6 C2 4.68 2 3.36 2 2 C3.32 2 4.64 2 6 2 C6.33 3.32 6.66 4.64 7 6 C7.33 5.67 7.66 5.34 8 5 C10.32817964 4.63239269 12.6618385 4.29758419 15 4 C15 3.01 15 2.02 15 1 C10.38 1 5.76 1 1 1 Z M8 7 C5.69 7.33 3.38 7.66 1 8 C1 12.95 1 17.9 1 23 C4.96 23 8.92 23 13 23 C13 17.06 13 11.12 13 5 C10.67642489 4.81509993 10.67642489 4.81509993 8 7 Z M14 5 C15 7 15 7 15 7 Z M14 8 C14 11.96 14 15.92 14 20 C14.33 20 14.66 20 15 20 C15 16.04 15 12.08 15 8 C14.67 8 14.34 8 14 8 Z M14 21 C15 23 15 23 15 23 Z "
@@ -150,18 +154,68 @@ import { TrainerManagementDialogComponent } from '../../../features/dashboard/tr
                   [routerLink]="['/dex', currentId, 'box', getCurrentBoxNumber()]"
                   [class.active]="getCurrentDexView() === 'box'"
                 >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-width="1.5"
+                      d="m15.578 3.382l2 1.05c2.151 1.129 3.227 1.693 3.825 2.708C22 8.154 22 9.417 22 11.942v.117c0 2.524 0 3.787-.597 4.801c-.598 1.015-1.674 1.58-3.825 2.709l-2 1.049C13.822 21.539 12.944 22 12 22s-1.822-.46-3.578-1.382l-2-1.05c-2.151-1.129-3.227-1.693-3.825-2.708C2 15.846 2 14.583 2 12.06v-.117c0-2.525 0-3.788.597-4.802c.598-1.015 1.674-1.58 3.825-2.708l2-1.05C10.178 2.461 11.056 2 12 2s1.822.46 3.578 1.382ZM21 7.5l-4 2M12 12L3 7.5m9 4.5v9.5m0-9.5l4.5-2.25l.5-.25m0 0V13m0-3.5l-9.5-5"
+                    />
+                  </svg>
                   Box</a
                 >
                 <a
                   [routerLink]="['/dex', currentId, 'gallery']"
                   [class.active]="getCurrentDexView() === 'gallery'"
-                >
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 48 48"
+                  >
+                    <g
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                    >
+                      <path
+                        d="M35.474 7c-.552-2.024-2.29-3.486-4.473-3.643C28.445 3.173 24.665 3 19.5 3c-5.134 0-8.898.171-11.453.354c-2.557.182-4.512 2.136-4.694 4.694C3.17 10.603 3 14.368 3 19.5c0 5.165.174 8.944.357 11.5c.157 2.183 1.62 3.922 3.643 4.473"
+                      />
+                      <path
+                        d="M12.354 17.047c.182-2.557 2.136-4.51 4.694-4.693C19.602 12.17 23.367 12 28.5 12s8.897.171 11.452.354c2.558.182 4.512 2.136 4.694 4.694c.183 2.555.354 6.32.354 11.452c0 5.133-.171 8.897-.354 11.453c-.182 2.557-2.136 4.51-4.694 4.693c-2.555.183-6.32.354-11.452.354c-5.133 0-8.897-.171-11.453-.354c-2.557-.182-4.51-2.136-4.693-4.694C12.17 37.398 12 33.633 12 28.5s.171-8.897.354-11.453"
+                      />
+                      <path
+                        d="M44.846 36.389c-2.255-2.114-3.88-3.522-5.008-4.444c-1.338-1.095-3.102-1.254-4.543-.293c-1.11.74-2.634 1.87-4.625 3.579c-2.96-2.831-5-4.61-6.338-5.705s-3.102-1.253-4.543-.293c-1.62 1.08-4.123 2.992-7.668 6.318M32 22a3 3 0 1 0 6 0a3 3 0 1 0-6 0"
+                      />
+                    </g>
+                  </svg>
                   Gallery</a
                 >
                 <a
                   [routerLink]="['/dex', currentId]"
                   [class.active]="getCurrentDexView() === 'overview'"
-                  >Overview</a
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="currentColor"
+                      fill-rule="evenodd"
+                      d="M2.5 5.5v-3h3v3zM1 2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm8 .25a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5A.75.75 0 0 1 9 2.25M9.75 5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5zM2.5 10.5v3h3v-3zM2 9a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1zm7.75.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5zm0 3.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Overview</a
                 >
               </nav>
             </div>

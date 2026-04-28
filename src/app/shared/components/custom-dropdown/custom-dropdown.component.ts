@@ -152,8 +152,8 @@ export class CustomDropdownComponent {
   options = input.required<CustomDropdownOption[]>();
   placeholder = input<string>('Select an option');
   selectedId = input<string>('');
-  label = input<string>(); // New label input
-  searchable = input<boolean>(true); // New Optional Searchable Input
+  label = input<string>();
+  searchable = input<boolean>(true);
 
   valueChanged = output<string>();
 
@@ -223,7 +223,6 @@ export class CustomDropdownComponent {
     const element = this.containerRef.nativeElement;
     const rect = element.getBoundingClientRect();
 
-    // Find nearest scrollable parent
     let scrollParent: HTMLElement | null = element.parentElement;
     while (scrollParent) {
       const style = getComputedStyle(scrollParent);
@@ -276,7 +275,6 @@ export class CustomDropdownComponent {
 
   onBlur() {
     setTimeout(() => {
-      // If the user completely cleared the text input, emit empty
       if (this.searchQuery().trim() === '') {
         this.valueChanged.emit('');
         this.searchQuery.set('');
@@ -302,7 +300,6 @@ export class CustomDropdownComponent {
       !this.containerRef.nativeElement.contains(event.target as Node)
     ) {
       this.isOpen.set(false);
-      // Revert search query to currently selected option or clear if none
       const selected = this.options().find((opt) => opt.id === this.selectedId());
       this.searchQuery.set(selected?.name || '');
     }
