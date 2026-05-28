@@ -8,6 +8,7 @@ import { CapitalizePipe } from '../../../../shared/pipes/capitalize-pipe';
 import { DexNumberPipe } from '../../../../shared/pipes/dex-number-pipe';
 import { StatPercentPipe } from '../../../../shared/pipes/stat-percent-pipe';
 import { StatColorPipe } from '../../../../shared/pipes/stat-color-pipe';
+import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl-pipe';
 
 @Component({
   selector: 'app-pokemon-detail-header',
@@ -19,6 +20,7 @@ import { StatColorPipe } from '../../../../shared/pipes/stat-color-pipe';
     DexNumberPipe,
     StatPercentPipe,
     StatColorPipe,
+    CdnUrlPipe,
   ],
   template: `
     <div
@@ -51,7 +53,7 @@ import { StatColorPipe } from '../../../../shared/pipes/stat-color-pipe';
               type="button"
             >
               <img
-                [src]="'assets/images/types/' + type + '.png'"
+                [src]="type + '.png' | cdnUrl: 'types'"
                 [alt]="type | capitalize"
                 class="h-10 drop-shadow-sm rounded-full bg-surface border border-theme transition-all duration-200 group-hover:scale-110 group-hover:shadow-lg group-hover:border-blue-400 cursor-pointer"
                 draggable="false"

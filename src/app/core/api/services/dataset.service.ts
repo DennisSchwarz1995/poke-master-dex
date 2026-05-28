@@ -11,6 +11,7 @@ import {
   MarkData,
   RibbonData,
   GameData,
+  MoveData,
 } from '../../../shared/models/dataset.model';
 
 export interface DatasetPokemon {
@@ -123,6 +124,7 @@ export class DatasetService {
   private marksCache: Observable<MarkData[]> | null = null;
   private ribbonsCache: Observable<RibbonData[]> | null = null;
   private gamesCache: Observable<GameData[]> | null = null;
+  private movesCache: Observable<MoveData[]> | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -372,6 +374,15 @@ export class DatasetService {
         .pipe(shareReplay(1));
     }
     return this.gamesCache;
+  }
+
+  loadMoves(): Observable<MoveData[]> {
+    if (!this.movesCache) {
+      this.movesCache = this.http
+        .get<MoveData[]>(`${this.datasetBasePath}/moves.json`)
+        .pipe(shareReplay(1));
+    }
+    return this.movesCache;
   }
 
   getPokedexesStats(dexNames: string[]): Observable<{ species: number; forms: number }> {

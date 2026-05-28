@@ -2,11 +2,12 @@ import { Component, OnInit, signal, inject, computed, Input } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { GameData } from '../../../shared/models/dataset.model';
+import { CdnUrlPipe } from "../../../shared/pipes/cdnUrl-pipe";
 
 @Component({
   selector: 'app-game-card',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CdnUrlPipe],
   template: `
     <a
       [routerLink]="game.type === 'dlc' ? null : ['/games', game.nameSlug]"
@@ -22,7 +23,7 @@ import { GameData } from '../../../shared/models/dataset.model';
       <div class="relative z-10 flex flex-col h-full">
         <div class="w-full flex items-center justify-center">
           <img
-            [src]="getGameImage(game)"
+            [src]="getGameImage(game) | cdnUrl: 'gametiles'"
             [alt]="game.name"
             class="rounded-2xl w-full h-full object-cover select-none pointer-events-none"
             (error)="onImageError($event)"
@@ -67,7 +68,7 @@ export class GameCard {
     };
 
     const slug = specialCases[game.nameSlug] || game.nameSlug.replace(/-/g, '_');
-    return `assets/images/gametiles/${slug}.webp`;
+    return `${slug}.webp`
   }
 
   onImageError(event: Event) {

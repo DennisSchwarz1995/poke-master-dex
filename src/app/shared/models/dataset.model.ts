@@ -73,3 +73,19 @@ export interface GameData {
   pokedexes: string[];
 }
 
+export interface MoveData {
+  id: string;
+  name: string;
+  psName: string;
+  gen: number;
+  shortDesc: string;
+  desc: string;
+  type: string;
+  power: number;
+  accuracy: number | boolean;
+  pp: number;
+  category: string;
+  priority: number;
+  isZ: boolean;
+  isGmax: boolean;
+}

@@ -4,13 +4,13 @@ import {
   output,
   signal,
   computed,
-  effect,
   ViewChild,
   ElementRef,
   HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CdnUrlPipe } from '../../pipes/cdnUrl-pipe';
 
 export interface CustomDropdownOption {
   id: string;
@@ -18,39 +18,42 @@ export interface CustomDropdownOption {
   description?: string;
   descriptionHtml?: string;
   category?: string;
+  active?: boolean;
   searchTerms?: string[];
   iconPath?: string;
+  cdnFolder?: string;
 }
 
 @Component({
   selector: 'app-custom-dropdown',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CdnUrlPipe],
   template: `
     <div class="relative group" #container>
       <div class="relative flex items-center">
         @if (selectedOption()?.iconPath) {
           <div class="absolute left-3 z-20 flex items-center pointer-events-none">
             <img
-              [src]="selectedOption()!.iconPath"
+              [src]="selectedOption()!.iconPath | cdnUrl: selectedOption()!.cdnFolder"
               [alt]="selectedOption()!.name"
-              class="w-5 h-5 object-contain image-pixelated"
+              class="w-6 h-6 object-contain"
               (error)="onImgError($event)"
+              loading="lazy"
             />
           </div>
         }
 
         <input
           type="text"
-          [(ngModel)]="searchQuery"
-          (focus)="onFocus()"
-          (blur)="onBlur()"
+          [value]="selectedOption() ? selectedOption()!.name : ''"
           [placeholder]="placeholder()"
-          [readonly]="!searchable()"
-          class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary placeholder-tertiary focus:border-blue-500 outline-none transition-colors peer"
-          [class.cursor-pointer]="!searchable()"
+          readonly
+          class="w-full bg-surface border-2 border-theme rounded-lg px-4 py-4 text-sm text-primary placeholder-tertiary focus:border-blue-500 outline-none transition-colors peer cursor-pointer"
           [class.pl-10]="selectedOption()?.iconPath"
           [class.pr-8]="true"
+          (click)="toggleDropdown()"
+          (keydown.space)="$event.preventDefault(); toggleDropdown()"
+          (keydown.enter)="$event.preventDefault(); toggleDropdown()"
         />
 
         @if (label()) {
@@ -85,64 +88,126 @@ export interface CustomDropdownOption {
 
       @if (isOpen()) {
         <div
-          class="absolute z-50 w-full bg-surface border border-theme rounded-lg shadow-xl max-h-60 overflow-y-auto custom-scrollbar"
+          class="absolute z-50 w-full bg-surface border border-theme rounded-lg shadow-xl flex flex-col max-h-80 overflow-hidden"
           [class.mt-1]="dropdownDirection() === 'down'"
           [class.top-full]="dropdownDirection() === 'down'"
           [class.mb-1]="dropdownDirection() === 'up'"
           [class.bottom-full]="dropdownDirection() === 'up'"
         >
-          @if (filteredOptions().length === 0) {
-            <div class="px-3 py-2 text-secondary text-sm">No results found</div>
-          } @else {
-            @for (group of groupedOptions(); track group.label) {
-              @if (group.label) {
-                <div
-                  class="px-3 py-2 min-h-[40px] flex items-center text-sm font-bold text-secondary bg-surface border-b border-theme sticky top-0 z-10"
-                >
-                  {{ group.label }}
-                </div>
-              }
-              @for (option of group.items; track option.id) {
+          @if (searchable()) {
+            <div class="relative flex items-center">
+              <div class="absolute left-3 flex items-center pointer-events-none text-secondary">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+              <input
+                #searchInput
+                type="text"
+                [(ngModel)]="searchQuery"
+                [placeholder]="'Search...'"
+                class="w-full bg-surface pl-9 pr-8 py-2 text-sm text-primary placeholder-tertiary outline-none transition-colors border-b border-theme"
+                (click)="$event.stopPropagation()"
+              />
+              @if (searchQuery()) {
                 <button
                   type="button"
-                  (click)="selectOption(option)"
-                  [disabled]="option.id === undefined"
-                  class="w-full text-left px-3 py-2 transition-colors border-b border-theme last:border-b-0"
-                  [ngClass]="{
-                    'hover:bg-surface-hover cursor-pointer':
-                      option.id !== undefined && option.id !== selectedId(),
-                    'opacity-50 cursor-not-allowed bg-surface-hover': option.id === undefined,
-                    'bg-blue-500/10 text-blue-500 dark:text-blue-400 font-semibold':
-                      option.id !== undefined && option.id === selectedId(),
-                  }"
+                  (click)="searchQuery.set(''); $event.stopPropagation(); searchInput.focus()"
+                  class="absolute right-3 text-secondary hover:text-primary"
                 >
-                  <div class="flex items-center justify-between gap-2">
-                    <div class="flex flex-col min-w-0">
-                      <span class="font-medium text-primary truncate">{{ option.name }}</span>
-                      @if (option.descriptionHtml) {
-                        <span
-                          class="text-xs mt-0.5 truncate"
-                          [innerHTML]="option.descriptionHtml"
-                        ></span>
-                      } @else if (option.description) {
-                        <span class="text-xs text-secondary mt-0.5 truncate">{{
-                          option.description
-                        }}</span>
-                      }
-                    </div>
-                    @if (option.iconPath) {
-                      <img
-                        [src]="option.iconPath"
-                        [alt]="option.name"
-                        class="w-6 h-6 object-contain flex-shrink-0"
-                        (error)="onImgError($event)"
-                      />
-                    }
-                  </div>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
                 </button>
               }
-            }
+            </div>
           }
+          <div class="flex-1 overflow-y-auto custom-scrollbar">
+            @if (filteredOptions().length === 0) {
+              <div class="px-3 py-3 text-secondary text-sm text-center">No results found</div>
+            } @else {
+              @for (group of groupedOptions(); track group.label) {
+                @if (group.label) {
+                  <div
+                    class="px-3 py-2 min-h-[40px] flex items-center text-sm font-bold text-secondary bg-secondary/10 border-b border-theme"
+                  >
+                    {{ group.label }}
+                  </div>
+                }
+                @for (option of group.items; track option.id) {
+                  <button
+                    type="button"
+                    (click)="selectOption(option)"
+                    [disabled]="option.id === undefined"
+                    class="w-full text-left px-3 py-2.5 transition-colors border-b border-theme last:border-b-0"
+                    [ngClass]="{
+                      'hover:bg-surface-hover cursor-pointer':
+                        option.id !== undefined && option.id !== selectedId() && !option.active,
+
+                      'opacity-50 cursor-not-allowed bg-surface-hover': option.id === undefined,
+
+                      'bg-blue-500/10 text-blue-500 dark:text-blue-400 font-semibold':
+                        option.id !== undefined && (option.id === selectedId() || option.active),
+                    }"
+                  >
+                    <div class="flex items-center justify-between gap-2">
+                      <div class="flex flex-col min-w-0">
+                        <span class="font-medium text-primary truncate">{{ option.name }}</span>
+                        @if (option.descriptionHtml) {
+                          <span
+                            class="text-xs mt-0.5 truncate"
+                            [innerHTML]="option.descriptionHtml"
+                          ></span>
+                        } @else if (option.description) {
+                          <span class="text-xs text-secondary mt-0.5 truncate">{{
+                            option.description
+                          }}</span>
+                        }
+                      </div>
+                      @if (option.iconPath) {
+                        <img
+                          [src]="option.iconPath | cdnUrl: option.cdnFolder"
+                          [alt]="option.name"
+                          class="w-6 h-6 object-contain flex-shrink-0"
+                          (error)="onImgError($event)"
+                          loading="lazy"
+                        />
+                      }
+                    </div>
+                  </button>
+                }
+              }
+            }
+          </div>
+
+          <div class="p-2 border-t border-theme bg-secondary/5 flex-shrink-0 flex justify-end">
+            <button
+              type="button"
+              (click)="clearSelection($event)"
+              [disabled]="!selectedOption()"
+              class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-500/10 active:bg-red-500/20 rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+              Clear Selection
+            </button>
+          </div>
         </div>
       }
     </div>
@@ -153,7 +218,7 @@ export class CustomDropdownComponent {
   placeholder = input<string>('Select an option');
   selectedId = input<string>('');
   label = input<string>();
-  searchable = input<boolean>(true);
+  searchable = input<boolean>(false);
 
   valueChanged = output<string>();
 
@@ -162,19 +227,20 @@ export class CustomDropdownComponent {
   dropdownDirection = signal<'down' | 'up'>('down');
 
   @ViewChild('container') containerRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('searchInput') searchInputRef!: ElementRef<HTMLInputElement>;
 
-  selectedOption = computed(() => this.options().find((opt) => opt.id === this.selectedId()));
+  selectedOption = computed(() => this.options().find((option) => option.id === this.selectedId()));
 
   filteredOptions = computed(() => {
     const query = this.searchQuery().toLowerCase();
     if (!query || !this.searchable()) return this.options();
 
     return this.options().filter(
-      (opt) =>
-        opt.name.toLowerCase().includes(query) ||
-        opt.description?.toLowerCase().includes(query) ||
-        opt.id.toLowerCase().includes(query) ||
-        opt.searchTerms?.some((term) => term.toLowerCase().includes(query)),
+      (option) =>
+        option.name.toLowerCase().includes(query) ||
+        option.description?.toLowerCase().includes(query) ||
+        option.id.toLowerCase().includes(query) ||
+        option.searchTerms?.some((term) => term.toLowerCase().includes(query)),
     );
   });
 
@@ -206,17 +272,6 @@ export class CustomDropdownComponent {
 
     return result;
   });
-
-  constructor() {
-    effect(() => {
-      const selected = this.options().find((opt) => opt.id === this.selectedId());
-      if (selected && !this.isOpen()) {
-        this.searchQuery.set(selected.name);
-      } else if (!this.selectedId() && !this.isOpen()) {
-        this.searchQuery.set('');
-      }
-    });
-  }
 
   private calculateDirection() {
     if (!this.containerRef) return;
@@ -250,45 +305,26 @@ export class CustomDropdownComponent {
     this.isOpen.set(!this.isOpen());
     if (this.isOpen()) {
       this.calculateDirection();
-    } else {
-      const selected = this.options().find((opt) => opt.id === this.selectedId());
-      this.searchQuery.set(selected?.name || '');
-    }
-  }
-
-  onFocus() {
-    this.calculateDirection();
-    if (this.isOpen()) {
-      this.isOpen.set(false);
-      const selected = this.options().find((opt) => opt.id === this.selectedId());
-      this.searchQuery.set(selected?.name || '');
-      return;
-    }
-    this.isOpen.set(true);
-    if (!this.searchable()) {
-      const selected = this.options().find((opt) => opt.id === this.selectedId());
-      this.searchQuery.set(selected?.name || '');
+      this.searchQuery.set('');
+      setTimeout(() => {
+        this.searchInputRef?.nativeElement?.focus();
+      }, 50);
     } else {
       this.searchQuery.set('');
     }
   }
 
-  onBlur() {
-    setTimeout(() => {
-      if (this.searchQuery().trim() === '') {
-        this.valueChanged.emit('');
-        this.searchQuery.set('');
-      } else {
-        const selected = this.options().find((opt) => opt.id === this.selectedId());
-        this.searchQuery.set(selected?.name || '');
-      }
-    }, 200);
-  }
-
   selectOption(option: CustomDropdownOption) {
     if (option.id === undefined) return;
     this.valueChanged.emit(option.id);
-    this.searchQuery.set(option.name);
+    this.searchQuery.set('');
+    this.isOpen.set(false);
+  }
+
+  clearSelection(event: MouseEvent) {
+    event.stopPropagation();
+    this.valueChanged.emit('');
+    this.searchQuery.set('');
     this.isOpen.set(false);
   }
 
@@ -300,8 +336,7 @@ export class CustomDropdownComponent {
       !this.containerRef.nativeElement.contains(event.target as Node)
     ) {
       this.isOpen.set(false);
-      const selected = this.options().find((opt) => opt.id === this.selectedId());
-      this.searchQuery.set(selected?.name || '');
+      this.searchQuery.set('');
     }
   }
 

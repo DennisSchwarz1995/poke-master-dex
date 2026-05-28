@@ -8,7 +8,6 @@ import {
   inject,
   HostListener,
   effect,
-  AfterViewInit,
 } from '@angular/core';
 import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.constants';
 import { CommonModule } from '@angular/common';
@@ -32,6 +31,7 @@ import {
   NatureData,
   MarkData,
   RibbonData,
+  MoveData,
 } from '../../../shared/models/dataset.model';
 import { CustomDropdownOption } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
@@ -40,9 +40,10 @@ import { getGameIconPath } from '../../../core/constants/game-data.constants';
 import { PokemonEditHeaderComponent } from './components/pokemon-edit-header.component';
 import { PokemonEditStatsComponent } from './components/pokemon-edit-stats.component';
 import { PokemonEditAttributesComponent } from './components/pokemon-edit-attributes.component';
+import { CustomDropdownComponent } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 
 @Component({
-  selector: 'app-pokemon-detail-dialog',
+  selector: 'app-pokemon-edit-dialog',
   standalone: true,
   imports: [
     CommonModule,
@@ -50,6 +51,7 @@ import { PokemonEditAttributesComponent } from './components/pokemon-edit-attrib
     PokemonEditHeaderComponent,
     PokemonEditStatsComponent,
     PokemonEditAttributesComponent,
+    CustomDropdownComponent,
   ],
   template: `
     <div
@@ -80,7 +82,7 @@ import { PokemonEditAttributesComponent } from './components/pokemon-edit-attrib
 
               <button
                 (click)="close()"
-                class="text-secondary hover:text-primary transition-colors p-2 text-2xl leading-none block"
+                class="text-secondary hover:text-primary transition-colors text-2xl leading-none block"
                 aria-label="Close dialog"
               >
                 ×
@@ -97,8 +99,6 @@ import { PokemonEditAttributesComponent } from './components/pokemon-edit-attrib
                   [languageOptions]="languageOptions()"
                   [pokeballOptions]="pokeballOptions()"
                   [itemOptions]="itemOptions()"
-                  [abilityOptions]="abilityOptions()"
-                  [natureOptions]="natureOptions()"
                   [ribbonOptions]="ribbonOptions()"
                   [markOptions]="markOptions()"
                   [trainerOptions]="trainerOptions()"
@@ -111,7 +111,6 @@ import { PokemonEditAttributesComponent } from './components/pokemon-edit-attrib
                   [(gender)]="gender"
                   [(ball)]="ball"
                   [(item)]="item"
-                  [(nature)]="nature"
                   [(ribbon)]="ribbon"
                   [(mark)]="mark"
                   [(originalTrainer)]="originalTrainer"
@@ -122,18 +121,69 @@ import { PokemonEditAttributesComponent } from './components/pokemon-edit-attrib
                   (isOwnedChange)="onCaughtChange()"
                   [(isShiny)]="isShiny"
                   (isShinyChange)="updateSpritePreview()"
-                  [(ability)]="ability"
-                  (abilityChange)="onAbilityChange($event)"
                   (trainerSelected)="onTrainerSelect($event)"
                 ></app-pokemon-edit-attributes>
               </div>
               <div class="flex flex-col gap-[18px]">
+                <div class="grid grid-cols-2 gap-4">
+                  <app-custom-dropdown
+                    [label]="'Nature'"
+                    [options]="natureOptions()"
+                    [selectedId]="nature"
+                    [placeholder]="'Select Nature'"
+                    (valueChanged)="nature = $event"
+                  />
+                  <app-custom-dropdown
+                    [label]="'Ability'"
+                    [options]="abilityOptions()"
+                    [selectedId]="ability"
+                    [placeholder]="'Select Ability'"
+                    [searchable]="false"
+                    (valueChanged)="onAbilityChange($event)"
+                  />
+                </div>
+
                 <app-pokemon-edit-stats
                   [ivs]="ivs"
                   [evs]="evs"
                   (ivsChanged)="ivs = $event"
                   (evsChanged)="evs = $event"
                 ></app-pokemon-edit-stats>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <app-custom-dropdown
+                    [label]="'Move 1'"
+                    [options]="moveOptions()"
+                    [selectedId]="move1"
+                    [placeholder]="'Select Move 1'"
+                    [searchable]="true"
+                    (valueChanged)="move1 = $event"
+                  />
+                  <app-custom-dropdown
+                    [label]="'Move 2'"
+                    [options]="moveOptions()"
+                    [selectedId]="move2"
+                    [placeholder]="'Select Move 2'"
+                    [searchable]="true"
+                    (valueChanged)="move2 = $event"
+                  />
+                  <app-custom-dropdown
+                    [label]="'Move 3'"
+                    [options]="moveOptions()"
+                    [selectedId]="move3"
+                    [placeholder]="'Select Move 3'"
+                    [searchable]="true"
+                    (valueChanged)="move3 = $event"
+                  />
+                  <app-custom-dropdown
+                    [label]="'Move 4'"
+                    [options]="moveOptions()"
+                    [selectedId]="move4"
+                    [placeholder]="'Select Move 4'"
+                    [searchable]="true"
+                    (valueChanged)="move4 = $event"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -195,7 +245,7 @@ import { PokemonEditAttributesComponent } from './components/pokemon-edit-attrib
   `,
   styles: [],
 })
-export class PokemonDetailDialogComponent implements OnInit {
+export class PokemonEditDialogComponent implements OnInit {
   pokemon = input.required<BoxSlot>();
   dexId = input.required<string>();
   boxNumber = input.required<number>();
@@ -235,6 +285,7 @@ export class PokemonDetailDialogComponent implements OnInit {
   allMarks = signal<MarkData[]>([]);
   allRibbons = signal<RibbonData[]>([]);
   allPokemon = signal<SimplePokemon[]>([]);
+  allMoves = signal<MoveData[]>([]);
 
   genderState = computed(() => {
     const data = this.pokemonData();
@@ -257,8 +308,9 @@ export class PokemonDetailDialogComponent implements OnInit {
         description: ribbon.shortDesc,
         category: `Gen ${ribbon.gen}`,
         iconPath: AVAILABLE_SPRITES.ribbons.has(ribbon.id)
-          ? `assets/images/ribbons/${ribbon.id}.png`
+          ? `${ribbon.id}.png`
           : undefined,
+        cdnFolder: 'ribbons'
       }))
       .sort((a, b) => {
         const genA = parseInt(a.category.replace('Gen ', ''));
@@ -276,8 +328,9 @@ export class PokemonDetailDialogComponent implements OnInit {
         description: mark.shortDesc,
         category: `Gen ${mark.gen}`,
         iconPath: AVAILABLE_SPRITES.marks.has(mark.id)
-          ? `assets/images/marks/${mark.id}.png`
+          ? `${mark.id}.png`
           : undefined,
+          cdnFolder: 'marks'
       }))
       .sort((a, b) => {
         const genA = parseInt(a.category.replace('Gen ', ''));
@@ -361,8 +414,9 @@ export class PokemonDetailDialogComponent implements OnInit {
       description: ball.shortDesc,
       category: categoryLabels[ball.category] ?? ball.category,
       iconPath: AVAILABLE_SPRITES.pokeballs.has(ball.id)
-        ? `assets/images/pokeballs/${ball.id}.png`
+        ? `${ball.id}.webp`
         : undefined,
+      cdnFolder: 'pokeballs',
     }));
   });
 
@@ -379,9 +433,22 @@ export class PokemonDetailDialogComponent implements OnInit {
       description: item.shortDesc,
       category: categoryLabels[item.category] ?? item.category,
       iconPath: AVAILABLE_SPRITES.items.has(item.id)
-        ? `assets/images/items/${item.id}.png`
+        ? `${item.id}.png`
         : undefined,
+      cdnFolder: 'items',
     }));
+  });
+
+  moveOptions = computed<CustomDropdownOption[]>(() => {
+    return [
+      { id: '', name: 'None', description: 'Empty move slot' },
+      ...this.allMoves().map((m) => ({
+        id: m.id,
+        name: m.name,
+        description: `${m.type.charAt(0).toUpperCase() + m.type.slice(1)} | Power: ${m.power || '—'} | PP: ${m.pp}`,
+        category: `Generation ${m.gen}`,
+      })),
+    ];
   });
 
   pokemonGenus = computed(() => {
@@ -438,6 +505,10 @@ export class PokemonDetailDialogComponent implements OnInit {
   mark = '';
   ribbon = '';
   gender = '';
+  move1 = '';
+  move2 = '';
+  move3 = '';
+  move4 = '';
 
   ivs: StatsMap = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
   evs: StatsMap = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
@@ -531,6 +602,10 @@ export class PokemonDetailDialogComponent implements OnInit {
     this.mark = pkmn.mark || '';
     this.ribbon = pkmn.ribbon || '';
     this.gender = pkmn.gender || '';
+    this.move1 = pkmn.moves?.[0] || '';
+    this.move2 = pkmn.moves?.[1] || '';
+    this.move3 = pkmn.moves?.[2] || '';
+    this.move4 = pkmn.moves?.[3] || '';
     if (pkmn.ivs) this.ivs = { ...pkmn.ivs };
     if (pkmn.evs) this.evs = { ...pkmn.evs };
 
@@ -545,6 +620,7 @@ export class PokemonDetailDialogComponent implements OnInit {
     this.datasetService.loadNatures().subscribe((natures) => this.allNatures.set(natures));
     this.datasetService.loadMarks().subscribe((marks) => this.allMarks.set(marks));
     this.datasetService.loadRibbons().subscribe((ribbons) => this.allRibbons.set(ribbons));
+    this.datasetService.loadMoves().subscribe((moves) => this.allMoves.set(moves));
     this.datasetService.getSimplePokemonList().subscribe((pokemonList) => {
       this.allPokemon.set(pokemonList);
     });
@@ -704,6 +780,7 @@ export class PokemonDetailDialogComponent implements OnInit {
         mark: this.mark || null,
         ribbon: this.ribbon || null,
         gender: this.gender || null,
+        moves: [this.move1 || '', this.move2 || '', this.move3 || '', this.move4 || ''],
         ivs: { ...this.ivs },
         evs: { ...this.evs },
       };

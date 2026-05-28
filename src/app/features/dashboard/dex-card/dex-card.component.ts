@@ -2,11 +2,12 @@ import { Component, input, output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../core/services/theme.service';
 import { Dex, DexType } from '../../../shared/models/dex.model';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
 
 @Component({
   selector: 'app-dex-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CdnUrlPipe],
   template: `
     @if (dex(); as currentDex) {
       <div
@@ -29,9 +30,10 @@ import { Dex, DexType } from '../../../shared/models/dex.model';
               >
                 <img
                   [src]="
-                    themeService.currentTheme() === 'dark'
-                      ? '/assets/images/icons/options-white.png'
-                      : '/assets/images/icons/options-black.png'
+                    (themeService.currentTheme() === 'dark'
+                      ? 'options-white.png'
+                      : 'options-black.png'
+                    ) | cdnUrl: 'icons'
                   "
                   class="w-5 h-5 opacity-70 hover:opacity-100"
                   alt="Options"

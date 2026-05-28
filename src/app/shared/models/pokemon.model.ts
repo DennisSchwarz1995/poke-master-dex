@@ -1,12 +1,12 @@
 export interface AppPokemon {
-  slug: string;           // "pikachu", "charizard-mega-x"
-  dexNum: number;         // National Dex number
-  name: string;           // Display name (localized)
-  nameGerman?: string;    // German name
-  types: string[];        // ["electric"], ["fire", "flying"]
-  spriteUrl: string;      // URL to sprite image
+  slug: string; // "pikachu", "charizard-mega-x"
+  dexNum: number; // National Dex number
+  name: string; // Display name (localized)
+  nameGerman?: string; // German name
+  types: string[]; // ["electric"], ["fire", "flying"]
+  spriteUrl: string; // URL to sprite image
   officialArtUrl?: string; // URL to official artwork
-  
+
   stats: {
     hp: number;
     atk: number;
@@ -15,15 +15,15 @@ export interface AppPokemon {
     spDef: number;
     speed: number;
   };
-   
+
   isForm: boolean;
   isMega: boolean;
   isGmax: boolean;
   isShiny?: boolean;
   height: number;
   weight: number;
-  genus?: string;         // "Mouse Pokémon"
-  abilities: string[];    // ["static", "lightning-rod"]
+  genus?: string; // "Mouse Pokémon"
+  abilities: string[]; // ["static", "lightning-rod"]
 }
 
 export interface PokemonListItem {

@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Dex } from '../../shared/models/dex.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DexStateService {
   currentDex = signal<Dex | null>(null);

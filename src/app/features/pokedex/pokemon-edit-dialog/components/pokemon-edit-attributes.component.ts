@@ -176,7 +176,7 @@ import {
             (ngModelChange)="level.set($event)"
             min="1"
             max="100"
-            class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary focus:border-blue-500 outline-none transition-colors peer placeholder-transparent no-spinners"
+            class="w-full bg-surface border-2 border-theme rounded-lg px-4 py-4 text-sm text-primary focus:border-blue-500 outline-none transition-colors peer placeholder-transparent no-spinners"
             placeholder="Level"
           />
           <label
@@ -275,31 +275,9 @@ import {
           [selectedId]="item()"
           [label]="'Held Item'"
           [placeholder]="'Select Held Item'"
+          [searchable]="true"
           (valueChanged)="item.set($event)"
         />
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div class="relative group">
-          <app-custom-dropdown
-            [label]="'Ability'"
-            [options]="abilityOptions()"
-            [selectedId]="ability()"
-            [placeholder]="'Select Ability'"
-            [searchable]="false"
-            (valueChanged)="ability.set($event)"
-          />
-        </div>
-
-        <div class="relative group">
-          <app-custom-dropdown
-            [label]="'Nature'"
-            [options]="natureOptions()"
-            [selectedId]="nature()"
-            [placeholder]="'Select Nature'"
-            (valueChanged)="nature.set($event)"
-          />
-        </div>
       </div>
 
       <div class="flex flex-col gap-[18px]">
@@ -308,6 +286,7 @@ import {
           [selectedId]="ribbon()"
           [label]="'Ribbon'"
           [placeholder]="'Select Ribbon'"
+          [searchable]="true"
           (valueChanged)="ribbon.set($event)"
         />
 
@@ -316,6 +295,7 @@ import {
           [selectedId]="mark()"
           [label]="'Mark'"
           [placeholder]="'Select Mark'"
+          [searchable]="true"
           (valueChanged)="mark.set($event)"
         />
       </div>
@@ -401,8 +381,6 @@ export class PokemonEditAttributesComponent {
   gender = model<string>('');
   ball = model<string>('');
   item = model<string>('');
-  ability = model<string>('');
-  nature = model<string>('');
   ribbon = model<string>('');
   mark = model<string>('');
   originalTrainer = model<string>('');
@@ -416,8 +394,6 @@ export class PokemonEditAttributesComponent {
   languageOptions = input<CustomDropdownOption[]>([]);
   pokeballOptions = input<CustomDropdownOption[]>([]);
   itemOptions = input<CustomDropdownOption[]>([]);
-  abilityOptions = input<CustomDropdownOption[]>([]);
-  natureOptions = input<CustomDropdownOption[]>([]);
   ribbonOptions = input<CustomDropdownOption[]>([]);
   markOptions = input<CustomDropdownOption[]>([]);
   trainerOptions = input<CustomDropdownOption[]>([]);

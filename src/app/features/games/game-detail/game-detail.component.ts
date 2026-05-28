@@ -4,11 +4,13 @@ import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { DatasetService, SimplePokemon } from '../../../core/api/services/dataset.service';
 import { GameData } from '../../../shared/models/dataset.model';
 import { GameCard } from '../game-card/game-card.component';
+import { CapitalizePipe } from '../../../shared/pipes/capitalize-pipe';
+import { CdnUrlPipe } from "../../../shared/pipes/cdnUrl-pipe";
 
 @Component({
   selector: 'app-game-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, GameCard],
+  imports: [CommonModule, RouterLink, GameCard, CapitalizePipe, CdnUrlPipe],
   template: `
     <div class="flex flex-col bg-bg-secondary p-4 sm:p-6 lg:p-8">
       <div class="max-w-5xl mx-auto w-full space-y-6">
@@ -28,7 +30,7 @@ import { GameCard } from '../game-card/game-card.component';
                   </h1>
                   @if (getGameIconUrl(game.id)) {
                     <img
-                      [src]="getGameIconUrl(game.id)"
+                      [src]="getGameIconUrl(game.id) | cdnUrl: 'games'"
                       class="inline-block w-16 h-16 object-fit z-20 drop-shadow flex-shrink-0 border border-theme rounded-xl"
                       (error)="onImageError($event)"
                     />
@@ -59,8 +61,8 @@ import { GameCard } from '../game-card/game-card.component';
                   <div class="flex items-center text-xl font-small text-primary">
                     <span
                       >Pokémon {{ game.name }} is a Game from Generation {{ game.gen }} which takes
-                      place in the {{ game.region | titlecase }} region. It is part of the
-                      {{ game.series | titlecase }} series.</span
+                      place in the {{ game.region | capitalize }} region. It is part of the
+                      {{ game.series | capitalize }} series.</span
                     >
                   </div>
                 </div>
@@ -154,7 +156,7 @@ import { GameCard } from '../game-card/game-card.component';
               >
                 <div class="relative w-full h-full">
                   <img
-                    [src]="getGameImage(game)"
+                    [src]="getGameImage(game) | cdnUrl: 'gametiles'"
                     [alt]="game.name"
                     class="w-full h-full object-cover rounded-2xl drop-shadow-xl z-10 transition-transform duration-500 hover:scale-105"
                     (error)="onImageError($event)"
@@ -336,7 +338,7 @@ export class GameDetailComponent implements OnInit {
     };
 
     const slug = specialCases[game.nameSlug] || game.nameSlug.replace(/-/g, '_');
-    return `assets/images/gametiles/${slug}.webp`;
+    return `${slug}.webp`;
   }
 
   getGameIconUrl(gameCode: string): string {
@@ -392,7 +394,7 @@ export class GameDetailComponent implements OnInit {
       col: 'coloseum.png',
     };
     const filename = map[gameCode.toLowerCase()];
-    return filename ? `assets/images/games/${filename}` : '';
+    return filename ? `${filename}` : '';
   }
 
   platform = computed(() => {

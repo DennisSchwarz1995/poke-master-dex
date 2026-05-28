@@ -51,6 +51,7 @@ export interface BoxSlot {
   ivs?: StatsMap;
   evs?: StatsMap;
   gender?: string;
+  moves?: string[];
 }
 
 export interface Box {

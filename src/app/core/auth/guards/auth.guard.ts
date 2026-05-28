@@ -6,14 +6,14 @@ import { map } from 'rxjs/operators';
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  
+
   return authService.getAuthState().pipe(
-    map(user => {
+    map((user) => {
       if (user) {
         return true;
       }
-      
+
       return router.createUrlTree(['/login']);
-    })
+    }),
   );
 };

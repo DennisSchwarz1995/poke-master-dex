@@ -7,7 +7,7 @@ import { DatasetService } from '../../../core/api/services/dataset.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { DexStateService } from '../../../core/services/dex-state.service';
 import { PokemonSpriteComponent } from '../../../shared/components/pokemon-sprite/pokemon-sprite.component';
-import { PokemonDetailDialogComponent } from '../pokemon-edit-dialog/pokemon-edit-dialog.component';
+import { PokemonEditDialogComponent } from '../pokemon-edit-dialog/pokemon-edit-dialog.component';
 import { PokemonViewDialogComponent } from '../pokemon-view-dialog/pokemon-view-dialog.component';
 import {
   BoxOptionsDialogComponent,
@@ -18,9 +18,11 @@ import { firstValueFrom } from 'rxjs';
 import {
   QuickEditBarComponent,
   QuickEditState,
-} from '../../../shared/components/quick-edit-bar/quick-edit-bar.component';
+} from '../../../shared/components/tool-bar/tool-bar.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 import { RouterLink } from '@angular/router';
+import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
+import { CdnUrlPipe } from "../../../shared/pipes/cdnUrl-pipe";
 
 @Component({
   selector: 'app-box-view',
@@ -29,40 +31,56 @@ import { RouterLink } from '@angular/router';
     CommonModule,
     FormsModule,
     PokemonSpriteComponent,
-    PokemonDetailDialogComponent,
+    PokemonEditDialogComponent,
     BoxOptionsDialogComponent,
-    QuickEditBarComponent,
     PokemonViewDialogComponent,
     RouterLink,
-  ],
+    TooltipDirective,
+    CdnUrlPipe
+],
   template: `
     <div class="min-h-[calc(100vh-16rem)] bg-secondary flex flex-col">
       <main class="container mx-auto px-4 flex-1 flex flex-col pt-6 gap-6">
-        <nav class="flex items-center justify-start gap-4">
-          <a
-            routerLink="/pokedex"
-            class="flex items-center gap-2 text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme px-3 py-1.5 rounded-xl border border-theme hover:shadow-sm"
-          >
-            <svg
-              class="w-5 h-5 flex-shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2.5"
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            <span class="hidden sm:inline">Back to Pokédex</span>
-          </a>
-        </nav>
-        @if (box()) {
-          <app-quick-edit-bar (modeChanged)="onQuickEditModeChanged($event)" />
-        }
+        <div class="relative flex items-center justify-between w-full">
+          <div class="flex justify-start">
+            <nav class="flex-shrink-0">
+              <a
+                routerLink="/pokedex"
+                class="flex z-10 relative items-center gap-2 text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme px-3 py-1.5 rounded-xl border border-theme hover:shadow-sm"
+              >
+                <svg
+                  class="w-5 h-5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+                <span class="hidden sm:inline">Back to Pokédex</span>
+              </a>
+            </nav>
+          </div>
 
+          <div
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[220px] xs:max-w-xs sm:max-w-sm md:max-w-md z-0 px-2"
+          ></div>
+
+          <!-- <div class="flex-shrink-0 z-10 relative">
+            <app-tool-bar
+              (modeChanged)="onQuickEditModeChanged($event)"
+              [pendingEditsCount]="pendingEdits().size"
+              [isSaving]="isSavingBatch()"
+              (save)="saveAllEdits()"
+              (discard)="discardAllEdits()"
+              class="max-h-f"
+            />
+          </div> -->
+        </div>
         @if (!box() && loading()) {
           <div class="text-center py-12">
             <div
@@ -77,7 +95,11 @@ import { RouterLink } from '@angular/router';
           >
             <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
               <div class="flex items-center justify-center md:justify-start gap-2 overflow-hidden">
-                <h2 class="text-xl sm:text-2xl font-bold truncate" [title]="currentBoxData.name">
+                <h2
+                  class="text-xl sm:text-2xl font-bold truncate"
+                  [appTooltip]="currentBoxData.name"
+                  tooltipPosition="top"
+                >
                   {{ currentBoxData.name }}
                 </h2>
               </div>
@@ -86,7 +108,8 @@ import { RouterLink } from '@angular/router';
                 <button
                   (click)="onPreviousBox()"
                   class="px-2 sm:px-4 py-1 sm:py-2 bg-secondary rounded hover:bg-surface-hover transition-colors font-bold text-lg"
-                  title="Previous Box"
+                  [appTooltip]="'Previous Box'"
+                  tooltipPosition="top"
                 >
                   ←
                 </button>
@@ -98,7 +121,8 @@ import { RouterLink } from '@angular/router';
                 <button
                   (click)="onNextBox()"
                   class="px-2 sm:px-4 py-1 sm:py-2 bg-secondary rounded hover:bg-surface-hover transition-colors font-bold text-lg"
-                  title="Next Box"
+                  [appTooltip]="'Next Box'"
+                  tooltipPosition="top"
                 >
                   →
                 </button>
@@ -114,11 +138,7 @@ import { RouterLink } from '@angular/router';
                   title="Box Options"
                 >
                   <img
-                    [src]="
-                      themeService.currentTheme() === 'dark'
-                        ? '/assets/images/icons/options-white.png'
-                        : '/assets/images/icons/options-black.png'
-                    "
+                    [src]="(themeService.currentTheme() === 'dark' ? 'options-white.png' : 'options-black.png') | cdnUrl:'icons'"
                     class="w-5 h-5 opacity-70 hover:opacity-100"
                     alt="Options"
                   />
@@ -142,7 +162,7 @@ import { RouterLink } from '@angular/router';
     </div>
 
     @if (showDetailDialog() && selectedSlot()) {
-      <app-pokemon-detail-dialog
+      <app-pokemon-edit-dialog
         [pokemon]="selectedSlot()!"
         [dexId]="dexId()"
         [boxNumber]="currentBox()"

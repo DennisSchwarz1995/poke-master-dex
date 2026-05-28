@@ -141,6 +141,62 @@ export class FirestoreService {
     }
   }
 
+
+  async updateMultipleSlots(
+    dexId: string,
+    updatesMap: Map<string, Partial<BoxSlot>>,
+  ): Promise<void> {
+    const userId = this.authService.user()?.uid;
+    if (!userId) throw new Error('User not authenticated');
+
+    const boxUpdates = new Map<number, Array<{ position: number; updates: Partial<BoxSlot> }>>();
+    updatesMap.forEach((updates, key) => {
+      const [boxNumStr, posStr] = key.split('_');
+      const boxNum = parseInt(boxNumStr, 10);
+      const position = parseInt(posStr, 10);
+      if (!boxUpdates.has(boxNum)) {
+        boxUpdates.set(boxNum, []);
+      }
+      boxUpdates.get(boxNum)!.push({ position, updates });
+    });
+
+    const promises = Array.from(boxUpdates.entries()).map(async ([boxNum, slotUpdates]) => {
+      const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNum}`);
+      const snapshot = await getDoc(boxRef);
+      if (!snapshot.exists()) throw new Error(`Box ${boxNum} does not exist`);
+
+      const data = snapshot.data();
+      let slots = data['slots'];
+
+      if (slots && typeof slots === 'object' && !Array.isArray(slots)) {
+        const slotsArray = Object.values(slots) as BoxSlot[];
+        slotsArray.sort((a, b) => a.position - b.position);
+        slots = slotsArray;
+      }
+
+      if (!Array.isArray(slots)) {
+        throw new Error('Invalid slots data');
+      }
+
+      slotUpdates.forEach(({ position, updates }) => {
+        const index = position - 1;
+        if (index >= 0 && index < slots.length) {
+          slots[index] = { ...slots[index], ...updates };
+          Object.keys(slots[index]).forEach((key) => {
+            if (slots[index][key as keyof BoxSlot] === undefined) {
+              delete slots[index][key as keyof BoxSlot];
+            }
+          });
+        }
+      });
+
+      await updateDoc(boxRef, { slots });
+    });
+
+    await Promise.all(promises);
+  }
+
+
   getDexBoxes(dexId: string): Observable<Box[]> {
     const userId = this.authService.user()?.uid;
     if (!userId) return of([]);

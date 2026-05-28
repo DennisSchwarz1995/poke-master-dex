@@ -4,12 +4,14 @@ import { RouterLink } from '@angular/router';
 import { DatasetPokemon, DatasetService } from '../../../core/api/services/dataset.service';
 import { TypeColorService } from '../../../core/services/type-color.service';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
+import { CapitalizePipe } from '../../pipes/capitalize-pipe';
+import { CdnUrlPipe } from "../../pipes/cdnUrl-pipe";
 
 @Component({
   selector: 'app-dataset-pokemon-card',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CapitalizePipe, CdnUrlPipe],
   template: `
     <a
       [routerLink]="['/pokemon', pokemon().id]"
@@ -27,18 +29,18 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
 
       <div class="absolute top-2.5 right-2.5 flex flex-row gap-1.5 z-20">
         <img
-          [src]="'assets/images/types/' + pokemon().type1 + '.png'"
-          [title]="pokemon().type1 | titlecase"
-          [alt]="pokemon().type1 | titlecase"
+          [src]="pokemon().type1 + '.png' | cdnUrl:'types'"
+          [title]="pokemon().type1 | capitalize"
+          [alt]="pokemon().type1 | capitalize"
           class="h-4 drop-shadow-md rounded-full bg-surface"
           (error)="onImageError($event)"
           draggable="false"
         />
         @if (pokemon().type2) {
           <img
-            [src]="'assets/images/types/' + pokemon().type2 + '.png'"
-            [title]="pokemon().type2 | titlecase"
-            [alt]="pokemon().type2 | titlecase"
+            [src]="pokemon().type2 + '.png' | cdnUrl:'types'"
+            [title]="pokemon().type2 | capitalize"
+            [alt]="pokemon().type2 | capitalize"
             class="h-4 drop-shadow-md rounded-full bg-surface"
             (error)="onImageError($event)"
             draggable="false"
@@ -76,7 +78,7 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
         }
       </div>
     </a>
-  `
+  `,
 })
 export class DatasetPokemonCardComponent {
   datasetService = inject(DatasetService);
@@ -108,7 +110,12 @@ export class DatasetPokemonCardComponent {
     }
     const color2 = this.typeColorService.getTypeColor(pkmn.type2);
     return {
-      'background-image': 'linear-gradient(var(--color-surface), var(--color-surface)), linear-gradient(to bottom right, ' + color1 + ', ' + color2 + ')',
+      'background-image':
+        'linear-gradient(var(--color-surface), var(--color-surface)), linear-gradient(to bottom right, ' +
+        color1 +
+        ', ' +
+        color2 +
+        ')',
       'background-origin': 'border-box',
       'background-clip': 'padding-box, border-box',
       'border-color': 'transparent',

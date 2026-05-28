@@ -4,11 +4,12 @@ import { DatasetService } from '../../../core/api/services/dataset.service';
 import { TypeColorService } from '../../../core/services/type-color.service';
 import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
+import { CdnUrlPipe } from "../../pipes/cdnUrl-pipe";
 
 @Component({
   selector: 'app-pokemon-sprite',
   standalone: true,
-  imports: [CommonModule, TooltipDirective],
+  imports: [CommonModule, TooltipDirective, CdnUrlPipe],
   template: `
     <div
       class="flex flex-col items-center p-2 rounded-lg transition-all duration-200 cursor-pointer border-2 bg-surface-raised"
@@ -35,7 +36,7 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
           @if (isShiny()) {
             <div class="absolute top-0 right-0 text-yellow-500 text-lg" title="Shiny">
               <img
-                src="assets/images/special_attributes/shiny-stars.png"
+                [src]="'ShinySVStar.png' | cdnUrl: 'special_attributes'"
                 alt="Shiny"
                 class="w-5 h-5 object-contain"
               />

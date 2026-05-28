@@ -48,8 +48,6 @@
   --color-surface-hover: #27272a;
   --color-surface-raised: #1c1c1c;
 
-
-
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
@@ -147,7 +145,6 @@ body {
     color 0.3s ease;
 }
 
-
 .app-custom-tooltip {
   position: absolute;
   background-color: var(--color-text-primary, #333);
@@ -164,30 +161,62 @@ body {
   letter-spacing: 0.02em;
 }
 
-.tooltip-top { animation: tooltipFadeInTop 0.15s ease-out forwards; }
-.tooltip-bottom { animation: tooltipFadeInBottom 0.15s ease-out forwards; }
-.tooltip-left { animation: tooltipFadeInLeft 0.15s ease-out forwards; }
-.tooltip-right { animation: tooltipFadeInRight 0.15s ease-out forwards; }
+.tooltip-top {
+  animation: tooltipFadeInTop 0.15s ease-out forwards;
+}
+.tooltip-bottom {
+  animation: tooltipFadeInBottom 0.15s ease-out forwards;
+}
+.tooltip-left {
+  animation: tooltipFadeInLeft 0.15s ease-out forwards;
+}
+.tooltip-right {
+  animation: tooltipFadeInRight 0.15s ease-out forwards;
+}
 
 @keyframes tooltipFadeInTop {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes tooltipFadeInBottom {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes tooltipFadeInLeft {
-  from { opacity: 0; transform: translateX(4px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 @keyframes tooltipFadeInRight {
-  from { opacity: 0; transform: translateX(-4px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .app-custom-tooltip::after {
-  content: "";
+  content: '';
   position: absolute;
   border-style: solid;
 }

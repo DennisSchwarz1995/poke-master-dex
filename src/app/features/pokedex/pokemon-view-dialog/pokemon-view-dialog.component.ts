@@ -3,17 +3,16 @@ import {
   input,
   output,
   signal,
-  OnInit,
   inject,
   HostListener,
-  ViewChild,
-  ElementRef,
-  effect,
   computed,
 } from '@angular/core';
+import { toObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { switchMap, of } from 'rxjs';
+
 import { BoxSlot } from '../../../shared/models/dex.model';
 import { ThemeService } from '../../../core/services/theme.service';
-import { NatureData } from '../../../shared/models/dataset.model';
+import { NatureData, RibbonData, MarkData } from '../../../shared/models/dataset.model';
 import { DatasetService, DatasetPokemon } from '../../../core/api/services/dataset.service';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 import { CapitalizePipe } from '../../../shared/pipes/capitalize-pipe';
@@ -25,11 +24,12 @@ import {
   getGameOriginMark,
 } from '../../../core/constants/game-data.constants';
 import { CommonModule } from '@angular/common';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
 
 @Component({
   selector: 'app-pokemon-view-dialog',
   standalone: true,
-  imports: [CommonModule, CapitalizePipe, TooltipDirective, PokemonStatchartComponent],
+  imports: [CommonModule, CapitalizePipe, TooltipDirective, PokemonStatchartComponent, CdnUrlPipe],
   template: `
     <div
       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
@@ -65,7 +65,7 @@ import { CommonModule } from '@angular/common';
                     >
                       @if (pokemonData()?.type1) {
                         <img
-                          [src]="'assets/images/types/' + pokemonData()!.type1 + '.png'"
+                          [src]="pokemonData()!.type1 + '.png' | cdnUrl: 'types'"
                           [appTooltip]="pokemonData()?.type1 | capitalize"
                           [alt]="pokemonData()?.type1 | capitalize"
                           class="h-5 object-contain drop-shadow bg-surface rounded-full shadow-sm"
@@ -74,7 +74,7 @@ import { CommonModule } from '@angular/common';
                       }
                       @if (pokemonData()?.type2) {
                         <img
-                          [src]="'assets/images/types/' + pokemonData()!.type2 + '.png'"
+                          [src]="pokemonData()!.type2 + '.png' | cdnUrl: 'types'"
                           [appTooltip]="pokemonData()?.type2 | capitalize"
                           [alt]="pokemonData()?.type2 | capitalize"
                           class="h-5 object-contain drop-shadow bg-surface rounded-full shadow-sm"
@@ -85,16 +85,14 @@ import { CommonModule } from '@angular/common';
                   }
                 </div>
               </div>
-              <div class="flex flex-col justify-center flex-1 min-w-0">
-                <div class="flex items-center gap-3 flex-wrap">
-                  <div
-                    class="w-10 h-10 bg-surface border border-theme rounded-full shadow flex items-center justify-center flex-none"
-                  >
+              <div class="flex flex-col self-start flex-1 min-w-0">
+                <div class="flex items-center flex-wrap">
+                  <div class="w-10 h-10 flex items-center justify-center flex-none">
                     <img
-                      [src]="'assets/images/pokeballs/' + (pkmn.ball || 'pokeball') + '.png'"
+                      [src]="pkmn.ball | cdnUrl: 'pokeballs'"
                       [alt]="pkmn.ball | capitalize"
                       [appTooltip]="pkmn.ball | capitalize"
-                      class="w-7 h-7 object-contain"
+                      class="w-12 h-12 object-contain"
                       [class.grayscale]="!pkmn.ball"
                       (error)="onImageError($event)"
                     />
@@ -104,23 +102,24 @@ import { CommonModule } from '@angular/common';
                     {{ pkmn.customName || localizedName() || pkmn.pokemonSlug || 'Empty Slot' }}
                   </h2>
 
-                  @if (pkmn.isShiny) {
-                    <div
-                      class="p-1 bg-surface border border-theme rounded-full shadow flex items-center justify-center w-7 h-7 flex-none"
-                      [appTooltip]="'Shiny'"
-                    >
-                      <img
-                        src="assets/images/special_attributes/shiny-stars.png"
-                        class="w-4 h-4 object-contain"
-                      />
-                    </div>
-                  }
-
                   @if (pkmn.level) {
                     <div
                       class="font-bold text-primary flex items-center gap-1 opacity-80 flex-none"
                     >
                       <span class="text-sm">Lv.</span><span class="text-lg">{{ pkmn.level }}</span>
+                    </div>
+                  }
+
+                  @if (pkmn.isShiny) {
+                    <div
+                      class="p-1 bg-surface flex items-center justify-center w-7 h-7 flex-none"
+                      [appTooltip]="'Shiny'"
+                    >
+                      <img
+                        [src]="'ShinySVStar.png' | cdnUrl: 'special_attributes'"
+                        class="w-12 h-12 object-contain"
+                        alt="Shiny"
+                      />
                     </div>
                   }
 
@@ -132,6 +131,7 @@ import { CommonModule } from '@angular/common';
                       width="24px"
                       fill="#4285f4"
                       class="flex-none"
+                      alt="Male"
                     >
                       <path
                         d="M797.5-797.5v235h-75V-669L558-505.5q19 28 29.25 59.66Q597.5-414.18 597.5-380q0 90.95-63.28 154.23-63.28 63.27-154.25 63.27t-154.22-63.28q-63.25-63.28-63.25-154.25t63.27-154.22Q289.05-597.5 380-597.5q33.5 0 65.5 10T505-558l164-164.5H562.5v-75h235ZM279.25-480.78q-41.75 41.73-41.75 100.75 0 59.03 41.72 100.78 41.73 41.75 100.75 41.75 59.03 0 100.78-41.72 41.75-41.73 41.75-100.75 0-59.03-41.72-100.78-41.73-41.75-100.75-41.75-59.03 0-100.78 41.72Z"
@@ -155,14 +155,16 @@ import { CommonModule } from '@angular/common';
 
                   @if (pkmn.isGmax) {
                     <img
-                      src="assets/images/special_attributes/gigantamax.png"
+                      [src]="'gigantamax.png' | cdnUrl: 'special_attributes'"
+                      alt="'Gigantamax'"
                       class="h-6 w-6 object-contain flex-none"
                       [appTooltip]="'Gigantamax'"
                     />
                   }
                   @if (pkmn.isAlpha) {
                     <img
-                      src="assets/images/special_attributes/alpha.png"
+                      [src]="'alpha.png' | cdnUrl: 'special_attributes'"
+                      alt="Alpha"
                       class="h-6 w-6 object-contain flex-none"
                       [appTooltip]="'Alpha'"
                     />
@@ -182,19 +184,11 @@ import { CommonModule } from '@angular/common';
                         class="w-5 h-5 flex items-center justify-center opacity-70"
                         [appTooltip]="originMark()!.name"
                       >
-                        @if (themeService.currentTheme() === 'dark') {
-                          <img
-                            [src]="'assets/images/origin_marks/' + originMark()!.id + '-white.png'"
-                            class="w-5 h-5"
-                            [alt]="originMark()!.name"
-                          />
-                        } @else {
-                          <img
-                            [src]="'assets/images/origin_marks/' + originMark()!.id + '-black.png'"
-                            class="w-5 h-5"
-                            [alt]="originMark()!.name"
-                          />
-                        }
+                        <img
+                          [src]="(themeService.currentTheme() === 'dark' ? originMark()!.id + '-white.png' : originMark()!.id + '-black.png') | cdnUrl: 'origin_marks'"
+                          class="w-5 h-5"
+                          [alt]="originMark()!.name"
+                        />
                       </div>
                     }
                   </div>
@@ -236,6 +230,7 @@ import { CommonModule } from '@angular/common';
                   <path d="M12 8h.01"></path>
                 </svg>
               </button>
+
               <button
                 (click)="activeTabIndex.set(1)"
                 class="w-16 h-16 flex flex-col items-center justify-center rounded-xl transition-all"
@@ -244,12 +239,12 @@ import { CommonModule } from '@angular/common';
                     ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
                     : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
                 "
-                [appTooltip]="'Stats'"
+                [appTooltip]="'Moves'"
                 tooltipPosition="right"
               >
                 <img
-                  src="assets/images/icons/stats.png"
-                  alt="Stats"
+                  [src]="'ribbon.png' | cdnUrl: 'icons'"
+                  alt="Moves"
                   class="w-6 h-6 transition-all"
                   [style.filter]="
                     themeService.currentTheme() === 'dark'
@@ -266,11 +261,33 @@ import { CommonModule } from '@angular/common';
                     ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
                     : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
                 "
+                [appTooltip]="'Stats'"
+                tooltipPosition="right"
+              >
+                <img
+                  [src]="'stats.png' | cdnUrl: 'icons'"
+                  alt="Stats"
+                  class="w-6 h-6 transition-all"
+                  [style.filter]="
+                    themeService.currentTheme() === 'dark'
+                      ? 'brightness(0) invert(1)'
+                      : 'brightness(0)'
+                  "
+                />
+              </button>
+              <button
+                (click)="activeTabIndex.set(3)"
+                class="w-16 h-16 flex flex-col items-center justify-center rounded-xl transition-all"
+                [ngClass]="
+                  activeTabIndex() === 3
+                    ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
+                    : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
+                "
                 [appTooltip]="'Ribbons & Marks'"
                 tooltipPosition="right"
               >
                 <img
-                  src="assets/images/icons/ribbon.png"
+                  [src]="'ribbon.png' | cdnUrl: 'icons'"
                   alt="Ribbons"
                   class="w-6 h-6 transition-all"
                   [style.filter]="
@@ -334,7 +351,7 @@ import { CommonModule } from '@angular/common';
                             <div class="flex items-center gap-2">
                               @if (originGameIcon()) {
                                 <img
-                                  [src]="originGameIcon()"
+                                  [src]="originGameIcon() | cdnUrl: 'gametiles'"
                                   class="w-6 h-6 object-contain drop-shadow-sm"
                                   [appTooltip]="originGameName()"
                                   [alt]="originGameName()"
@@ -349,6 +366,75 @@ import { CommonModule } from '@angular/common';
                   } @else {
                     <div class="flex flex-col items-center justify-center h-40 text-tertiary">
                       <p class="text-lg">This slot is empty.</p>
+                    </div>
+                  }
+                </div>
+
+                <div class="w-full h-full flex-shrink-0 overflow-y-auto custom-scrollbar p-6">
+                  @if (pkmn.pokemonSlug) {
+                    <div class="max-w-md mx-auto space-y-6">
+                      <h3
+                        class="text-sm font-bold text-secondary uppercase tracking-wider mb-4 border-b border-theme pb-2"
+                      >
+                        Moves
+                      </h3>
+
+                      @if (hasAnyMove(pkmn)) {
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          @for (move of formattedMoves(); track $index) {
+                            @if (move) {
+                              <div
+                                class="p-4 bg-secondary/10 border border-theme rounded-2xl flex items-center justify-between shadow-sm hover:bg-secondary/20 transition-all duration-300 relative overflow-hidden group"
+                              >
+                                <div class="flex flex-col">
+                                  <span
+                                    class="text-xs text-secondary opacity-60 uppercase font-mono mb-1"
+                                    >Slot {{ $index + 1 }}</span
+                                  >
+                                  <span
+                                    class="font-bold text-primary text-base group-hover:text-blue-500 transition-colors"
+                                  >
+                                    {{ formatMoveName(move) }}
+                                  </span>
+                                </div>
+                              </div>
+                            } @else {
+                              <div
+                                class="p-4 bg-secondary/5 border border-theme border-dashed rounded-2xl flex items-center justify-between opacity-60"
+                              >
+                                <div class="flex flex-col">
+                                  <span
+                                    class="text-xs text-secondary opacity-60 uppercase font-mono mb-1"
+                                    >Slot {{ $index + 1 }}</span
+                                  >
+                                  <span class="italic text-tertiary text-base">Empty Slot</span>
+                                </div>
+                              </div>
+                            }
+                          }
+                        </div>
+                      } @else {
+                        <div
+                          class="flex flex-col items-center justify-center p-8 bg-secondary/5 border border-theme rounded-2xl text-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="40px"
+                            viewBox="0 -960 960 960"
+                            width="40px"
+                            fill="currentColor"
+                            class="text-secondary opacity-40 mb-3"
+                          >
+                            <path
+                              d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q54 0 104-17.5t92-50.5L252-648q-33 42-50.5 92T184-480q0 123 86.5 209.5T480-160Zm228-112q33-42 50.5-92t17.5-104q0-123-86.5-209.5T480-800q-54 0-104 17.5t-92 50.5l424 420Z"
+                            />
+                          </svg>
+                          <p class="text-sm font-medium text-secondary">
+                            No moves configured for this Pokémon.
+                          </p>
+                          <p class="text-xs text-tertiary mt-1">Click Edit to add moves.</p>
+                        </div>
+                      }
                     </div>
                   }
                 </div>
@@ -376,7 +462,7 @@ import { CommonModule } from '@angular/common';
                         @if (pkmn.ribbon) {
                           <div class="flex items-center gap-4 p-3 bg-secondary/10 rounded-lg">
                             <img
-                              [src]="ribbonSpriteUrl()"
+                              [src]="ribbonSpriteUrl() | cdnUrl: 'ribbons'"
                               [alt]="ribbonName() || pkmn.ribbon"
                               class="w-10 h-10 object-contain drop-shadow-md"
                             />
@@ -396,7 +482,7 @@ import { CommonModule } from '@angular/common';
                         @if (pkmn.mark) {
                           <div class="flex items-center gap-4 p-3 bg-secondary/10 rounded-lg">
                             <img
-                              [src]="markSpriteUrl()"
+                              [src]="markSpriteUrl() | cdnUrl: 'marks'"
                               [alt]="markName() || pkmn.mark"
                               class="w-10 h-10 object-contain drop-shadow-md"
                             />
@@ -416,7 +502,7 @@ import { CommonModule } from '@angular/common';
           <div class="p-4 border-t border-theme bg-surface flex justify-between items-center z-20">
             <div class="flex gap-2">
               <button
-                class="px-3 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme"
+                class="px-3 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold hover:bg-theme"
                 (click)="previous.emit()"
                 [appTooltip]="'Previous Pokémon'"
                 tooltipPosition="top"
@@ -431,7 +517,7 @@ import { CommonModule } from '@angular/common';
                 </svg>
               </button>
               <button
-                class="px-3 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme"
+                class="px-3 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold hover:bg-theme"
                 (click)="next.emit()"
                 [appTooltip]="'Next Pokémon'"
                 tooltipPosition="top"
@@ -449,13 +535,13 @@ import { CommonModule } from '@angular/common';
 
             <div class="flex gap-3">
               <button
-                class="px-5 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme"
+                class="px-5 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold hover:bg-theme"
                 (click)="edit.emit()"
               >
                 Edit
               </button>
               <button
-                class="px-5 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme"
+                class="px-5 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold hover:bg-theme"
                 (click)="closed.emit()"
               >
                 Close
@@ -484,54 +570,56 @@ export class PokemonViewDialogComponent {
 
   pokemonData = signal<DatasetPokemon | null>(null);
   allNatures = signal<NatureData[]>([]);
+  allRibbons = signal<RibbonData[]>([]);
+  allMarks = signal<MarkData[]>([]);
   activeTabIndex = signal<number>(0);
-  ribbonName = signal('');
-  ribbonSpriteUrl = signal('');
-  markName = signal('');
-  markSpriteUrl = signal('');
 
   constructor() {
-    effect(() => {
-      const pkmn = this.pokemon();
-      if (pkmn.pokemonSlug) {
-        this.datasetService.loadPokemonBySlug(pkmn.pokemonSlug).subscribe((data) => {
-          this.pokemonData.set(data);
-        });
-      } else {
-        this.pokemonData.set(null);
-      }
-
-      if (pkmn.ribbon) {
-        this.datasetService.loadRibbons().subscribe((ribbons) => {
-          const found = ribbons.find((ribbon) => ribbon.id === pkmn.ribbon);
-          if (found) {
-            this.ribbonName.set(found.name);
-            this.ribbonSpriteUrl.set(`assets/images/ribbons/${found.id}.png`);
+    // 1. Daten reaktiv laden (ohne Memory Leak)
+    toObservable(this.pokemon)
+      .pipe(
+        switchMap((pkmn) => {
+          if (pkmn.pokemonSlug) {
+            return this.datasetService.loadPokemonBySlug(pkmn.pokemonSlug);
           }
-        });
-      } else {
-        this.ribbonName.set('');
-        this.ribbonSpriteUrl.set('');
-      }
+          return of(null);
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe((data) => {
+        this.pokemonData.set(data);
+      });
 
-      if (pkmn.mark) {
-        this.datasetService.loadMarks().subscribe((marks) => {
-          const found = marks.find((mark) => mark.id === pkmn.mark);
-          if (found) {
-            this.markName.set(found.name);
-            this.markSpriteUrl.set(`assets/images/marks/${found.id}.png`);
-          }
-        });
-      } else {
-        this.markName.set('');
-        this.markSpriteUrl.set('');
-      }
-    });
-
-    this.datasetService.loadNatures().subscribe((natures) => {
-      this.allNatures.set(natures);
-    });
+    // 2. Einmalige Listen laden
+    this.datasetService.loadNatures().subscribe((natures) => this.allNatures.set(natures));
+    this.datasetService.loadRibbons().subscribe((ribbons) => this.allRibbons.set(ribbons));
+    this.datasetService.loadMarks().subscribe((marks) => this.allMarks.set(marks));
   }
+
+  // 3. Computed Signals für Ribbons und Marks
+  ribbonName = computed(() => {
+    const pkmn = this.pokemon();
+    const found = this.allRibbons().find((r) => r.id === pkmn.ribbon);
+    return found ? found.name : '';
+  });
+
+  ribbonSpriteUrl = computed(() => {
+    const pkmn = this.pokemon();
+    const found = this.allRibbons().find((r) => r.id === pkmn.ribbon);
+    return found ? `${found.id}.png` : '';
+  });
+
+  markName = computed(() => {
+    const pkmn = this.pokemon();
+    const found = this.allMarks().find((m) => m.id === pkmn.mark);
+    return found ? found.name : '';
+  });
+
+  markSpriteUrl = computed(() => {
+    const pkmn = this.pokemon();
+    const found = this.allMarks().find((m) => m.id === pkmn.mark);
+    return found ? `${found.id}.png` : '';
+  });
 
   localizedName = computed(() => {
     const data = this.pokemonData();
@@ -559,6 +647,8 @@ export class PokemonViewDialogComponent {
 
   originGameIcon = computed(() => {
     const gameCode = this.pokemon().originGame;
+    // ACHTUNG: Die getGameIconPath Methode sollte nur noch den Dateinamen liefern,
+    // da wir im HTML jetzt die Pipe `| cdnUrl: 'gametiles'` verwenden!
     return gameCode ? getGameIconPath(gameCode) : '';
   });
 
@@ -574,6 +664,30 @@ export class PokemonViewDialogComponent {
     if (!data) return '';
     return this.datasetService.getSpriteUrl(data, isShiny);
   });
+
+  formattedMoves = computed(() => {
+    const pkmn = this.pokemon();
+    const moves = (pkmn as any).moves || [];
+    const padded = [...moves];
+    while (padded.length < 4) {
+      padded.push('');
+    }
+    return padded.slice(0, 4);
+  });
+
+  hasAnyMove(pkmn: BoxSlot): boolean {
+    const moves = (pkmn as any).moves;
+    if (!moves || !Array.isArray(moves)) return false;
+    return moves.some((move) => move && move.trim() !== '');
+  }
+
+  formatMoveName(move: string | undefined | null): string {
+    if (!move) return '—';
+    return move
+      .split('-')
+      .map((word) => this.capitalize(word))
+      .join(' ');
+  }
 
   capitalize(str: string | undefined | null): string {
     if (!str) return '';

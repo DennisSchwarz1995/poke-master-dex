@@ -293,7 +293,8 @@ export function getGameDropdownOptions(): CustomDropdownOption[] {
   return GAME_MASTER_LIST.map((game) => ({
     id: game.id,
     name: game.name,
-    iconPath: `assets/images/games/${game.iconFilename}`,
+    iconPath: game.iconFilename,
+    cdnFolder: 'games',
     category: game.category,
   }));
 }
@@ -316,7 +317,7 @@ export function getFullGameName(gameId: string): string {
 
 export function getGameIconPath(gameId: string): string {
   const game = GAME_MASTER_LIST.find((game) => game.id === gameId.toLowerCase());
-  return game ? `assets/images/games/${game.iconFilename}` : '';
+  return game ? game.iconFilename : '';
 }
 
 export function getGameOriginMark(gameId: string): { id: string; name: string } | null {

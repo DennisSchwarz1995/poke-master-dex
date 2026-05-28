@@ -7,11 +7,12 @@ import { CapitalizePipe } from '../../../../shared/pipes/capitalize-pipe';
 import { PokemonLanguageService } from '../../../../core/services/pokemon-language.service';
 import { FormatAbilityPipe } from '../../../../shared/pipes/ability-pipe';
 import { getShortGameName, getGameIconPath } from '../../../../core/constants/game-data.constants';
+import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl-pipe';
 
 @Component({
   selector: 'app-pokemon-detail-info',
   standalone: true,
-  imports: [CommonModule, TooltipDirective, CapitalizePipe, FormatAbilityPipe],
+  imports: [CommonModule, TooltipDirective, CapitalizePipe, FormatAbilityPipe, CdnUrlPipe],
   template: `
     <div
       class="bg-[var(--color-bg-secondary)] rounded-3xl border border-theme p-6 sm:p-10 shadow-md"
@@ -45,7 +46,7 @@ import { getShortGameName, getGameIconPath } from '../../../../core/constants/ga
             </div>
             <div class="flex items-start gap-1.5">
               <img
-                src="/assets/images/origin_marks/virtual-console-white.png"
+                [src]="'virtual-console-white.png' | cdnUrl: 'origin_marks'"
                 class="w-5 h-5 shrink-0 mt-0.5 invert dark:invert-0 opacity-80"
                 alt="Generation"
               />
@@ -246,7 +247,7 @@ import { getShortGameName, getGameIconPath } from '../../../../core/constants/ga
                 @if (game.iconUrl) {
                   <img
                     (click)="navigateToGame(game.code)"
-                    [src]="game.iconUrl"
+                    [src]="game.iconUrl | cdnUrl: 'games'"
                     [alt]="game.name"
                     [appTooltip]="game.name"
                     class="h-14 w-14 sm:h-16 sm:w-16 object-contain drop-shadow hover:scale-110 transition-transform duration-200 ease-in-out cursor-pointer"

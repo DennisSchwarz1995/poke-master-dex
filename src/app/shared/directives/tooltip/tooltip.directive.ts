@@ -22,7 +22,7 @@ export class TooltipDirective implements OnDestroy {
   private renderer = inject(Renderer2);
 
   @HostListener('mouseenter') onMouseEnter() {
-    if (!this.tooltip && this.tooltipTitle) {
+    if (!this.tooltip && this.tooltipTitle && this.tooltipTitle.trim() !== '') {
       this.show();
     }
   }
@@ -35,9 +35,16 @@ export class TooltipDirective implements OnDestroy {
     this.tooltip = this.renderer.createElement('div');
     if (this.tooltip) {
       this.renderer.appendChild(this.tooltip, this.renderer.createText(this.tooltipTitle));
-      this.renderer.appendChild(document.body, this.tooltip);
+
       this.renderer.addClass(this.tooltip, 'app-custom-tooltip');
       this.renderer.addClass(this.tooltip, `tooltip-${this.tooltipPosition}`);
+
+      this.renderer.setStyle(this.tooltip, 'position', 'absolute');
+      this.renderer.setStyle(this.tooltip, 'visibility', 'hidden');
+      this.renderer.setStyle(this.tooltip, 'top', '0px');
+      this.renderer.setStyle(this.tooltip, 'left', '0px');
+
+      this.renderer.appendChild(document.body, this.tooltip);
 
       const hostPos = this.elementRef.nativeElement.getBoundingClientRect();
       const tooltipPos = this.tooltip.getBoundingClientRect();
@@ -64,8 +71,10 @@ export class TooltipDirective implements OnDestroy {
           break;
       }
 
-      this.renderer.setStyle(this.tooltip, 'top', `${top + window.scrollY}px`);
-      this.renderer.setStyle(this.tooltip, 'left', `${left + window.scrollX}px`);
+      this.renderer.setStyle(this.tooltip, 'top', `${Math.round(top + window.scrollY)}px`);
+      this.renderer.setStyle(this.tooltip, 'left', `${Math.round(left + window.scrollX)}px`);
+
+      this.renderer.setStyle(this.tooltip, 'visibility', 'visible');
     }
   }
 
