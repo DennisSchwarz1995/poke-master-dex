@@ -34,14 +34,6 @@ export const GAME_MASTER_LIST: GameDefinition[] = [
   },
 
   {
-    id: 'pla',
-    name: 'Pokémon Legends: Arceus',
-    iconFilename: 'legends_arceus.png',
-    category: 'Generation 8',
-    originMarkId: 'hisui',
-    originMarkName: 'Hisui Mark',
-  },
-  {
     id: 'la',
     name: 'Pokémon Legends: Arceus',
     iconFilename: 'legends_arceus.png',
@@ -181,12 +173,10 @@ export const GAME_MASTER_LIST: GameDefinition[] = [
     iconFilename: 'heartgold.png',
     category: 'Generation 4',
   },
-  { id: 'dppt-pt', name: 'Pokémon Platinum', iconFilename: 'platin.png', category: 'Generation 4' },
   { id: 'pt', name: 'Pokémon Platinum', iconFilename: 'platin.png', category: 'Generation 4' },
   { id: 'dp-p', name: 'Pokémon Pearl', iconFilename: 'pearl.png', category: 'Generation 4' },
-  { id: 'dppt-p', name: 'Pokémon Pearl', iconFilename: 'pearl.png', category: 'Generation 4' },
+
   { id: 'dp-d', name: 'Pokémon Diamond', iconFilename: 'diamond.png', category: 'Generation 4' },
-  { id: 'dppt-d', name: 'Pokémon Diamond', iconFilename: 'diamond.png', category: 'Generation 4' },
 
   {
     id: 'frlg-lg',
@@ -196,11 +186,10 @@ export const GAME_MASTER_LIST: GameDefinition[] = [
   },
   { id: 'frlg-fr', name: 'Pokémon FireRed', iconFilename: 'firered.png', category: 'Generation 3' },
   { id: 'e', name: 'Pokémon Emerald', iconFilename: 'emerald.png', category: 'Generation 3' },
-  { id: 'rse-e', name: 'Pokémon Emerald', iconFilename: 'emerald.png', category: 'Generation 3' },
+
   { id: 'rs-s', name: 'Pokémon Sapphire', iconFilename: 'sapphire.png', category: 'Generation 3' },
-  { id: 'rse-s', name: 'Pokémon Sapphire', iconFilename: 'sapphire.png', category: 'Generation 3' },
+
   { id: 'rs-r', name: 'Pokémon Ruby', iconFilename: 'ruby.png', category: 'Generation 3' },
-  { id: 'rse-r', name: 'Pokémon Ruby', iconFilename: 'ruby.png', category: 'Generation 3' },
 
   {
     id: 'c',
@@ -210,14 +199,7 @@ export const GAME_MASTER_LIST: GameDefinition[] = [
     originMarkId: 'virtual-console',
     originMarkName: 'GameBoy Mark',
   },
-  {
-    id: 'gsc-c',
-    name: 'Pokémon Crystal',
-    iconFilename: 'crystal.png',
-    category: 'Generation 2',
-    originMarkId: 'virtual-console',
-    originMarkName: 'GameBoy Mark',
-  },
+
   {
     id: 'gs-s',
     name: 'Pokémon Silver',
@@ -226,14 +208,7 @@ export const GAME_MASTER_LIST: GameDefinition[] = [
     originMarkId: 'virtual-console',
     originMarkName: 'GameBoy Mark',
   },
-  {
-    id: 'gsc-s',
-    name: 'Pokémon Silver',
-    iconFilename: 'silver.png',
-    category: 'Generation 2',
-    originMarkId: 'virtual-console',
-    originMarkName: 'GameBoy Mark',
-  },
+
   {
     id: 'gs-g',
     name: 'Pokémon Gold',
@@ -242,14 +217,7 @@ export const GAME_MASTER_LIST: GameDefinition[] = [
     originMarkId: 'virtual-console',
     originMarkName: 'GameBoy Mark',
   },
-  {
-    id: 'gsc-g',
-    name: 'Pokémon Gold',
-    iconFilename: 'gold.png',
-    category: 'Generation 2',
-    originMarkId: 'virtual-console',
-    originMarkName: 'GameBoy Mark',
-  },
+
   {
     id: 'y',
     name: 'Pokémon Yellow',
@@ -300,11 +268,11 @@ export function getGameDropdownOptions(): CustomDropdownOption[] {
 }
 
 export function getShortGameName(gameId: string): string {
-  const game = GAME_MASTER_LIST.find((g) => g.id === gameId.toLowerCase());
+  const game = GAME_MASTER_LIST.find((game) => game.id === gameId.toLowerCase());
   if (!game) {
     return gameId
       .split('-')
-      .map((p) => p.toUpperCase())
+      .map((part) => part.toUpperCase())
       .join(' ');
   }
   return game.name.replace('Pokémon ', '');

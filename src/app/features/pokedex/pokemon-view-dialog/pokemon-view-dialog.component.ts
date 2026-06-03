@@ -1,12 +1,4 @@
-import {
-  Component,
-  input,
-  output,
-  signal,
-  inject,
-  HostListener,
-  computed,
-} from '@angular/core';
+import { Component, input, output, signal, inject, HostListener, computed } from '@angular/core';
 import { toObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap, of } from 'rxjs';
 
@@ -89,7 +81,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
                 <div class="flex items-center flex-wrap">
                   <div class="w-10 h-10 flex items-center justify-center flex-none">
                     <img
-                      [src]="pkmn.ball | cdnUrl: 'pokeballs'"
+                      [src]="pkmn.ball + '.webp' | cdnUrl: 'pokeballs'"
                       [alt]="pkmn.ball | capitalize"
                       [appTooltip]="pkmn.ball | capitalize"
                       class="w-12 h-12 object-contain"
@@ -99,7 +91,13 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
                   </div>
 
                   <h2 class="text-2xl font-bold truncate">
-                    {{ pkmn.customName || localizedName() || pkmn.pokemonSlug || 'Empty Slot' }}
+                    {{
+                      (pkmn.pokemonSlug | capitalize) ||
+                        pkmn.nickname ||
+                        pkmn.customName ||
+                        localizedName() ||
+                        'Empty Slot'
+                    }}
                   </h2>
 
                   @if (pkmn.level) {
@@ -185,7 +183,12 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
                         [appTooltip]="originMark()!.name"
                       >
                         <img
-                          [src]="(themeService.currentTheme() === 'dark' ? originMark()!.id + '-white.png' : originMark()!.id + '-black.png') | cdnUrl: 'origin_marks'"
+                          [src]="
+                            (themeService.currentTheme() === 'dark'
+                              ? originMark()!.id + '-white.png'
+                              : originMark()!.id + '-black.png'
+                            ) | cdnUrl: 'origin_marks'
+                          "
                           class="w-5 h-5"
                           [alt]="originMark()!.name"
                         />
@@ -310,9 +313,9 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
                       <div>
                         <div class="space-y-3">
                           <div class="flex justify-between items-center">
-                            <span class="text-secondary text-sm">Pokemonname</span>
+                            <span class="text-secondary text-sm">Nickname</span>
                             <div class="flex items-center gap-2">
-                              <span class="font-medium">{{ localizedName() }}</span>
+                              <span class="font-medium">{{ pkmn.nickname || '—' }}</span>
                             </div>
                           </div>
                           <div class="flex justify-between">
@@ -349,15 +352,29 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
                           <div class="flex justify-between items-center">
                             <span class="text-secondary text-sm">Origin Game</span>
                             <div class="flex items-center gap-2">
+                              <span class="font-medium">{{ originGameName() }}</span>
                               @if (originGameIcon()) {
                                 <img
-                                  [src]="originGameIcon() | cdnUrl: 'gametiles'"
+                                  [src]="originGameIcon() | cdnUrl: 'games'"
                                   class="w-6 h-6 object-contain drop-shadow-sm"
                                   [appTooltip]="originGameName()"
                                   [alt]="originGameName()"
                                 />
                               }
-                              <span class="font-medium">{{ originGameName() }}</span>
+                            </div>
+                          </div>
+                          <div class="flex justify-between items-center">
+                            <span class="text-secondary text-sm">Stored In</span>
+                            <div class="flex items-center gap-2">
+                              <span class="font-medium">{{ storedInGameName() }}</span>
+                              @if (storedInGameIcon()) {
+                                <img
+                                  [src]="storedInGameIcon() | cdnUrl: 'games'"
+                                  class="w-6 h-6 object-contain drop-shadow-sm"
+                                  [appTooltip]="storedInGameName()"
+                                  [alt]="storedInGameName()"
+                                />
+                              }
                             </div>
                           </div>
                         </div>
@@ -584,7 +601,7 @@ export class PokemonViewDialogComponent {
           }
           return of(null);
         }),
-        takeUntilDestroyed()
+        takeUntilDestroyed(),
       )
       .subscribe((data) => {
         this.pokemonData.set(data);
@@ -647,8 +664,16 @@ export class PokemonViewDialogComponent {
 
   originGameIcon = computed(() => {
     const gameCode = this.pokemon().originGame;
-    // ACHTUNG: Die getGameIconPath Methode sollte nur noch den Dateinamen liefern,
-    // da wir im HTML jetzt die Pipe `| cdnUrl: 'gametiles'` verwenden!
+    return gameCode ? getGameIconPath(gameCode) : '';
+  });
+
+  storedInGameName = computed(() => {
+    const gameCode = this.pokemon().storedIn;
+    return gameCode ? getFullGameName(gameCode) : '—';
+  });
+
+  storedInGameIcon = computed(() => {
+    const gameCode = this.pokemon().storedIn;
     return gameCode ? getGameIconPath(gameCode) : '';
   });
 

@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import {
   getAvailableGamesForPokemon,
   GameDefinition,
+  GAME_CODES,
 } from '../../../shared/models/game-definitions';
 import { BoxSlot, StatsMap } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
@@ -116,6 +117,9 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
                   [(originalTrainer)]="originalTrainer"
                   [(trainerId)]="trainerId"
                   [(originGame)]="originGame"
+                  [storedInOptions]="storedInOptions()"
+                  [(storedIn)]="storedIn"
+                  [(nickname)]="nickname"
                   [(notes)]="notes"
                   [(isOwned)]="isOwned"
                   (isOwnedChange)="onCaughtChange()"
@@ -307,10 +311,8 @@ export class PokemonEditDialogComponent implements OnInit {
         name: ribbon.name,
         description: ribbon.shortDesc,
         category: `Gen ${ribbon.gen}`,
-        iconPath: AVAILABLE_SPRITES.ribbons.has(ribbon.id)
-          ? `${ribbon.id}.png`
-          : undefined,
-        cdnFolder: 'ribbons'
+        iconPath: AVAILABLE_SPRITES.ribbons.has(ribbon.id) ? `${ribbon.id}.png` : undefined,
+        cdnFolder: 'ribbons',
       }))
       .sort((a, b) => {
         const genA = parseInt(a.category.replace('Gen ', ''));
@@ -327,10 +329,8 @@ export class PokemonEditDialogComponent implements OnInit {
         name: mark.name,
         description: mark.shortDesc,
         category: `Gen ${mark.gen}`,
-        iconPath: AVAILABLE_SPRITES.marks.has(mark.id)
-          ? `${mark.id}.png`
-          : undefined,
-          cdnFolder: 'marks'
+        iconPath: AVAILABLE_SPRITES.marks.has(mark.id) ? `${mark.id}.png` : undefined,
+        cdnFolder: 'marks',
       }))
       .sort((a, b) => {
         const genA = parseInt(a.category.replace('Gen ', ''));
@@ -413,9 +413,7 @@ export class PokemonEditDialogComponent implements OnInit {
       name: ball.name,
       description: ball.shortDesc,
       category: categoryLabels[ball.category] ?? ball.category,
-      iconPath: AVAILABLE_SPRITES.pokeballs.has(ball.id)
-        ? `${ball.id}.webp`
-        : undefined,
+      iconPath: AVAILABLE_SPRITES.pokeballs.has(ball.id) ? `${ball.id}.webp` : undefined,
       cdnFolder: 'pokeballs',
     }));
   });
@@ -432,9 +430,7 @@ export class PokemonEditDialogComponent implements OnInit {
       name: item.name,
       description: item.shortDesc,
       category: categoryLabels[item.category] ?? item.category,
-      iconPath: AVAILABLE_SPRITES.items.has(item.id)
-        ? `${item.id}.png`
-        : undefined,
+      iconPath: AVAILABLE_SPRITES.items.has(item.id) ? `${item.id}.png` : undefined,
       cdnFolder: 'items',
     }));
   });
@@ -495,6 +491,8 @@ export class PokemonEditDialogComponent implements OnInit {
   ball = '';
   item = '';
   originGame = '';
+  storedIn = '';
+  nickname = '';
   originLanguage = '';
   originalTrainer = '';
   trainerId = '';
@@ -571,6 +569,39 @@ export class PokemonEditDialogComponent implements OnInit {
     return options;
   });
 
+  storedInOptions = computed<CustomDropdownOption[]>(() => {
+    const options: CustomDropdownOption[] = [
+      { id: '', name: 'None', description: 'Not Stored / Unknown', category: 'Options' },
+    ];
+
+    const allowedCodes = [
+      'home',
+      'sv-s',
+      'sv-v',
+      'swsh-sw',
+      'swsh-sh',
+      'bdsp-bd',
+      'bdsp-sp',
+      'la',
+      'lgpe-lgp',
+      'lgpe-lge',
+    ];
+
+    allowedCodes.forEach((code) => {
+      const game = GAME_CODES[code];
+      if (game) {
+        options.push({
+          id: game.code,
+          name: game.fullName,
+          category: game.gen === 0 ? 'Special' : `Generation ${game.gen}`,
+          iconPath: getGameIconPath(game.code) || undefined,
+        });
+      }
+    });
+
+    return options;
+  });
+
   onOriginGameChange(gameCode: string) {
     this.originGame = gameCode;
   }
@@ -593,6 +624,8 @@ export class PokemonEditDialogComponent implements OnInit {
     this.level = pkmn.level;
     this.ball = pkmn.ball || '';
     this.originGame = pkmn.originGame || '';
+    this.storedIn = pkmn.storedIn || 'home';
+    this.nickname = pkmn.nickname || '';
     this.originLanguage = pkmn.originLanguage || '';
     this.originalTrainer = pkmn.originalTrainer || '';
     this.trainerId = pkmn.trainerId || '';
@@ -646,8 +679,8 @@ export class PokemonEditDialogComponent implements OnInit {
 
   onCaughtChange() {
     if (this.isOwned) {
-      if (!this.level) {
-        this.level = 5;
+      if (!this.storedIn) {
+        this.storedIn = 'home';
       }
       this.onAbilityChange(this.ability);
       if (!this.originLanguage) {
@@ -770,6 +803,8 @@ export class PokemonEditDialogComponent implements OnInit {
         ball: this.ball || null,
         item: this.item || null,
         originGame: this.originGame || null,
+        storedIn: this.storedIn || null,
+        nickname: this.nickname || null,
         originLanguage: this.originLanguage || null,
         originalTrainer: this.originalTrainer || null,
         trainerId: this.trainerId || null,

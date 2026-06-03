@@ -1,11 +1,11 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
-import { DatasetService, SimplePokemon } from '../../../core/api/services/dataset.service';
+import { DatasetService } from '../../../core/api/services/dataset.service';
 import { GameData } from '../../../shared/models/dataset.model';
 import { GameCard } from '../game-card/game-card.component';
 import { CapitalizePipe } from '../../../shared/pipes/capitalize-pipe';
-import { CdnUrlPipe } from "../../../shared/pipes/cdnUrl-pipe";
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
 
 @Component({
   selector: 'app-game-detail',

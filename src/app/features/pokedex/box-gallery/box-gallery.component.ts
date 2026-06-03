@@ -10,7 +10,6 @@ import {
   QueryList,
   ChangeDetectionStrategy,
   computed,
-  Host,
   ViewChild,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -26,15 +25,16 @@ import { PokemonEditDialogComponent } from '../pokemon-edit-dialog/pokemon-edit-
 import { PokemonViewDialogComponent } from '../pokemon-view-dialog/pokemon-view-dialog.component';
 import { Dex, Box, BoxSlot } from '../../../shared/models/dex.model';
 import {
-  QuickEditBarComponent,
+  ToolbarComponent,
   QuickEditState,
-} from '../../../shared/components/tool-bar/tool-bar.component';
+} from '../../../shared/components/toolbar/toolbar.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { HostListener } from '@angular/core';
 import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.constants';
-import { CdnUrlPipe } from "../../../shared/pipes/cdnUrl-pipe";
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
+import { ToolbarService } from '../../../core/services/toolbar.service';
 
 export interface EnrichedSlot {
   originalSlot: BoxSlot | null;
@@ -67,19 +67,19 @@ export interface BoxWithSprites {
     FormsModule,
     PokemonEditDialogComponent,
     PokemonViewDialogComponent,
-    QuickEditBarComponent,
+    ToolbarComponent,
     RouterLink,
     TooltipDirective,
     ScrollingModule,
-    CdnUrlPipe
-],
+    CdnUrlPipe,
+  ],
   template: `
     <div class="container mx-auto px-4 pt-6 pb-2">
       <div class="mx-auto w-full flex flex-col gap-6">
-        <app-tool-bar
+        <app-toolbar
           (modeChanged)="onQuickEditModeChanged($event)"
-          [pendingEditsCount]="pendingEdits().size"
-          [isSaving]="isSavingBatch()"
+          [pendingEditsCount]="toolbarService.pendingEdits().size"
+          [isSaving]="toolbarService.isSavingBatch()"
           (save)="saveAllEdits()"
           (discard)="discardAllEdits()"
           class="w-full"
@@ -136,29 +136,29 @@ export interface BoxWithSprites {
               </button>
             }
           </div>
-        </app-tool-bar>
+        </app-toolbar>
 
-          @if (searchQuery() && matchedLocations().length > 0) {
-            <div class="flex flex-col items-center justify-center mt-2 gap-2">
-              <p class="text-sm text-secondary">
-                {{ matchedPokemonSlugs().size }} Pokémon species found
-              </p>
-              <button
-                (click)="jumpToNextMatch()"
-                class="bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full font-bold hover:bg-blue-200 transition-colors flex items-center gap-2 text-sm shadow-sm"
-              >
-                Jump to Next Match ({{ currentMatchIndex() + 1 }} / {{ matchedLocations().length }})
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2.5"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          }
+        @if (searchQuery() && matchedLocations().length > 0) {
+          <div class="flex flex-col items-center justify-center mt-2 gap-2">
+            <p class="text-sm text-secondary">
+              {{ matchedPokemonSlugs().size }} Pokémon species found
+            </p>
+            <button
+              (click)="jumpToNextMatch()"
+              class="bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full font-bold hover:bg-blue-200 transition-colors flex items-center gap-2 text-sm shadow-sm"
+            >
+              Jump to Next Match ({{ currentMatchIndex() + 1 }} / {{ matchedLocations().length }})
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2.5"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        }
         <main class="container mx-auto py-4 flex flex-col pt-0 gap-4">
           @if (loading()) {
             <div class="text-center py-12">
@@ -216,7 +216,7 @@ export interface BoxWithSprites {
                             [class.search-match-border]="slot.isMatched"
                             [style.--c1]="slot.colors[0] || 'transparent'"
                             [style.--c2]="slot.colors[1] || 'transparent'"
-                            (click)="onPokemonClick(boxData.box, $index)"
+                            (click)="onSlotClick(boxData.box, $index)"
                           >
                             @if (slot.sprite) {
                               <img
@@ -363,6 +363,7 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
   private typeColorService = inject(TypeColorService);
   private dexStateService = inject(DexStateService);
   private pokemonLangService = inject(PokemonLanguageService);
+  public toolbarService = inject(ToolbarService);
 
   @ViewChildren('boxCard') boxCards!: QueryList<ElementRef>;
   @ViewChild(CdkVirtualScrollViewport) viewport!: CdkVirtualScrollViewport;
@@ -384,8 +385,7 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
   boxesWithSprites = signal<BoxWithSprites[]>([]);
   loading = signal(true);
   columns = signal(this.calculateColumns(window.innerWidth));
-  pendingEdits = signal<Map<string, Partial<BoxSlot>>>(new Map());
-  isSavingBatch = signal(false);
+
   matchedLocations = signal<{ boxIndex: number; boxNumber: number }[]>([]);
   currentMatchIndex = signal<number>(0);
 
@@ -394,7 +394,7 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
     const searchActive = !!this.searchQuery();
     const matchedSlugs = this.matchedPokemonSlugs();
     const quickEdit = this.currentQuickEditState();
-    const pendingMap = this.pendingEdits();
+    const pendingMap = this.toolbarService.pendingEdits();
 
     return loadedBoxes.map((boxData) => {
       return {
@@ -707,47 +707,22 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
     this.currentQuickEditState.set(state);
   }
 
-  async onPokemonClick(box: Box, slotIndex: number) {
+  async onSlotClick(box: Box, slotIndex: number) {
     const slots = Array.isArray(box.slots) ? box.slots : Object.values(box.slots || []);
     const slot = slots[slotIndex] as BoxSlot;
 
     if (!slot) return;
 
-    if (this.currentQuickEditState().active && this.currentQuickEditState().mode !== 'None') {
-      const mode = this.currentQuickEditState().mode;
+    const quickEditState = this.currentQuickEditState();
 
-      if (mode === 'Edit') {
+    if (quickEditState.active && quickEditState.mode !== 'None') {
+      if (quickEditState.mode === 'Edit') {
         this.selectedSlotForDetail.set(slot);
         this.selectedBoxNumber.set(box.boxNumber);
         return;
       }
 
-      const position = slot.position || slotIndex + 1;
-      const key = `${box.boxNumber}_${position}`;
-
-      const currentPending = this.pendingEdits().get(key) || {};
-      const updates: any = { ...currentPending };
-
-      const currentOwned = updates.isOwned !== undefined ? updates.isOwned : !!slot.isOwned;
-      const currentShiny = updates.isShiny !== undefined ? updates.isShiny : !!slot.isShiny;
-      const currentGmax = updates.isGmax !== undefined ? updates.isGmax : !!slot.isGmax;
-      const currentAlpha = updates.isAlpha !== undefined ? updates.isAlpha : !!slot.isAlpha;
-
-      if (mode === 'Owned') updates.isOwned = !currentOwned;
-      if (mode === 'Pokeball' && this.currentQuickEditState().ball) {
-        updates.ball = this.currentQuickEditState().ball;
-      }
-      if (mode === 'Shiny') updates.isShiny = !currentShiny;
-      if (mode === 'Gmax') updates.isGmax = !currentGmax;
-      if (mode === 'Alpha') updates.isAlpha = !currentAlpha;
-      if (mode === 'Trainer' && this.currentQuickEditState().trainerId) {
-        updates.trainerId = this.currentQuickEditState().trainerId;
-        updates.originalTrainer = this.currentQuickEditState().originalTrainer;
-      }
-
-      const newMap = new Map(this.pendingEdits());
-      newMap.set(key, updates);
-      this.pendingEdits.set(newMap);
+      this.toolbarService.processToolClick(box.boxNumber, slot, quickEditState);
     } else {
       this.selectedSlotForView.set(slot);
       this.selectedBoxNumber.set(box.boxNumber);
@@ -755,28 +730,17 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async saveAllEdits() {
-    this.isSavingBatch.set(true);
-    const boxesToReload = new Set<number>();
-
-    this.pendingEdits().forEach((updates, key) => {
-      const [boxNumStr] = key.split('_');
-      const boxNum = parseInt(boxNumStr, 10);
-      boxesToReload.add(boxNum);
-    });
-
     try {
-      await this.firestoreService.updateMultipleSlots(this.dexId(), this.pendingEdits());
-      this.pendingEdits.set(new Map());
-      boxesToReload.forEach((bNum) => this.reloadSingleBox(bNum));
+      const updatedBoxes = await this.toolbarService.saveAllEdits(this.dexId());
+
+      updatedBoxes.forEach((boxNum) => this.reloadSingleBox(boxNum));
     } catch (e) {
-      console.error('Fehler beim Speichern der Quick-Edits', e);
-    } finally {
-      this.isSavingBatch.set(false);
+      console.error('Error saving edits', e);
     }
   }
 
   discardAllEdits() {
-    this.pendingEdits.set(new Map());
+    this.toolbarService.discardAllEdits();
   }
 
   closeDetailDialog() {
@@ -931,8 +895,6 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getBallImage(ballId: string): string {
-    return AVAILABLE_SPRITES.pokeballs.has(ballId)
-      ? `${ballId}.png`
-      : 'poke-ball.png';
+    return AVAILABLE_SPRITES.pokeballs.has(ballId) ? `${ballId}.png` : 'poke-ball.png';
   }
 }

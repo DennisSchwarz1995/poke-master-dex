@@ -339,7 +339,7 @@ export class PokemonDetailInfoComponent {
 
   navigateToGame(gameId: string) {
     this.datasetService.loadGames().subscribe((games) => {
-      const foundGame = games.find((g) => g.id === gameId);
+      const foundGame = games.find((game) => game.id === gameId);
       if (foundGame && foundGame.nameSlug) {
         this.router.navigate(['/games', foundGame.nameSlug]);
       } else {

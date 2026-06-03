@@ -36,6 +36,7 @@ export interface BoxSlot {
   isGmax?: boolean;
   isAlpha?: boolean;
   customName?: string;
+  nickname?: string;
   notes?: string;
   level?: number;
   ball?: string;
@@ -43,6 +44,7 @@ export interface BoxSlot {
   ability?: string;
   nature?: string;
   originGame?: string;
+  storedIn?: string;
   originLanguage?: string;
   originalTrainer?: string;
   trainerId?: string;

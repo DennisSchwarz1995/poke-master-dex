@@ -16,13 +16,14 @@ import {
 import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
 import { firstValueFrom } from 'rxjs';
 import {
-  QuickEditBarComponent,
   QuickEditState,
-} from '../../../shared/components/tool-bar/tool-bar.component';
+  ToolbarComponent,
+} from '../../../shared/components/toolbar/toolbar.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 import { RouterLink } from '@angular/router';
 import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
-import { CdnUrlPipe } from "../../../shared/pipes/cdnUrl-pipe";
+import { ToolbarService } from '../../../core/services/toolbar.service';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
 
 @Component({
   selector: 'app-box-view',
@@ -34,13 +35,14 @@ import { CdnUrlPipe } from "../../../shared/pipes/cdnUrl-pipe";
     PokemonEditDialogComponent,
     BoxOptionsDialogComponent,
     PokemonViewDialogComponent,
+    ToolbarComponent,
     RouterLink,
     TooltipDirective,
-    CdnUrlPipe
-],
+    CdnUrlPipe,
+  ],
   template: `
     <div class="min-h-[calc(100vh-16rem)] bg-secondary flex flex-col">
-      <main class="container mx-auto px-4 flex-1 flex flex-col pt-6 gap-6">
+      <main class="container mx-auto px-4 flex-1 flex flex-col pt-6 gap-4">
         <div class="relative flex items-center justify-between w-full">
           <div class="flex justify-start">
             <nav class="flex-shrink-0">
@@ -67,19 +69,17 @@ import { CdnUrlPipe } from "../../../shared/pipes/cdnUrl-pipe";
           </div>
 
           <div
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[220px] xs:max-w-xs sm:max-w-sm md:max-w-md z-0 px-2"
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full xs:max-w-xs sm:max-w-sm md:max-w-md z-0 px-2"
           ></div>
 
-          <!-- <div class="flex-shrink-0 z-10 relative">
-            <app-tool-bar
-              (modeChanged)="onQuickEditModeChanged($event)"
-              [pendingEditsCount]="pendingEdits().size"
-              [isSaving]="isSavingBatch()"
-              (save)="saveAllEdits()"
-              (discard)="discardAllEdits()"
-              class="max-h-f"
-            />
-          </div> -->
+          <app-toolbar
+            (modeChanged)="onQuickEditModeChanged($event)"
+            [pendingEditsCount]="this.toolbarService.pendingEdits().size"
+            [isSaving]="this.toolbarService.isSavingBatch()"
+            (save)="saveAllEdits()"
+            (discard)="discardAllEdits()"
+            class="w-full"
+          />
         </div>
         @if (!box() && loading()) {
           <div class="text-center py-12">
@@ -138,7 +138,12 @@ import { CdnUrlPipe } from "../../../shared/pipes/cdnUrl-pipe";
                   title="Box Options"
                 >
                   <img
-                    [src]="(themeService.currentTheme() === 'dark' ? 'options-white.png' : 'options-black.png') | cdnUrl:'icons'"
+                    [src]="
+                      (themeService.currentTheme() === 'dark'
+                        ? 'options-white.png'
+                        : 'options-black.png'
+                      ) | cdnUrl: 'icons'
+                    "
                     class="w-5 h-5 opacity-70 hover:opacity-100"
                     alt="Options"
                   />
@@ -206,6 +211,7 @@ export class BoxViewComponent implements OnInit {
   private firestoreService = inject(FirestoreService);
   private datasetService = inject(DatasetService);
   private dexStateService = inject(DexStateService);
+  toolbarService = inject(ToolbarService);
   themeService = inject(ThemeService);
   private pokemonLangService = inject(PokemonLanguageService);
 
@@ -298,29 +304,16 @@ export class BoxViewComponent implements OnInit {
   }
 
   async onSlotClick(slot: BoxSlot) {
-    if (this.currentQuickEditState().active && this.currentQuickEditState().mode !== 'None') {
-      const mode = this.currentQuickEditState().mode;
-      const updates: any = {};
+    const quickEditState = this.currentQuickEditState();
 
-      if (mode === 'Edit') {
+    if (quickEditState.active && quickEditState.mode !== 'None') {
+      if (quickEditState.mode === 'Edit') {
         this.selectedSlot.set(slot);
         this.showDetailDialog.set(true);
         return;
       }
 
-      if (mode === 'Owned') {
-        updates.isOwned = !slot.isOwned;
-        if (updates.isOwned && this.currentQuickEditState().ball) {
-          updates.ball = this.currentQuickEditState().ball;
-        }
-      }
-      if (mode === 'Shiny') updates.isShiny = !slot.isShiny;
-      if (mode === 'Gmax') updates.isGmax = !slot.isGmax;
-      if (mode === 'Alpha') updates.isAlpha = !slot.isAlpha;
-      if (mode === 'Trainer' && this.currentQuickEditState().trainerId) {
-        updates.trainerId = this.currentQuickEditState().trainerId;
-        updates.originalTrainer = this.currentQuickEditState().originalTrainer;
-      }
+      const updates = this.toolbarService.processToolClick(this.currentBox(), slot, quickEditState);
 
       const currentSlots = [...this.slots()];
       const slotIndex = currentSlots.findIndex((s) => s.position === slot.position);
@@ -328,17 +321,27 @@ export class BoxViewComponent implements OnInit {
         currentSlots[slotIndex] = { ...slot, ...updates };
         this.slots.set(currentSlots);
       }
-
-      await this.firestoreService.updateSlot(
-        this.dexId(),
-        this.currentBox(),
-        slot.position,
-        updates,
-      );
     } else {
       this.selectedSlot.set(slot);
       this.showViewDialog.set(true);
     }
+  }
+
+  async saveAllEdits() {
+    try {
+      const updatedBoxes = await this.toolbarService.saveAllEdits(this.dexId());
+
+      if (updatedBoxes.includes(this.currentBox())) {
+        this.loadBox(this.dexId(), this.currentBox());
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  discardAllEdits() {
+    this.toolbarService.discardAllEdits();
+    this.loadBox(this.dexId(), this.currentBox());
   }
 
   closeDetailDialog() {

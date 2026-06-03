@@ -344,13 +344,37 @@ import {
           </div>
         </div>
 
-        <app-custom-dropdown
-          [label]="'Origin Game'"
-          [options]="originGameOptions()"
-          [selectedId]="originGame()"
-          [placeholder]="'Select Origin Game'"
-          (valueChanged)="originGame.set($event)"
+        <div class="flex flex-col gap-3">
+          <app-custom-dropdown
+            [label]="'Origin Game'"
+            [options]="originGameOptions()"
+            [selectedId]="originGame()"
+            [placeholder]="'Select Origin Game'"
+            (valueChanged)="originGame.set($event)"
+          />
+
+          <app-custom-dropdown
+            [label]="'Stored In'"
+            [options]="storedInOptions()"
+            [selectedId]="storedIn()"
+            [placeholder]="'Select Game'"
+            (valueChanged)="storedIn.set($event)"
+          />
+        </div>
+      </div>
+
+      <div class="relative group mb-4">
+        <input
+          [ngModel]="nickname()"
+          (ngModelChange)="nickname.set($event)"
+          placeholder="Nickname"
+          class="w-full bg-surface border-2 border-theme rounded-lg px-4 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none transition-colors peer"
         />
+        <label
+          class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
+        >
+          Nickname
+        </label>
       </div>
 
       <div class="relative group">
@@ -386,6 +410,8 @@ export class PokemonEditAttributesComponent {
   originalTrainer = model<string>('');
   trainerId = model<string>('');
   originGame = model<string>('');
+  storedIn = model<string>('');
+  nickname = model<string>('');
   notes = model<string>('');
 
   pokemonData = input<DatasetPokemon | null>(null);
@@ -398,6 +424,7 @@ export class PokemonEditAttributesComponent {
   markOptions = input<CustomDropdownOption[]>([]);
   trainerOptions = input<CustomDropdownOption[]>([]);
   originGameOptions = input<CustomDropdownOption[]>([]);
+  storedInOptions = input<CustomDropdownOption[]>([]);
 
   trainerSelected = output<string>();
 }

@@ -51,7 +51,7 @@ export interface QuickEditState {
 }
 
 @Component({
-  selector: 'app-tool-bar',
+  selector: 'app-toolbar',
   standalone: true,
   imports: [CommonModule, FormsModule, CustomDropdownComponent, TooltipDirective, CdnUrlPipe],
   template: `
@@ -358,7 +358,7 @@ export interface QuickEditState {
     </div>
   `,
 })
-export class QuickEditBarComponent implements OnInit {
+export class ToolbarComponent implements OnInit {
   private firestoreService = inject(FirestoreService);
   private authService = inject(AuthService);
   private datasetService = inject(DatasetService);

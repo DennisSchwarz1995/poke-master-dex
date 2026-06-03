@@ -84,7 +84,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
               unavailable ones are greyed out.
             </p>
 
-            <div class="flex flex-wrap gap-3 items-center mb-6">
+            <div class="flex flex-wrap gap-3 items-center mb-6 ">
               <div class="relative max-w-sm w-[300px]" #addGameContainer>
                 <app-custom-dropdown
                   [options]="availableGameOptions()"
