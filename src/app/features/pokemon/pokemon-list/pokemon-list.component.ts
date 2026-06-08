@@ -31,7 +31,7 @@ import {
 } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-pokemon-card/dataset-pokemon-card.component';
 import { getGameDropdownOptions } from '../../../core/constants/game-data.constants';
-import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -44,8 +44,8 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
     CdnUrlPipe,
   ],
   template: `<div class="h-full flex flex-col bg-bg-secondary px-4 pb-8 sm:px-6 lg:px-8">
-    <div class="max-w-[1600px] mx-auto w-full">
-      <div class="z-40 bg-bg-secondary/95 pt-6 space-y-4 mb-6">
+    <main class="max-w-[1600px] mx-auto w-full">
+      <header class="z-40 bg-bg-secondary/95 pt-6 space-y-4 mb-6">
         <div class="flex justify-center">
           <div
             class="bg-surface border border-theme p-1 rounded-2xl flex max-w-md w-full shadow-sm"
@@ -391,7 +391,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
             </div>
           }
         </div>
-      </div>
+      </header>
 
       @if (isLoadingList()) {
         <div class="flex justify-center items-center h-64">
@@ -402,10 +402,8 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
           class="grid grid-cols-1 min-[450px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-6 pb-8"
         >
           @for (item of processedDisplayedPokemon(); track item.pokemon.id) {
-            <div class="h-full">
-              <app-dataset-pokemon-card [pokemon]="item.pokemon" [isGreyedOut]="item.isGreyedOut">
-              </app-dataset-pokemon-card>
-            </div>
+            <app-dataset-pokemon-card [pokemon]="item.pokemon" [isGreyedOut]="item.isGreyedOut">
+            </app-dataset-pokemon-card>
           }
         </div>
 
@@ -438,7 +436,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
           </div>
         }
       }
-    </div>
+    </main>
   </div> `,
   styles: [
     `

@@ -4,14 +4,15 @@ import { RouterLink } from '@angular/router';
 import { DatasetPokemon, DatasetService } from '../../../core/api/services/dataset.service';
 import { TypeColorService } from '../../../core/services/type-color.service';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
-import { CapitalizePipe } from '../../pipes/capitalize-pipe';
-import { CdnUrlPipe } from "../../pipes/cdnUrl-pipe";
+import { CapitalizePipe } from '../../pipes/capitalize.pipe';
+import { CdnUrlPipe } from '../../pipes/cdnUrl.pipe';
+import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
 
 @Component({
   selector: 'app-dataset-pokemon-card',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterLink, CapitalizePipe, CdnUrlPipe],
+  imports: [CommonModule, RouterLink, CapitalizePipe, CdnUrlPipe, TooltipDirective],
   template: `
     <a
       [routerLink]="['/pokemon', pokemon().id]"
@@ -29,18 +30,19 @@ import { CdnUrlPipe } from "../../pipes/cdnUrl-pipe";
 
       <div class="absolute top-2.5 right-2.5 flex flex-row gap-1.5 z-20">
         <img
-          [src]="pokemon().type1 + '.png' | cdnUrl:'types'"
-          [title]="pokemon().type1 | capitalize"
+          [src]="pokemon().type1 + '.png' | cdnUrl: 'types'"
           [alt]="pokemon().type1 | capitalize"
+          [appTooltip]="pokemon().type1 | capitalize"
           class="h-4 drop-shadow-md rounded-full bg-surface"
           (error)="onImageError($event)"
           draggable="false"
+          [appTooltip]="pokemon().type1 | capitalize"
         />
         @if (pokemon().type2) {
           <img
-            [src]="pokemon().type2 + '.png' | cdnUrl:'types'"
-            [title]="pokemon().type2 | capitalize"
+            [src]="pokemon().type2 + '.png' | cdnUrl: 'types'"
             [alt]="pokemon().type2 | capitalize"
+            [appTooltip]="pokemon().type2 | capitalize"
             class="h-4 drop-shadow-md rounded-full bg-surface"
             (error)="onImageError($event)"
             draggable="false"
