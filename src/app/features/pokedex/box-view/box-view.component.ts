@@ -23,7 +23,7 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
 import { RouterLink } from '@angular/router';
 import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 import { ToolbarService } from '../../../core/services/toolbar.service';
-import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-box-view',
@@ -157,7 +157,14 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
                   (click)="onSlotClick(slot)"
                   [pokemonSlug]="slot.pokemonSlug"
                   [isOwned]="slot.isOwned"
-                  [isShiny]="slot.isShiny"
+                  [isShiny]="slot.isShiny || false"
+                  [isGmax]="slot.isGmax || false"
+                  [isAlpha]="slot.isAlpha || false"
+                  [ball]="slot.ball"
+                  [showShinyIcon]="currentQuickEditState().appearance?.showShiny || false"
+                  [showGmaxIcon]="currentQuickEditState().appearance?.showGmax || false"
+                  [showAlphaIcon]="currentQuickEditState().appearance?.showAlpha || false"
+                  [showPokeballIcon]="currentQuickEditState().appearance?.showPokeball || false"
                 />
               }
             </div>

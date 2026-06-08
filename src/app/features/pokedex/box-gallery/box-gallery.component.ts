@@ -33,12 +33,13 @@ import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.dir
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { HostListener } from '@angular/core';
 import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.constants';
-import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { ToolbarService } from '../../../core/services/toolbar.service';
 
 export interface EnrichedSlot {
   originalSlot: BoxSlot | null;
   sprite: string;
+  spriteId: string;
   name: string;
   colors: string[];
   slug: string;
@@ -427,6 +428,7 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
             ball,
             isMatched,
             isDisabled,
+            sprite: slot.spriteId ? this.datasetService.getSpriteUrl({ refs: { pkApiId: slot.spriteId } } as any, isShiny) : slot.sprite,
           };
         }),
       };
@@ -553,6 +555,7 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
         return {
           originalSlot: originalSlot || null,
           sprite: '',
+          spriteId: '',
           name: '',
           colors: [],
           slug: originalSlot?.pokemonSlug || '',
@@ -606,6 +609,7 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
             enrichedSlots[index] = {
               originalSlot: slot,
               sprite: this.datasetService.getSpriteUrl(pokemon, slot.isShiny),
+              spriteId: pokemon.refs.pkApiId,
               name: `${this.pokemonLangService.getName(pokemon)} - #${pokemon.nid} - Slot ${slot.position || index + 1}`,
               colors: colors,
               slug: slot.pokemonSlug,
@@ -666,6 +670,7 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
           return {
             originalSlot: originalSlot || null,
             sprite: '',
+            spriteId: '',
             name: '',
             colors: [],
             slug: originalSlot?.pokemonSlug || '',
@@ -895,6 +900,6 @@ export class BoxGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getBallImage(ballId: string): string {
-    return AVAILABLE_SPRITES.pokeballs.has(ballId) ? `${ballId}.png` : 'poke-ball.png';
+    return AVAILABLE_SPRITES.pokeballs.has(ballId) ? `${ballId}.webp` : 'pokeball.webp';
   }
 }

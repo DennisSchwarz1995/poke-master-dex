@@ -4,7 +4,8 @@ import { DatasetService } from '../../../core/api/services/dataset.service';
 import { TypeColorService } from '../../../core/services/type-color.service';
 import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
-import { CdnUrlPipe } from "../../pipes/cdnUrl-pipe";
+import { CdnUrlPipe } from '../../pipes/cdnUrl.pipe';
+import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.constants';
 
 @Component({
   selector: 'app-pokemon-sprite',
@@ -33,15 +34,42 @@ import { CdnUrlPipe } from "../../pipes/cdnUrl-pipe";
             class="w-full h-full object-contain"
             loading="lazy"
           />
-          @if (isShiny()) {
-            <div class="absolute top-0 right-0 text-yellow-500 text-lg" title="Shiny">
-              <img
-                [src]="'ShinySVStar.png' | cdnUrl: 'special_attributes'"
-                alt="Shiny"
-                class="w-5 h-5 object-contain"
-              />
+          <div
+            class="absolute inset-0 pointer-events-none p-[2px] flex flex-col justify-between z-10"
+          >
+            <div class="flex justify-between items-start">
+              @if (showPokeballIcon() && ball()) {
+                <img
+                  [src]="getBallImage(ball()!) | cdnUrl: 'pokeballs'"
+                  class="w-3.5 h-3.5 object-contain drop-shadow"
+                />
+              } @else {
+                <div></div>
+              }
+              @if (showShinyIcon() && isShiny()) {
+                <img
+                  [src]="'shiny-stars.png' | cdnUrl: 'special_attributes'"
+                  class="w-4 h-4 object-contain drop-shadow"
+                />
+              }
             </div>
-          }
+            <div class="flex justify-between items-end">
+              @if (showGmaxIcon() && isGmax()) {
+                <img
+                  [src]="'gigantamax.png' | cdnUrl: 'special_attributes'"
+                  class="w-4 h-4 object-contain drop-shadow"
+                />
+              } @else {
+                <div></div>
+              }
+              @if (showAlphaIcon() && isAlpha()) {
+                <img
+                  [src]="'alpha.png' | cdnUrl: 'special_attributes'"
+                  class="w-4 h-4 object-contain drop-shadow"
+                />
+              }
+            </div>
+          </div>
         </div>
 
         <div class="text-center mt-1 w-full px-1">
@@ -74,6 +102,14 @@ export class PokemonSpriteComponent {
   pokemonSlug = input<string | null>(null);
   isOwned = input<boolean>(false);
   isShiny = input<boolean>(false);
+  isGmax = input<boolean>(false);
+  isAlpha = input<boolean>(false);
+  ball = input<string | undefined>(undefined);
+
+  showShinyIcon = input<boolean>(false);
+  showGmaxIcon = input<boolean>(false);
+  showAlphaIcon = input<boolean>(false);
+  showPokeballIcon = input<boolean>(false);
 
   pokemonName = signal('...');
   pokemonNid = signal('');
@@ -148,5 +184,9 @@ export class PokemonSpriteComponent {
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
         .join('-')
     );
+  }
+
+  getBallImage(ballId: string): string {
+    return AVAILABLE_SPRITES.pokeballs.has(ballId) ? `${ballId}.webp` : 'pokeball.webp';
   }
 }
