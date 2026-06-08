@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { DatasetPokemon, DatasetService } from '../../../../core/api/services/dataset.service';
 import { TooltipDirective } from '../../../../shared/directives/tooltip/tooltip.directive';
 import { PokemonLanguageService } from '../../../../core/services/pokemon-language.service';
-import { CapitalizePipe } from '../../../../shared/pipes/capitalize-pipe';
-import { DexNumberPipe } from '../../../../shared/pipes/dex-number-pipe';
-import { StatPercentPipe } from '../../../../shared/pipes/stat-percent-pipe';
-import { StatColorPipe } from '../../../../shared/pipes/stat-color-pipe';
-import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl-pipe';
+import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
+import { DexNumberPipe } from '../../../../shared/pipes/dex-number.pipe';
+import { StatPercentPipe } from '../../../../shared/pipes/stat-percent.pipe';
+import { StatColorPipe } from '../../../../shared/pipes/stat-color.pipe';
+import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-pokemon-detail-header',

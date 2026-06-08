@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { GameData } from '../../../shared/models/dataset.model';
-import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-game-card',

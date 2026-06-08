@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, HostListener, ElementRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,11 +8,16 @@ import {
   PokemonLanguageService,
   POKEMON_LANGUAGES,
 } from '../../../core/services/pokemon-language.service';
+import {
+  AppearanceState,
+  AVAILABLE_APPEARANCES,
+} from '../../../shared/components/toolbar/toolbar.component';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ThemeToggleComponent],
+  imports: [CommonModule, FormsModule, ThemeToggleComponent, CdnUrlPipe],
   template: `
     <div class="container mx-auto px-4 py-8 max-w-4xl">
       @if (user(); as currentUser) {
@@ -104,6 +109,63 @@ import {
             </div>
           </div>
 
+          <div class="border-t border-theme pt-6 mb-6">
+            <h4 class="font-semibold text-primary mb-3">Appearance Icons</h4>
+            <p class="text-sm text-secondary mb-4">
+              Choose which icons should be displayed on Pokémon cards.
+            </p>
+
+            <div class="relative flex items-center">
+              <button
+                (click)="toggleAppearanceDropdown()"
+                class="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-surface hover:bg-surface-hover text-primary shadow-sm border border-theme"
+              >
+                <svg fill="none" width="20" height="20" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  ></path>
+                </svg>
+                Select Appearance Icons
+              </button>
+
+              @if (isAppearanceDropdownOpen) {
+                <div
+                  class="absolute top-[120%] left-0 z-50 animate-in fade-in zoom-in-95 w-48 bg-surface border border-theme rounded-xl p-1 shadow-xl py-1 flex flex-col gap-1"
+                >
+                  @for (app of availableAppearances; track app.stateKey) {
+                    <label
+                      class="p-2 text-left text-sm font-medium transition-all flex items-center gap-3 hover:bg-surface-hover w-full rounded-lg cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="appearanceState[app.stateKey]"
+                        (change)="toggleAppearance(app.stateKey)"
+                        class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      />
+                      @if (app.icon) {
+                        <img
+                          [src]="app.icon | cdnUrl: app.cdnFolder"
+                          [alt]="app.label"
+                          [class]="app.iconClass"
+                        />
+                      }
+                      {{ app.label }}
+                    </label>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
           <div class="mt-8 flex gap-4">
             <button
               (click)="goBack()"
@@ -132,6 +194,44 @@ export class ProfileComponent {
 
   user = this.authService.user;
   promptDisabled = localStorage.getItem('disableAutoTrainerPrompt') === 'true';
+
+  availableAppearances = AVAILABLE_APPEARANCES;
+  isAppearanceDropdownOpen = false;
+  private elRef = inject(ElementRef);
+
+  appearanceState: Record<string, boolean> = {
+    showShiny: false,
+    showGmax: false,
+    showAlpha: false,
+    showPokeball: false,
+  };
+
+  constructor() {
+    const savedAppearance = localStorage.getItem('appearanceState');
+    if (savedAppearance) {
+      try {
+        this.appearanceState = { ...this.appearanceState, ...JSON.parse(savedAppearance) };
+      } catch (e) {
+        console.error('Error parsing appearance state', e);
+      }
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    if (!this.elRef.nativeElement.contains(event.target)) {
+      this.isAppearanceDropdownOpen = false;
+    }
+  }
+
+  toggleAppearanceDropdown() {
+    this.isAppearanceDropdownOpen = !this.isAppearanceDropdownOpen;
+  }
+
+  toggleAppearance(key: keyof AppearanceState | string) {
+    this.appearanceState[key] = !this.appearanceState[key];
+    localStorage.setItem('appearanceState', JSON.stringify(this.appearanceState));
+  }
 
   toggleTrainerPrompt() {
     this.promptDisabled = !this.promptDisabled;

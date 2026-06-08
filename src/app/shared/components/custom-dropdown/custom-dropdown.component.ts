@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CdnUrlPipe } from '../../pipes/cdnUrl-pipe';
+import { CdnUrlPipe } from '../../pipes/cdnUrl.pipe';
 
 export interface CustomDropdownOption {
   id: string;

@@ -4,8 +4,8 @@ import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { GameData } from '../../../shared/models/dataset.model';
 import { GameCard } from '../game-card/game-card.component';
-import { CapitalizePipe } from '../../../shared/pipes/capitalize-pipe';
-import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
+import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-game-detail',

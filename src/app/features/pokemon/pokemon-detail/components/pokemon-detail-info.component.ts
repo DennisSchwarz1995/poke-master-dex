@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DatasetPokemon, DatasetService } from '../../../../core/api/services/dataset.service';
 import { TooltipDirective } from '../../../../shared/directives/tooltip/tooltip.directive';
-import { CapitalizePipe } from '../../../../shared/pipes/capitalize-pipe';
+import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { PokemonLanguageService } from '../../../../core/services/pokemon-language.service';
-import { FormatAbilityPipe } from '../../../../shared/pipes/ability-pipe';
+import { FormatAbilityPipe } from '../../../../shared/pipes/ability.pipe';
 import { getShortGameName, getGameIconPath } from '../../../../core/constants/game-data.constants';
-import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl-pipe';
+import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-pokemon-detail-info',

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CapitalizePipe } from './capitalize-pipe';
+import { CapitalizePipe } from './capitalize.pipe';
 
 @Pipe({
   name: 'formatAbility',

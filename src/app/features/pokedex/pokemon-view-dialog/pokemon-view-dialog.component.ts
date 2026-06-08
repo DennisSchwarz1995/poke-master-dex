@@ -7,7 +7,7 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { NatureData, RibbonData, MarkData } from '../../../shared/models/dataset.model';
 import { DatasetService, DatasetPokemon } from '../../../core/api/services/dataset.service';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
-import { CapitalizePipe } from '../../../shared/pipes/capitalize-pipe';
+import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
 import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 import { PokemonStatchartComponent } from '../../../shared/components/pokemon-statchart/pokemon-statchart.component';
 import {
@@ -16,7 +16,7 @@ import {
   getGameOriginMark,
 } from '../../../core/constants/game-data.constants';
 import { CommonModule } from '@angular/common';
-import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-pokemon-view-dialog',

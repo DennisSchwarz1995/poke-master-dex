@@ -2,7 +2,7 @@ import { Component, input, output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../core/services/theme.service';
 import { Dex, DexType } from '../../../shared/models/dex.model';
-import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl-pipe';
+import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-dex-card',
