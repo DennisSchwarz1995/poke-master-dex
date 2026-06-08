@@ -22,7 +22,8 @@ import {
   CustomDropdownOption,
 } from '../custom-dropdown/custom-dropdown.component';
 import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
-import { CdnUrlPipe } from '../../pipes/cdnUrl-pipe';
+import { CdnUrlPipe } from '../../pipes/cdnUrl.pipe';
+import { SafeHtmlPipe } from '../../pipes/safeHtml.pipe';
 
 export type QuickEditMode =
   | 'None'
@@ -41,6 +42,45 @@ export interface AppearanceState {
   showPokeball: boolean;
 }
 
+export const AVAILABLE_APPEARANCES: {
+  label: string;
+  stateKey: keyof AppearanceState;
+  icon: string;
+  cdnFolder: string;
+  iconClass: string;
+  svgPath?: string;
+  svgViewBox?: string;
+}[] = [
+  {
+    label: 'Shiny Icon',
+    stateKey: 'showShiny',
+    icon: 'ShinySVStar.png',
+    cdnFolder: 'special_attributes',
+    iconClass: 'w-5 h-5 object-contain',
+  },
+  {
+    label: 'Gmax Icon',
+    stateKey: 'showGmax',
+    icon: 'gigantamax.png',
+    cdnFolder: 'special_attributes',
+    iconClass: 'w-5 h-5 object-contain',
+  },
+  {
+    label: 'Alpha Icon',
+    stateKey: 'showAlpha',
+    icon: 'alpha.png',
+    cdnFolder: 'special_attributes',
+    iconClass: 'w-5 h-5 object-contain',
+  },
+  {
+    label: 'Pokéball',
+    stateKey: 'showPokeball',
+    icon: 'pokeball.webp',
+    cdnFolder: 'pokeballs',
+    iconClass: 'w-6 h-6 object-contain',
+  },
+];
+
 export interface QuickEditState {
   active: boolean;
   mode: QuickEditMode;
@@ -53,7 +93,14 @@ export interface QuickEditState {
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomDropdownComponent, TooltipDirective, CdnUrlPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CustomDropdownComponent,
+    TooltipDirective,
+    CdnUrlPipe,
+    SafeHtmlPipe,
+  ],
   template: `
     <div class="flex flex-col gap-4 w-full animate-in fade-in duration-300">
       <div class="relative flex items-center justify-between w-full">
@@ -65,7 +112,7 @@ export interface QuickEditState {
           <div class="relative flex items-center">
             <button
               (click)="toggleToolsDropdown()"
-              class="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 border border-theme bg-surface hover:bg-surface-hover text-primary shadow-sm"
+              class="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-surface hover:bg-surface-hover text-primary shadow-sm"
               [ngClass]="{
                 'bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-950/20 dark:border-blue-900/50 dark:text-blue-300':
                   currentMode() !== 'None',
@@ -73,74 +120,87 @@ export interface QuickEditState {
               [appTooltip]="'Pokémon Tools'"
               tooltipPosition="top"
             >
-              <img
-                [src]="'options-black.png' | cdnUrl: 'icons'"
-                class="w-4 h-4 dark:invert"
-                alt="Tools"
-              />
-              {{ currentMode() !== 'None' ? '(' + getModeLabel(currentMode()) + ')' : '' }}
+              @if (this.currentMode() === 'None') {
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    fill="currentColor"
+                    d="M5.33 3.272a3.5 3.5 0 0 1 4.472 4.473L20.647 18.59l-2.122 2.122L7.68 9.867a3.5 3.5 0 0 1-4.472-4.474L5.444 7.63a1.5 1.5 0 0 0 2.121-2.121zm10.367 1.883l3.182-1.768l1.414 1.415l-1.768 3.182l-1.768.353l-2.12 2.121l-1.415-1.414l2.121-2.121zm-7.071 7.778l2.121 2.122l-4.95 4.95A1.5 1.5 0 0 1 3.58 17.99l.097-.107z"
+                  />
+                </svg>
+              } @else {
+                @if (currentMode() === 'Pokeball') {
+                  <img
+                    [src]="(selectedBall() || 'pokeball') + '.webp' | cdnUrl: 'pokeballs'"
+                    alt="Ball"
+                    class="w-5 h-5 object-contain"
+                  />
+                } @else if (activeMode()?.icon) {
+                  <img
+                    [src]="activeMode()?.icon | cdnUrl: activeMode()?.cdnFolder || ''"
+                    [alt]="activeMode()?.label"
+                    class="w-5 h-5 object-contain"
+                  />
+                } @else if (activeMode()?.svgString) {
+                  <span
+                    [innerHTML]="activeMode()?.svgString | safeHtml"
+                    class="flex items-center justify-center text-inherit"
+                  ></span>
+                }
+              }
             </button>
 
             @if (isToolsDropdownOpen()) {
               <div
-                class="absolute top-[120%] left-0 z-50 animate-in fade-in zoom-in-95 w-48 bg-surface border border-theme rounded-xl shadow-xl py-2 flex flex-col gap-1"
+                class="absolute top-[150%] left-[-8px] z-50 animate-in fade-in zoom-in-95 w-48 bg-surface border border-theme rounded-xl shadow-xl p-1 flex flex-col gap-1"
               >
                 @for (mode of availableModes; track mode.value) {
                   <button
                     (click)="setMode(mode.value)"
-                    class="px-4 py-2 text-left text-sm font-medium transition-all flex items-center gap-3 hover:bg-surface-hover w-full"
+                    class="p-2 text-left text-sm font-medium transition-all flex items-center gap-2 hover:bg-surface-hover w-full rounded-lg"
                     [class.bg-blue-50]="currentMode() === mode.value"
                     [class.text-blue-700]="currentMode() === mode.value"
                     [class.dark:bg-blue-950/30]="currentMode() === mode.value"
                     [class.dark:text-blue-300]="currentMode() === mode.value"
                   >
                     @if (mode.value === 'Pokeball') {
-                      <img [src]="getBallIcon()" alt="Ball" class="w-5 h-5 object-contain" />
-                    } @else if (mode.svgIcon) {
-                      <span
-                        class="w-5 h-5 flex items-center justify-center text-current [&>svg]:w-full [&>svg]:h-full"
-                        [innerHTML]="mode.svgIcon"
-                      >
-                      </span>
+                      <img
+                        [src]="'pokeball.webp' | cdnUrl: 'pokeballs'"
+                        alt="Ball"
+                        class="w-5 h-5 object-contain"
+                      />
                     } @else if (mode.icon) {
                       <img
                         [src]="mode.icon | cdnUrl: mode.cdnFolder || ''"
                         [alt]="mode.label"
                         class="w-5 h-5 object-contain"
                       />
-                    } @else if (mode.icons) {
-                      <div
-                        class="flex flex-row items-center justify-center -space-x-1.5 transition-all w-5"
-                      >
-                        @for (icon of mode.icons; track icon) {
-                          <img
-                            [src]="icon | cdnUrl: mode.cdnFolder || ''"
-                            alt="Icon"
-                            class="w-[1.1rem] h-[1.1rem] object-contain drop-shadow-sm bg-surface rounded-full p-0.5"
-                          />
-                        }
-                      </div>
+                    } @else if (mode.svgString) {
+                      <span
+                        [innerHTML]="mode.svgString | safeHtml"
+                        class="flex items-center justify-center text-inherit"
+                      ></span>
                     }
                     {{ mode.label }}
                   </button>
                 }
-                @if (currentMode() !== 'None') {
-                  <div class="h-px bg-theme my-1"></div>
-                  <button
-                    (click)="setMode('None')"
-                    class="px-4 py-2 text-left text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 w-full flex items-center gap-3"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      ></path>
-                    </svg>
-                    Clear Tool
-                  </button>
-                }
+
+                <button
+                  (click)="setMode('None')"
+                  class="p-2 text-left text-sm font-medium transition-all flex items-center gap-2 hover:bg-surface-hover w-full rounded-lg"
+                  [disabled]="currentMode() === 'None'"
+                  ngClass="disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <svg fill="none" width="20" height="20" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                  Clear Tool
+                </button>
               </div>
             }
           </div>
@@ -148,11 +208,11 @@ export interface QuickEditState {
           <div class="relative flex items-center">
             <button
               (click)="toggleAppearanceDropdown()"
-              class="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-surface hover:bg-surface-hover border border-theme text-primary shadow-sm"
+              class="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-surface hover:bg-surface-hover text-primary shadow-sm"
               [appTooltip]="'Appearance'"
               tooltipPosition="top"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg fill="none" width="20" height="20" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -170,72 +230,28 @@ export interface QuickEditState {
 
             @if (isAppearanceDropdownOpen()) {
               <div
-                class="absolute top-[120%] left-0 z-50 animate-in fade-in zoom-in-95 w-48 bg-surface border border-theme rounded-xl shadow-xl py-2 flex flex-col gap-1"
+                class="absolute top-[150%] left-[-4px] z-50 animate-in fade-in zoom-in-95 w-48 bg-surface border border-theme rounded-xl p-1 shadow-xl py-1 flex flex-col gap-1"
               >
-                <label
-                  class="px-4 py-2 text-sm font-medium transition-all flex items-center gap-3 hover:bg-surface-hover w-full cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    [checked]="appearanceState().showShiny"
-                    (change)="toggleAppearance('showShiny')"
-                    class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                  />
-                  <img
-                    [src]="'ShinySVStar.png' | cdnUrl: 'special_attributes'"
-                    alt="Shiny"
-                    class="w-5 h-5 object-contain"
-                  />
-                  Shiny Icon
-                </label>
-                <label
-                  class="px-4 py-2 text-sm font-medium transition-all flex items-center gap-3 hover:bg-surface-hover w-full cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    [checked]="appearanceState().showGmax"
-                    (change)="toggleAppearance('showGmax')"
-                    class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                  />
-                  <img
-                    [src]="'gigantamax.png' | cdnUrl: 'special_attributes'"
-                    alt="Gmax"
-                    class="w-5 h-5 object-contain"
-                  />
-                  Gmax Icon
-                </label>
-                <label
-                  class="px-4 py-2 text-sm font-medium transition-all flex items-center gap-3 hover:bg-surface-hover w-full cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    [checked]="appearanceState().showAlpha"
-                    (change)="toggleAppearance('showAlpha')"
-                    class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                  />
-                  <img
-                    [src]="'alpha.png' | cdnUrl: 'special_attributes'"
-                    alt="Alpha"
-                    class="w-5 h-5 object-contain"
-                  />
-                  Alpha Icon
-                </label>
-                <label
-                  class="px-4 py-2 text-sm font-medium transition-all flex items-center gap-3 hover:bg-surface-hover w-full cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    [checked]="appearanceState().showPokeball"
-                    (change)="toggleAppearance('showPokeball')"
-                    class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                  />
-                  <img
-                    [src]="'pokeball.webp' | cdnUrl: 'pokeballs'"
-                    alt="Pokeball"
-                    class="w-6 h-6 object-contain"
-                  />
-                  Pokéball
-                </label>
+                @for (appearance of availableAppearances; track appearance.stateKey) {
+                  <label
+                    class="p-2 text-left text-sm font-medium transition-all flex items-center gap-3 hover:bg-surface-hover w-full rounded-lg cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      [checked]="appearanceState()[appearance.stateKey]"
+                      (change)="toggleAppearance(appearance.stateKey)"
+                      class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    />
+                    @if (appearance.icon) {
+                      <img
+                        [src]="appearance.icon | cdnUrl: appearance.cdnFolder"
+                        [alt]="appearance.label"
+                        [class]="appearance.iconClass"
+                      />
+                    }
+                    {{ appearance.label }}
+                  </label>
+                }
               </div>
             }
           </div>
@@ -244,7 +260,7 @@ export interface QuickEditState {
             <button
               (click)="discard.emit()"
               [disabled]="pendingEditsCount() === 0 || isSaving()"
-              class="px-4 py-2 rounded-lg transition-all flex items-center justify-center border border-theme bg-surface text-primary disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+              class="px-4 py-2 rounded-lg transition-all flex items-center justify-center bg-surface text-primary disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
               [ngClass]="{
                 'hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-950/20 dark:hover:border-red-900/50':
                   pendingEditsCount() > 0 && !isSaving(),
@@ -252,7 +268,7 @@ export interface QuickEditState {
               [appTooltip]="'Discard Changes'"
               tooltipPosition="top"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg fill="none" width="20" height="20" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -263,9 +279,9 @@ export interface QuickEditState {
             </button>
 
             <button
-              (click)="save.emit()"
+              (click)="save.emit(); setMode('None')"
               [disabled]="pendingEditsCount() === 0 || isSaving()"
-              class="relative px-4 py-2 rounded-lg transition-all flex items-center justify-center border border-theme bg-surface text-primary disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+              class="relative px-4 py-2 rounded-lg transition-all flex items-center justify-center bg-surface text-primary disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
               [ngClass]="{
                 'hover:bg-green-50 hover:text-green-600 hover:border-green-300 dark:hover:bg-green-950/20 dark:hover:border-green-900/50':
                   pendingEditsCount() > 0 && !isSaving(),
@@ -278,7 +294,7 @@ export interface QuickEditState {
                   class="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"
                 ></div>
               } @else {
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg fill="none" width="20" height="20" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -346,7 +362,7 @@ export interface QuickEditState {
                 [ngClass]="selectedBall() === ball.id ? 'bg-blue-500/20  shadow-md' : 'bg-surface'"
               >
                 <img
-                  [src]="getBallImage(ball.id) | cdnUrl: 'pokeballs'"
+                  [src]="ball.id + '.webp' | cdnUrl: 'pokeballs'"
                   [alt]="ball.name"
                   class="w-7 h-7 object-contain drop-shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-transform"
                 />
@@ -393,9 +409,8 @@ export class ToolbarComponent implements OnInit {
     value: QuickEditMode;
     label: string;
     icon?: string;
-    svgIcon?: string;
-    icons?: string[];
     cdnFolder?: string;
+    svgString?: string;
   }[] = [
     {
       value: 'Edit',
@@ -406,13 +421,12 @@ export class ToolbarComponent implements OnInit {
     {
       value: 'Owned',
       label: 'Caught',
-      svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      svgString: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
 	<path d="M0 0h24v24H0z" fill="none" />
-	<path fill="currentColor" d="M14.5 12a2.5 2.5 0 0 1-5 0a2.5 2.5 0 0 1 5 0m7.5 0c0 5.52-4.48 10-10 10S2 17.52 2 12S6.48 2 12 2s10 4.48 10 10m-2 0h-4c0-2.21-1.79-4-4-4s-4 1.79-4 4H4c0 4.41 3.59 8 8 8s8-3.59 8-8" />
+	<path fill="currentColor" d="M12 4c4.08 0 7.45 3.05 7.94 7h-4.06c-.45-1.73-2.02-3-3.88-3s-3.43 1.27-3.87 3H4.06C4.55 7.05 7.92 4 12 4" opacity=".3" />
+	<path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m0 2c4.08 0 7.45 3.05 7.94 7h-4.06c-.45-1.73-2.02-3-3.88-3s-3.43 1.27-3.87 3H4.06C4.55 7.05 7.92 4 12 4m2 8c0 1.1-.9 2-2 2s-2-.9-2-2s.9-2 2-2s2 .9 2 2m-2 8c-4.08 0-7.45-3.05-7.94-7h4.06c.44 1.73 2.01 3 3.87 3s3.43-1.27 3.87-3h4.06c-.47 3.95-3.84 7-7.92 7" />
 </svg>
-
-        `,
-      cdnFolder: 'icons',
+`,
     },
     {
       value: 'Pokeball',
@@ -439,10 +453,11 @@ export class ToolbarComponent implements OnInit {
     {
       value: 'Trainer',
       label: 'Set Trainer',
-      icons: ['trainer-male.png', 'trainer-female.png'],
       cdnFolder: 'icons',
     },
   ];
+
+  availableAppearances = AVAILABLE_APPEARANCES;
 
   trainerDropdownOptions = computed<CustomDropdownOption[]>(() => {
     return this.trainers().map((tr) => ({
@@ -464,9 +479,13 @@ export class ToolbarComponent implements OnInit {
       name: ball.name,
       description: ball.shortDesc,
       category: categoryLabels[ball.category] ?? ball.category,
-      iconPath: AVAILABLE_SPRITES.pokeballs.has(ball.id) ? `${ball.id}.png` : undefined,
+      iconPath: AVAILABLE_SPRITES.pokeballs.has(ball.id) ? `${ball.id}.webp` : undefined,
       cdnFolder: 'pokeballs',
     }));
+  });
+
+  activeMode = computed(() => {
+    return this.availableModes.find((mode) => mode.value === this.currentMode());
   });
 
   @HostListener('document:click', ['$event'])
@@ -478,6 +497,16 @@ export class ToolbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    const savedAppearance = localStorage.getItem('appearanceState');
+    if (savedAppearance) {
+      try {
+        const parsed = JSON.parse(savedAppearance);
+        this.appearanceState.set({ ...this.appearanceState(), ...parsed });
+      } catch (e) {
+        console.error('Error parsing appearance state', e);
+      }
+    }
+
     const user = this.authService.user();
     if (user) {
       this.firestoreService.getUserTrainers().subscribe((data) => {
@@ -502,31 +531,29 @@ export class ToolbarComponent implements OnInit {
 
   toggleAppearance(key: keyof AppearanceState) {
     const currentState = this.appearanceState();
-    this.appearanceState.set({ ...currentState, [key]: !currentState[key] });
+    const newState = { ...currentState, [key]: !currentState[key] };
+    this.appearanceState.set(newState);
+    localStorage.setItem('appearanceState', JSON.stringify(newState));
     this.emitState();
   }
 
   setMode(mode: QuickEditMode) {
     if (this.currentMode() === mode) {
-      this.isToolsDropdownOpen.set(false);
-      return;
+      this.currentMode.set('None');
+    } else {
+      this.currentMode.set(mode);
     }
-    this.currentMode.set(mode);
     this.isToolsDropdownOpen.set(false);
     this.emitState();
   }
 
   getModeLabel(modeValue: QuickEditMode): string {
-    const mode = this.availableModes.find((m) => m.value === modeValue);
+    const mode = this.availableModes.find((mode) => mode.value === modeValue);
     return mode ? mode.label : '';
   }
 
   getBallImage(ballId: string): string {
     return AVAILABLE_SPRITES.pokeballs.has(ballId) ? `${ballId}.webp` : 'pokeball.webp';
-  }
-
-  getBallIcon(): string {
-    return this.getBallImage(this.selectedBall());
   }
 
   onTrainerSelected(trainerId: string) {
