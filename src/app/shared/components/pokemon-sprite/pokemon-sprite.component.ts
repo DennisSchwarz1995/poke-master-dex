@@ -35,7 +35,7 @@ import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.con
             loading="lazy"
           />
           <div
-            class="absolute inset-0 pointer-events-none p-[2px] flex flex-col justify-between z-10"
+            class="absolute inset-0 pointer-events-none p-[0px] flex flex-col justify-between z-10"
           >
             <div class="flex justify-between items-start">
               @if (showPokeballIcon() && ball()) {

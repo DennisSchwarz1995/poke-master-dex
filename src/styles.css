@@ -161,6 +161,12 @@ body {
   letter-spacing: 0.02em;
 }
 
+.transition-animation {
+  transition-duration: 0.15s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: transform, translate, scale, rotate;
+}
+
 .tooltip-top {
   animation: tooltipFadeInTop 0.15s ease-out forwards;
 }

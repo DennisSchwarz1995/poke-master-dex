@@ -16,7 +16,7 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
   template: `
     <a
       [routerLink]="['/pokemon', pokemon().id]"
-      class="group block relative w-full h-full bg-surface border-2 rounded-2xl shadow-md hover:shadow-xl dark:border-white/5 dark:shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-2px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col items-center p-4 overflow-hidden cursor-pointer"
+      class="group block relative w-full h-full bg-surface border-2 rounded-2xl shadow-md hover:shadow-xl dark:border-white/5 dark:shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-2px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] transition-transform hover:-translate-y-1.5 flex flex-col items-center p-4 overflow-hidden cursor-pointer"
       [class.opacity-40]="isGreyedOut()"
       [class.grayscale]="isGreyedOut()"
       [ngStyle]="getCardBorderStyle()"

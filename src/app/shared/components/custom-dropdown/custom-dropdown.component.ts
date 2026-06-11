@@ -190,12 +190,12 @@ export interface CustomDropdownOption {
             }
           </div>
 
-          <div class="p-2 border-t border-theme bg-secondary/5 flex-shrink-0 flex justify-end">
+          <div class="py-2.5 px-1.5 border-t border-theme bg-secondary/5 flex-shrink-0 flex">
             <button
               type="button"
               (click)="clearSelection($event)"
-              [disabled]="!selectedOption()"
-              class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-500/10 active:bg-red-500/20 rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed"
+              [disabled]="!selectedOption() || selectedOption()?.name === 'ALL'"
+              class="flex items-center gap-1.5 px-1.5 py-1.5 text-xs font-semibold rounded-md transition-all disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:text-red-500 enabled:hover:bg-surface-hover"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
