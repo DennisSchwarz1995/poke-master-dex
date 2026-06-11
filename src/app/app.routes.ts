@@ -79,6 +79,16 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'imprint',
+    loadComponent: () =>
+      import('./features/legal/imprint/imprint.component').then((m) => m.ImprintComponent),
+  },
+  {
+    path: 'privacy',
+    loadComponent: () =>
+      import('./features/legal/privacy/privacy.component').then((m) => m.PrivacyComponent),
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },
