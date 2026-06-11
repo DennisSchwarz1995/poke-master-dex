@@ -43,7 +43,14 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
   template: `
     <div class="min-h-[calc(100vh-16rem)] bg-secondary flex flex-col">
       <main class="container mx-auto px-4 flex-1 flex flex-col pt-6 gap-4">
-        <div class="relative flex items-center justify-between w-full">
+        <app-toolbar
+          (modeChanged)="onQuickEditModeChanged($event)"
+          [pendingEditsCount]="this.toolbarService.pendingEdits().size"
+          [isSaving]="this.toolbarService.isSavingBatch()"
+          (save)="saveAllEdits()"
+          (discard)="discardAllEdits()"
+          class="w-full"
+        >
           <div class="flex justify-start">
             <nav class="flex-shrink-0">
               <a
@@ -71,16 +78,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
           <div
             class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full xs:max-w-xs sm:max-w-sm md:max-w-md z-0 px-2"
           ></div>
-
-          <app-toolbar
-            (modeChanged)="onQuickEditModeChanged($event)"
-            [pendingEditsCount]="this.toolbarService.pendingEdits().size"
-            [isSaving]="this.toolbarService.isSavingBatch()"
-            (save)="saveAllEdits()"
-            (discard)="discardAllEdits()"
-            class="w-full"
-          />
-        </div>
+        </app-toolbar>
         @if (!box() && loading()) {
           <div class="text-center py-12">
             <div

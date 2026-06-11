@@ -21,7 +21,7 @@ import { ThemeService } from '../../core/services/theme.service';
   ],
   template: `
     <div class="bg-secondary">
-      <main class="container mx-auto px-4 py-8">
+      <main class="container mx-auto max-w-5xl py-6">
         <div class="mb-8">
           <h2 class="text-3xl font-bold text-primary mb-2">Your Dex Collection</h2>
           <p class="text-secondary">Manage your Pokemon collections</p>
