@@ -3,7 +3,6 @@ import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
-import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/theme-toggle.component';
 import {
   PokemonLanguageService,
   POKEMON_LANGUAGES,
@@ -13,18 +12,17 @@ import {
   AVAILABLE_APPEARANCES,
 } from '../../../shared/components/toolbar/toolbar.component';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ThemeToggleComponent, CdnUrlPipe],
+  imports: [CommonModule, FormsModule, CdnUrlPipe],
   template: `
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="container mx-auto px-4 pt-6 max-w-4xl">
       @if (user(); as currentUser) {
         <div class="bg-surface rounded-xl shadow-lg p-8 border border-theme">
-          <h2 class="text-2xl font-bold mb-6 text-primary">Profile</h2>
-
-          <div class="flex items-center gap-6 mb-8">
+          <div class="flex items-center gap-6 border-b border-theme pb-6">
             @if (currentUser.photoURL) {
               <img
                 [src]="currentUser.photoURL"
@@ -52,27 +50,44 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
             </div>
           </div>
 
-          <div class="border-t border-theme pt-6 mb-6">
-            <h4 class="font-semibold text-primary mb-3">Account Information</h4>
-            <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-6 border-b border-theme py-6">
+            <div class="flex items-center justify-between">
               <div>
-                <dt class="text-sm text-secondary">User ID</dt>
-                <dd class="font-mono text-sm text-primary break-all">{{ currentUser.uid }}</dd>
+                <p class="font-medium text-primary">App Theme</p>
+                <p class="text-sm text-secondary">Change the App Theme</p>
               </div>
-            </dl>
-          </div>
-
-          <div class="border-t border-theme pt-6 mb-6">
-            <h4 class="font-semibold text-primary mb-3">Settings</h4>
-            <div class="flex items-center justify-between py-3">
-              <div>
-                <p class="font-medium text-primary">Theme</p>
-                <p class="text-sm text-secondary">Switch between light and dark mode</p>
-              </div>
-              <app-theme-toggle />
+              <button
+                (click)="themeService.toggleTheme()"
+                class="p-2.5 rounded-xl text-secondary hover:text-primary hover:bg-surface-hover transition-colors focus:ring-2 focus:ring-primary/20 outline-none"
+                [title]="
+                  themeService.currentTheme() === 'dark'
+                    ? 'Switch to Light Mode'
+                    : 'Switch to Dark Mode'
+                "
+              >
+                @if (themeService.currentTheme() === 'light') {
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    ></path>
+                  </svg>
+                } @else {
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                    ></path>
+                  </svg>
+                }
+              </button>
             </div>
 
-            <div class="flex items-center justify-between py-3">
+            <div class="flex items-center justify-between">
               <div>
                 <p class="font-medium text-primary">Pokémon Language</p>
                 <p class="text-sm text-secondary">Choose the display language for Pokémon names</p>
@@ -88,9 +103,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
               </select>
             </div>
 
-            <div
-              class="flex items-center justify-between py-3 border-t border-theme border-opacity-50"
-            >
+            <div class="flex items-center justify-between">
               <div>
                 <p class="font-medium text-primary">Ask to save Trainer</p>
                 <p class="text-sm text-secondary">Ask to save new trainers</p>
@@ -109,11 +122,13 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
             </div>
           </div>
 
-          <div class="border-t border-theme pt-6 mb-6">
-            <h4 class="font-semibold text-primary mb-3">Appearance Icons</h4>
-            <p class="text-sm text-secondary mb-4">
-              Choose which icons should be displayed on Pokémon cards.
-            </p>
+          <div class="flex items-center justify-between gap-6 border-b border-theme py-6">
+            <div>
+              <p class="font-medium text-primary">Appearance Icons</p>
+              <p class="text-sm text-secondary">
+                Choose which icons should be displayed on Pokémon cards.
+              </p>
+            </div>
 
             <div class="relative flex items-center">
               <button
@@ -134,7 +149,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                   ></path>
                 </svg>
-                Select Appearance Icons
+                Appearance Icons
               </button>
 
               @if (isAppearanceDropdownOpen) {
@@ -166,17 +181,38 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
             </div>
           </div>
 
-          <div class="mt-8 flex gap-4">
+          <div class="flex justify-end pt-6 gap-6">
             <button
               (click)="goBack()"
-              class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition font-semibold flex items-center gap-2"
+              class="flex flex-row items-center gap-1 bg-blue-500 text-white px-4 py-2.5 rounded-lg hover:bg-blue-600 transition font-semibold flex items-center gap-2"
             >
-              ← Back
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 1024 1024"
+              >
+                <path d="M0 0h1024v1024H0z" fill="none" />
+                <path fill="currentColor" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64" />
+                <path
+                  fill="currentColor"
+                  d="m237.2 512l265.5 265.3a32 32 0 0 1-45.4 45.4l-288-288a32 32 0 0 1 0-45.4l288-288a32 32 0 1 1 45.4 45.4z"
+                />
+              </svg>
+
+              Back
             </button>
             <button
               (click)="signOut()"
-              class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition font-semibold"
+              class="flex flex-row items-center gap-1 bg-red-500 text-white px-4 py-2.5 rounded-lg hover:bg-red-600 transition font-semibold"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path
+                  fill="currentColor"
+                  d="M4 12a.5.5 0 0 0 .5.5h8.793l-2.647 2.646a.5.5 0 1 0 .707.708l3.5-3.5a.5.5 0 0 0 0-.707l-3.5-3.5a.5.5 0 0 0-.707.707l2.647 2.646H4.5a.5.5 0 0 0-.5.5M17.5 2h-11A2.5 2.5 0 0 0 4 4.5v4a.5.5 0 0 0 1 0v-4A1.5 1.5 0 0 1 6.5 3h11A1.5 1.5 0 0 1 19 4.5v15a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19.5v-4a.5.5 0 0 0-1 0v4A2.5 2.5 0 0 0 6.5 22h11a2.5 2.5 0 0 0 2.5-2.5v-15A2.5 2.5 0 0 0 17.5 2"
+                />
+              </svg>
               Sign Out
             </button>
           </div>
@@ -189,6 +225,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 export class ProfileComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  public themeService = inject(ThemeService);
   pokemonLangService = inject(PokemonLanguageService);
   languages = POKEMON_LANGUAGES;
 

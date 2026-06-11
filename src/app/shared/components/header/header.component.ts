@@ -222,11 +222,9 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
           </div>
         }
 
-        <div class="flex items-center gap-2 sm:gap-4">
+        <div class="flex items-center">
           @if (user(); as currentUser) {
-            <div
-              class="flex items-center gap-2 sm:gap-3 mr-2 sm:mr-4 border-r border-theme pr-2 sm:pr-4"
-            >
+            <div class="flex items-center">
               @if (isPokedexRoute()) {
                 <button
                   (click)="openTrainerManagement()"
@@ -243,50 +241,20 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
                   [src]="currentUser.photoURL"
                   [alt]="currentUser.displayName || 'User'"
                   (click)="goToProfile()"
-                  class="w-9 h-9 rounded-full cursor-pointer hover:ring-2 hover:ring-blue-400 transition ml-1"
-                  title="Go to Profile"
+                  class="w-9 h-9 rounded-full cursor-pointer hover:ring-2 hover:ring-blue-400 transition"
+                  [appTooltip]="'Go to Profile'"
                 />
               } @else {
                 <button
                   (click)="goToProfile()"
                   class="w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold hover:bg-blue-600 transition ml-1"
-                  title="Go to Profile"
+                  [appTooltip]="'Go to Profile'"
                 >
                   {{ currentUser.displayName?.charAt(0) || '?' }}
                 </button>
               }
             </div>
           }
-
-          <button
-            (click)="themeService.toggleTheme()"
-            class="p-2.5 rounded-xl text-secondary hover:text-primary hover:bg-surface-hover transition-colors focus:ring-2 focus:ring-primary/20 outline-none"
-            [title]="
-              themeService.currentTheme() === 'dark'
-                ? 'Switch to Light Mode'
-                : 'Switch to Dark Mode'
-            "
-          >
-            @if (themeService.currentTheme() === 'light') {
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                ></path>
-              </svg>
-            } @else {
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                ></path>
-              </svg>
-            }
-          </button>
         </div>
       </div>
     </header>
@@ -398,7 +366,6 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
   ],
 })
 export class HeaderComponent {
-  themeService = inject(ThemeService);
   private dexStateService = inject(DexStateService);
   private authService = inject(AuthService);
   private router = inject(Router);
