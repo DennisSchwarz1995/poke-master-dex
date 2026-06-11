@@ -11,6 +11,14 @@ export class CdnUrlPipe implements PipeTransform {
       return '';
     }
 
+    if (
+      fileName.startsWith('data:') ||
+      fileName.startsWith('http://') ||
+      fileName.startsWith('https://')
+    ) {
+      return fileName;
+    }
+
     const folderPath = subfolder ? `/${subfolder}` : '';
 
     return `${environment.cdnUrl}${folderPath}/${fileName}`;
