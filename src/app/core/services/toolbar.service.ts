@@ -74,7 +74,9 @@ export class ToolbarService {
       }
     }
 
-    if (mode === 'Pokeball' && modeState.ball) {
+    if (mode === 'Pokeball') {
+      if (!modeState.ball) return updates;
+
       if (currentBall === modeState.ball) {
         updates.ball = undefined;
       } else {
@@ -86,13 +88,21 @@ export class ToolbarService {
       }
     }
 
-    if (mode === 'Trainer' && modeState.trainerId) {
-      if (currentTrainer === modeState.trainerId) {
-        updates.trainerId = undefined;
-        updates.originalTrainer = undefined;
+    if (mode === 'Trainer') {
+      if (!modeState.trainerId && !modeState.originalTrainer) return updates;
+
+      const currentOriginalTrainer =
+        updates.originalTrainer !== undefined ? updates.originalTrainer : slot.originalTrainer;
+
+      if (
+        currentTrainer === modeState.trainerId &&
+        currentOriginalTrainer === modeState.originalTrainer
+      ) {
+        return updates;
       } else {
         updates.trainerId = modeState.trainerId;
         updates.originalTrainer = modeState.originalTrainer;
+        updates.originGame = modeState.originGame;
         if (!currentOwned) {
           updates.isOwned = true;
           updates.storedIn = 'home';

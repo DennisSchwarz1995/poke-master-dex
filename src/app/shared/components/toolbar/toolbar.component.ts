@@ -86,6 +86,7 @@ export interface QuickEditState {
   mode: QuickEditMode;
   trainerId?: string;
   originalTrainer?: string;
+  originGame?: string;
   ball?: string;
   appearance?: AppearanceState;
 }
@@ -393,6 +394,8 @@ export class ToolbarComponent implements OnInit {
 
   selectedTrainerId = signal<string>('');
   selectedTrainerName = signal<string>('');
+  selectedTrainerTid = signal<string>('');
+  selectedTrainerGame = signal<string>('');
   selectedBall = signal<string>('');
 
   isToolsDropdownOpen = signal(false);
@@ -560,9 +563,13 @@ export class ToolbarComponent implements OnInit {
     this.selectedTrainerId.set(trainerId);
     if (!trainerId) {
       this.selectedTrainerName.set('');
+      this.selectedTrainerTid.set('');
+      this.selectedTrainerGame.set('');
     } else {
       const tr = this.trainers().find((t) => t.id === trainerId);
       this.selectedTrainerName.set(tr ? tr.name : '');
+      this.selectedTrainerTid.set(tr ? tr.trainerId : '');
+      this.selectedTrainerGame.set(tr?.game ? tr.game : '');
     }
     this.emitState();
   }
@@ -624,7 +631,7 @@ export class ToolbarComponent implements OnInit {
         return 'Select a Trainer from the selection box, then click on any Pokémon to assign this Trainer.';
       }
       const trainerName = this.selectedTrainerName() || 'selected Trainer';
-      return `Click on any Pokémon to assign the Trainer "${trainerName}" to it. Click again on a Pokémon with the same Trainer to remove it.`;
+      return `Click on any Pokémon to assign the Trainer "${trainerName}" to it.`;
     }
 
     return '';
@@ -634,8 +641,9 @@ export class ToolbarComponent implements OnInit {
     this.modeChanged.emit({
       active: this.currentMode() !== 'None',
       mode: this.currentMode(),
-      trainerId: this.selectedTrainerId() || undefined,
+      trainerId: this.selectedTrainerTid() || undefined,
       originalTrainer: this.selectedTrainerName() || undefined,
+      originGame: this.selectedTrainerGame() || undefined,
       ball: this.selectedBall() || undefined,
       appearance: this.appearanceState(),
     });
