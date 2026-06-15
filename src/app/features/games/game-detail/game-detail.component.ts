@@ -4,13 +4,16 @@ import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { GameData } from '../../../shared/models/dataset.model';
 import { GameCard } from '../game-card/game-card.component';
-import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
+import {
+  getGameCustomDescription,
+  getGameIconPath,
+} from '../../../core/constants/game-data.constants';
 
 @Component({
   selector: 'app-game-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, GameCard, CapitalizePipe, CdnUrlPipe],
+  imports: [CommonModule, RouterLink, GameCard, CdnUrlPipe],
   template: `
     <div class="flex flex-col bg-bg-secondary p-4 sm:p-6 lg:p-8">
       <div class="max-w-5xl mx-auto w-full space-y-6">
@@ -28,9 +31,9 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
                   <h1 class="text-4xl sm:text-4xl font-extrabold tracking-tight mb-2">
                     Pokémon {{ game.name }}
                   </h1>
-                  @if (getGameIconUrl(game.id)) {
+                  @if (gameIconPath()) {
                     <img
-                      [src]="getGameIconUrl(game.id) | cdnUrl: 'games'"
+                      [src]="gameIconPath() | cdnUrl: 'games'"
                       class="inline-block w-16 h-16 object-fit z-20 drop-shadow flex-shrink-0 border border-theme rounded-xl"
                       (error)="onImageError($event)"
                     />
@@ -59,11 +62,9 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
                   </div>
 
                   <div class="flex items-center text-xl font-small text-primary">
-                    <span
-                      >Pokémon {{ game.name }} is a Game from Generation {{ game.gen }} which takes
-                      place in the {{ game.region | capitalize }} region. It is part of the
-                      {{ game.series | capitalize }} series.</span
-                    >
+                    <span>
+                      {{ gameDescription() }}
+                    </span>
                   </div>
                 </div>
 
@@ -156,7 +157,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
               >
                 <div class="relative w-full h-full">
                   <img
-                    [src]="getGameImage(game) | cdnUrl: 'gametiles'"
+                    [src]="gameIconPath() | cdnUrl: 'gametiles'"
                     [alt]="game.name"
                     class="w-full h-full object-cover rounded-2xl drop-shadow-xl z-10 transition-transform duration-500 hover:scale-105"
                     (error)="onImageError($event)"
@@ -259,6 +260,7 @@ export class GameDetailComponent implements OnInit {
           (!current.gameSet &&
             !current.gameSuperSet &&
             game.series === current.series &&
+            current.series !== 'spinoff' &&
             game.gen === current.gen &&
             game.type === current.type)),
     );
@@ -277,6 +279,53 @@ export class GameDetailComponent implements OnInit {
           (game.gameSuperSet &&
             (game.gameSuperSet === current.gameSuperSet || game.gameSuperSet === current.gameSet))),
     );
+  });
+
+  platform = computed(() => {
+    const platformsMap: Record<string, string> = {
+      gb: 'Game Boy',
+      gbc: 'Game Boy Color',
+      gba: 'Game Boy Advance',
+      nds: 'DS',
+      '3ds': '3DS',
+      switch: 'Switch',
+      switch2: 'Switch 2',
+      ngc: 'GameCube',
+      wii: 'Wii',
+      mobile: 'Mobile',
+    };
+
+    return this.game()?.platforms
+      ? this.game()!.platforms.map((platform) => platformsMap[platform] || platform)[0]
+      : '';
+  });
+
+  gameIconPath = computed(() => {
+    const game = this.game();
+    if (!game) return '';
+    return getGameIconPath(game.id);
+  });
+
+  gameDescription = computed(() => {
+    const current = this.game();
+    if (!current) return '';
+
+    const gameId = current.nameSlug?.toLowerCase() || current.id?.toLowerCase();
+
+    const customDesc = getGameCustomDescription(gameId || '');
+    if (customDesc) {
+      return customDesc;
+    }
+
+    const capitalize = (str: string) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : '');
+
+    const genText = current.gen > 0 ? ` from Generation ${current.gen}` : '';
+    const regionText =
+      current.region && current.region !== 'unknown'
+        ? ` which takes place in the ${capitalize(current.region)} region`
+        : '';
+
+    return `Pokémon ${current.name} is a Game${genText}${regionText}. It is part of the ${capitalize(current.series)} series.`;
   });
 
   ngOnInit() {
@@ -313,108 +362,6 @@ export class GameDetailComponent implements OnInit {
       },
     });
   }
-
-  getGameImage(game: GameData): string {
-    const specialCases: Record<string, string> = {
-      'legends-za': 'legends_z-a',
-      'letsgo-eevee': "let's_go_eevee",
-      'letsgo-pikachu': "let's_go_pikachu",
-      'omega-ruby': 'omega_ruby',
-      'alpha-sapphire': 'alpha_sapphire',
-      heartgold: 'heartgold',
-      soulsilver: 'soulsilver',
-      'brilliant-diamond': 'brilliant_diamond',
-      'shining-pearl': 'shining_pearl',
-      'ultra-sun': 'ultra_sun',
-      'ultra-moon': 'ultra_moon',
-      black2: 'black2',
-      white2: 'white2',
-      'legends-arceus': 'legends_arceus',
-      'legends-za-megadimension': 'mega_dimension',
-      'the-isle-of-armor': 'the_isle_of_armor',
-      'the-crown-tundra': 'the_crown_tundra',
-      'the-teal-mask': 'the_teal_mask',
-      'the-indigo-disk': 'the_indigo_disk',
-    };
-
-    const slug = specialCases[game.nameSlug] || game.nameSlug.replace(/-/g, '_');
-    return `${slug}.webp`;
-  }
-
-  getGameIconUrl(gameCode: string): string {
-    const map: Record<string, string> = {
-      'rb-r': 'red.png',
-      'rb-b': 'blue.png',
-      y: 'yellow.png',
-      'gsc-g': 'gold.png',
-      'gsc-s': 'silver.png',
-      'gsc-c': 'crystal.png',
-      'gs-g': 'gold.png',
-      'gs-s': 'silver.png',
-      c: 'crystal.png',
-      'rs-r': 'ruby.png',
-      'rs-s': 'sapphire.png',
-      e: 'emerald.png',
-      'frlg-fr': 'firered.png',
-      'frlg-lg': 'leafgreen.png',
-      'dp-d': 'diamond.png',
-      'dp-p': 'pearl.png',
-      'dppt-pt': 'platin.png',
-      pt: 'platin.png',
-      'hgss-hg': 'heartgold.png',
-      'hgss-ss': 'soulsilver.png',
-      'bw-b': 'black.png',
-      'bw-w': 'white.png',
-      'b2w2-b2': 'black2.png',
-      'b2w2-w2': 'white2.png',
-      'xy-x': 'x.png',
-      'xy-y': 'y.png',
-      'oras-or': 'omega_ruby.png',
-      'oras-as': 'alpha_sapphire.png',
-      'sm-s': 'sun.png',
-      'sm-m': 'moon.png',
-      'usum-us': 'ultra_sun.png',
-      'usum-um': 'ultra_moon.png',
-      'lgpe-lgp': "let's_go_pikachu.png",
-      'lgpe-lge': "let's_go_eevee.png",
-      'swsh-sw': 'sword.png',
-      'swsh-sh': 'shield.png',
-      'bdsp-bd': 'brilliant_diamond.png',
-      'bdsp-sp': 'shining_pearl.png',
-      la: 'legends_arceus.png',
-      pla: 'legends_arceus.png',
-      'sv-s': 'scarlet.png',
-      'sv-v': 'violet.png',
-      lza: 'legends_z-a.png',
-      go: 'go.png',
-      home: 'home.png',
-      bank: 'bank.png',
-      xd: 'xd.png',
-      colosseum: 'coloseum.png',
-      col: 'coloseum.png',
-    };
-    const filename = map[gameCode.toLowerCase()];
-    return filename ? `${filename}` : '';
-  }
-
-  platform = computed(() => {
-    const platformsMap: Record<string, string> = {
-      gb: 'Game Boy',
-      gbc: 'Game Boy Color',
-      gba: 'Game Boy Advance',
-      nds: 'DS',
-      '3ds': '3DS',
-      switch: 'Switch',
-      switch2: 'Switch 2',
-      ngc: 'GameCube',
-      wii: 'Wii',
-      mobile: 'Mobile',
-    };
-
-    return this.game()?.platforms
-      ? this.game()!.platforms.map((platform) => platformsMap[platform] || platform)[0]
-      : '';
-  });
 
   onImageError(event: Event) {
     const img = event.target as HTMLImageElement;
