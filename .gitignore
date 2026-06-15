@@ -48,8 +48,8 @@ testem.log
 Thumbs.db
 
 # Dev scripts
-/scripts/download-icons.mjs
-analyze-form-dex.mjs
+/scripts
+/scripts/analyze-form-dex.mjs
 analyze-regions.mjs
 analyze-shiny-dex.mjs
 analyze-living-dex.mjs
