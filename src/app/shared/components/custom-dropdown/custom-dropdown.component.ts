@@ -194,7 +194,7 @@ export interface CustomDropdownOption {
             <button
               type="button"
               (click)="clearSelection($event)"
-              [disabled]="!selectedOption() || selectedOption()?.name === 'ALL'"
+              [disabled]="!hasSelection()"
               class="flex items-center gap-1.5 px-1.5 py-1.5 text-xs font-semibold rounded-md transition-all disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:text-red-500 enabled:hover:bg-surface-hover"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -230,6 +230,12 @@ export class CustomDropdownComponent {
   @ViewChild('searchInput') searchInputRef!: ElementRef<HTMLInputElement>;
 
   selectedOption = computed(() => this.options().find((option) => option.id === this.selectedId()));
+
+  hasSelection = computed(() => {
+    const selected = this.selectedOption();
+    if (selected && selected.name !== 'ALL') return true;
+    return this.options().some((opt) => opt.active);
+  });
 
   filteredOptions = computed(() => {
     const query = this.searchQuery().toLowerCase();

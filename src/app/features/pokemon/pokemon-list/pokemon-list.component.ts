@@ -898,7 +898,10 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   }
 
   toggleGame(id: string) {
-    if (!id) return;
+    if (!id) {
+      this.selectedGames.set([]);
+      return;
+    }
 
     this.selectedGames.update((games) => {
       if (games.includes(id)) {
