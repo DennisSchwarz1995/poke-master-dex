@@ -114,9 +114,10 @@ export interface DexPokemonMapping {
 export class DatasetService {
   private readonly datasetBasePath = '/dataset/data';
   private pokemonCache = new Map<string, Observable<DatasetPokemon>>();
+  private http = inject(HttpClient);
+
   private allPokemonCache: Observable<DatasetPokemon[]> | null = null;
   private pokemonIndexCache: Observable<string[]> | null = null;
-
   private abilitiesCache: Observable<AbilityData[]> | null = null;
   private itemsCache: Observable<ItemData[]> | null = null;
   private pokeballsCache: Observable<PokeballData[]> | null = null;
@@ -125,8 +126,6 @@ export class DatasetService {
   private ribbonsCache: Observable<RibbonData[]> | null = null;
   private gamesCache: Observable<GameData[]> | null = null;
   private movesCache: Observable<MoveData[]> | null = null;
-
-  constructor(private http: HttpClient) {}
 
   loadPokemonIndex(): Observable<string[]> {
     if (!this.pokemonIndexCache) {

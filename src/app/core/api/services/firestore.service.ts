@@ -141,7 +141,6 @@ export class FirestoreService {
     }
   }
 
-
   async updateMultipleSlots(
     dexId: string,
     updatesMap: Map<string, Partial<BoxSlot>>,
@@ -195,7 +194,6 @@ export class FirestoreService {
 
     await Promise.all(promises);
   }
-
 
   getDexBoxes(dexId: string): Observable<Box[]> {
     const userId = this.authService.user()?.uid;
