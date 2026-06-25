@@ -1,7 +1,8 @@
 import { Component, input, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { DatasetPokemon, DatasetService } from '../../../core/api/services/dataset.service';
+import { DatasetService } from '../../../core/api/services/dataset.service';
+import { DatasetPokemon } from '../../../shared/models/dataset.model';
 import { TypeColorService } from '../../../core/services/type-color.service';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';

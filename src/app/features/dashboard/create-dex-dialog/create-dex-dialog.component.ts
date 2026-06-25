@@ -166,6 +166,13 @@ export class CreateDexDialogComponent {
       color: 'yellow',
     },
     {
+      type: DexType.COMBINED_SHINY_LIVING,
+      name: 'Combined Shiny Living Dex',
+      description: 'Normal and Shiny versions side by side',
+      icon: '🌟',
+      color: 'yellow',
+    },
+    {
       type: DexType.FORM,
       name: 'Form Dex',
       description: 'All forms and variants of each Pokemon',
@@ -175,9 +182,16 @@ export class CreateDexDialogComponent {
     {
       type: DexType.ORIGIN,
       name: 'Origin Dex',
-      description: 'Collection of Pokemon you caught as Original Trainer',
+      description: 'Collect all 1025 Base Species, but each one must be from its debut generation.',
       icon: '🏆',
-      color: 'red',
+      color: 'yellow',
+    },
+    {
+      type: DexType.ORIGIN_FORM,
+      name: 'Origin Form Dex',
+      description: 'Collect all 1428 Forms, where each form is caught in its debut generation.',
+      icon: '🌍',
+      color: 'green',
     },
   ];
 

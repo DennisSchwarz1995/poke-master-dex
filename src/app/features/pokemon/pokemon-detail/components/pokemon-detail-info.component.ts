@@ -1,7 +1,8 @@
 import { Component, inject, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { DatasetPokemon, DatasetService } from '../../../../core/api/services/dataset.service';
+import { DatasetService } from '../../../../core/api/services/dataset.service';
+import { DatasetPokemon } from '../../../../shared/models/dataset.model';
 import { TooltipDirective } from '../../../../shared/directives/tooltip/tooltip.directive';
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { PokemonLanguageService } from '../../../../core/services/pokemon-language.service';

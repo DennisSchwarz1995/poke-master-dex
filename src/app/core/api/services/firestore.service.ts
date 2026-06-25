@@ -11,6 +11,8 @@ import {
   writeBatch,
   deleteDoc,
   Timestamp,
+  DocumentReference,
+  DocumentData,
 } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -18,6 +20,9 @@ import { AuthService } from '../../auth/services/auth.service';
 import { Dex, Box, BoxSlot } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
 import { ToastService } from '../../services/toast.service';
+
+const POKEMON_PER_BOX = 30;
+const MAX_BOXES = 200;
 
 @Injectable({
   providedIn: 'root',
@@ -27,8 +32,52 @@ export class FirestoreService {
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
 
-  getUserDexList(): Observable<Dex[]> {
+  private requireUserId(): string {
     const userId = this.authService.user()?.uid;
+    if (!userId) throw new Error('User not authenticated');
+    return userId;
+  }
+
+  private getOptionalUserId(): string | undefined {
+    return this.authService.user()?.uid;
+  }
+
+  private getBoxDocRef(
+    userId: string,
+    dexId: string,
+    boxNumber: number,
+  ): DocumentReference<DocumentData> {
+    return doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
+  }
+
+  private async getNormalizedBoxSlots(boxRef: DocumentReference<DocumentData>): Promise<BoxSlot[]> {
+    const snapshot = await getDoc(boxRef);
+    if (!snapshot.exists()) throw new Error('Box does not exist');
+
+    const data = snapshot.data();
+    let slots = data['slots'];
+
+    if (slots && typeof slots === 'object' && !Array.isArray(slots)) {
+      const slotsArray = Object.values(slots) as BoxSlot[];
+      slotsArray.sort((a, b) => a.position - b.position);
+      slots = slotsArray;
+    }
+
+    if (!Array.isArray(slots)) throw new Error('Invalid slots data');
+    return slots;
+  }
+
+  private cleanUndefinedProperties<T extends object>(obj: T): T {
+    const cleaned = { ...obj };
+    Object.keys(cleaned).forEach((key) => {
+      if (cleaned[key as keyof T] === undefined) {
+        delete cleaned[key as keyof T];
+      }
+    });
+    return cleaned;
+  }
+  getUserDexList(): Observable<Dex[]> {
+    const userId = this.getOptionalUserId();
     if (!userId) return of([]);
 
     const dexCollection = collection(this.firestore, `users/${userId}/dexes`);
@@ -36,9 +85,7 @@ export class FirestoreService {
   }
 
   async createDex(dex: Omit<Dex, 'id' | 'userId' | 'createdAt' | 'updatedAt'>): Promise<string> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
-
+    const userId = this.requireUserId();
     const dexCollection = collection(this.firestore, `users/${userId}/dexes`);
     const newDex = {
       ...dex,
@@ -56,34 +103,34 @@ export class FirestoreService {
     userId: string,
     dexId: string,
     startBox: number,
-    pokemonList: Array<{ slug: string; position: number } | null>,
+    pokemonList: Array<{ slug: string; position: number; isShiny?: boolean } | null>,
     boxNames?: string[],
   ): Promise<void> {
     const batch = writeBatch(this.firestore);
-    const totalPokemon = pokemonList.length;
-    const pokemonPerBox = 30;
-    const neededBoxes = Math.ceil(totalPokemon / pokemonPerBox);
 
-    for (let offset = 0; offset < 200; offset++) {
-      const boxNum = ((startBox - 1 + offset) % 200) + 1;
-      const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNum}`);
+    for (let offset = 0; offset < MAX_BOXES; offset++) {
+      const boxNum = ((startBox - 1 + offset) % MAX_BOXES) + 1;
+      const boxRef = this.getBoxDocRef(userId, dexId, boxNum);
 
-      const slots: BoxSlot[] = Array.from({ length: pokemonPerBox }, (_, i) => {
-        const slotIndex = i + 1; // 1-30
-        const globalIndex = offset * pokemonPerBox + i; // Global position in pokemon list
+      const slots: BoxSlot[] = Array.from({ length: POKEMON_PER_BOX }, (_, i) => {
+        const slotIndex = i + 1;
+        const globalIndex = offset * POKEMON_PER_BOX + i;
         const pokemon = globalIndex < pokemonList.length ? pokemonList[globalIndex] : null;
 
         return {
           position: slotIndex,
           pokemonSlug: pokemon?.slug || null,
-          isShiny: false,
+          isShiny: pokemon?.isShiny || false,
           isOwned: false,
         };
       });
 
       batch.set(boxRef, {
         boxNumber: boxNum,
-        name: boxNames && offset < boxNames.length ? boxNames[offset] : `Box ${boxNum}`,
+        name:
+          boxNames && offset < boxNames.length && boxNames[offset]
+            ? boxNames[offset]
+            : `Box ${boxNum}`,
         slots,
       });
     }
@@ -92,10 +139,10 @@ export class FirestoreService {
   }
 
   getBox(dexId: string, boxNumber: number): Observable<Box> {
-    const userId = this.authService.user()?.uid;
+    const userId = this.getOptionalUserId();
     if (!userId) return of({} as Box);
 
-    const boxDoc = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
+    const boxDoc = this.getBoxDocRef(userId, dexId, boxNumber);
     return docData(boxDoc) as Observable<Box>;
   }
 
@@ -105,87 +152,43 @@ export class FirestoreService {
     slotPosition: number,
     updates: Partial<BoxSlot>,
   ): Promise<void> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
-
-    const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
-
-    const snapshot = await getDoc(boxRef);
-    if (!snapshot.exists()) throw new Error('Box does not exist');
-
-    const data = snapshot.data();
-    let slots = data['slots'];
-
-    if (slots && typeof slots === 'object' && !Array.isArray(slots)) {
-      const slotsArray = Object.values(slots) as BoxSlot[];
-      slotsArray.sort((a, b) => a.position - b.position);
-      slots = slotsArray;
-    }
-
-    if (!Array.isArray(slots)) {
-      throw new Error('Invalid slots data');
-    }
+    const userId = this.requireUserId();
+    const boxRef = this.getBoxDocRef(userId, dexId, boxNumber);
+    const slots = await this.getNormalizedBoxSlots(boxRef);
 
     const index = slotPosition - 1;
-    if (index >= 0 && index < slots.length) {
-      slots[index] = { ...slots[index], ...updates };
-
-      Object.keys(slots[index]).forEach((key) => {
-        if (slots[index][key as keyof BoxSlot] === undefined) {
-          delete slots[index][key as keyof BoxSlot];
-        }
-      });
-      return updateDoc(boxRef, { slots });
-    } else {
+    if (index < 0 || index >= slots.length) {
       throw new Error(`Slot position ${slotPosition} out of bounds`);
     }
+
+    slots[index] = this.cleanUndefinedProperties({ ...slots[index], ...updates });
+    return updateDoc(boxRef, { slots });
   }
 
   async updateMultipleSlots(
     dexId: string,
     updatesMap: Map<string, Partial<BoxSlot>>,
   ): Promise<void> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
-
+    const userId = this.requireUserId();
     const boxUpdates = new Map<number, Array<{ position: number; updates: Partial<BoxSlot> }>>();
+
     updatesMap.forEach((updates, key) => {
       const [boxNumStr, posStr] = key.split('_');
       const boxNum = parseInt(boxNumStr, 10);
       const position = parseInt(posStr, 10);
-      if (!boxUpdates.has(boxNum)) {
-        boxUpdates.set(boxNum, []);
-      }
+
+      if (!boxUpdates.has(boxNum)) boxUpdates.set(boxNum, []);
       boxUpdates.get(boxNum)!.push({ position, updates });
     });
 
     const promises = Array.from(boxUpdates.entries()).map(async ([boxNum, slotUpdates]) => {
-      const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNum}`);
-      const snapshot = await getDoc(boxRef);
-      if (!snapshot.exists()) throw new Error(`Box ${boxNum} does not exist`);
-
-      const data = snapshot.data();
-      let slots = data['slots'];
-
-      if (slots && typeof slots === 'object' && !Array.isArray(slots)) {
-        const slotsArray = Object.values(slots) as BoxSlot[];
-        slotsArray.sort((a, b) => a.position - b.position);
-        slots = slotsArray;
-      }
-
-      if (!Array.isArray(slots)) {
-        throw new Error('Invalid slots data');
-      }
+      const boxRef = this.getBoxDocRef(userId, dexId, boxNum);
+      const slots = await this.getNormalizedBoxSlots(boxRef);
 
       slotUpdates.forEach(({ position, updates }) => {
         const index = position - 1;
         if (index >= 0 && index < slots.length) {
-          slots[index] = { ...slots[index], ...updates };
-          Object.keys(slots[index]).forEach((key) => {
-            if (slots[index][key as keyof BoxSlot] === undefined) {
-              delete slots[index][key as keyof BoxSlot];
-            }
-          });
+          slots[index] = this.cleanUndefinedProperties({ ...slots[index], ...updates });
         }
       });
 
@@ -196,7 +199,7 @@ export class FirestoreService {
   }
 
   getDexBoxes(dexId: string): Observable<Box[]> {
-    const userId = this.authService.user()?.uid;
+    const userId = this.getOptionalUserId();
     if (!userId) return of([]);
 
     const boxesCollection = collection(this.firestore, `users/${userId}/dexes/${dexId}/boxes`);
@@ -204,77 +207,39 @@ export class FirestoreService {
   }
 
   getDexBox(dexId: string, boxNumber: number): Observable<Box | undefined> {
-    const userId = this.authService.user()?.uid;
+    const userId = this.getOptionalUserId();
     if (!userId) return of(undefined);
 
-    const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
+    const boxRef = this.getBoxDocRef(userId, dexId, boxNumber);
     return (docData(boxRef) as Observable<Box | undefined>).pipe(take(1));
   }
 
   async updateBoxName(dexId: string, boxNumber: number, newName: string): Promise<void> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
-
-    const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
+    const userId = this.requireUserId();
+    const boxRef = this.getBoxDocRef(userId, dexId, boxNumber);
     return updateDoc(boxRef, { name: newName });
   }
 
   async emptyBox(dexId: string, boxNumber: number): Promise<void> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
+    const userId = this.requireUserId();
+    const boxRef = this.getBoxDocRef(userId, dexId, boxNumber);
+    const slots = await this.getNormalizedBoxSlots(boxRef);
 
-    const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
-    const snapshot = await getDoc(boxRef);
-    if (!snapshot.exists()) throw new Error('Box does not exist');
-
-    const data = snapshot.data();
-    let slots = data['slots'];
-
-    if (slots && typeof slots === 'object' && !Array.isArray(slots)) {
-      const slotsArray = Object.values(slots) as BoxSlot[];
-      slotsArray.sort((a, b) => a.position - b.position);
-      slots = slotsArray;
-    }
-
-    if (!Array.isArray(slots)) throw new Error('Invalid slots data');
-
-    // Reset all slots to not owned and not shiny
-    const updatedSlots = slots.map((slot) => ({
-      ...slot,
-      isOwned: false,
-      isShiny: false,
-    }));
-
+    const updatedSlots = slots.map((slot) => ({ ...slot, isOwned: false, isShiny: false }));
     return updateDoc(boxRef, { slots: updatedSlots });
   }
 
   async removeAllPokemon(dexId: string, boxNumber: number): Promise<void> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
+    const userId = this.requireUserId();
+    const boxRef = this.getBoxDocRef(userId, dexId, boxNumber);
+    const slots = await this.getNormalizedBoxSlots(boxRef);
 
-    const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
-    const snapshot = await getDoc(boxRef);
-    if (!snapshot.exists()) throw new Error('Box does not exist');
-
-    const data = snapshot.data();
-    let slots = data['slots'];
-
-    if (slots && typeof slots === 'object' && !Array.isArray(slots)) {
-      const slotsArray = Object.values(slots) as BoxSlot[];
-      slotsArray.sort((a, b) => a.position - b.position);
-      slots = slotsArray;
-    }
-
-    if (!Array.isArray(slots)) throw new Error('Invalid slots data');
-
-    // Reset all slots to completely empty (remove pokemon)
     const updatedSlots = slots.map((slot) => ({
       ...slot,
       pokemonSlug: null,
       isOwned: false,
       isShiny: false,
     }));
-
     return updateDoc(boxRef, { slots: updatedSlots });
   }
 
@@ -282,32 +247,16 @@ export class FirestoreService {
     dexId: string,
     boxNumber: number,
     startBox: number,
-    pokemonList: Array<{ slug: string; position: number } | null>,
+    pokemonList: Array<{ slug: string; position: number; isShiny?: boolean } | null>,
     targetedNativeBoxNumber: number,
   ): Promise<void> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
-
-    const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNumber}`);
-    const snapshot = await getDoc(boxRef);
-    if (!snapshot.exists()) throw new Error('Box does not exist');
-
-    const data = snapshot.data();
-    let slots = data['slots'];
-
-    if (slots && typeof slots === 'object' && !Array.isArray(slots)) {
-      const slotsArray = Object.values(slots) as BoxSlot[];
-      slotsArray.sort((a, b) => a.position - b.position);
-      slots = slotsArray;
-    }
-
-    if (!Array.isArray(slots)) throw new Error('Invalid slots data');
-
-    const pokemonPerBox = 30;
-    const offset = (targetedNativeBoxNumber - startBox + 200) % 200;
+    const userId = this.requireUserId();
+    const boxRef = this.getBoxDocRef(userId, dexId, boxNumber);
+    const slots = await this.getNormalizedBoxSlots(boxRef);
+    const offset = (targetedNativeBoxNumber - startBox + MAX_BOXES) % MAX_BOXES;
 
     const updatedSlots = slots.map((slot, i) => {
-      const globalIndex = offset * pokemonPerBox + i;
+      const globalIndex = offset * POKEMON_PER_BOX + i;
       const pokemon = globalIndex < pokemonList.length ? pokemonList[globalIndex] : null;
       const newSlug = pokemon?.slug || null;
 
@@ -315,7 +264,7 @@ export class FirestoreService {
         ...slot,
         pokemonSlug: newSlug,
         isOwned: slot.pokemonSlug === newSlug ? slot.isOwned : false,
-        isShiny: slot.pokemonSlug === newSlug ? slot.isShiny : false,
+        isShiny: slot.pokemonSlug === newSlug ? slot.isShiny : pokemon?.isShiny || false,
       };
     });
 
@@ -323,7 +272,7 @@ export class FirestoreService {
   }
 
   getDex(dexId: string): Observable<Dex> {
-    const userId = this.authService.user()?.uid;
+    const userId = this.getOptionalUserId();
     if (!userId) return of({} as Dex);
 
     const dexDoc = doc(this.firestore, `users/${userId}/dexes/${dexId}`);
@@ -331,13 +280,11 @@ export class FirestoreService {
   }
 
   async deleteDex(dexId: string): Promise<void> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
-
+    const userId = this.requireUserId();
     const batch = writeBatch(this.firestore);
 
-    for (let boxNum = 1; boxNum <= 200; boxNum++) {
-      const boxRef = doc(this.firestore, `users/${userId}/dexes/${dexId}/boxes/${boxNum}`);
+    for (let boxNum = 1; boxNum <= MAX_BOXES; boxNum++) {
+      const boxRef = this.getBoxDocRef(userId, dexId, boxNum);
       batch.delete(boxRef);
     }
 
@@ -348,7 +295,7 @@ export class FirestoreService {
   }
 
   getUserTrainers(): Observable<Trainer[]> {
-    const userId = this.authService.user()?.uid;
+    const userId = this.getOptionalUserId();
     if (!userId) return of([]);
 
     const trainersCollection = collection(this.firestore, `users/${userId}/trainers`);
@@ -356,10 +303,9 @@ export class FirestoreService {
   }
 
   async createTrainer(trainer: Omit<Trainer, 'id' | 'userId' | 'createdAt'>): Promise<string> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
-
+    const userId = this.requireUserId();
     const trainersCollection = collection(this.firestore, `users/${userId}/trainers`);
+
     const newTrainer = {
       ...trainer,
       userId,
@@ -371,18 +317,15 @@ export class FirestoreService {
   }
 
   async deleteTrainer(trainerId: string): Promise<void> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
-
+    const userId = this.requireUserId();
     const trainerRef = doc(this.firestore, `users/${userId}/trainers/${trainerId}`);
     return deleteDoc(trainerRef);
   }
 
   async updateDexName(dexId: string, newName: string): Promise<void> {
-    const userId = this.authService.user()?.uid;
-    if (!userId) throw new Error('User not authenticated');
-
+    const userId = this.requireUserId();
     const dexRef = doc(this.firestore, `users/${userId}/dexes/${dexId}`);
+
     return updateDoc(dexRef, {
       name: newName,
       updatedAt: Timestamp.now(),

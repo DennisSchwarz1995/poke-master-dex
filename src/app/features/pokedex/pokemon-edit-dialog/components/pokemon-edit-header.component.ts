@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DatasetPokemon } from '../../../../core/api/services/dataset.service';
+import { DatasetPokemon } from '../../../../shared/models/dataset.model';
 import {
   CustomDropdownComponent,
   CustomDropdownOption,

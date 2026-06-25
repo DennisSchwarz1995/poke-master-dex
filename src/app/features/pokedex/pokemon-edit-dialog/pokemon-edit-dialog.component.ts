@@ -5,12 +5,14 @@ import {
   signal,
   computed,
   OnInit,
+  OnDestroy,
   inject,
   HostListener,
   effect,
+  Renderer2,
 } from '@angular/core';
 import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.constants';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   getAvailableGamesForPokemon,
@@ -19,11 +21,8 @@ import {
 } from '../../../shared/models/game-definitions';
 import { BoxSlot, StatsMap } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
-import {
-  DatasetService,
-  DatasetPokemon,
-  SimplePokemon,
-} from '../../../core/api/services/dataset.service';
+import { DatasetService } from '../../../core/api/services/dataset.service';
+import { DatasetPokemon, SimplePokemon } from '../../../shared/models/dataset.model';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import {
   AbilityData,
@@ -109,7 +108,8 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
                   [(isAlpha)]="isAlpha"
                   [(level)]="level"
                   [(originLanguage)]="originLanguage"
-                  [(gender)]="gender"
+                  [gender]="gender"
+                  (genderChange)="onGenderChange($event)"
                   [(ball)]="ball"
                   [(item)]="item"
                   [(ribbon)]="ribbon"
@@ -249,7 +249,7 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
   `,
   styles: [],
 })
-export class PokemonEditDialogComponent implements OnInit {
+export class PokemonEditDialogComponent implements OnInit, OnDestroy {
   pokemon = input.required<BoxSlot>();
   dexId = input.required<string>();
   boxNumber = input.required<number>();
@@ -264,6 +264,8 @@ export class PokemonEditDialogComponent implements OnInit {
   private firestoreService = inject(FirestoreService);
   private toastService = inject(ToastService);
   private langService = inject(PokemonLanguageService);
+  renderer = inject(Renderer2);
+  document = inject(DOCUMENT);
 
   constructor() {
     effect(() => {
@@ -611,7 +613,8 @@ export class PokemonEditDialogComponent implements OnInit {
     return pokemon?.obtainableIn?.includes(gameCode) || false;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.renderer.addClass(this.document.body, 'overflow-hidden');
     const pkmn = this.pokemon();
     this.localPokemonSlug.set(pkmn.pokemonSlug);
     this.isOwned = pkmn.isOwned;
@@ -643,6 +646,10 @@ export class PokemonEditDialogComponent implements OnInit {
     if (pkmn.evs) this.evs = { ...pkmn.evs };
 
     this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.renderer.removeClass(this.document.body, 'overflow-hidden');
   }
 
   loadData() {
@@ -850,6 +857,32 @@ export class PokemonEditDialogComponent implements OnInit {
       this.pokemonData.set(data);
       this.updateSpritePreview();
     });
+  }
+
+  onGenderChange(newGender: string) {
+    this.gender = newGender;
+
+    const currentSlug = this.localPokemonSlug();
+    if (!currentSlug) return;
+
+    // Extract base slug (remove -f or -m if present)
+    const baseSlug = currentSlug.replace(/-(f|m)$/, '');
+
+    if (newGender === 'female') {
+      const femaleSlug = `${baseSlug}-f`;
+      const femaleExists = this.allPokemon().some((p) => p.slug === femaleSlug);
+      if (femaleExists && currentSlug !== femaleSlug) {
+        this.onPokemonChange(femaleSlug);
+      }
+    } else {
+      // For male or genderless, switch back to base slug if we were on a female form
+      if (currentSlug !== baseSlug) {
+        const baseExists = this.allPokemon().some((p) => p.slug === baseSlug);
+        if (baseExists) {
+          this.onPokemonChange(baseSlug);
+        }
+      }
+    }
   }
 
   onImageError(event: Event) {

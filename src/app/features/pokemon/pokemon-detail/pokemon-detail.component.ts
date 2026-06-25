@@ -1,7 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { DatasetService, DatasetPokemon } from '../../../core/api/services/dataset.service';
+import { DatasetService } from '../../../core/api/services/dataset.service';
+import { DatasetPokemon } from '../../../shared/models/dataset.model';
 import { PokemonDetailHeaderComponent } from './components/pokemon-detail-header.component';
 import { PokemonDetailInfoComponent } from './components/pokemon-detail-info.component';
 import { PokemonDetailFormsComponent } from './components/pokemon-detail-forms.component';

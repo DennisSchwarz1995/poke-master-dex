@@ -18,11 +18,8 @@ import { catchError, switchMap, debounceTime, tap, take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import {
-  DatasetService,
-  DatasetPokemon,
-  SimplePokemon,
-} from '../../../core/api/services/dataset.service';
+import { DatasetService } from '../../../core/api/services/dataset.service';
+import { DatasetPokemon, SimplePokemon } from '../../../shared/models/dataset.model';
 import { ThemeService } from '../../../core/services/theme.service';
 import { TypeColorService } from '../../../core/services/type-color.service';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';

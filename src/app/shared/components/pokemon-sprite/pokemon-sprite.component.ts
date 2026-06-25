@@ -48,7 +48,7 @@ import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.con
               }
               @if (showShinyIcon() && isShiny()) {
                 <img
-                  [src]="'shiny-stars.png' | cdnUrl: 'special_attributes'"
+                  [src]="'shiny.png' | cdnUrl: 'special_attributes'"
                   class="w-4 h-4 object-contain drop-shadow"
                 />
               }
@@ -110,6 +110,7 @@ export class PokemonSpriteComponent {
   showGmaxIcon = input<boolean>(false);
   showAlphaIcon = input<boolean>(false);
   showPokeballIcon = input<boolean>(false);
+  hideDefaultFormLabel = input<boolean>(false);
 
   pokemonName = signal('...');
   pokemonNid = signal('');
@@ -152,7 +153,14 @@ export class PokemonSpriteComponent {
       if (slug) {
         this.datasetService.loadPokemonBySlug(slug).subscribe({
           next: (pokemon) => {
-            this.pokemonName.set(this.pokemonLangService.getName(pokemon));
+            const formLabel = this.pokemonLangService.getFormLabel(
+              pokemon,
+              this.hideDefaultFormLabel(),
+            );
+            const displayName = formLabel
+              ? `${this.pokemonLangService.getName(pokemon)} (${formLabel})`
+              : this.pokemonLangService.getName(pokemon);
+            this.pokemonName.set(displayName);
             this.pokemonNid.set(this.formatNid(pokemon.nid));
             this.spriteUrl.set(this.datasetService.getSpriteUrl(pokemon, this.isShiny()));
 

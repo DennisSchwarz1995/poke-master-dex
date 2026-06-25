@@ -2,8 +2,10 @@ export enum DexType {
   STANDARD = 'standard',
   LIVING = 'living',
   SHINY_LIVING = 'shiny-living',
+  COMBINED_SHINY_LIVING = 'combined-shiny-living',
   FORM = 'form',
   ORIGIN = 'origin',
+  ORIGIN_FORM = 'origin-form',
 }
 
 export interface Dex {

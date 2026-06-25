@@ -12,100 +12,24 @@ import {
   RibbonData,
   GameData,
   MoveData,
+  DatasetPokemon,
+  SimplePokemon,
+  PokemonNameIndex,
+  DexPokemonMapping,
+  BoxPreset,
+  MAX_BOX_SIZE,
+  MAX_LIVING_DEX_BOXES,
 } from '../../../shared/models/dataset.model';
 
-export interface DatasetPokemon {
+export interface RawPokemonNameIndex {
   id: string;
-  nid: string;
+  names?: { [lang: string]: string };
   dexNum: number;
-  formId?: string;
-  region: string;
-  gen: number;
-  type1: string;
-  type2?: string;
-  color: string;
-  ability1: string;
-  ability2?: string;
-  abilityHidden?: string;
-  isDefault: boolean;
-  isForm: boolean;
-  isLegendary: boolean;
-  isMythical: boolean;
-  isBaby?: boolean;
-  isUltraBeast?: boolean;
-  isParadox?: boolean;
-  isMega: boolean;
-  isGmax: boolean;
-  canGmax?: boolean;
-  canBeAlpha?: boolean;
-  isRegional: boolean;
-  baseHp: number;
-  baseAtk: number;
-  baseDef: number;
-  baseSpAtk: number;
-  baseSpDef: number;
-  baseSpeed: number;
-  height: number;
-  weight: number;
-  maleRate: number;
-  femaleRate: number;
-  baseSpecies?: string;
-  baseForms: string[];
-  forms: string[];
-  refs: {
-    pkApiId: string;
-    pkApiFormId: string;
-    pkApiFormSlug: string;
-    showdownName: string;
-  };
-  names: {
-    eng: string;
-    deu?: string;
-    fra?: string;
-    jap?: string;
-    [key: string]: string | undefined;
-  };
-  genus: {
-    eng: string;
-    deu?: string;
-    [key: string]: string | undefined;
-  };
-  speciesNames?: {
-    [key: string]: string;
-  };
-  formNames?: {
-    [key: string]: string;
-  };
-  obtainableIn: string[];
-  eventOnlyIn: string[];
-  storableIn: string[];
-}
-
-export interface SimplePokemon {
-  slug: string;
-  dexNum: number;
-  name: string;
-  nameGerman?: string;
-  type1: string;
+  type1?: string;
   type2?: string;
   obtainableIn?: string[];
-  isForm: boolean;
-  spriteId: string;
-  allNames?: { [lang: string]: string }; // All language names for searching
-}
-
-export interface PokemonNameIndex {
-  id: string;
-  nid: string;
-  dexNum: number;
-  names: { [lang: string]: string };
-  isDefault: boolean;
-}
-
-export interface DexPokemonMapping {
-  slug: string;
-  dexNum: number;
-  position: number;
+  isDefault?: boolean;
+  refs?: { pkApiId?: string };
 }
 
 @Injectable({
@@ -116,7 +40,6 @@ export class DatasetService {
   private pokemonCache = new Map<string, Observable<DatasetPokemon>>();
   private http = inject(HttpClient);
 
-  private allPokemonCache: Observable<DatasetPokemon[]> | null = null;
   private pokemonIndexCache: Observable<string[]> | null = null;
   private abilitiesCache: Observable<AbilityData[]> | null = null;
   private itemsCache: Observable<ItemData[]> | null = null;
@@ -126,6 +49,7 @@ export class DatasetService {
   private ribbonsCache: Observable<RibbonData[]> | null = null;
   private gamesCache: Observable<GameData[]> | null = null;
   private movesCache: Observable<MoveData[]> | null = null;
+  private simplePokemonListCache: Observable<SimplePokemon[]> | null = null;
 
   loadPokemonIndex(): Observable<string[]> {
     if (!this.pokemonIndexCache) {
@@ -155,50 +79,54 @@ export class DatasetService {
   }
 
   loadAllPokemon(): Observable<DatasetPokemon[]> {
-    if (!this.allPokemonCache) {
-      this.allPokemonCache = this.loadPokemonIndex().pipe(
-        map((slugs) => {
-          return slugs;
-        }),
-        shareReplay(1),
-        map(() => []),
-      );
-    }
-    return this.allPokemonCache;
+    return this.loadPokemonIndex().pipe(
+      switchMap((slugs) => {
+        const requests = slugs.map((slug) => this.loadPokemonBySlug(slug));
+        return forkJoin(requests);
+      }),
+      shareReplay(1),
+    );
   }
 
   getSimplePokemonList(): Observable<SimplePokemon[]> {
-    return this.http
-      .get<PokemonNameIndex[]>(`${this.datasetBasePath}/indices/pokemon-names.json`)
-      .pipe(
-        map((pokemonList) =>
-          pokemonList.map(
-            (p: any) =>
-              ({
-                slug: p.id,
-                name: p.names?.['eng'] || p.id,
-                nameGerman: p.names?.['deu'],
-                dexNum: p.dexNum,
-                type1: p.type1 || 'normal',
-                type2: p.type2,
-                obtainableIn: p.obtainableIn || [],
-                isForm: p.isDefault === false,
-                allNames: p.names,
-              }) as SimplePokemon,
+    if (!this.simplePokemonListCache) {
+      this.simplePokemonListCache = this.http
+        .get<RawPokemonNameIndex[]>(`${this.datasetBasePath}/indices/pokemon-names.json`)
+        .pipe(
+          map((pokemonList) =>
+            pokemonList.map(
+              (p) =>
+                ({
+                  slug: p.id,
+                  name: p.names?.['eng'] || p.id,
+                  nameGerman: p.names?.['deu'],
+                  dexNum: p.dexNum,
+                  type1: p.type1 || 'normal',
+                  type2: p.type2,
+                  obtainableIn: p.obtainableIn || [],
+                  isForm: p.isDefault === false,
+                  spriteId: p.refs?.pkApiId || '1',
+                  allNames: p.names,
+                }) as SimplePokemon,
+            ),
           ),
-        ),
-        shareReplay(1),
-      );
+          shareReplay(1),
+        );
+    }
+    return this.simplePokemonListCache;
   }
 
   getDexBoxNames(dexType: DexType): Observable<string[] | undefined> {
-    if (dexType === DexType.FORM) {
-      return this.http.get<string[]>(`${this.datasetBasePath}/indices/form-dex-boxes.json`).pipe(
-        catchError((err) => {
-          console.error('Failed to load form dex box names.', err);
-          return of(undefined);
-        }),
-      );
+    if (dexType === DexType.FORM || dexType === DexType.ORIGIN_FORM) {
+      return this.http
+        .get<BoxPreset>(`${this.datasetBasePath}/boxpresets/modern/home/grouped-region.json`)
+        .pipe(
+          map((preset) => preset.boxes.map((box) => box.name)),
+          catchError((err) => {
+            console.error('Failed to load form dex box names.', err);
+            return of(undefined);
+          }),
+        );
     }
 
     if (dexType === DexType.STANDARD) {
@@ -212,12 +140,39 @@ export class DatasetService {
         );
     }
 
-    if (dexType === DexType.LIVING || dexType === DexType.SHINY_LIVING) {
+    if (
+      dexType === DexType.LIVING ||
+      dexType === DexType.SHINY_LIVING ||
+      dexType === DexType.ORIGIN
+    ) {
       return this.http
         .get<string[]>(`${this.datasetBasePath}/indices/standard-dex-boxes.json`)
         .pipe(
+          map((names) => {
+            const allNames = [...names, 'Paldea 1', 'Paldea 2', 'Paldea 3', 'Paldea 4'];
+            return allNames.slice(0, MAX_LIVING_DEX_BOXES);
+          }),
           catchError((err) => {
             console.error('Failed to load living dex box names.', err);
+            return of(undefined);
+          }),
+        );
+    }
+
+    if (dexType === DexType.COMBINED_SHINY_LIVING) {
+      return this.http
+        .get<string[]>(`${this.datasetBasePath}/indices/standard-dex-boxes.json`)
+        .pipe(
+          map((names) => {
+            const allNames = [...names, 'Paldea 1', 'Paldea 2', 'Paldea 3', 'Paldea 4'];
+            const doubledNames: string[] = [];
+            allNames.slice(0, MAX_LIVING_DEX_BOXES).forEach((name: string) => {
+              doubledNames.push(name, name);
+            });
+            return doubledNames;
+          }),
+          catchError((err) => {
+            console.error('Failed to load combined shiny living dex box names.', err);
             return of(undefined);
           }),
         );
@@ -227,10 +182,36 @@ export class DatasetService {
   }
 
   createDexMapping(dexType: DexType): Observable<(DexPokemonMapping | null)[]> {
-    if (dexType === DexType.FORM) {
+    if (dexType === DexType.FORM || dexType === DexType.ORIGIN_FORM) {
       return this.http
-        .get<(DexPokemonMapping | null)[]>(`${this.datasetBasePath}/indices/form-dex-mapping.json`)
+        .get<BoxPreset>(`${this.datasetBasePath}/boxpresets/modern/home/grouped-region.json`)
         .pipe(
+          map((preset) => {
+            const mapping: (DexPokemonMapping | null)[] = [];
+            preset.boxes.forEach((box, boxIndex) => {
+              for (let i = 0; i < MAX_BOX_SIZE; i++) {
+                const rawSlot = box.slots[i];
+                let slug: string | null = null;
+
+                if (typeof rawSlot === 'string') {
+                  slug = rawSlot;
+                } else if (rawSlot && typeof rawSlot === 'object' && 'pokemon' in rawSlot) {
+                  slug = rawSlot.pokemon;
+                }
+
+                if (slug) {
+                  mapping.push({
+                    slug,
+                    dexNum: 0,
+                    position: boxIndex * MAX_BOX_SIZE + i + 1,
+                  });
+                } else {
+                  mapping.push(null);
+                }
+              }
+            });
+            return mapping;
+          }),
           catchError((err) => {
             console.error('Failed to load form dex mapping.', err);
             return of([]);
@@ -238,14 +219,104 @@ export class DatasetService {
         );
     }
 
-    if (dexType === DexType.LIVING || dexType === DexType.SHINY_LIVING) {
+    if (
+      dexType === DexType.LIVING ||
+      dexType === DexType.SHINY_LIVING ||
+      dexType === DexType.ORIGIN
+    ) {
       return this.http
-        .get<
-          (DexPokemonMapping | null)[]
-        >(`${this.datasetBasePath}/indices/standard-dex-mapping.json`)
+        .get<BoxPreset>(
+          `${this.datasetBasePath}/boxpresets/modern/home/sorted-species-minimal.json`,
+        )
         .pipe(
+          map((preset) => {
+            const mapping: (DexPokemonMapping | null)[] = [];
+            const isShinyDex = dexType === DexType.SHINY_LIVING;
+            preset.boxes.slice(0, MAX_LIVING_DEX_BOXES).forEach((box, boxIndex) => {
+              for (let i = 0; i < MAX_BOX_SIZE; i++) {
+                const rawSlot = box.slots[i];
+                let slug: string | null = null;
+
+                if (typeof rawSlot === 'string') {
+                  slug = rawSlot;
+                } else if (rawSlot && typeof rawSlot === 'object' && 'pokemon' in rawSlot) {
+                  slug = rawSlot.pokemon;
+                }
+
+                if (slug) {
+                  mapping.push({
+                    slug,
+                    dexNum: 0,
+                    position: boxIndex * MAX_BOX_SIZE + i + 1,
+                    isShiny: isShinyDex,
+                  });
+                } else {
+                  mapping.push(null);
+                }
+              }
+            });
+            return mapping;
+          }),
           catchError((err) => {
             console.error('Failed to load standard dex mapping.', err);
+            return of([]);
+          }),
+        );
+    }
+
+    if (dexType === DexType.COMBINED_SHINY_LIVING) {
+      return this.http
+        .get<BoxPreset>(
+          `${this.datasetBasePath}/boxpresets/modern/home/sorted-species-minimal.json`,
+        )
+        .pipe(
+          map((preset) => {
+            const mapping: (DexPokemonMapping | null)[] = [];
+            let currentBoxIndex = 0;
+
+            preset.boxes.slice(0, MAX_LIVING_DEX_BOXES).forEach((box) => {
+              const combinedItems: { slug: string | null; isShiny: boolean }[] = [];
+
+              for (let i = 0; i < MAX_BOX_SIZE; i++) {
+                const rawSlot = box.slots[i];
+                let slug: string | null = null;
+
+                if (typeof rawSlot === 'string') {
+                  slug = rawSlot;
+                } else if (rawSlot && typeof rawSlot === 'object' && 'pokemon' in rawSlot) {
+                  slug = rawSlot.pokemon;
+                }
+
+                if (slug) {
+                  combinedItems.push({ slug, isShiny: false });
+                  combinedItems.push({ slug, isShiny: true });
+                } else {
+                  combinedItems.push({ slug: null, isShiny: false });
+                  combinedItems.push({ slug: null, isShiny: true });
+                }
+              }
+
+              for (let i = 0; i < combinedItems.length; i += MAX_BOX_SIZE) {
+                const chunk = combinedItems.slice(i, i + MAX_BOX_SIZE);
+                chunk.forEach((item, slotIndex) => {
+                  if (item.slug) {
+                    mapping.push({
+                      slug: item.slug,
+                      dexNum: 0,
+                      position: currentBoxIndex * MAX_BOX_SIZE + slotIndex + 1,
+                      isShiny: item.isShiny,
+                    });
+                  } else {
+                    mapping.push(null);
+                  }
+                });
+                currentBoxIndex++;
+              }
+            });
+            return mapping;
+          }),
+          catchError((err) => {
+            console.error('Failed to load combined shiny living dex mapping.', err);
             return of([]);
           }),
         );
@@ -255,7 +326,7 @@ export class DatasetService {
       return this.getDexBoxNames(DexType.STANDARD).pipe(
         map((boxNames) => {
           const totalBoxes = boxNames ? boxNames.length : 40;
-          const emptySlots = new Array(totalBoxes * 30).fill(null);
+          const emptySlots = new Array(totalBoxes * MAX_BOX_SIZE).fill(null);
           return emptySlots;
         }),
       );
@@ -264,10 +335,6 @@ export class DatasetService {
     return this.loadPokemonIndex().pipe(
       map((allSlugs) => {
         let filteredSlugs: string[] = [];
-
-        if (dexType === DexType.ORIGIN) {
-          filteredSlugs = [];
-        }
 
         return filteredSlugs.map((slug, index) => ({
           slug,
@@ -279,29 +346,27 @@ export class DatasetService {
   }
 
   searchPokemon(query: string): Observable<SimplePokemon[]> {
-    const lowerQuery = query.toLowerCase();
+    const lowerQuery = query.trim().toLowerCase();
 
-    return this.loadPokemonIndex().pipe(
-      map((slugs) => {
-        const matchingSlugs = slugs.filter((slug) => {
-          if (slug.includes(lowerQuery)) return true;
+    if (!lowerQuery) return of([]);
 
-          return false;
-        });
-        return matchingSlugs.map((slug) => ({
-          slug,
-          dexNum: 0, // Placeholder
-          name: slug,
-          type1: 'normal',
-          isForm: slug.includes('-'),
-          spriteId: '1',
-        }));
+    return this.getSimplePokemonList().pipe(
+      map((pokemonList) => {
+        return pokemonList.filter(
+          (pokemon) =>
+            pokemon.name.toLowerCase().includes(lowerQuery) ||
+            pokemon.slug.includes(lowerQuery) ||
+            (pokemon.nameGerman && pokemon.nameGerman.toLowerCase().includes(lowerQuery)),
+        );
       }),
     );
   }
 
   getSpriteUrl(pokemon: DatasetPokemon, shiny: boolean = false): string {
-    const spriteId = pokemon.refs.pkApiId;
+    let spriteId = pokemon.refs.pkApiId;
+    if (pokemon.id?.startsWith('unown-') && pokemon.id !== 'unown') {
+      spriteId = `201-${pokemon.id.replace('unown-', '')}`;
+    }
     const shinyPath = shiny ? 'shiny/' : '';
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${shinyPath}${spriteId}.png`;
   }

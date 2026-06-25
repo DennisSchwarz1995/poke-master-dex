@@ -54,7 +54,7 @@ export const AVAILABLE_APPEARANCES: {
   {
     label: 'Shiny Icon',
     stateKey: 'showShiny',
-    icon: 'ShinySVStar.png',
+    icon: 'shiny.png',
     cdnFolder: 'special_attributes',
     iconClass: 'w-5 h-5 object-contain',
   },
@@ -438,7 +438,7 @@ export class ToolbarComponent implements OnInit {
     {
       value: 'Shiny',
       label: 'Shiny',
-      icon: 'shiny-stars.png',
+      icon: 'shiny.png',
       cdnFolder: 'special_attributes',
     },
     {

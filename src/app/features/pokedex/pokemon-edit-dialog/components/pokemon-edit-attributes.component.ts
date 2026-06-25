@@ -1,7 +1,7 @@
 import { Component, input, model, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DatasetPokemon } from '../../../../core/api/services/dataset.service';
+import { DatasetPokemon } from '../../../../shared/models/dataset.model';
 import {
   CustomDropdownComponent,
   CustomDropdownOption,
@@ -206,7 +206,9 @@ import {
           <div class="absolute left-1/2 top-0 bottom-0 w-px bg-theme z-10"></div>
 
           <button
-            (click)="genderState().canMale ? gender.set('male') : null"
+            (click)="
+              genderState().canMale && gender() !== 'male' ? gender.set('male') : gender.set('')
+            "
             [disabled]="!genderState().canMale"
             class="flex-1 flex items-center justify-center gap-2 transition-all font-bold text-sm z-0 relative"
             [ngClass]="[
@@ -233,7 +235,11 @@ import {
           </button>
 
           <button
-            (click)="genderState().canFemale ? gender.set('female') : null"
+            (click)="
+              genderState().canFemale && gender() !== 'female'
+                ? gender.set('female')
+                : gender.set('')
+            "
             [disabled]="!genderState().canFemale"
             class="flex-1 flex items-center justify-center gap-2 transition-all font-bold text-sm z-0 relative"
             [ngClass]="[

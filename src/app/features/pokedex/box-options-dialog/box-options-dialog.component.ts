@@ -50,7 +50,6 @@ export interface AutoFillOption {
 
           <div class="h-px bg-theme w-full"></div>
 
-          <!-- Auto-Fill Box Section -->
           <div>
             <label class="block font-semibold mb-2 text-primary">Auto-Fill Box</label>
             <div class="mb-4">
@@ -223,47 +222,52 @@ export class BoxOptionsDialogComponent implements OnInit {
   emptyBoxRequested = output<void>();
   removeAllRequested = output<void>();
 
-  newName = '';
-  selectedAutoFillOffset = 0;
-  showAutoFillConfirm = signal(false);
-  showEmptyConfirm = signal(false);
-  showRemoveAllConfirm = signal(false);
+  newName: string = '';
+  selectedAutoFillOffset: number = 0;
+  showAutoFillConfirm = signal<boolean>(false);
+  showEmptyConfirm = signal<boolean>(false);
+  showRemoveAllConfirm = signal<boolean>(false);
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.newName = this.currentName();
     const defaultOffset = (this.boxNumber() - this.startBox() + 200) % 200;
     this.selectedAutoFillOffset = defaultOffset >= 0 ? defaultOffset : 0;
   }
 
-  save() {
-    if (this.newName.trim() && this.newName !== this.currentName() && this.newName.length <= 16) {
+  save(): void {
+    if (this.isValidName) {
       this.nameSaved.emit(this.newName.trim());
     } else {
       this.close();
     }
   }
 
-  confirmAutoFill() {
+  get isValidName(): boolean {
+    const trimmedName = this.newName.trim();
+    return !!trimmedName && trimmedName !== this.currentName() && trimmedName.length <= 16;
+  }
+
+  confirmAutoFill(): void {
     this.showAutoFillConfirm.set(false);
     this.autoFillRequested.emit(Number(this.selectedAutoFillOffset));
   }
 
-  confirmEmptyBox() {
+  confirmEmptyBox(): void {
     this.showEmptyConfirm.set(false);
     this.emptyBoxRequested.emit();
   }
 
-  confirmRemoveAll() {
+  confirmRemoveAll(): void {
     this.showRemoveAllConfirm.set(false);
     this.removeAllRequested.emit();
   }
 
-  close() {
+  close(): void {
     this.closed.emit();
   }
 
   @HostListener('window:keydown.escape')
-  onEscape() {
+  onEscape(): void {
     if (!this.showEmptyConfirm() && !this.showRemoveAllConfirm() && !this.showAutoFillConfirm()) {
       this.close();
     }

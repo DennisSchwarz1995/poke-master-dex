@@ -1,4 +1,4 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../core/services/theme.service';
 import { Dex, DexType } from '../../../shared/models/dex.model';
@@ -16,7 +16,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
         <div (click)="onClick()" class="cursor-pointer flex-1 flex flex-col">
           <div class="flex items-start justify-between mb-4">
             <div>
-              <span class="text-3xl">{{ getIcon(currentDex.type) }}</span>
+              <span class="text-3xl">{{ dexIcon() }}</span>
             </div>
 
             <div class="flex items-center gap-2">
@@ -51,15 +51,13 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 
           <div class="mb-4">
             <span class="text-xs text-secondary font-medium">Type: </span>
-            <span class="text-sm font-semibold text-primary pl-1">{{
-              getTypeName(currentDex.type)
-            }}</span>
+            <span class="text-sm font-semibold text-primary pl-1">{{ dexTypeName() }}</span>
           </div>
 
           <div class="flex items-center justify-between text-sm">
             <span class="text-secondary"> Start: Box {{ currentDex.startBox }} </span>
             <span class="px-3 py-1 rounded-full text-xs font-medium bg-surface-raised text-primary">
-              {{ getTypeName(currentDex.type) }}
+              {{ dexTypeName() }}
             </span>
           </div>
         </div>
@@ -75,34 +73,40 @@ export class DexCardComponent {
   clicked = output<Dex>();
   optionsClicked = output<Dex>();
 
-  onClick() {
+  onClick(): void {
     this.clicked.emit(this.dex());
   }
 
-  onOptions(event: Event) {
+  onOptions(event: Event): void {
     event.stopPropagation();
     this.optionsClicked.emit(this.dex());
   }
 
-  getIcon(type: DexType): string {
+  dexIcon = computed(() => {
+    const type = this.dex().type;
     const icons: Record<DexType, string> = {
       [DexType.STANDARD]: '📋',
       [DexType.LIVING]: '🌱',
       [DexType.SHINY_LIVING]: '✨',
+      [DexType.COMBINED_SHINY_LIVING]: '1',
       [DexType.FORM]: '🔄',
       [DexType.ORIGIN]: '🏆',
+      [DexType.ORIGIN_FORM]: '🌍',
     };
     return icons[type] || '📋';
-  }
+  });
 
-  getTypeName(type: DexType): string {
+  dexTypeName = computed(() => {
+    const type = this.dex().type;
     const names: Record<DexType, string> = {
       [DexType.STANDARD]: 'Standard',
       [DexType.LIVING]: 'Living',
       [DexType.SHINY_LIVING]: 'Shiny Living',
+      [DexType.COMBINED_SHINY_LIVING]: '1',
       [DexType.FORM]: 'Form',
       [DexType.ORIGIN]: 'Origin',
+      [DexType.ORIGIN_FORM]: 'Origin Form',
     };
     return names[type] || 'Standard';
-  }
+  });
 }

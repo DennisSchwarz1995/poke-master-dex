@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { DatasetPokemon } from '../api/services/dataset.service';
+import { DatasetPokemon } from '../../shared/models/dataset.model';
 
 export type PokemonLangCode = 'eng' | 'fra' | 'deu' | 'jap' | 'kor' | 'chs' | 'cht';
 
@@ -66,7 +66,10 @@ export class PokemonLanguageService {
     return engName.replace(/\s*\(.*\)\s*$/, '');
   }
 
-  getFormLabel(pkmn: DatasetPokemon): string {
+  getFormLabel(pkmn: DatasetPokemon, hideDefault: boolean = false): string {
+    if (hideDefault && pkmn.isDefault) {
+      return '';
+    }
     const lang = this.currentLang();
     return pkmn.formNames?.[lang] || pkmn.formNames?.['eng'] || '';
   }

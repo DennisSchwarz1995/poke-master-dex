@@ -11,7 +11,8 @@ import {
 import { CommonModule } from '@angular/common';
 import Chart from 'chart.js/auto';
 import { BoxSlot } from '../../../shared/models/dex.model';
-import { DatasetPokemon, DatasetService } from '../../../core/api/services/dataset.service';
+import { DatasetService } from '../../../core/api/services/dataset.service';
+import { DatasetPokemon } from '../../../shared/models/dataset.model';
 import { NatureData } from '../../../shared/models/dataset.model';
 
 @Component({

@@ -1,7 +1,8 @@
 import { Component, input, inject, signal, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { DatasetPokemon, DatasetService } from '../../../../core/api/services/dataset.service';
+import { DatasetService } from '../../../../core/api/services/dataset.service';
+import { DatasetPokemon } from '../../../../shared/models/dataset.model';
 import { forkJoin, catchError, of, Observable } from 'rxjs';
 import { take, switchMap, map } from 'rxjs/operators';
 import { DatasetPokemonCardComponent } from '../../../../shared/components/dataset-pokemon-card/dataset-pokemon-card.component';

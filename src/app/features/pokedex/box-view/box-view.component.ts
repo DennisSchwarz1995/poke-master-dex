@@ -163,6 +163,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
                   [showGmaxIcon]="currentQuickEditState().appearance?.showGmax || false"
                   [showAlphaIcon]="currentQuickEditState().appearance?.showAlpha || false"
                   [showPokeballIcon]="currentQuickEditState().appearance?.showPokeball || false"
+                  [hideDefaultFormLabel]="dex()?.type !== 'form'"
                 />
               }
             </div>
@@ -448,10 +449,11 @@ export class BoxViewComponent implements OnInit {
         const startIndex = offset * pokemonPerBox;
         const endIndex = Math.min(startIndex + pokemonPerBox - 1, totalPokemon - 1);
 
-        const firstPoke = mapping[startIndex];
-        const lastPoke = mapping[endIndex];
+        const chunk = mapping.slice(startIndex, endIndex + 1).filter((p) => p !== null);
+        if (chunk.length === 0) continue;
 
-        if (!firstPoke || !lastPoke) continue; // Skip empty chunks
+        const firstPoke = chunk[0]!;
+        const lastPoke = chunk[chunk.length - 1]!;
 
         const numStart = String(firstPoke.dexNum).padStart(4, '0');
         const numEnd = String(lastPoke.dexNum).padStart(4, '0');
