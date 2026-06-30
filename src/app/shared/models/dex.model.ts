@@ -64,10 +64,16 @@ export interface Box {
   slots: BoxSlot[];
 }
 
+export interface DexLayoutOption {
+  id: string;
+  name: string;
+}
+
 export interface DexTypeConfig {
   type: DexType;
   name: string;
   description: string;
   icon: string;
   color: string;
+  supportedLayouts?: DexLayoutOption[];
 }
