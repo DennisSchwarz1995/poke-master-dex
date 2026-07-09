@@ -11,8 +11,8 @@ import { Dex, Box } from '../../../shared/models/dex.model';
   imports: [CommonModule, RouterLink],
   template: `
     <div class="min-h-screen bg-secondary">
-      <main class="container mx-auto px-4 py-8 pt-6">
-        <nav class="flex items-center justify-start gap-4">
+      <main class="flex flex-col gap-6 container mx-auto pt-6 pb-2 px-4">
+        <nav class="flex items-center justify-start">
           <a
             routerLink="/pokedex"
             class="flex items-center gap-2 text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme px-3 py-1.5 rounded-xl border border-theme hover:shadow-sm"
@@ -42,7 +42,7 @@ import { Dex, Box } from '../../../shared/models/dex.model';
           </div>
         } @else {
           <div
-            class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2"
+            class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-10 gap-2"
           >
             @for (box of sortedBoxes(); track box.boxNumber) {
               <div
