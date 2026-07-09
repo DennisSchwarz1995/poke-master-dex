@@ -1,11 +1,23 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ['./src/**/*.{html,ts}'],
   darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
+      keyframes: {
+        marqueeLeft: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        marqueeRight: {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' },
+        },
+      },
+      animation: {
+        'marquee-left': 'marqueeLeft 180s linear infinite',
+        'marquee-right': 'marqueeRight 180s linear infinite',
+      },
       colors: {
         pokemon: {
           normal: '#A8A878',
@@ -31,4 +43,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};
