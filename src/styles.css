@@ -29,17 +29,19 @@
 }
 
 [data-theme='dark'] {
-  --color-primary: #60a5fa;
-  --color-primary-hover: #3b82f6;
+  --color-primary: #ededed;
+  --color-primary-hover: #cccccc;
   --color-primary-light: #1e3a8a;
+  --color-active: #3b82f6;
 
   --color-bg-primary: #000000;
   --color-bg-secondary: #0f0f0f;
   --color-bg-tertiary: #303031;
+  --color-bg-active: #224a8a;
 
   --color-text-primary: #f2f2f2;
   --color-text-secondary: #a1a1aa;
-  --color-text-tertiary: #71717a;
+  --color-text-tertiary: #000000;
 
   --color-border: #27272a;
   --color-border-hover: #3f3f46;
@@ -56,6 +58,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply p-2.5 flex items-center gap-2 border border-theme rounded-lg bg-[var(--color-primary)] text-[var(--color-text-tertiary)] transition-all font-semibold  hover:bg-[var(--color-primary-hover)] has-[svg,img,i]:ps-4;
+  }
+
+  .btn-secondary {
+    @apply p-2.5 flex items-center gap-2 border border-theme rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] transition-all font-semibold  hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] has-[svg,img,i]:ps-4;
+  }
+}
 
 @layer utilities {
   .bg-surface {
@@ -98,7 +110,6 @@
     border-color: var(--color-border-hover);
   }
 
-  /* Input theme utilities */
   .input-theme {
     background-color: var(--color-surface);
     border-color: var(--color-border);

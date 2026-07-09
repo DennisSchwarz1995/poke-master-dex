@@ -32,7 +32,7 @@ export interface CustomDropdownOption {
     <div class="relative group" #container>
       <div class="relative flex items-center">
         @if (selectedOption()?.iconPath) {
-          <div class="absolute left-3 z-20 flex items-center pointer-events-none">
+          <div class="absolute z-20 flex items-center pointer-events-none" [style.right.px]="28">
             <img
               [src]="selectedOption()!.iconPath | cdnUrl: selectedOption()!.cdnFolder"
               [alt]="selectedOption()!.name"
@@ -48,9 +48,10 @@ export interface CustomDropdownOption {
           [value]="selectedOption() ? selectedOption()!.name : ''"
           [placeholder]="placeholder()"
           readonly
-          class="w-full bg-surface border-2 border-theme rounded-lg px-4 py-4 text-sm text-primary placeholder-tertiary focus:border-blue-500 outline-none transition-colors peer cursor-pointer"
-          [class.pl-10]="selectedOption()?.iconPath"
-          [class.pr-8]="true"
+          class="w-full bg-surface border-2 rounded-lg px-4 pr-8 py-4 text-sm text-primary placeholder-tertiary outline-none transition-colors peer cursor-pointer"
+          style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"
+          [class.border-[var(--color-active)]]="isOpen()"
+          [class.border-theme]="!isOpen()"
           (click)="toggleDropdown()"
           (keydown.space)="$event.preventDefault(); toggleDropdown()"
           (keydown.enter)="$event.preventDefault(); toggleDropdown()"

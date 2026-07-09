@@ -63,7 +63,7 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
 
       <div class="z-10 flex flex-col items-center gap-1 mt-3 w-full">
         <span
-          class="text-xs font-mono font-bold text-tertiary group-hover:text-primary transition-colors tracking-widest text-center"
+          class="text-xs font-mono font-bold text-secondary group-hover:text-primary transition-colors tracking-widest text-center"
           >#{{ pokemon().nid.slice(0, 4) }}</span
         >
 

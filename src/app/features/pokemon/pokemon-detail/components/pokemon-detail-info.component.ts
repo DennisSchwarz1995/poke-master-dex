@@ -36,7 +36,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
               </svg>
               <div class="space-y-1">
                 <h3
-                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-tertiary)]"
+                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-secondary)]"
                 >
                   Region
                 </h3>
@@ -53,7 +53,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
               />
               <div class="space-y-1">
                 <h3
-                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-tertiary)]"
+                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-secondary)]"
                 >
                   Generation
                 </h3>
@@ -73,7 +73,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
               </svg>
               <div class="space-y-1">
                 <h3
-                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-tertiary)]"
+                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-secondary)]"
                 >
                   Height
                 </h3>
@@ -93,7 +93,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
               </svg>
               <div class="space-y-1">
                 <h3
-                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-tertiary)]"
+                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-secondary)]"
                 >
                   Weight
                 </h3>
@@ -113,7 +113,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
               </svg>
               <div class="space-y-1">
                 <h3
-                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-tertiary)]"
+                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-secondary)]"
                 >
                   Color
                 </h3>
@@ -135,7 +135,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
               </svg>
               <div class="space-y-1">
                 <h3
-                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-tertiary)] mb-2"
+                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-secondary)] mb-2"
                 >
                   Abilities
                 </h3>
@@ -178,7 +178,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
               </svg>
               <div class="space-y-1 w-full">
                 <h3
-                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-tertiary)]"
+                  class="text-xs uppercase font-bold tracking-wider text-[var(--color-text-secondary)]"
                 >
                   Gender Ratio
                 </h3>

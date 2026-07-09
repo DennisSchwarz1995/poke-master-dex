@@ -101,10 +101,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
         />
 
         <div class="flex gap-2 absolute bottom-4 right-4">
-          <a
-            [href]="serebiiUrl()"
-            target="_blank"
-            class="py-2 pl-5 pr-2.5 flex items-center gap-2 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme"
+          <a [href]="serebiiUrl()" target="_blank" class="btn-secondary"
             >Serebii
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -120,10 +117,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
               />
             </svg>
           </a>
-          <a
-            [href]="bulbapediaUrl()"
-            target="_blank"
-            class="py-2 pl-5 pr-2.5 flex items-center gap-2 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme"
+          <a [href]="bulbapediaUrl()" target="_blank" class="btn-secondary"
             >Bulbapedia
             <svg
               xmlns="http://www.w3.org/2000/svg"

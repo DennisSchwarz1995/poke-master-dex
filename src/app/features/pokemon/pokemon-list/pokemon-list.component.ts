@@ -46,7 +46,9 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
   >
     <header class="z-40 bg-bg-secondary/95 pt-6 space-y-4 mb-6">
       <div class="flex justify-center">
-        <div class="bg-surface border border-theme p-1 rounded-2xl flex max-w-md w-full shadow-sm">
+        <div
+          class="bg-surface border border-theme p-1 rounded-2xl flex max-w-md w-full shadow-sm gap-1"
+        >
           <button
             (click)="viewMode.set('national')"
             class="flex-1 py-1.5 px-4 rounded-xl font-bold transition-all shadow-sm"
@@ -54,8 +56,8 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
             [attr.aria-selected]="viewMode() === 'national'"
             [ngClass]="
               viewMode() === 'national'
-                ? 'bg-blue-500/10 text-blue-500 dark:bg-blue-500/20 dark:text-blue-400'
-                : 'text-secondary hover:text-primary font-medium bg-transparent'
+                ? 'text-primary bg-[var(--color-bg-active)]'
+                : 'text-secondary hover:text-primary font-medium bg-transparent hover:bg-surface-hover'
             "
           >
             National Pokédex
@@ -67,8 +69,8 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
             [attr.aria-selected]="viewMode() === 'games'"
             [ngClass]="
               viewMode() === 'games'
-                ? 'bg-blue-500/10 text-blue-500 dark:bg-blue-500/20 dark:text-blue-400'
-                : 'text-secondary hover:text-primary font-medium bg-transparent'
+                ? 'text-primary bg-[var(--color-bg-active)]'
+                : 'text-secondary hover:text-primary font-medium bg-transparent hover:bg-surface-hover'
             "
           >
             By Games
@@ -256,7 +258,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
               (ngModelChange)="onSearchChange()"
               placeholder="Search Pokémon..."
               aria-label="Search Pokémon"
-              class="w-full pl-11 pr-4 py-2.5 bg-surface text-text-primary border border-theme rounded-3xl shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder:text-text-tertiary font-medium bg-surface-hover"
+              class="w-full pl-11 pr-4 py-2.5 bg-surface text-text-primary border border-theme rounded-3xl shadow-sm focus:border-[var(--color-active)] outline-none transition-all placeholder:text-text-tertiary font-medium bg-surface-hover"
             />
             <svg
               class="absolute left-4 top-3 w-5 h-5 text-text-tertiary"
@@ -279,6 +281,9 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
             (click)="showFilters.set(!showFilters())"
             class="px-5 py-2.5 bg-surface text-primary border border-theme rounded-3xl shadow-sm hover:shadow-md transition-all flex items-center gap-2 font-bold bg-surface-hover"
             [class.bg-surface-raised]="showFilters()"
+            [ngClass]="
+              showFilters() ? 'bg-surface-raised focus:border-[var(--color-active)]' : 'bg-surface'
+            "
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -293,7 +298,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
           </button>
         </div>
 
-        <div class="py-2 flex justify-center text-md font-medium text-tertiary text-center px-4">
+        <div class="py-2 flex justify-center text-md font-medium text-secondary text-center px-4">
           @if (viewMode() === 'games' && selectedGames().length > 0) {
             @switch (gameFilterMode()) {
               @case ('all') {
@@ -361,8 +366,8 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
               </div>
             </div>
 
-            <div class="border-t border-theme pt-4 mb-4">
-              <p class="text-xs font-bold uppercase tracking-wider text-tertiary mb-3">Options</p>
+            <div class="border-t border-theme pt-4 mb-4 flex flex-col gap-2">
+              <p class="text-xs font-bold uppercase tracking-wider text-secondary">Options</p>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div
                   class="flex items-center justify-between gap-3 cursor-pointer select-none group"
