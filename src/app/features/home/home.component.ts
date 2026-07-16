@@ -1,132 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CdnUrlPipe } from '../../shared/pipes/cdnUrl.pipe';
+import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-marquee.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, CdnUrlPipe],
+  imports: [RouterLink, PokemonMarqueeComponent],
   template: `
     <section
       class="min-h-[calc(100vh-4rem)] flex items-center justify-center pt-12 overflow-hidden bg-secondary w-full"
     >
-      <div class="flex flex-col gap-4 relative z-10 w-full text-center">
+      <div class="flex flex-col gap-4 relative w-full text-center">
         <img src="assets/images/logo.png" alt="logo" class="w-48 h-48 mx-auto" />
         <h1
-          class="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-black leading-[1.1] tracking-tight text-primary mb-6 max-w-[800px] mx-auto px-4"
+          class="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-black leading-[1.1] tracking-tight text-primary mb-6 max-w-[1000px] mx-auto"
         >
           Track, Collect & Complete Your Pokédex
         </h1>
 
         <p
-          class="text-base sm:text-lg md:text-xl text-secondary leading-relaxed max-w-[600px] mx-auto mb-10"
+          class="text-base sm:text-lg md:text-xl text-secondary leading-relaxed max-w-[600px] mx-auto mb-6"
         >
           The ultimate tool for Pokémon collectors. Manage your Living Dex, track shiny hunts,
           explore every generation — all in one beautifully crafted app.
         </p>
 
         <section
-          class="relative w-full overflow-hidden flex flex-col gap-3 sm:gap-4 mb-10 mt-2 pointer-events-none"
+          class="relative w-full overflow-hidden flex flex-col gap-3 sm:gap-4 mb-10 max-w-[1920px] mx-auto"
         >
-          <div class="flex w-max animate-marquee-left gap-3 sm:gap-4">
-            @for (pokemon of marqueeRow1; track $index) {
-              <div
-                class="relative w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 shadow-sm"
-              >
-                <img
-                  [src]="
-                    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
-                    (pokemon.isShiny ? 'shiny/' : '') +
-                    pokemon.id +
-                    '.png'
-                  "
-                  class="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-sm"
-                  alt="pokemon"
-                  loading="lazy"
-                />
-                @if (pokemon.isShiny) {
-                  <img
-                    [src]="'shiny.png' | cdnUrl: 'special_attributes'"
-                    alt="shiny"
-                    class="absolute top-0 right-0 w-4 h-4 sm:w-5 sm:h-5 object-contain"
-                  />
-                }
-              </div>
-            }
-            @for (pokemon of marqueeRow1; track $index) {
-              <div
-                class="relative w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 shadow-sm"
-              >
-                <img
-                  [src]="
-                    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
-                    (pokemon.isShiny ? 'shiny/' : '') +
-                    pokemon.id +
-                    '.png'
-                  "
-                  class="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-sm"
-                  alt="pokemon"
-                  loading="lazy"
-                />
-                @if (pokemon.isShiny) {
-                  <img
-                    [src]="'shiny.png' | cdnUrl: 'special_attributes'"
-                    alt="shiny"
-                    class="absolute top-0 right-0 w-4 h-4 sm:w-5 sm:h-5 object-contain"
-                  />
-                }
-              </div>
-            }
-          </div>
-          <div class="flex w-max animate-marquee-right gap-3 sm:gap-4">
-            @for (pokemon of marqueeRow2; track $index) {
-              <div
-                class="relative w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 shadow-sm"
-              >
-                <img
-                  [src]="
-                    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
-                    (pokemon.isShiny ? 'shiny/' : '') +
-                    pokemon.id +
-                    '.png'
-                  "
-                  class="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-sm"
-                  alt="pokemon"
-                  loading="lazy"
-                />
-                @if (pokemon.isShiny) {
-                  <img
-                    [src]="'shiny.png' | cdnUrl: 'special_attributes'"
-                    alt="shiny"
-                    class="absolute top-0 right-0 w-4 h-4 sm:w-5 sm:h-5 object-contain"
-                  />
-                }
-              </div>
-            }
-            @for (pokemon of marqueeRow2; track $index) {
-              <div
-                class="relative w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 shadow-sm"
-              >
-                <img
-                  [src]="
-                    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
-                    (pokemon.isShiny ? 'shiny/' : '') +
-                    pokemon.id +
-                    '.png'
-                  "
-                  class="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-sm"
-                  alt="pokemon"
-                  loading="lazy"
-                />
-                @if (pokemon.isShiny) {
-                  <img
-                    [src]="'shiny.png' | cdnUrl: 'special_attributes'"
-                    alt="shiny"
-                    class="absolute top-0 right-0 w-4 h-4 sm:w-5 sm:h-5 object-contain"
-                  />
-                }
-              </div>
-            }
+          <div class="flex w-max gap-8">
+            <app-pokemon-marquee></app-pokemon-marquee>
           </div>
         </section>
 
@@ -607,22 +510,7 @@ import { CdnUrlPipe } from '../../shared/pipes/cdnUrl.pipe';
   `,
   styles: [],
 })
-export class HomeComponent implements OnInit {
-  marqueeRow1: { id: number; isShiny: boolean }[] = [];
-  marqueeRow2: { id: number; isShiny: boolean }[] = [];
-
-  ngOnInit() {
-    for (let i = 0; i < 15; i++) {
-      const id1 = Math.floor(Math.random() * 1025) + 1;
-      const isShiny1 = Math.floor(Math.random() * 8192) === 0;
-      this.marqueeRow1.push({ id: id1, isShiny: isShiny1 });
-
-      const id2 = Math.floor(Math.random() * 1025) + 1;
-      const isShiny2 = Math.floor(Math.random() * 8192) === 0;
-      this.marqueeRow2.push({ id: id2, isShiny: isShiny2 });
-    }
-  }
-
+export class HomeComponent {
   mockPokemonList = [
     { name: 'Bulbasaur', id: '001', emoji: '🌿', color: '#78C850' },
     { name: 'Charmander', id: '004', emoji: '🔥', color: '#F08030' },

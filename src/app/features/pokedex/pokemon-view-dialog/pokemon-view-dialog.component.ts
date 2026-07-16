@@ -95,6 +95,7 @@ export class PokemonViewDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.renderer.addClass(this.document.body, 'overflow-hidden');
   }
+
   ngOnDestroy() {
     this.renderer.removeClass(this.document.body, 'overflow-hidden');
   }

@@ -36,7 +36,6 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
     BoxOptionsDialogComponent,
     PokemonViewDialogComponent,
     ToolbarComponent,
-    RouterLink,
     TooltipDirective,
     CdnUrlPipe,
   ],
@@ -51,30 +50,6 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
           (discard)="discardAllEdits()"
           class="w-full"
         >
-          <div class="flex justify-start">
-            <nav class="flex-shrink-0">
-              <a
-                routerLink="/pokedex"
-                class="flex z-10 relative items-center gap-2 text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme px-3 py-1.5 rounded-xl border border-theme hover:shadow-sm"
-              >
-                <svg
-                  class="w-5 h-5 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2.5"
-                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                  />
-                </svg>
-                <span class="hidden sm:inline">Back to Pokédex</span>
-              </a>
-            </nav>
-          </div>
-
           <div
             class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full xs:max-w-xs sm:max-w-sm md:max-w-md z-0 px-2"
           ></div>
@@ -105,11 +80,26 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
               <div class="flex items-center justify-center gap-2 sm:gap-4 order-last md:order-none">
                 <button
                   (click)="onPreviousBox()"
-                  class="px-2 sm:px-4 py-1 sm:py-2 bg-secondary rounded hover:bg-surface-hover transition-colors font-bold text-lg"
+                  class="px-2 sm:px-4 py-1 sm:py-2 bg-surface rounded hover:bg-surface-hover transition-colors font-bold text-lg"
                   [appTooltip]="'Previous Box'"
                   tooltipPosition="top"
                 >
-                  ←
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28.45"
+                    height="16"
+                    viewBox="0 0 16 9"
+                  >
+                    <path d="M0 0h16v9H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M12.5 5h-9c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h9c.28 0 .5.22.5.5s-.22.5-.5.5"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M6 8.5a.47.47 0 0 1-.35-.15l-3.5-3.5c-.2-.2-.2-.51 0-.71L5.65.65c.2-.2.51-.2.71 0s.2.51 0 .71L3.21 4.51l3.15 3.15c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z"
+                    />
+                  </svg>
                 </button>
                 <div
                   class="px-3 font-bold text-sm sm:text-base text-center whitespace-nowrap text-text-primary"
@@ -118,11 +108,11 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
                 </div>
                 <button
                   (click)="onNextBox()"
-                  class="px-2 sm:px-4 py-1 sm:py-2 bg-secondary rounded hover:bg-surface-hover transition-colors font-bold text-lg"
+                  class="px-2 sm:px-4 py-1 sm:py-2 bg-surface rounded hover:bg-surface-hover transition-colors font-bold text-lg"
                   [appTooltip]="'Next Box'"
                   tooltipPosition="top"
                 >
-                  →
+                  <img [src]="'next.svg' | cdnUrl: 'icons'" alt="next" fill="currentColor" />
                 </button>
               </div>
 

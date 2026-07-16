@@ -30,6 +30,7 @@ import {
 import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-pokemon-card/dataset-pokemon-card.component';
 import { getGameDropdownOptions } from '../../../core/constants/game-data.constants';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
+import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -40,6 +41,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
     CustomDropdownComponent,
     DatasetPokemonCardComponent,
     CdnUrlPipe,
+    SearchInputComponent,
   ],
   template: `<main
     class="h-full max-w-[1600px] mx-auto w-full flex flex-col bg-bg-secondary px-4 pb-8 sm:px-6 lg:px-8"
@@ -251,30 +253,10 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 
       <div class="max-w-3xl w-full mx-auto relative flex flex-col gap-2">
         <div class="flex gap-3">
-          <div class="relative flex-1">
-            <input
-              type="text"
-              [(ngModel)]="searchQuery"
-              (ngModelChange)="onSearchChange()"
-              placeholder="Search Pokémon..."
-              aria-label="Search Pokémon"
-              class="w-full pl-11 pr-4 py-2.5 bg-surface text-text-primary border border-theme rounded-3xl shadow-sm focus:border-[var(--color-active)] outline-none transition-all placeholder:text-text-tertiary font-medium bg-surface-hover"
-            />
-            <svg
-              class="absolute left-4 top-3 w-5 h-5 text-text-tertiary"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2.5"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
+          <app-search-input
+            [(value)]="searchQuery"
+            (searchChange)="onSearchChange()"
+          />
 
           <button
             #filterBtn
@@ -915,5 +897,9 @@ export class PokemonListComponent implements OnInit, OnDestroy {
 
   removeGame(id: string) {
     this.selectedGames.update((games) => games.filter((g) => g !== id));
+  }
+
+  clearSearch() {
+    this.searchQuery.set('');
   }
 }

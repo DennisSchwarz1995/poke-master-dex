@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { Trainer } from '../../../shared/models/trainer.model';
-import { GAME_CODES, GameDefinition } from '../../../shared/models/game-definitions';
+import { GAME_CODES, GameDefinition } from '../../../shared/models/game-definitions.model';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ToastService } from '../../../core/services/toast.service';
 

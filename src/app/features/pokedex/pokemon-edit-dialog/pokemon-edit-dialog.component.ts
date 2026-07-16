@@ -18,7 +18,7 @@ import {
   getAvailableGamesForPokemon,
   GameDefinition,
   GAME_CODES,
-} from '../../../shared/models/game-definitions';
+} from '../../../shared/models/game-definitions.model';
 import { BoxSlot, StatsMap } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
 import { DatasetService } from '../../../core/api/services/dataset.service';
@@ -150,6 +150,8 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
                 <app-pokemon-edit-stats
                   [ivs]="ivs"
                   [evs]="evs"
+                  [raisedStat]="selectedNature?.raises || null"
+                  [loweredStat]="selectedNature?.lowers || null"
                   (ivsChanged)="ivs = $event"
                   (evsChanged)="evs = $event"
                 ></app-pokemon-edit-stats>
@@ -378,6 +380,10 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
       };
     });
   });
+
+  get selectedNature() {
+    return this.allNatures().find((n) => n.id === this.nature) || null;
+  }
 
   languageOptions = computed<CustomDropdownOption[]>(() => {
     return [

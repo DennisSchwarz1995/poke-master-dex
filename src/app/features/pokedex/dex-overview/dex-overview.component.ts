@@ -8,31 +8,10 @@ import { Dex, Box } from '../../../shared/models/dex.model';
 @Component({
   selector: 'app-dex-overview',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   template: `
     <div class="min-h-screen bg-secondary">
       <main class="flex flex-col gap-6 container mx-auto pt-6 pb-2 px-4">
-        <nav class="flex items-center justify-start">
-          <a
-            routerLink="/pokedex"
-            class="flex items-center gap-2 text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme px-3 py-1.5 rounded-xl border border-theme hover:shadow-sm"
-          >
-            <svg
-              class="w-5 h-5 flex-shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2.5"
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            <span class="hidden sm:inline">Back to Pokédex</span>
-          </a>
-        </nav>
         @if (loading()) {
           <div class="text-center py-12">
             <div
