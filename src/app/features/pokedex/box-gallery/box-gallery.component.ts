@@ -35,6 +35,7 @@ import { HostListener } from '@angular/core';
 import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.constants';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { ToolbarService } from '../../../core/services/toolbar.service';
+import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 
 export interface EnrichedSlot {
   originalSlot: BoxSlot | null;
@@ -69,10 +70,10 @@ export interface BoxWithSprites {
     PokemonEditDialogComponent,
     PokemonViewDialogComponent,
     ToolbarComponent,
-    RouterLink,
     TooltipDirective,
     ScrollingModule,
     CdnUrlPipe,
+    SearchInputComponent,
   ],
   templateUrl: 'box-gallery.component.html',
   styles: [

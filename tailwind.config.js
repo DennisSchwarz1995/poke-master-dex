@@ -5,40 +5,28 @@ module.exports = {
   theme: {
     extend: {
       keyframes: {
-        marqueeLeft: {
-          '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-50%)' },
+        marquee: {
+          '0%': { transform: 'translate(0)' },
+          '100%': { transform: 'translate(-100%)' },
         },
-        marqueeRight: {
-          '0%': { transform: 'translateX(-50%)' },
-          '100%': { transform: 'translateX(0%)' },
+        'marquee-copy': {
+          '0%': { transform: 'translate(100%)' },
+          '100%': { transform: 'translate(0)' },
+        },
+        'marquee-rev': {
+          '0%': { transform: 'translate(-100%)' },
+          '100%': { transform: 'translate(0)' },
+        },
+        'marquee-rev-copy': {
+          '0%': { transform: 'translate(0)' },
+          '100%': { transform: 'translate(100%)' },
         },
       },
       animation: {
-        'marquee-left': 'marqueeLeft 180s linear infinite',
-        'marquee-right': 'marqueeRight 180s linear infinite',
-      },
-      colors: {
-        pokemon: {
-          normal: '#A8A878',
-          fire: '#F08030',
-          water: '#6890F0',
-          grass: '#78C850',
-          electric: '#F8D030',
-          ice: '#98D8D8',
-          fighting: '#C03028',
-          poison: '#A040A0',
-          ground: '#E0C068',
-          flying: '#A890F0',
-          psychic: '#F85888',
-          bug: '#A8B820',
-          rock: '#B8A038',
-          ghost: '#705898',
-          dragon: '#7038F8',
-          dark: '#705848',
-          steel: '#B8B8D0',
-          fairy: '#EE99AC',
-        },
+        marquee: 'marquee 90s linear infinite',
+        'marquee-copy': 'marquee-copy 90s linear infinite',
+        'marquee-rev': 'marquee-rev 90s linear infinite',
+        'marquee-rev-copy': 'marquee-rev-copy 90s linear infinite',
       },
     },
   },
