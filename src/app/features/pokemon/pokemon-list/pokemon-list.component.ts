@@ -28,7 +28,7 @@ import {
   CustomDropdownOption,
 } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-pokemon-card/dataset-pokemon-card.component';
-import { getGameDropdownOptions } from '../../../core/constants/game-data.constants';
+import { GameDataService } from '../../../core/services/game-data.service';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 
@@ -463,6 +463,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   themeService = inject(ThemeService);
   typeColorService = inject(TypeColorService);
   langService = inject(PokemonLanguageService);
+  private gameDataService = inject(GameDataService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -668,7 +669,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
     });
   });
 
-  gameOptions = signal<CustomDropdownOption[]>(getGameDropdownOptions());
+  gameOptions = signal<CustomDropdownOption[]>(this.gameDataService.getGameDropdownOptions());
 
   filteredSlugs = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();

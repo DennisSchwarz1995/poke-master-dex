@@ -5,10 +5,7 @@ import { DatasetService } from '../../../core/api/services/dataset.service';
 import { GameData } from '../../../shared/models/dataset.model';
 import { GameCard } from '../game-card/game-card.component';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
-import {
-  getGameCustomDescription,
-  getGameIconPath,
-} from '../../../core/constants/game-data.constants';
+import { GameDataService } from '../../../core/services/game-data.service';
 
 @Component({
   selector: 'app-game-detail',
@@ -237,6 +234,7 @@ export class GameDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private datasetService = inject(DatasetService);
+  private gameDataService = inject(GameDataService);
 
   game = signal<GameData | undefined>(undefined);
   allGames = signal<GameData[]>([]);
@@ -303,7 +301,7 @@ export class GameDetailComponent implements OnInit {
   gameIconPath = computed(() => {
     const game = this.game();
     if (!game) return '';
-    return getGameIconPath(game.id);
+    return this.gameDataService.getGameIconPath(game.id);
   });
 
   gameDescription = computed(() => {
@@ -312,7 +310,7 @@ export class GameDetailComponent implements OnInit {
 
     const gameId = current.nameSlug?.toLowerCase() || current.id?.toLowerCase();
 
-    const customDesc = getGameCustomDescription(gameId || '');
+    const customDesc = this.gameDataService.getGameCustomDescription(gameId || '');
     if (customDesc) {
       return customDesc;
     }

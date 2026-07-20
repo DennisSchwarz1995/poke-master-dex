@@ -1,16 +1,15 @@
 import {
   Component,
-  OnInit,
   inject,
   output,
   input,
   signal,
   computed,
-  HostListener,
   ElementRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { DatasetService } from '../../../core/api/services/dataset.service';
@@ -93,15 +92,17 @@ export interface QuickEditState {
 
 @Component({
   selector: 'app-toolbar',
-  standalone: true,
   imports: [
-    CommonModule,
+    NgClass,
     FormsModule,
     CustomDropdownComponent,
     TooltipDirective,
     CdnUrlPipe,
     SafeHtmlPipe,
   ],
+  host: {
+    '(document:click)': 'onDocumentClick($event)',
+  },
   template: `
     <div class="flex flex-col gap-4 w-full animate-in fade-in duration-300">
       <div class="relative flex items-center justify-between w-full">
@@ -121,7 +122,7 @@ export interface QuickEditState {
               [appTooltip]="'Pokémon Tools'"
               tooltipPosition="top"
             >
-              @if (this.currentMode() === 'None') {
+              @if (currentMode() === 'None') {
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                   <path d="M0 0h24v24H0z" fill="none" />
                   <path
@@ -334,7 +335,7 @@ export interface QuickEditState {
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span class="font-medium leading-relaxed">{{ getModeDescription() }}</span>
+          <span class="font-medium leading-relaxed">{{ modeDescription() }}</span>
         </div>
       }
       @if (currentMode() === 'Trainer' || currentMode() === 'Pokeball') {
@@ -375,40 +376,44 @@ export interface QuickEditState {
     </div>
   `,
 })
-export class ToolbarComponent implements OnInit {
-  private firestoreService = inject(FirestoreService);
-  private authService = inject(AuthService);
-  private datasetService = inject(DatasetService);
-  private elRef = inject(ElementRef);
+export class ToolbarComponent {
+  private readonly firestoreService = inject(FirestoreService);
+  private readonly authService = inject(AuthService);
+  private readonly datasetService = inject(DatasetService);
+  private readonly elRef = inject(ElementRef);
 
-  pendingEditsCount = input<number>(0);
-  isSaving = input<boolean>(false);
+  // --- Inputs ---
+  readonly pendingEditsCount = input<number>(0);
+  readonly isSaving = input<boolean>(false);
 
-  modeChanged = output<QuickEditState>();
-  save = output<void>();
-  discard = output<void>();
+  // --- Outputs ---
+  readonly modeChanged = output<QuickEditState>();
+  readonly save = output<void>();
+  readonly discard = output<void>();
 
-  currentMode = signal<QuickEditMode>('None');
-  trainers = signal<Trainer[]>([]);
-  allPokeballs = signal<PokeballData[]>([]);
+  // --- State ---
+  readonly currentMode = signal<QuickEditMode>('None');
+  readonly trainers = signal<Trainer[]>([]);
+  readonly allPokeballs = signal<PokeballData[]>([]);
 
-  selectedTrainerId = signal<string>('');
-  selectedTrainerName = signal<string>('');
-  selectedTrainerTid = signal<string>('');
-  selectedTrainerGame = signal<string>('');
-  selectedBall = signal<string>('');
+  readonly selectedTrainerId = signal<string>('');
+  readonly selectedTrainerName = signal<string>('');
+  readonly selectedTrainerTid = signal<string>('');
+  readonly selectedTrainerGame = signal<string>('');
+  readonly selectedBall = signal<string>('');
 
-  isToolsDropdownOpen = signal(false);
-  isAppearanceDropdownOpen = signal(false);
+  readonly isToolsDropdownOpen = signal(false);
+  readonly isAppearanceDropdownOpen = signal(false);
 
-  appearanceState = signal<AppearanceState>({
+  readonly appearanceState = signal<AppearanceState>({
     showShiny: false,
     showGmax: false,
     showAlpha: false,
     showPokeball: false,
   });
 
-  availableModes: {
+  // --- Static Data ---
+  readonly availableModes: {
     value: QuickEditMode;
     label: string;
     icon?: string;
@@ -460,9 +465,10 @@ export class ToolbarComponent implements OnInit {
     },
   ];
 
-  availableAppearances = AVAILABLE_APPEARANCES;
+  readonly availableAppearances = AVAILABLE_APPEARANCES;
 
-  trainerDropdownOptions = computed<CustomDropdownOption[]>(() => {
+  // --- Computed Signals ---
+  readonly trainerDropdownOptions = computed<CustomDropdownOption[]>(() => {
     return this.trainers().map((tr) => ({
       id: tr.id,
       name: tr.name,
@@ -470,7 +476,7 @@ export class ToolbarComponent implements OnInit {
     }));
   });
 
-  pokeballDropdownOptions = computed<CustomDropdownOption[]>(() => {
+  readonly pokeballDropdownOptions = computed<CustomDropdownOption[]>(() => {
     const categoryLabels: Record<string, string> = {
       regular: 'Regular',
       special: 'Special',
@@ -487,112 +493,11 @@ export class ToolbarComponent implements OnInit {
     }));
   });
 
-  activeMode = computed(() => {
+  readonly activeMode = computed(() => {
     return this.availableModes.find((mode) => mode.value === this.currentMode());
   });
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: Event) {
-    if (!this.elRef.nativeElement.contains(event.target)) {
-      this.isToolsDropdownOpen.set(false);
-      this.isAppearanceDropdownOpen.set(false);
-    }
-  }
-
-  ngOnInit() {
-    const savedAppearance = localStorage.getItem('appearanceState');
-    if (savedAppearance) {
-      try {
-        const parsed = JSON.parse(savedAppearance);
-        this.appearanceState.set({ ...this.appearanceState(), ...parsed });
-      } catch (e) {
-        console.error('Error parsing appearance state', e);
-      }
-    }
-
-    const user = this.authService.user();
-    if (user) {
-      this.firestoreService.getUserTrainers().subscribe((data) => {
-        this.trainers.set(data);
-      });
-    }
-    this.datasetService.loadPokeballs().subscribe((data) => {
-      this.allPokeballs.set(data);
-    });
-    this.emitState();
-  }
-
-  toggleToolsDropdown() {
-    this.isToolsDropdownOpen.set(!this.isToolsDropdownOpen());
-    if (this.isToolsDropdownOpen()) this.isAppearanceDropdownOpen.set(false);
-  }
-
-  toggleAppearanceDropdown() {
-    this.isAppearanceDropdownOpen.set(!this.isAppearanceDropdownOpen());
-    if (this.isAppearanceDropdownOpen()) this.isToolsDropdownOpen.set(false);
-  }
-
-  toggleAppearance(key: keyof AppearanceState) {
-    const currentState = this.appearanceState();
-    const newState = { ...currentState, [key]: !currentState[key] };
-    this.appearanceState.set(newState);
-    localStorage.setItem('appearanceState', JSON.stringify(newState));
-    this.emitState();
-  }
-
-  setMode(mode: QuickEditMode) {
-    if (this.currentMode() === mode) {
-      this.currentMode.set('None');
-    } else {
-      this.currentMode.set(mode);
-    }
-    this.isToolsDropdownOpen.set(false);
-    this.emitState();
-  }
-
-  getModeLabel(modeValue: QuickEditMode): string {
-    const mode = this.availableModes.find((mode) => mode.value === modeValue);
-    return mode ? mode.label : '';
-  }
-
-  getBallImage(ballId: string): string {
-    return AVAILABLE_SPRITES.pokeballs.has(ballId) ? `${ballId}.webp` : 'pokeball.webp';
-  }
-
-  onTrainerSelected(trainerId: string) {
-    this.selectedTrainerId.set(trainerId);
-    if (!trainerId) {
-      this.selectedTrainerName.set('');
-      this.selectedTrainerTid.set('');
-      this.selectedTrainerGame.set('');
-    } else {
-      const tr = this.trainers().find((t) => t.id === trainerId);
-      this.selectedTrainerName.set(tr ? tr.name : '');
-      this.selectedTrainerTid.set(tr ? tr.trainerId : '');
-      this.selectedTrainerGame.set(tr?.game ? tr.game : '');
-    }
-    this.emitState();
-  }
-
-  onBallSelected(ballId: string, event: Event) {
-    event.stopPropagation();
-
-    if (this.selectedBall() === ballId) {
-      this.selectedBall.set('');
-    } else {
-      this.selectedBall.set(ballId);
-    }
-
-    this.emitState();
-  }
-
-  getChosenBallName(): string {
-    const ball = this.allPokeballs().find((b) => b.id === this.selectedBall());
-    if (!ball) return '';
-    return ball.name.replace(/\s*[Bb]all$/, '');
-  }
-
-  getModeDescription(): string {
+  readonly modeDescription = computed<string>(() => {
     const mode = this.currentMode();
     if (mode === 'None') return '';
 
@@ -635,6 +540,125 @@ export class ToolbarComponent implements OnInit {
     }
 
     return '';
+  });
+
+  constructor() {
+    this.initAppearanceState();
+    this.loadTrainers();
+    this.loadPokeballs();
+    this.emitState();
+  }
+
+  // --- Event Handlers ---
+  onDocumentClick(event: Event) {
+    if (!this.elRef.nativeElement.contains(event.target)) {
+      this.isToolsDropdownOpen.set(false);
+      this.isAppearanceDropdownOpen.set(false);
+    }
+  }
+
+  toggleToolsDropdown() {
+    this.isToolsDropdownOpen.set(!this.isToolsDropdownOpen());
+    if (this.isToolsDropdownOpen()) this.isAppearanceDropdownOpen.set(false);
+  }
+
+  toggleAppearanceDropdown() {
+    this.isAppearanceDropdownOpen.set(!this.isAppearanceDropdownOpen());
+    if (this.isAppearanceDropdownOpen()) this.isToolsDropdownOpen.set(false);
+  }
+
+  toggleAppearance(key: keyof AppearanceState) {
+    const currentState = this.appearanceState();
+    const newState = { ...currentState, [key]: !currentState[key] };
+    this.appearanceState.set(newState);
+    localStorage.setItem('appearanceState', JSON.stringify(newState));
+    this.emitState();
+  }
+
+  setMode(mode: QuickEditMode) {
+    if (this.currentMode() === mode) {
+      this.currentMode.set('None');
+    } else {
+      this.currentMode.set(mode);
+    }
+    this.isToolsDropdownOpen.set(false);
+    this.emitState();
+  }
+
+  getModeLabel(modeValue: QuickEditMode): string {
+    const mode = this.availableModes.find((m) => m.value === modeValue);
+    return mode ? mode.label : '';
+  }
+
+  getBallImage(ballId: string): string {
+    return AVAILABLE_SPRITES.pokeballs.has(ballId) ? `${ballId}.webp` : 'pokeball.webp';
+  }
+
+  onTrainerSelected(trainerId: string) {
+    this.selectedTrainerId.set(trainerId);
+    if (!trainerId) {
+      this.selectedTrainerName.set('');
+      this.selectedTrainerTid.set('');
+      this.selectedTrainerGame.set('');
+    } else {
+      const tr = this.trainers().find((t) => t.id === trainerId);
+      this.selectedTrainerName.set(tr ? tr.name : '');
+      this.selectedTrainerTid.set(tr ? tr.trainerId : '');
+      this.selectedTrainerGame.set(tr?.game ? tr.game : '');
+    }
+    this.emitState();
+  }
+
+  onBallSelected(ballId: string, event: Event) {
+    event.stopPropagation();
+
+    if (this.selectedBall() === ballId) {
+      this.selectedBall.set('');
+    } else {
+      this.selectedBall.set(ballId);
+    }
+
+    this.emitState();
+  }
+
+  // --- Private Methods ---
+  private initAppearanceState() {
+    const savedAppearance = localStorage.getItem('appearanceState');
+    if (savedAppearance) {
+      try {
+        const parsed = JSON.parse(savedAppearance);
+        this.appearanceState.set({ ...this.appearanceState(), ...parsed });
+      } catch (e) {
+        console.error('Error parsing appearance state', e);
+      }
+    }
+  }
+
+  private loadTrainers() {
+    const user = this.authService.user();
+    if (user) {
+      this.firestoreService
+        .getUserTrainers()
+        .pipe(takeUntilDestroyed())
+        .subscribe((data) => {
+          this.trainers.set(data);
+        });
+    }
+  }
+
+  private loadPokeballs() {
+    this.datasetService
+      .loadPokeballs()
+      .pipe(takeUntilDestroyed())
+      .subscribe((data) => {
+        this.allPokeballs.set(data);
+      });
+  }
+
+  private getChosenBallName(): string {
+    const ball = this.allPokeballs().find((b) => b.id === this.selectedBall());
+    if (!ball) return '';
+    return ball.name.replace(/\s*[Bb]all$/, '');
   }
 
   private emitState() {
