@@ -10,16 +10,13 @@ import {
   HostListener,
   effect,
   Renderer2,
+  DestroyRef,
 } from '@angular/core';
-import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.constants';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import {
-  getAvailableGamesForPokemon,
-  GameDefinition,
-  GAME_CODES,
-} from '../../../shared/models/game-definitions.model';
-import { BoxSlot, StatsMap } from '../../../shared/models/dex.model';
+import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { GameDefinition } from '../../../shared/models/game-definitions.model';
+import { BoxSlot } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { DatasetPokemon, SimplePokemon } from '../../../shared/models/dataset.model';
@@ -36,7 +33,8 @@ import {
 import { CustomDropdownOption } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { getGameIconPath } from '../../../core/constants/game-data.constants';
+import { GameDataService } from '../../../core/services/game-data.service';
+import { DropdownOptionService } from '../../../core/services/dropdown-option.service';
 import { PokemonEditHeaderComponent } from './components/pokemon-edit-header.component';
 import { PokemonEditStatsComponent } from './components/pokemon-edit-stats.component';
 import { PokemonEditAttributesComponent } from './components/pokemon-edit-attributes.component';
@@ -48,6 +46,7 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     PokemonEditHeaderComponent,
     PokemonEditStatsComponent,
     PokemonEditAttributesComponent,
@@ -72,7 +71,7 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
                 [pokemonData]="pokemonData()"
                 [currentSpriteUrl]="currentSpriteUrl()"
                 [localPokemonSlug]="localPokemonSlug()"
-                [ball]="ball"
+                [ball]="form.get('ball')?.value || ''"
                 [pokemonSearchOptions]="pokemonSearchOptions()"
                 [localizedName]="localizedName()"
                 [pokemonGenus]="pokemonGenus()"
@@ -103,28 +102,7 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
                   [markOptions]="markOptions()"
                   [trainerOptions]="trainerOptions()"
                   [originGameOptions]="originGameOptions()"
-                  [(isEvent)]="isEvent"
-                  [(isGmax)]="isGmax"
-                  [(isAlpha)]="isAlpha"
-                  [(level)]="level"
-                  [(originLanguage)]="originLanguage"
-                  [gender]="gender"
-                  (genderChange)="onGenderChange($event)"
-                  [(ball)]="ball"
-                  [(item)]="item"
-                  [(ribbon)]="ribbon"
-                  [(mark)]="mark"
-                  [(originalTrainer)]="originalTrainer"
-                  [(trainerId)]="trainerId"
-                  [(originGame)]="originGame"
-                  [storedInOptions]="storedInOptions()"
-                  [(storedIn)]="storedIn"
-                  [(nickname)]="nickname"
-                  [(notes)]="notes"
-                  [(isOwned)]="isOwned"
-                  (isOwnedChange)="onCaughtChange()"
-                  [(isShiny)]="isShiny"
-                  (isShinyChange)="updateSpritePreview()"
+                  [form]="form"
                   (trainerSelected)="onTrainerSelect($event)"
                 ></app-pokemon-edit-attributes>
               </div>
@@ -133,61 +111,61 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
                   <app-custom-dropdown
                     [label]="'Nature'"
                     [options]="natureOptions()"
-                    [selectedId]="nature"
+                    [selectedId]="form.get('nature')?.value || ''"
                     [placeholder]="'Select Nature'"
-                    (valueChanged)="nature = $event"
+                    (valueChanged)="form.get('nature')?.setValue($event)"
                   />
                   <app-custom-dropdown
                     [label]="'Ability'"
                     [options]="abilityOptions()"
-                    [selectedId]="ability"
+                    [selectedId]="form.get('ability')?.value || ''"
                     [placeholder]="'Select Ability'"
                     [searchable]="false"
-                    (valueChanged)="onAbilityChange($event)"
+                    (valueChanged)="form.get('ability')?.setValue($event)"
                   />
                 </div>
 
                 <app-pokemon-edit-stats
-                  [ivs]="ivs"
-                  [evs]="evs"
+                  [ivs]="form.get('ivs')?.value!"
+                  [evs]="form.get('evs')?.value!"
                   [raisedStat]="selectedNature?.raises || null"
                   [loweredStat]="selectedNature?.lowers || null"
-                  (ivsChanged)="ivs = $event"
-                  (evsChanged)="evs = $event"
+                  (ivsChanged)="form.get('ivs')?.setValue($event)"
+                  (evsChanged)="form.get('evs')?.setValue($event)"
                 ></app-pokemon-edit-stats>
 
                 <div class="grid grid-cols-2 gap-4">
                   <app-custom-dropdown
                     [label]="'Move 1'"
                     [options]="moveOptions()"
-                    [selectedId]="move1"
-                    [placeholder]="'Select Move 1'"
+                    [selectedId]="form.get('move1')?.value || ''"
+                    [placeholder]="'Select Move'"
                     [searchable]="true"
-                    (valueChanged)="move1 = $event"
+                    (valueChanged)="form.get('move1')?.setValue($event)"
                   />
                   <app-custom-dropdown
                     [label]="'Move 2'"
                     [options]="moveOptions()"
-                    [selectedId]="move2"
-                    [placeholder]="'Select Move 2'"
+                    [selectedId]="form.get('move2')?.value || ''"
+                    [placeholder]="'Select Move'"
                     [searchable]="true"
-                    (valueChanged)="move2 = $event"
+                    (valueChanged)="form.get('move2')?.setValue($event)"
                   />
                   <app-custom-dropdown
                     [label]="'Move 3'"
                     [options]="moveOptions()"
-                    [selectedId]="move3"
-                    [placeholder]="'Select Move 3'"
+                    [selectedId]="form.get('move3')?.value || ''"
+                    [placeholder]="'Select Move'"
                     [searchable]="true"
-                    (valueChanged)="move3 = $event"
+                    (valueChanged)="form.get('move3')?.setValue($event)"
                   />
                   <app-custom-dropdown
                     [label]="'Move 4'"
                     [options]="moveOptions()"
-                    [selectedId]="move4"
-                    [placeholder]="'Select Move 4'"
+                    [selectedId]="form.get('move4')?.value || ''"
+                    [placeholder]="'Select Move'"
                     [searchable]="true"
-                    (valueChanged)="move4 = $event"
+                    (valueChanged)="form.get('move4')?.setValue($event)"
                   />
                 </div>
               </div>
@@ -228,7 +206,7 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
         >
           <h3 class="text-xl font-bold text-primary">Unknown Trainer</h3>
           <p class="text-secondary text-sm">
-            The trainer "<span class="font-bold">{{ originalTrainer }}</span
+            The trainer "<span class="font-bold">{{ form.get('originalTrainer')?.value }}</span
             >" is not yet saved. Would you like to save this trainer for the quick selection?
           </p>
           <div class="flex justify-end gap-3 mt-2">
@@ -266,6 +244,9 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
   private firestoreService = inject(FirestoreService);
   private toastService = inject(ToastService);
   private langService = inject(PokemonLanguageService);
+  private gameDataService = inject(GameDataService);
+  private dropdownOptionService = inject(DropdownOptionService);
+  private fb = inject(FormBuilder);
   renderer = inject(Renderer2);
   document = inject(DOCUMENT);
 
@@ -273,16 +254,49 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     effect(() => {
       const state = this.genderState();
       setTimeout(() => {
+        const currentGender = this.form.get('gender')?.value;
         if (!state.canMale && !state.canFemale) {
-          if (this.gender !== '') this.gender = '';
+          if (currentGender !== '') this.form.patchValue({ gender: '' });
         } else if (state.canMale && !state.canFemale) {
-          if (this.gender !== 'male') this.gender = 'male';
+          if (currentGender !== 'male') this.form.patchValue({ gender: 'male' });
         } else if (!state.canMale && state.canFemale) {
-          if (this.gender !== 'female') this.gender = 'female';
+          if (currentGender !== 'female') this.form.patchValue({ gender: 'female' });
         }
       });
     });
   }
+
+  private destroyRef = inject(DestroyRef);
+
+  form = this.fb.group({
+    isOwned: [false],
+    isEvent: [false],
+    isShiny: [false],
+    isGmax: [false],
+    isAlpha: [false],
+    level: [null as number | null],
+    ball: [''],
+    item: [''],
+    originGame: [''],
+    storedIn: ['home'],
+    nickname: [''],
+    originLanguage: [''],
+    originalTrainer: [''],
+    trainerId: [''],
+    customName: [''],
+    notes: [''],
+    ability: [''],
+    nature: [''],
+    mark: [''],
+    ribbon: [''],
+    gender: [''],
+    move1: [''],
+    move2: [''],
+    move3: [''],
+    move4: [''],
+    ivs: [{ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }],
+    evs: [{ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }],
+  });
 
   pokemonData = signal<DatasetPokemon | null>(null);
   trainers = signal<Trainer[]>([]);
@@ -308,50 +322,15 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     return { canMale: true, canFemale: true };
   });
 
-  ribbonOptions = computed<CustomDropdownOption[]>(() => {
-    return this.allRibbons()
-      .map((ribbon) => ({
-        id: ribbon.id,
-        name: ribbon.name,
-        description: ribbon.shortDesc,
-        category: `Gen ${ribbon.gen}`,
-        iconPath: AVAILABLE_SPRITES.ribbons.has(ribbon.id) ? `${ribbon.id}.png` : undefined,
-        cdnFolder: 'ribbons',
-      }))
-      .sort((a, b) => {
-        const genA = parseInt(a.category.replace('Gen ', ''));
-        const genB = parseInt(b.category.replace('Gen ', ''));
-        if (genA !== genB) return genB - genA;
-        return a.name.localeCompare(b.name);
-      });
-  });
-
-  markOptions = computed<CustomDropdownOption[]>(() => {
-    return this.allMarks()
-      .map((mark) => ({
-        id: mark.id,
-        name: mark.name,
-        description: mark.shortDesc,
-        category: `Gen ${mark.gen}`,
-        iconPath: AVAILABLE_SPRITES.marks.has(mark.id) ? `${mark.id}.png` : undefined,
-        cdnFolder: 'marks',
-      }))
-      .sort((a, b) => {
-        const genA = parseInt(a.category.replace('Gen ', ''));
-        const genB = parseInt(b.category.replace('Gen ', ''));
-        if (genA !== genB) return genB - genA;
-        return a.name.localeCompare(b.name);
-      });
-  });
-
-  pokemonSearchOptions = computed<CustomDropdownOption[]>(() => {
-    return this.allPokemon().map((p) => ({
-      id: p.slug,
-      name: p.name,
-      description: p.nameGerman && p.nameGerman !== p.name ? p.nameGerman : '',
-      searchTerms: p.allNames ? Object.values(p.allNames).filter((n) => n) : [],
-    }));
-  });
+  ribbonOptions = computed<CustomDropdownOption[]>(() =>
+    this.dropdownOptionService.mapRibbons(this.allRibbons()),
+  );
+  markOptions = computed<CustomDropdownOption[]>(() =>
+    this.dropdownOptionService.mapMarks(this.allMarks()),
+  );
+  pokemonSearchOptions = computed<CustomDropdownOption[]>(() =>
+    this.dropdownOptionService.mapPokemonSearchOptions(this.allPokemon()),
+  );
 
   abilityOptions = computed<CustomDropdownOption[]>(() => {
     return this.availableAbilities().map((abil) => {
@@ -364,96 +343,31 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     });
   });
 
-  natureOptions = computed<CustomDropdownOption[]>(() => {
-    return this.allNatures().map((nat) => {
-      let desc = '';
-      let descHtml = '';
-      if (nat.raises && nat.lowers) {
-        desc = `(+${this.getNatureStatLabel(nat.raises)} -${this.getNatureStatLabel(nat.lowers)})`;
-        descHtml = `(<span class="text-[#e46787] font-bold">+${this.getNatureStatLabel(nat.raises)}</span> <span class="text-[#3babdf] font-bold">-${this.getNatureStatLabel(nat.lowers)}</span>)`;
-      }
-      return {
-        id: nat.id,
-        name: nat.name,
-        description: desc,
-        descriptionHtml: descHtml,
-      };
-    });
-  });
+  natureOptions = computed<CustomDropdownOption[]>(() =>
+    this.dropdownOptionService.mapNatures(this.allNatures()),
+  );
 
   get selectedNature() {
-    return this.allNatures().find((n) => n.id === this.nature) || null;
+    return this.allNatures().find((n) => n.id === this.form.get('nature')?.value) || null;
   }
 
-  languageOptions = computed<CustomDropdownOption[]>(() => {
-    return [
-      { id: '', name: 'None' },
-      { id: 'ENG', name: 'ENG', description: 'English' },
-      { id: 'DEU', name: 'DEU', description: 'German' },
-      { id: 'JPN', name: 'JPN', description: 'Japanese' },
-      { id: 'FRA', name: 'FRA', description: 'French' },
-      { id: 'ITA', name: 'ITA', description: 'Italian' },
-      { id: 'ESP', name: 'ESP', description: 'Spanish' },
-      { id: 'KOR', name: 'KOR', description: 'Korean' },
-      { id: 'CHS', name: 'CHS', description: 'Chinese (Simp)' },
-      { id: 'CHT', name: 'CHT', description: 'Chinese (Trad)' },
-    ];
-  });
+  languageOptions = computed<CustomDropdownOption[]>(() =>
+    this.dropdownOptionService.getLanguageOptions(),
+  );
 
-  trainerOptions = computed<CustomDropdownOption[]>(() => {
-    return this.trainers().map((trainer) => ({
-      id: trainer.id,
-      name: trainer.name,
-      description: `(${trainer.game})${!this.isTrainerCompatible(trainer) ? ' — incompatible' : ''}`,
-      category: !this.isTrainerCompatible(trainer) ? 'Incompatible' : 'Compatible',
-    }));
-  });
+  trainerOptions = computed<CustomDropdownOption[]>(() =>
+    this.dropdownOptionService.mapTrainers(this.trainers(), (t) => this.isTrainerCompatible(t)),
+  );
 
-  pokeballOptions = computed<CustomDropdownOption[]>(() => {
-    const categoryLabels: Record<string, string> = {
-      regular: 'Regular',
-      special: 'Special',
-      hisuian: 'Hisuian',
-      other: 'Other',
-    };
-    return this.allPokeballs().map((ball) => ({
-      id: ball.id,
-      name: ball.name,
-      description: ball.shortDesc,
-      category: categoryLabels[ball.category] ?? ball.category,
-      iconPath: AVAILABLE_SPRITES.pokeballs.has(ball.id) ? `${ball.id}.webp` : undefined,
-      cdnFolder: 'pokeballs',
-    }));
-  });
-
-  itemOptions = computed<CustomDropdownOption[]>(() => {
-    const categoryLabels: Record<string, string> = {
-      ball: 'Poké Ball',
-      berry: 'Berry',
-      other: 'Item',
-    };
-
-    return this.allItems().map((item) => ({
-      id: item.id,
-      name: item.name,
-      description: item.shortDesc,
-      category: categoryLabels[item.category] ?? item.category,
-      iconPath: AVAILABLE_SPRITES.items.has(item.id) ? `${item.id}.png` : undefined,
-      cdnFolder: 'items',
-    }));
-  });
-
-  moveOptions = computed<CustomDropdownOption[]>(() => {
-    return [
-      { id: '', name: 'None', description: 'Empty move slot' },
-      ...this.allMoves().map((m) => ({
-        id: m.id,
-        name: m.name,
-        description: `${m.type.charAt(0).toUpperCase() + m.type.slice(1)} | Power: ${m.power || '—'} | PP: ${m.pp}`,
-        category: `Generation ${m.gen}`,
-      })),
-    ];
-  });
+  pokeballOptions = computed<CustomDropdownOption[]>(() =>
+    this.dropdownOptionService.mapPokeballs(this.allPokeballs()),
+  );
+  itemOptions = computed<CustomDropdownOption[]>(() =>
+    this.dropdownOptionService.mapItems(this.allItems()),
+  );
+  moveOptions = computed<CustomDropdownOption[]>(() =>
+    this.dropdownOptionService.mapMoves(this.allMoves()),
+  );
 
   pokemonGenus = computed(() => {
     const data = this.pokemonData();
@@ -486,39 +400,6 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     return abs;
   });
 
-  onAbilityChange(newAbility: string) {
-    this.ability = newAbility;
-  }
-
-  isOwned = false;
-  isEvent = false;
-  isShiny = false;
-  isGmax = false;
-  isAlpha = false;
-  level?: number;
-  ball = '';
-  item = '';
-  originGame = '';
-  storedIn = '';
-  nickname = '';
-  originLanguage = '';
-  originalTrainer = '';
-  trainerId = '';
-  customName = '';
-  notes = '';
-  ability = '';
-  nature = '';
-  mark = '';
-  ribbon = '';
-  gender = '';
-  move1 = '';
-  move2 = '';
-  move3 = '';
-  move4 = '';
-
-  ivs: StatsMap = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
-  evs: StatsMap = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-
   saving = signal(false);
   currentSpriteUrl = signal('');
 
@@ -536,7 +417,7 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     if (!cannotBreed && pokemon.storableIn) {
       pokemon.storableIn.forEach((game) => validGames.add(game));
     }
-    return getAvailableGamesForPokemon(Array.from(validGames));
+    return this.gameDataService.getAvailableGamesForPokemon(Array.from(validGames));
   });
 
   availableGamesByGen = computed(() => {
@@ -557,62 +438,13 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
       }));
   });
 
-  originGameOptions = computed<CustomDropdownOption[]>(() => {
-    const options: CustomDropdownOption[] = [
-      { id: '', name: 'None', description: 'No Origin Game selected', category: 'Options' },
-    ];
+  originGameOptions = computed<CustomDropdownOption[]>(() =>
+    this.gameDataService.getOriginGameOptions(this.availableGamesByGen()),
+  );
 
-    this.availableGamesByGen().forEach((group) => {
-      group.games.forEach((game) => {
-        options.push({
-          id: game.code,
-          name: game.fullName,
-          category: group.label,
-
-          iconPath: getGameIconPath(game.code) || undefined,
-        });
-      });
-    });
-
-    return options;
-  });
-
-  storedInOptions = computed<CustomDropdownOption[]>(() => {
-    const options: CustomDropdownOption[] = [
-      { id: '', name: 'None', description: 'Not Stored / Unknown', category: 'Options' },
-    ];
-
-    const allowedCodes = [
-      'home',
-      'sv-s',
-      'sv-v',
-      'swsh-sw',
-      'swsh-sh',
-      'bdsp-bd',
-      'bdsp-sp',
-      'la',
-      'lgpe-lgp',
-      'lgpe-lge',
-    ];
-
-    allowedCodes.forEach((code) => {
-      const game = GAME_CODES[code];
-      if (game) {
-        options.push({
-          id: game.code,
-          name: game.fullName,
-          category: game.gen === 0 ? 'Special' : `Generation ${game.gen}`,
-          iconPath: getGameIconPath(game.code) || undefined,
-        });
-      }
-    });
-
-    return options;
-  });
-
-  onOriginGameChange(gameCode: string) {
-    this.originGame = gameCode;
-  }
+  storedInOptions = computed<CustomDropdownOption[]>(() =>
+    this.gameDataService.getStoredInOptions(),
+  );
 
   isObtainableIn(gameCode: string): boolean {
     const pokemon = this.pokemonData();
@@ -623,33 +455,45 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     this.renderer.addClass(this.document.body, 'overflow-hidden');
     const pkmn = this.pokemon();
     this.localPokemonSlug.set(pkmn.pokemonSlug);
-    this.isOwned = pkmn.isOwned;
-    this.isEvent = pkmn.isEvent || false;
-    this.isShiny = pkmn.isShiny;
-    this.isGmax = pkmn.isGmax || false;
-    this.isAlpha = pkmn.isAlpha || false;
-    this.customName = pkmn.customName || '';
-    this.notes = pkmn.notes || '';
-    this.level = pkmn.level;
-    this.ball = pkmn.ball || '';
-    this.originGame = pkmn.originGame || '';
-    this.storedIn = pkmn.storedIn || 'home';
-    this.nickname = pkmn.nickname || '';
-    this.originLanguage = pkmn.originLanguage || '';
-    this.originalTrainer = pkmn.originalTrainer || '';
-    this.trainerId = pkmn.trainerId || '';
-    this.item = pkmn.item || '';
-    this.ability = pkmn.ability || '';
-    this.nature = pkmn.nature || '';
-    this.mark = pkmn.mark || '';
-    this.ribbon = pkmn.ribbon || '';
-    this.gender = pkmn.gender || '';
-    this.move1 = pkmn.moves?.[0] || '';
-    this.move2 = pkmn.moves?.[1] || '';
-    this.move3 = pkmn.moves?.[2] || '';
-    this.move4 = pkmn.moves?.[3] || '';
-    if (pkmn.ivs) this.ivs = { ...pkmn.ivs };
-    if (pkmn.evs) this.evs = { ...pkmn.evs };
+
+    this.form
+      .get('isOwned')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.onCaughtChange());
+    this.form
+      .get('isShiny')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.updateSpritePreview());
+
+    this.form.patchValue({
+      isOwned: pkmn.isOwned,
+      isEvent: pkmn.isEvent || false,
+      isShiny: pkmn.isShiny,
+      isGmax: pkmn.isGmax || false,
+      isAlpha: pkmn.isAlpha || false,
+      customName: pkmn.customName || '',
+      notes: pkmn.notes || '',
+      level: pkmn.level,
+      ball: pkmn.ball || '',
+      originGame: pkmn.originGame || '',
+      storedIn: pkmn.storedIn || 'home',
+      nickname: pkmn.nickname || '',
+      originLanguage: pkmn.originLanguage || '',
+      originalTrainer: pkmn.originalTrainer || '',
+      trainerId: pkmn.trainerId || '',
+      item: pkmn.item || '',
+      ability: pkmn.ability || '',
+      nature: pkmn.nature || '',
+      mark: pkmn.mark || '',
+      ribbon: pkmn.ribbon || '',
+      gender: pkmn.gender || '',
+      move1: pkmn.moves?.[0] || '',
+      move2: pkmn.moves?.[1] || '',
+      move3: pkmn.moves?.[2] || '',
+      move4: pkmn.moves?.[3] || '',
+      ivs: pkmn.ivs ? { ...pkmn.ivs } : { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
+      evs: pkmn.evs ? { ...pkmn.evs } : { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+    });
 
     this.loadData();
   }
@@ -682,45 +526,37 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
   updateSpritePreview() {
     const data = this.pokemonData();
     if (!data) return;
-    this.currentSpriteUrl.set(this.datasetService.getSpriteUrl(data, this.isShiny));
+    this.currentSpriteUrl.set(
+      this.datasetService.getSpriteUrl(data, this.form.get('isShiny')?.value || false),
+    );
   }
 
   toggleShinyPreview() {
-    this.isShiny = !this.isShiny;
+    const v = this.form.get('isShiny')?.value;
+    this.form.patchValue({ isShiny: !v });
     this.updateSpritePreview();
   }
 
   onCaughtChange() {
-    if (this.isOwned) {
-      if (!this.storedIn) {
-        this.storedIn = 'home';
+    const caught = this.form.get('isOwned')?.value;
+    if (caught && !this.form.get('storedIn')?.value) {
+      this.form.patchValue({ storedIn: 'home' });
+    }
+    if (caught && !this.form.get('ability')?.value) {
+      const data = this.pokemonData();
+      if (data?.ability1) {
+        this.form.patchValue({ ability: this.findAbilityName(data.ability1) });
       }
-      this.onAbilityChange(this.ability);
-      if (!this.originLanguage) {
-        const browserLang = navigator.language.toLowerCase();
-        if (browserLang.startsWith('de')) {
-          this.originLanguage = 'DEU';
-        } else if (browserLang.startsWith('ja')) {
-          this.originLanguage = 'JPN';
-        } else if (browserLang.startsWith('fr')) {
-          this.originLanguage = 'FRA';
-        } else if (browserLang.startsWith('es')) {
-          this.originLanguage = 'ESP';
-        } else if (browserLang.startsWith('it')) {
-          this.originLanguage = 'ITA';
-        } else {
-          this.originLanguage = 'ENG'; // Default to English
-        }
-      }
-      if (!this.ability && this.pokemonData()) {
-        const pokemon = this.pokemonData();
-        if (pokemon?.ability1) {
-          this.ability = this.findAbilityName(pokemon.ability1);
-        }
-        if (pokemon?.isGmax) {
-          this.isGmax = true;
-        }
-      }
+    }
+    if (caught && !this.form.get('originLanguage')?.value) {
+      const browserLang = navigator.language.toLowerCase();
+      let lang = 'ENG';
+      if (browserLang.startsWith('de')) lang = 'DEU';
+      else if (browserLang.startsWith('ja')) lang = 'JPN';
+      else if (browserLang.startsWith('fr')) lang = 'FRA';
+      else if (browserLang.startsWith('es')) lang = 'ESP';
+      else if (browserLang.startsWith('it')) lang = 'ITA';
+      this.form.patchValue({ originLanguage: lang });
     }
   }
 
@@ -729,20 +565,9 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     return match ? match.name : slug;
   }
 
-  getNatureStatLabel(stat: string): string {
-    const labels: Record<string, string> = {
-      atk: 'Atk',
-      def: 'Def',
-      spa: 'SpA',
-      spd: 'SpD',
-      spe: 'Spe',
-    };
-    return labels[stat] || stat;
-  }
-
   isTrainerCompatible(trainer: Trainer): boolean {
     if (!trainer.game) return true;
-    return this.availableGames().some((game) => game.code === trainer.game);
+    return this.availableGames().some((game) => game.id === trainer.game);
   }
 
   onTrainerSelect(trainerId: string) {
@@ -751,28 +576,40 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     if (trainer) {
       if (!this.isTrainerCompatible(trainer)) return;
 
-      this.originalTrainer = trainer.name;
-      this.trainerId = trainer.trainerId;
+      this.form.patchValue({
+        originalTrainer: trainer.name,
+        trainerId: trainer.trainerId,
+      });
+
       if (trainer.game && this.isObtainableIn(trainer.game)) {
-        this.originGame = trainer.game;
+        this.form.patchValue({ originGame: trainer.game });
       }
     }
   }
 
   async save() {
+    if (this.saving()) return;
     this.saving.set(true);
 
-    if (this.originalTrainer.trim() !== '') {
-      const promptDisabled = localStorage.getItem('disableAutoTrainerPrompt') === 'true';
-      if (!promptDisabled) {
-        const trainerExists = this.trainers().some(
-          (trainer) => trainer.name.toLowerCase() === this.originalTrainer.trim().toLowerCase(),
+    const fv = this.form.value;
+
+    if (fv.originalTrainer?.trim()) {
+      let matchingTrainer = this.trainers().find(
+        (t) => t.name.toLowerCase() === fv.originalTrainer!.trim().toLowerCase(),
+      );
+
+      if (fv.trainerId?.trim()) {
+        matchingTrainer = this.trainers().find(
+          (t) =>
+            t.name.toLowerCase() === fv.originalTrainer!.trim().toLowerCase() &&
+            t.trainerId === fv.trainerId!.trim(),
         );
-        if (!trainerExists) {
-          this.saving.set(false);
-          this.showTrainerPromptDialog.set(true);
-          return;
-        }
+      }
+
+      if (!matchingTrainer && fv.originGame) {
+        this.saving.set(false);
+        this.showTrainerPromptDialog.set(true);
+        return;
       }
     }
 
@@ -783,10 +620,11 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     this.showTrainerPromptDialog.set(false);
     this.saving.set(true);
     try {
+      const fv = this.form.value;
       await this.firestoreService.createTrainer({
-        name: this.originalTrainer.trim(),
-        trainerId: this.trainerId?.trim() || '',
-        game: this.originGame || '',
+        name: fv.originalTrainer!.trim(),
+        trainerId: fv.trainerId?.trim() || '',
+        game: fv.originGame || '',
       });
       this.toastService.success('Trainer saved successfully!');
     } catch (e) {
@@ -805,32 +643,33 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
 
   async executeSave() {
     try {
+      const fv = this.form.value;
       const updates: any = {
         pokemonSlug: this.localPokemonSlug() || null,
-        isOwned: this.isOwned,
-        isEvent: this.isEvent,
-        isShiny: this.isShiny,
-        isGmax: this.isGmax,
-        isAlpha: this.isAlpha,
-        level: this.level || null,
-        ball: this.ball || null,
-        item: this.item || null,
-        originGame: this.originGame || null,
-        storedIn: this.storedIn || null,
-        nickname: this.nickname || null,
-        originLanguage: this.originLanguage || null,
-        originalTrainer: this.originalTrainer || null,
-        trainerId: this.trainerId || null,
-        customName: this.customName || null,
-        notes: this.notes || null,
-        ability: this.ability || null,
-        nature: this.nature || null,
-        mark: this.mark || null,
-        ribbon: this.ribbon || null,
-        gender: this.gender || null,
-        moves: [this.move1 || '', this.move2 || '', this.move3 || '', this.move4 || ''],
-        ivs: { ...this.ivs },
-        evs: { ...this.evs },
+        isOwned: fv.isOwned,
+        isEvent: fv.isEvent,
+        isShiny: fv.isShiny,
+        isGmax: fv.isGmax,
+        isAlpha: fv.isAlpha,
+        level: fv.level || null,
+        ball: fv.ball || null,
+        item: fv.item || null,
+        originGame: fv.originGame || null,
+        storedIn: fv.storedIn || null,
+        nickname: fv.nickname || null,
+        originLanguage: fv.originLanguage || null,
+        originalTrainer: fv.originalTrainer || null,
+        trainerId: fv.trainerId || null,
+        customName: fv.customName || null,
+        notes: fv.notes || null,
+        ability: fv.ability || null,
+        nature: fv.nature || null,
+        mark: fv.mark || null,
+        ribbon: fv.ribbon || null,
+        gender: fv.gender || null,
+        moves: [fv.move1 || '', fv.move2 || '', fv.move3 || '', fv.move4 || ''],
+        ivs: { ...fv.ivs },
+        evs: { ...fv.evs },
       };
       Object.keys(updates).forEach((key) => updates[key] === undefined && delete updates[key]);
 
@@ -866,12 +705,11 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
   }
 
   onGenderChange(newGender: string) {
-    this.gender = newGender;
+    this.form.patchValue({ gender: newGender });
 
     const currentSlug = this.localPokemonSlug();
     if (!currentSlug) return;
 
-    // Extract base slug (remove -f or -m if present)
     const baseSlug = currentSlug.replace(/-(f|m)$/, '');
 
     if (newGender === 'female') {

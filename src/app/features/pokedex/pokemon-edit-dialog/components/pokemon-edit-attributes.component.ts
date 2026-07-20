@@ -1,6 +1,6 @@
-import { Component, input, model, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { DatasetPokemon } from '../../../../shared/models/dataset.model';
 import {
   CustomDropdownComponent,
@@ -10,9 +10,9 @@ import {
 @Component({
   selector: 'app-pokemon-edit-attributes',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomDropdownComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CustomDropdownComponent],
   template: `
-    <div class="flex flex-col gap-[18px]">
+    <div class="flex flex-col gap-[18px]" [formGroup]="form()">
       <div
         class="flex items-center justify-between p-4 bg-secondary/50 rounded-xl border border-theme"
       >
@@ -20,8 +20,7 @@ import {
           <div class="relative flex items-center">
             <input
               type="checkbox"
-              [ngModel]="isOwned()"
-              (ngModelChange)="isOwned.set($event)"
+              formControlName="isOwned"
               class="peer sr-only"
             />
             <div
@@ -48,8 +47,7 @@ import {
           <div class="relative flex items-center">
             <input
               type="checkbox"
-              [ngModel]="isShiny()"
-              (ngModelChange)="isShiny.set($event)"
+              formControlName="isShiny"
               class="peer sr-only"
             />
             <div
@@ -76,8 +74,7 @@ import {
           <div class="relative flex items-center">
             <input
               type="checkbox"
-              [ngModel]="isEvent()"
-              (ngModelChange)="isEvent.set($event)"
+              formControlName="isEvent"
               class="peer sr-only"
             />
             <div
@@ -107,8 +104,7 @@ import {
           <div class="relative flex items-center">
             <input
               type="checkbox"
-              [ngModel]="isGmax()"
-              (ngModelChange)="isGmax.set($event)"
+              formControlName="isGmax"
               [disabled]="!pokemonData()?.canGmax && !pokemonData()?.isGmax"
               class="peer sr-only"
             />
@@ -143,8 +139,7 @@ import {
           <div class="relative flex items-center">
             <input
               type="checkbox"
-              [ngModel]="isAlpha()"
-              (ngModelChange)="isAlpha.set($event)"
+              formControlName="isAlpha"
               [disabled]="!pokemonData()?.canBeAlpha"
               class="peer sr-only"
             />
@@ -172,8 +167,7 @@ import {
         <div class="relative group">
           <input
             type="number"
-            [ngModel]="level()"
-            (ngModelChange)="level.set($event)"
+            formControlName="level"
             min="1"
             max="100"
             class="w-full bg-surface border-2 border-theme rounded-lg px-4 py-4 text-sm text-primary focus:border-blue-500 outline-none transition-colors peer placeholder-transparent no-spinners"
@@ -190,10 +184,10 @@ import {
           <app-custom-dropdown
             [label]="'Language'"
             [options]="languageOptions()"
-            [selectedId]="originLanguage()"
+            [selectedId]="form().get('originLanguage')?.value"
             [placeholder]="'Select Language'"
             [searchable]="false"
-            (valueChanged)="originLanguage.set($event)"
+            (valueChanged)="form().get('originLanguage')?.setValue($event)"
           />
         </div>
       </div>
@@ -206,26 +200,19 @@ import {
           <div class="absolute left-1/2 top-0 bottom-0 w-px bg-theme z-10"></div>
 
           <button
-            (click)="
-              genderState().canMale && gender() !== 'male' ? gender.set('male') : gender.set('')
-            "
+            (click)="genderState().canMale ? form().get('gender')?.setValue('male') : null"
             [disabled]="!genderState().canMale"
             class="flex-1 flex items-center justify-center gap-2 transition-all font-bold text-sm z-0 relative"
-            [ngClass]="[
-              gender() === 'male'
-                ? 'bg-blue-100/50 text-primary dark:bg-blue-900/30'
-                : 'text-secondary hover:bg-surface-hover',
-              !genderState().canMale
-                ? 'opacity-40 cursor-not-allowed bg-secondary/10 hover:bg-secondary/10'
-                : 'cursor-pointer',
-            ]"
+            [class.bg-blue-500]="form().get('gender')?.value === 'male'"
+            [class.text-white]="form().get('gender')?.value === 'male'"
+            [class.opacity-50]="!genderState().canMale"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
               viewBox="0 -960 960 960"
               width="24px"
-              fill="#4285f4"
+              fill="currentColor"
             >
               <path
                 d="M797.5-797.5v235h-75V-669L558-505.5q19 28 29.25 59.66Q597.5-414.18 597.5-380q0 90.95-63.28 154.23-63.28 63.27-154.25 63.27t-154.22-63.28q-63.25-63.28-63.25-154.25t63.27-154.22Q289.05-597.5 380-597.5q33.5 0 65.5 10T505-558l164-164.5H562.5v-75h235ZM279.25-480.78q-41.75 41.73-41.75 100.75 0 59.03 41.72 100.78 41.73 41.75 100.75 41.75 59.03 0 100.78-41.72 41.75-41.73 41.75-100.75 0-59.03-41.72-100.78-41.73-41.75-100.75-41.75-59.03 0-100.78 41.72Z"
@@ -235,28 +222,19 @@ import {
           </button>
 
           <button
-            (click)="
-              genderState().canFemale && gender() !== 'female'
-                ? gender.set('female')
-                : gender.set('')
-            "
+            (click)="genderState().canFemale ? form().get('gender')?.setValue('female') : null"
             [disabled]="!genderState().canFemale"
             class="flex-1 flex items-center justify-center gap-2 transition-all font-bold text-sm z-0 relative"
-            [ngClass]="[
-              gender() === 'female'
-                ? 'bg-pink-100/50 text-primary dark:bg-pink-900/30'
-                : 'text-secondary hover:bg-surface-hover',
-              !genderState().canFemale
-                ? 'opacity-40 cursor-not-allowed bg-secondary/10 hover:bg-secondary/10'
-                : 'cursor-pointer',
-            ]"
+            [class.bg-pink-500]="form().get('gender')?.value === 'female'"
+            [class.text-white]="form().get('gender')?.value === 'female'"
+            [class.opacity-50]="!genderState().canFemale"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
               viewBox="0 -960 960 960"
               width="24px"
-              fill="#d6428c"
+              fill="currentColor"
             >
               <path
                 d="M442.5-122.5v-80h-80v-75h80V-366q-78.5-14-129.25-74.6Q262.5-501.19 262.5-581q0-90.37 63.5-153.44 63.5-63.06 154-63.06t154 63.06q63.5 63.07 63.5 153.44 0 79.81-50.75 140.4Q596-380 517.5-366v88.5h80v75h-80v80h-75Zm138.25-356.72q41.75-41.73 41.75-100.75 0-59.03-41.72-100.78-41.73-41.75-100.75-41.75-59.03 0-100.78 41.72-41.75 41.73-41.75 100.75 0 59.03 41.72 100.78 41.73 41.75 100.75 41.75 59.03 0 100.78-41.72Z"
@@ -270,39 +248,39 @@ import {
       <div class="flex flex-col gap-[18px]">
         <app-custom-dropdown
           [options]="pokeballOptions()"
-          [selectedId]="ball()"
+          [selectedId]="form().get('ball')?.value"
           [label]="'Poké Ball'"
           [placeholder]="'Select Poké Ball'"
-          (valueChanged)="ball.set($event)"
+          (valueChanged)="form().get('ball')?.setValue($event)"
         />
 
         <app-custom-dropdown
           [options]="itemOptions()"
-          [selectedId]="item()"
+          [selectedId]="form().get('item')?.value"
           [label]="'Held Item'"
           [placeholder]="'Select Held Item'"
           [searchable]="true"
-          (valueChanged)="item.set($event)"
+          (valueChanged)="form().get('item')?.setValue($event)"
         />
       </div>
 
       <div class="flex flex-col gap-[18px]">
         <app-custom-dropdown
           [options]="ribbonOptions()"
-          [selectedId]="ribbon()"
+          [selectedId]="form().get('ribbon')?.value"
           [label]="'Ribbon'"
           [placeholder]="'Select Ribbon'"
           [searchable]="true"
-          (valueChanged)="ribbon.set($event)"
+          (valueChanged)="form().get('ribbon')?.setValue($event)"
         />
 
         <app-custom-dropdown
           [options]="markOptions()"
-          [selectedId]="mark()"
+          [selectedId]="form().get('mark')?.value"
           [label]="'Mark'"
           [placeholder]="'Select Mark'"
           [searchable]="true"
-          (valueChanged)="mark.set($event)"
+          (valueChanged)="form().get('mark')?.setValue($event)"
         />
       </div>
 
@@ -324,8 +302,7 @@ import {
         <div class="grid grid-cols-2 gap-3 mb-3">
           <div class="relative group">
             <input
-              [ngModel]="originalTrainer()"
-              (ngModelChange)="originalTrainer.set($event)"
+              formControlName="originalTrainer"
               placeholder="OT Name"
               class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none transition-colors peer"
             />
@@ -337,8 +314,7 @@ import {
           </div>
           <div class="relative group">
             <input
-              [ngModel]="trainerId()"
-              (ngModelChange)="trainerId.set($event)"
+              formControlName="trainerId"
               placeholder="ID No."
               class="w-full bg-surface border-2 border-theme rounded-lg px-3 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none transition-colors peer"
             />
@@ -354,25 +330,24 @@ import {
           <app-custom-dropdown
             [label]="'Origin Game'"
             [options]="originGameOptions()"
-            [selectedId]="originGame()"
+            [selectedId]="form().get('originGame')?.value"
             [placeholder]="'Select Origin Game'"
-            (valueChanged)="originGame.set($event)"
+            (valueChanged)="form().get('originGame')?.setValue($event)"
           />
 
           <app-custom-dropdown
             [label]="'Stored In'"
             [options]="storedInOptions()"
-            [selectedId]="storedIn()"
+            [selectedId]="form().get('storedIn')?.value"
             [placeholder]="'Select Game'"
-            (valueChanged)="storedIn.set($event)"
+            (valueChanged)="form().get('storedIn')?.setValue($event)"
           />
         </div>
       </div>
 
       <div class="relative group mb-4">
         <input
-          [ngModel]="nickname()"
-          (ngModelChange)="nickname.set($event)"
+          formControlName="nickname"
           placeholder="Nickname"
           class="w-full bg-surface border-2 border-theme rounded-lg px-4 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none transition-colors peer"
         />
@@ -385,8 +360,7 @@ import {
 
       <div class="relative group">
         <textarea
-          [ngModel]="notes()"
-          (ngModelChange)="notes.set($event)"
+          formControlName="notes"
           rows="2"
           class="w-full bg-surface border-2 border-theme rounded-lg px-4 py-3 text-sm text-primary placeholder-transparent focus:border-blue-500 outline-none resize-none transition-colors peer"
           placeholder="Notes"
@@ -401,24 +375,7 @@ import {
   `,
 })
 export class PokemonEditAttributesComponent {
-  isOwned = model<boolean>(false);
-  isShiny = model<boolean>(false);
-  isEvent = model<boolean>(false);
-  isGmax = model<boolean>(false);
-  isAlpha = model<boolean>(false);
-  level = model<number | undefined>();
-  originLanguage = model<string>('');
-  gender = model<string>('');
-  ball = model<string>('');
-  item = model<string>('');
-  ribbon = model<string>('');
-  mark = model<string>('');
-  originalTrainer = model<string>('');
-  trainerId = model<string>('');
-  originGame = model<string>('');
-  storedIn = model<string>('');
-  nickname = model<string>('');
-  notes = model<string>('');
+  form = input.required<FormGroup>();
 
   pokemonData = input<DatasetPokemon | null>(null);
   genderState = input<{ canMale: boolean; canFemale: boolean }>({ canMale: true, canFemale: true });

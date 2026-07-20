@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { Trainer } from '../../../shared/models/trainer.model';
-import { GAME_CODES, GameDefinition } from '../../../shared/models/game-definitions.model';
+import { GameDefinition } from '../../../shared/models/game-definitions.model';
+import { GAME_DEFINITIONS } from '../../../core/constants/game-data.constants';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ToastService } from '../../../core/services/toast.service';
 
@@ -67,8 +68,8 @@ import { ToastService } from '../../../core/services/toast.service';
                   <option value="">Select Game</option>
                   @for (genGroup of gameOptions(); track genGroup.gen) {
                     <optgroup [label]="genGroup.label">
-                      @for (game of genGroup.games; track game.code) {
-                        <option [value]="game.code">{{ game.fullName }}</option>
+                      @for (game of genGroup.games; track game.id) {
+                        <option [value]="game.id">{{ game.name }}</option>
                       }
                     </optgroup>
                   }
@@ -159,7 +160,7 @@ export class TrainerManagementDialogComponent {
   newTrainerId = '';
   newTrainerGame = '';
   gameOptions = computed(() => {
-    const games = Object.values(GAME_CODES);
+    const games = GAME_DEFINITIONS;
     const grouped = new Map<number, GameDefinition[]>();
 
     games.forEach((game) => {

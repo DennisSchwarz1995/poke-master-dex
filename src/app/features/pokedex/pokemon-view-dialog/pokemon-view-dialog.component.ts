@@ -23,11 +23,7 @@ import { PokemonStatchartComponent } from '../../../shared/components/pokemon-st
 import { PokemonViewGeneralComponent } from './components/pokemon-view-general.component';
 import { PokemonViewMovesComponent } from './components/pokemon-view-moves.component';
 import { PokemonViewRibbonsComponent } from './components/pokemon-view-ribbons.component';
-import {
-  getFullGameName,
-  getGameIconPath,
-  getGameOriginMark,
-} from '../../../core/constants/game-data.constants';
+import { GameDataService } from '../../../core/services/game-data.service';
 import { CommonModule } from '@angular/common';
 import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
@@ -54,6 +50,7 @@ export class PokemonViewDialogComponent implements OnInit, OnDestroy {
   datasetService = inject(DatasetService);
   themeService = inject(ThemeService);
   langService = inject(PokemonLanguageService);
+  gameDataService = inject(GameDataService);
   renderer = inject(Renderer2);
   document = inject(DOCUMENT);
 
@@ -145,27 +142,27 @@ export class PokemonViewDialogComponent implements OnInit, OnDestroy {
 
   originGameName = computed(() => {
     const gameCode = this.pokemon().originGame;
-    return gameCode ? getFullGameName(gameCode) : '—';
+    return gameCode ? this.gameDataService.getFullGameName(gameCode) : '—';
   });
 
   originGameIcon = computed(() => {
     const gameCode = this.pokemon().originGame;
-    return gameCode ? getGameIconPath(gameCode) : '';
+    return gameCode ? this.gameDataService.getGameIconPath(gameCode) : '';
   });
 
   storedInGameName = computed(() => {
     const gameCode = this.pokemon().storedIn;
-    return gameCode ? getFullGameName(gameCode) : '—';
+    return gameCode ? this.gameDataService.getFullGameName(gameCode) : '—';
   });
 
   storedInGameIcon = computed(() => {
     const gameCode = this.pokemon().storedIn;
-    return gameCode ? getGameIconPath(gameCode) : '';
+    return gameCode ? this.gameDataService.getGameIconPath(gameCode) : '';
   });
 
   originMark = computed(() => {
     const gameCode = this.pokemon().originGame;
-    return gameCode ? getGameOriginMark(gameCode) : null;
+    return gameCode ? this.gameDataService.getGameOriginMark(gameCode) : null;
   });
 
   spriteUrl = computed(() => {

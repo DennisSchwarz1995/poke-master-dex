@@ -7,7 +7,7 @@ import { TooltipDirective } from '../../../../shared/directives/tooltip/tooltip.
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { PokemonLanguageService } from '../../../../core/services/pokemon-language.service';
 import { FormatAbilityPipe } from '../../../../shared/pipes/ability.pipe';
-import { getShortGameName, getGameIconPath } from '../../../../core/constants/game-data.constants';
+import { GameDataService } from '../../../../core/services/game-data.service';
 import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
 
 @Component({
@@ -278,6 +278,7 @@ export class PokemonDetailInfoComponent {
   private readonly router = inject(Router);
   private readonly datasetService = inject(DatasetService);
   private readonly languageService = inject(PokemonLanguageService);
+  private readonly gameDataService = inject(GameDataService);
 
   pokemon = input.required<DatasetPokemon>();
 
@@ -329,8 +330,8 @@ export class PokemonDetailInfoComponent {
 
     return games.map((gameCode) => ({
       code: gameCode,
-      name: getShortGameName(gameCode),
-      iconUrl: getGameIconPath(gameCode),
+      name: this.gameDataService.getShortGameName(gameCode),
+      iconUrl: this.gameDataService.getGameIconPath(gameCode),
     }));
   });
 
