@@ -29,6 +29,7 @@ import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 import { DOCUMENT } from '@angular/common';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-pokemon-view-dialog',
@@ -42,6 +43,7 @@ import { DOCUMENT } from '@angular/common';
     PokemonViewGeneralComponent,
     PokemonViewMovesComponent,
     PokemonViewRibbonsComponent,
+    IconComponent,
   ],
   templateUrl: './pokemon-view-dialog.component.html',
   styles: [],

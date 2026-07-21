@@ -111,6 +111,7 @@ export class DatasetPokemonCardComponent {
     if (!pkmn.type2) {
       return { 'border-color': color1 };
     }
+
     const color2 = this.typeColorService.getTypeColor(pkmn.type2);
     return {
       'background-image':

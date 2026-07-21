@@ -11,6 +11,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CdnUrlPipe } from '../../pipes/cdnUrl.pipe';
+import { IconComponent } from '../icon/icon.component';
 
 export interface CustomDropdownOption {
   id: string;
@@ -27,7 +28,7 @@ export interface CustomDropdownOption {
 @Component({
   selector: 'app-custom-dropdown',
   standalone: true,
-  imports: [CommonModule, FormsModule, CdnUrlPipe],
+  imports: [CommonModule, FormsModule, CdnUrlPipe, IconComponent],
   template: `
     <div class="relative group" #container>
       <div class="relative flex items-center">
@@ -70,20 +71,12 @@ export interface CustomDropdownOption {
           (click)="toggleDropdown()"
           class="absolute right-2 top-1/2 -translate-y-1/2 text-secondary hover:text-primary z-20"
         >
-          <svg
-            class="w-4 h-4 transition-transform"
+          <app-icon
+            name="dropdown-arrow"
+            size="1em"
+            class="transition-transform"
             [class.rotate-180]="isOpen()"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
+          ></app-icon>
         </button>
       </div>
 

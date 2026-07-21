@@ -1,12 +1,4 @@
-import {
-  Component,
-  inject,
-  output,
-  input,
-  signal,
-  computed,
-  ElementRef,
-} from '@angular/core';
+import { Component, inject, output, input, signal, computed, ElementRef } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -382,16 +374,13 @@ export class ToolbarComponent {
   private readonly datasetService = inject(DatasetService);
   private readonly elRef = inject(ElementRef);
 
-  // --- Inputs ---
   readonly pendingEditsCount = input<number>(0);
   readonly isSaving = input<boolean>(false);
 
-  // --- Outputs ---
   readonly modeChanged = output<QuickEditState>();
   readonly save = output<void>();
   readonly discard = output<void>();
 
-  // --- State ---
   readonly currentMode = signal<QuickEditMode>('None');
   readonly trainers = signal<Trainer[]>([]);
   readonly allPokeballs = signal<PokeballData[]>([]);
@@ -412,7 +401,6 @@ export class ToolbarComponent {
     showPokeball: false,
   });
 
-  // --- Static Data ---
   readonly availableModes: {
     value: QuickEditMode;
     label: string;
@@ -467,7 +455,6 @@ export class ToolbarComponent {
 
   readonly availableAppearances = AVAILABLE_APPEARANCES;
 
-  // --- Computed Signals ---
   readonly trainerDropdownOptions = computed<CustomDropdownOption[]>(() => {
     return this.trainers().map((tr) => ({
       id: tr.id,
@@ -549,7 +536,6 @@ export class ToolbarComponent {
     this.emitState();
   }
 
-  // --- Event Handlers ---
   onDocumentClick(event: Event) {
     if (!this.elRef.nativeElement.contains(event.target)) {
       this.isToolsDropdownOpen.set(false);
@@ -621,7 +607,6 @@ export class ToolbarComponent {
     this.emitState();
   }
 
-  // --- Private Methods ---
   private initAppearanceState() {
     const savedAppearance = localStorage.getItem('appearanceState');
     if (savedAppearance) {

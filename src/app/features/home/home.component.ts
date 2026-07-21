@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-marquee.component';
+import { IconComponent } from '../../shared/components/icon/icon.component';
+import { CdnUrlPipe } from '../../shared/pipes/cdnUrl.pipe';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, PokemonMarqueeComponent],
+  imports: [RouterLink, PokemonMarqueeComponent, IconComponent, CdnUrlPipe],
   template: `
     <section
       class="min-h-[calc(100vh-4rem)] flex items-center justify-center pt-12 overflow-hidden bg-secondary w-full"
@@ -34,32 +36,13 @@ import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-ma
         </section>
 
         <div class="flex items-center justify-center gap-4 flex-wrap mb-12">
-          <a routerLink="/pokedex" class="btn-primary">
-            Start collecting now
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <path d="M0 0h24v24H0z" fill="none" />
-              <path
-                fill="currentColor"
-                fill-rule="evenodd"
-                d="M3 12a9 9 0 1 1 18 0a9 9 0 0 1-18 0m2.07 1a7.002 7.002 0 0 0 13.86 0h-4.1a3.001 3.001 0 0 1-5.66 0zm13.86-2a7.001 7.001 0 0 0-13.86 0h4.1a3.001 3.001 0 0 1 5.66 0zM12 13a1 1 0 1 0 0-2a1 1 0 0 0 0 2"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </a>
-          <a routerLink="/pokemon" class="btn-secondary">
+          <a routerLink="/pokedex" class="btn btn-primary">
+            Start collecting now <app-icon name="pokeball" size="1em"></app-icon
+          ></a>
+
+          <a routerLink="/pokemon" class="btn btn-secondary">
             Explore Pokémon
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+            <app-icon name="next" size="1em"></app-icon>
           </a>
         </div>
 
@@ -68,19 +51,19 @@ import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-ma
         >
           <div class="flex flex-col items-center gap-1">
             <span class="text-2xl font-extrabold text-primary tracking-tight">1025+</span>
-            <span class="text-xs font-medium text-tertiary uppercase tracking-wider">Pokémon</span>
+            <span class="text-xs font-medium text-secondary uppercase tracking-wider">Pokémon</span>
           </div>
           <div class="w-px h-8 border-r border-theme"></div>
           <div class="flex flex-col items-center gap-1">
             <span class="text-2xl font-extrabold text-primary tracking-tight">9</span>
-            <span class="text-xs font-medium text-tertiary uppercase tracking-wider"
+            <span class="text-xs font-medium text-secondary uppercase tracking-wider"
               >Generations</span
             >
           </div>
           <div class="w-px h-8 border-r border-theme"></div>
           <div class="flex flex-col items-center gap-1">
             <span class="text-2xl font-extrabold text-primary tracking-tight">120+</span>
-            <span class="text-xs font-medium text-tertiary uppercase tracking-wider">Games</span>
+            <span class="text-xs font-medium text-secondary uppercase tracking-wider">Games</span>
           </div>
         </div>
       </div>
@@ -88,11 +71,6 @@ import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-ma
 
     <section class="py-24 max-w-[1200px] mx-auto">
       <div class="text-center mb-20">
-        <span
-          class="inline-block py-1.5 px-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-purple-500 bg-purple-500/10 border border-purple-500/20 mb-5"
-        >
-          Features
-        </span>
         <h2 class="text-3xl md:text-5xl font-extrabold text-primary tracking-tight mb-4">
           Everything you need to catch 'em all
         </h2>
@@ -104,24 +82,6 @@ import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-ma
 
       <div class="grid grid-cols-1 md:grid-cols-[1fr_1.15fr] gap-10 md:gap-16 items-center mb-24">
         <div class="order-2 md:order-1">
-          <div
-            class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-blue-500/10 text-blue-500"
-          >
-            <svg
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
           <h3 class="text-2xl font-extrabold text-primary mb-3 tracking-tight">
             Complete Pokémon Database
           </h3>
@@ -132,51 +92,15 @@ import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-ma
           </p>
           <ul class="flex flex-col gap-2.5">
             <li class="flex items-center gap-2.5 text-[0.95rem] font-medium text-primary">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-green-500 shrink-0"
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
-              Base stats, abilities &amp; type charts
+              <app-icon name="stat-chart" size="1em"></app-icon>
+              Base stats, abilities type charts
             </li>
             <li class="flex items-center gap-2.5 text-[0.95rem] font-medium text-primary">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-green-500 shrink-0"
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
-              Filter by generation, type &amp; more
+              <app-icon name="filter" size="1em"></app-icon>
+              Filter by generation, type more
             </li>
             <li class="flex items-center gap-2.5 text-[0.95rem] font-medium text-primary">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-green-500 shrink-0"
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
+              <app-icon name="gamepad" size="1em"></app-icon>
               Game availability per Pokémon
             </li>
           </ul>
@@ -232,24 +156,6 @@ import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-ma
 
       <div class="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-10 md:gap-16 items-center mb-24">
         <div class="order-2 md:order-2">
-          <div
-            class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-green-500/10 text-green-500"
-          >
-            <svg
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
           <h3 class="text-2xl font-extrabold text-primary mb-3 tracking-tight">
             Living Dex Tracker
           </h3>
@@ -259,51 +165,15 @@ import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-ma
           </p>
           <ul class="flex flex-col gap-2.5">
             <li class="flex items-center gap-2.5 text-[0.95rem] font-medium text-primary">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-green-500 shrink-0"
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
+              <app-icon name="box-list" size="1em"></app-icon>
               PC box-style organization
             </li>
             <li class="flex items-center gap-2.5 text-[0.95rem] font-medium text-primary">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-green-500 shrink-0"
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
-              Track normal &amp; shiny Pokémon
+              <img class="w-4 h-4" [src]="'shiny.png' | cdnUrl: 'special_attributes'" alt="shiny" />
+              Track normal shiny Pokémon
             </li>
             <li class="flex items-center gap-2.5 text-[0.95rem] font-medium text-primary">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-green-500 shrink-0"
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
+              <app-icon name="progress" size="1em"></app-icon>
               Visual progress tracking
             </li>
           </ul>
@@ -361,28 +231,8 @@ import { PokemonMarqueeComponent } from './components/pokemon-marquee/pokemon-ma
 
       <div class="grid grid-cols-1 md:grid-cols-[1fr_1.15fr] gap-10 md:gap-16 items-center mb-24">
         <div class="order-2 md:order-1">
-          <div
-            class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-purple-500/10 text-purple-500"
-          >
-            <svg
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <line x1="6" x2="10" y1="11" y2="11" />
-              <line x1="8" x2="8" y1="9" y2="13" />
-              <line x1="15" x2="15.01" y1="12" y2="12" />
-              <line x1="18" x2="18.01" y1="10" y2="10" />
-              <path
-                d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"
-              />
-            </svg>
-          </div>
           <h3 class="text-2xl font-extrabold text-primary mb-3 tracking-tight">
-            Game Library &amp; Dex Management
+            Game Library Dex Management
           </h3>
           <p class="text-base text-secondary leading-relaxed mb-6">
             Every mainline game at your fingertips. Create dedicated Pokédex collections per game,

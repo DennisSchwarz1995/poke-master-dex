@@ -31,6 +31,7 @@ import { DatasetPokemonCardComponent } from '../../../shared/components/dataset-
 import { GameDataService } from '../../../core/services/game-data.service';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -42,6 +43,7 @@ import { SearchInputComponent } from '../../../shared/components/search-input/se
     DatasetPokemonCardComponent,
     CdnUrlPipe,
     SearchInputComponent,
+    IconComponent,
   ],
   template: `<main
     class="h-full max-w-[1600px] mx-auto w-full flex flex-col bg-bg-secondary px-4 pb-8 sm:px-6 lg:px-8"
@@ -254,6 +256,7 @@ import { SearchInputComponent } from '../../../shared/components/search-input/se
       <div class="max-w-3xl w-full mx-auto relative flex flex-col gap-2">
         <div class="flex gap-3">
           <app-search-input
+            class="flex-1"
             [(value)]="searchQuery"
             (searchChange)="onSearchChange()"
           />
@@ -267,15 +270,8 @@ import { SearchInputComponent } from '../../../shared/components/search-input/se
               showFilters() ? 'bg-surface-raised focus:border-[var(--color-active)]' : 'bg-surface'
             "
           >
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                aria-hidden="true"
-              />
-            </svg>
+            <app-icon name="filter" size="1em"></app-icon>
+
             <span class="hidden sm:inline">Filters</span>
           </button>
         </div>
