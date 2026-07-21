@@ -6,11 +6,12 @@ import { GameData } from '../../../shared/models/dataset.model';
 import { GameCard } from '../game-card/game-card.component';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { GameDataService } from '../../../core/services/game-data.service';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-game-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, GameCard, CdnUrlPipe],
+  imports: [CommonModule, RouterLink, GameCard, CdnUrlPipe, IconComponent],
   template: `
     <div class="flex flex-col bg-bg-secondary p-4 sm:p-6 lg:p-8">
       <div class="max-w-5xl mx-auto w-full space-y-6">
@@ -41,7 +42,7 @@ import { GameDataService } from '../../../core/services/game-data.service';
                   <div class="flex items-start gap-4">
                     <div class="flex items-center gap-2">
                       @if (game.codename) {
-                        <h3 class="ext-xl uppercase font-bold tracking-wider text-tertiary">
+                        <h3 class="ext-xl uppercase font-bold tracking-wider text-secondary">
                           Codename:
                         </h3>
                         <h3 class="text-xl uppercase font-bold tracking-wider text-primary">
@@ -70,17 +71,7 @@ import { GameDataService } from '../../../core/services/game-data.service';
                     class="flex flex-col items-center gap-4 rounded-xl text-sm font-bold text-secondary"
                   >
                     <span class="flex items-center gap-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M19 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h11c2.76 0 5-2.24 5-5V4c0-1.1-.9-2-2-2m-7 16h-2v2H8v-2H6v-2h2v-2h2v2h2zm3 1c-.55 0-1-.45-1-1s.45-1 1-1s1 .45 1 1s-.45 1-1 1m2-2c-.55 0-1-.45-1-1s.45-1 1-1s1 .45 1 1s-.45 1-1 1m1-5H6V5h12z"
-                        />
-                      </svg>
+                      <app-icon name="gameboy"></app-icon>
                       <span class="text-secondary text-lg font-semibold">Platform</span>
                     </span>
 
@@ -93,20 +84,7 @@ import { GameDataService } from '../../../core/services/game-data.service';
                     class="flex flex-col items-center gap-4 rounded-xl text-sm font-bold text-secondary"
                   >
                     <span class="flex items-center gap-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                      >
-                        <g fill="none" stroke="currentColor" stroke-width="1.5">
-                          <circle cx="11.5" cy="11.5" r="9.5" />
-                          <path
-                            stroke-linecap="round"
-                            d="M11.5 15.5a3 3 0 0 1-3-3v-2m3 5a3 3 0 0 0 3-3v-2m-3 5v-5m3 0a3 3 0 1 0-6 0m6 0h-6m6.072 1H16m-9 0h1.5m6 2.5l1 .5m-7-.5l-1 .5m7-5.5l1-.5m-7 .5l-1-.5m11 10L22 22"
-                          />
-                        </g>
-                      </svg>
+                      <app-icon name="species"></app-icon>
                       <span class="text-secondary text-lg font-semibold">Species</span>
                     </span>
 
@@ -118,27 +96,7 @@ import { GameDataService } from '../../../core/services/game-data.service';
                     class="flex flex-col items-center gap-4 rounded-xl text-sm font-bold text-secondary"
                   >
                     <span class="flex items-center gap-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                      >
-                        <g
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                        >
-                          <path
-                            d="M17 3v1q-.015 5.028-5.008 8.014c-3.328 1.99 3.336-2 .008-.014c-3.328 1.99-5 4.662-5.008 8.014v1"
-                          />
-                          <path
-                            d="M17 21.014v-1q-.015-5.028-5.008-8.014c-3.328-1.99 3.336 2 .008.014C8.672 10.023 7 7.352 6.992 4V3M7 4h10M7 20h10M8 8h8m-8 8h8"
-                          />
-                        </g>
-                      </svg>
+                      <app-icon name="forms"></app-icon>
                       <span class="text-secondary text-lg font-semibold">Forms</span>
                     </span>
 
@@ -210,19 +168,7 @@ import { GameDataService } from '../../../core/services/game-data.service';
             routerLink="/games"
             class="flex items-center gap-2 text-secondary hover:text-primary transition-all font-semibold bg-surface-hover hover:bg-theme px-3 py-1.5 rounded-xl border border-theme hover:shadow-sm"
           >
-            <svg
-              class="w-5 h-5 flex-shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2.5"
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
+            <app-icon name="previous" size="1.25em"></app-icon>
             <span class="hidden sm:inline">Back to Games</span>
           </a>
         </nav>

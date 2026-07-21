@@ -1,11 +1,12 @@
 import { Component, input, output, signal, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-dex-options-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconComponent],
   template: `
     <div
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm animate-fade-in"
@@ -18,14 +19,7 @@ import { FormsModule } from '@angular/forms';
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-2xl font-bold text-primary">Dex Options</h2>
           <button (click)="close()" class="text-secondary hover:text-primary transition-colors p-1">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <app-icon name="close"></app-icon>
           </button>
         </div>
 
@@ -49,14 +43,7 @@ import { FormsModule } from '@angular/forms';
               (click)="onDeleteClicked()"
               class="w-full py-2.5 px-4 bg-red-500/10 text-red-500 border border-red-500/50 rounded-lg hover:bg-red-500 hover:text-white transition-colors font-semibold flex items-center justify-center gap-2"
             >
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
+              <app-icon name="delete"></app-icon>
               Delete Dex
             </button>
             <p class="text-sm text-secondary mt-3">
