@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "npm run build:icons && ng serve",
+    "build": "npm run build:icons && ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:icons": "svg-sprite --config svg-sprite.config.json public/assets/icons/raw/*.svg"
   },
   "prettier": {
     "printWidth": 100,
@@ -45,6 +46,7 @@
     "@angular/compiler-cli": "^20.3.0",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.9.0",
+    "svg-sprite": "^2.0.4",
     "tailwindcss": "^3.4.19",
     "typescript": "~5.9.2"
   }

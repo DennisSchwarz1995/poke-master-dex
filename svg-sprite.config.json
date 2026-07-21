@@ -1,0 +1,36 @@
+{
+  "mode": {
+    "symbol": {
+      "dest": "public/assets/icons/sprite",
+      "sprite": "sprite.svg",
+      "example": false
+    }
+  },
+  "shape": {
+    "id": {
+      "generator": "icon-%s"
+    },
+    "transform": [
+      {
+        "svgo": {
+          "plugins": [
+            {
+              "name": "preset-default",
+              "params": {
+                "overrides": {
+                  "removeViewBox": false
+                }
+              }
+            },
+            {
+              "name": "convertColors",
+              "params": {
+                "currentColor": true
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
