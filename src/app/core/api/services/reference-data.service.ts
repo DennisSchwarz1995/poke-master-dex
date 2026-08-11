@@ -20,6 +20,7 @@ export class ReferenceDataService {
   private readonly datasetBasePath = '/dataset/data';
   private readonly http = inject(HttpClient);
   private readonly cache = new Map<string, Observable<unknown>>();
+  private readonly pokeApiMovesCache = new Map<string, Observable<Set<string>>>();
 
   loadAbilities(): Observable<AbilityData[]> {
     return this.cachedGet<AbilityData[]>('abilities', 'abilities.json');
@@ -51,6 +52,26 @@ export class ReferenceDataService {
 
   loadMoves(): Observable<MoveData[]> {
     return this.cachedGet<MoveData[]>('moves', 'moves.json');
+  }
+
+  loadPokemonMovesFromPokeApi(slug: string): Observable<Set<string>> {
+    if (!this.pokeApiMovesCache.has(slug)) {
+      const request = this.http.get<any>(`https://pokeapi.co/api/v2/pokemon/${slug}`).pipe(
+        map((res) => {
+          const moveIds = new Set<string>();
+          if (res && res.moves) {
+            res.moves.forEach((m: any) => {
+              moveIds.add(m.move.name);
+            });
+          }
+          return moveIds;
+        }),
+        catchError(() => of(new Set<string>())),
+        shareReplay(1),
+      );
+      this.pokeApiMovesCache.set(slug, request);
+    }
+    return this.pokeApiMovesCache.get(slug)!;
   }
 
   getPokedexesStats(dexNames: string[]): Observable<{ species: number; forms: number }> {

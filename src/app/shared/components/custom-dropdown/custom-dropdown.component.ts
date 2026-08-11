@@ -30,10 +30,15 @@ export interface CustomDropdownOption {
   standalone: true,
   imports: [CommonModule, FormsModule, CdnUrlPipe, IconComponent],
   template: `
-    <div class="relative group" #container>
+    <div class="flex flex-col gap-1.5 relative group" #container>
+      @if (label()) {
+        <label class="text-[12px] font-bold text-secondary uppercase pl-2 z-10">
+          {{ label() }}
+        </label>
+      }
       <div class="relative flex items-center">
         @if (selectedOption()?.iconPath) {
-          <div class="absolute z-20 flex items-center pointer-events-none" [style.right.px]="28">
+          <div class="absolute z-20 flex items-center pointer-events-none left-4">
             <img
               [src]="selectedOption()!.iconPath | cdnUrl: selectedOption()!.cdnFolder"
               [alt]="selectedOption()!.name"
@@ -49,7 +54,8 @@ export interface CustomDropdownOption {
           [value]="selectedOption() ? selectedOption()!.name : ''"
           [placeholder]="placeholder()"
           readonly
-          class="w-full bg-surface border-2 rounded-lg px-4 pr-8 py-4 text-sm text-primary placeholder-tertiary outline-none transition-colors peer cursor-pointer"
+          class="w-full bg-surface border-2 rounded-xl pr-8 py-4 text-sm text-primary placeholder-tertiary outline-none transition-colors cursor-pointer"
+          [ngClass]="selectedOption()?.iconPath ? 'pl-12' : 'pl-4'"
           style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"
           [class.border-[var(--color-active)]]="isOpen()"
           [class.border-theme]="!isOpen()"
@@ -57,14 +63,6 @@ export interface CustomDropdownOption {
           (keydown.space)="$event.preventDefault(); toggleDropdown()"
           (keydown.enter)="$event.preventDefault(); toggleDropdown()"
         />
-
-        @if (label()) {
-          <label
-            class="absolute -top-2.5 left-2 bg-surface px-1 text-xs font-bold text-secondary uppercase z-10 transition-colors peer-focus:text-blue-500"
-          >
-            {{ label() }}
-          </label>
-        }
 
         <button
           type="button"
@@ -82,7 +80,7 @@ export interface CustomDropdownOption {
 
       @if (isOpen()) {
         <div
-          class="absolute z-50 w-full bg-surface border border-theme rounded-lg shadow-xl flex flex-col max-h-80 overflow-hidden"
+          class="absolute z-50 w-full bg-surface border border-theme rounded-xl shadow-xl flex flex-col max-h-80 overflow-hidden"
           [class.mt-1]="dropdownDirection() === 'down'"
           [class.top-full]="dropdownDirection() === 'down'"
           [class.mb-1]="dropdownDirection() === 'up'"
@@ -151,23 +149,10 @@ export interface CustomDropdownOption {
                       'opacity-50 cursor-not-allowed bg-surface-hover': option.id === undefined,
 
                       'bg-blue-500/10 text-blue-500 dark:text-blue-400 font-semibold':
-                        option.id !== undefined && (option.id === selectedId() || option.active),
+                        option.id !== undefined && (option.id === selectedId() || option.active || highlightedIds().includes(option.id)),
                     }"
                   >
-                    <div class="flex items-center justify-between gap-2">
-                      <div class="flex flex-col min-w-0">
-                        <span class="font-medium text-primary truncate">{{ option.name }}</span>
-                        @if (option.descriptionHtml) {
-                          <span
-                            class="text-xs mt-0.5 truncate"
-                            [innerHTML]="option.descriptionHtml"
-                          ></span>
-                        } @else if (option.description) {
-                          <span class="text-xs text-secondary mt-0.5 truncate">{{
-                            option.description
-                          }}</span>
-                        }
-                      </div>
+                    <div class="flex items-center gap-3">
                       @if (option.iconPath) {
                         <img
                           [src]="option.iconPath | cdnUrl: option.cdnFolder"
@@ -177,6 +162,19 @@ export interface CustomDropdownOption {
                           loading="lazy"
                         />
                       }
+                      <div class="flex flex-col min-w-0 flex-1">
+                        <span class="font-medium text-primary truncate">{{ option.name }}</span>
+                        @if (option.descriptionHtml) {
+                          <div
+                            class="text-xs mt-0.5"
+                            [innerHTML]="option.descriptionHtml"
+                          ></div>
+                        } @else if (option.description) {
+                          <span class="text-xs text-secondary mt-0.5 truncate">{{
+                            option.description
+                          }}</span>
+                        }
+                      </div>
                     </div>
                   </button>
                 }
@@ -211,6 +209,7 @@ export class CustomDropdownComponent {
   options = input.required<CustomDropdownOption[]>();
   placeholder = input<string>('Select an option');
   selectedId = input<string>('');
+  highlightedIds = input<string[]>([]);
   label = input<string>();
   searchable = input<boolean>(false);
 
@@ -316,9 +315,15 @@ export class CustomDropdownComponent {
 
   selectOption(option: CustomDropdownOption) {
     if (option.id === undefined) return;
-    this.valueChanged.emit(option.id);
-    this.searchQuery.set('');
+    
+    if (option.id === this.selectedId()) {
+      this.valueChanged.emit('');
+    } else {
+      this.valueChanged.emit(option.id);
+    }
+    
     this.isOpen.set(false);
+    this.searchQuery.set('');
   }
 
   clearSelection(event: MouseEvent) {
