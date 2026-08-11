@@ -106,6 +106,10 @@ export class DatasetService {
     return this.referenceData.loadMoves();
   }
 
+  loadPokemonMovesFromPokeApi(slug: string): Observable<Set<string>> {
+    return this.referenceData.loadPokemonMovesFromPokeApi(slug);
+  }
+
   getPokedexesStats(dexNames: string[]): Observable<{ species: number; forms: number }> {
     return this.referenceData.getPokedexesStats(dexNames);
   }

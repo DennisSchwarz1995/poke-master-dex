@@ -1,60 +1,38 @@
 import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoxSlot } from '../../../../shared/models/dex.model';
+import { MoveData } from '../../../../shared/models/dataset.model';
+import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card/stat-card.component';
+import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
+import {
+  MoveCardComponent,
+  MoveViewSlot,
+} from '../../../../shared/components/move-card/move-card.component';
 
 @Component({
   selector: 'app-pokemon-view-moves',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MoveCardComponent],
   template: `
-    <div class="max-w-md mx-auto space-y-6">
-      <h3
-        class="text-sm font-bold text-secondary uppercase tracking-wider mb-4 border-b border-theme pb-2"
+    @if (hasAnyMove()) {
+      <div class="grid grid-cols-1 gap-6 overflow-hidden shadow-sm">
+        @for (move of moveSlots(); track move.index) {
+          <app-move-card [move]="move" />
+        }
+      </div>
+    } @else {
+      <div
+        class="flex flex-col items-center justify-center p-8 bg-secondary/5 border border-theme rounded-2xl text-center"
       >
-        Moves
-      </h3>
-
-      @if (hasAnyMove()) {
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          @for (move of formattedMoves(); track $index) {
-            @if (move) {
-              <div
-                class="p-4 bg-secondary/10 border border-theme rounded-2xl flex items-center justify-between shadow-sm"
-              >
-                <div class="flex flex-col">
-                  <span class="text-xs text-secondary opacity-60 uppercase font-mono mb-1"
-                    >Slot {{ $index + 1 }}</span
-                  >
-                  <span class="font-bold text-primary text-base">{{ formatMoveName(move) }}</span>
-                </div>
-              </div>
-            } @else {
-              <div
-                class="p-4 bg-secondary/5 border border-theme border-dashed rounded-2xl flex items-center justify-between opacity-60"
-              >
-                <div class="flex flex-col">
-                  <span class="text-xs text-secondary opacity-60 uppercase font-mono mb-1"
-                    >Slot {{ $index + 1 }}</span
-                  >
-                  <span class="italic text-tertiary text-base">Empty Slot</span>
-                </div>
-              </div>
-            }
-          }
-        </div>
-      } @else {
-        <div
-          class="flex flex-col items-center justify-center p-8 bg-secondary/5 border border-theme rounded-2xl text-center"
-        >
-          <img src="assets/icons/no-moves.svg" alt="No Moves" class="w-10 h-10 opacity-40 mb-3" />
-          <p class="text-sm font-medium text-secondary">No moves configured for this Pokémon.</p>
-        </div>
-      }
-    </div>
+        <img src="assets/icons/no-moves.svg" alt="No Moves" class="w-10 h-10 opacity-40 mb-3" />
+        <p class="text-sm font-medium text-secondary">No moves configured for this Pokémon.</p>
+      </div>
+    }
   `,
 })
 export class PokemonViewMovesComponent {
   pokemon = input.required<BoxSlot>();
+  allMoves = input<MoveData[]>([]);
 
   formattedMoves = computed(() => {
     const moves = this.pokemon().moves || [];
@@ -63,15 +41,61 @@ export class PokemonViewMovesComponent {
     return padded.slice(0, 4);
   });
 
-  hasAnyMove(): boolean {
-    const moves = (this.pokemon() as any).moves;
-    return Array.isArray(moves) && moves.some((m) => m && m.trim() !== '');
-  }
+  movesDictionary = computed(() => {
+    const map = new Map<string, MoveData>();
+    this.allMoves().forEach((move) => map.set(move.id, move));
+    return map;
+  });
 
-  formatMoveName(move: string): string {
+  moveSlots = computed<MoveViewSlot[]>(() => {
+    const moves = this.pokemon().moves || [];
+    const dictionary = this.movesDictionary();
+    const result: MoveViewSlot[] = [];
+
+    for (let i = 0; i < 4; i++) {
+      const moveId = moves[i];
+
+      if (!moveId) {
+        result.push({ index: i, status: 'empty' });
+        continue;
+      }
+
+      const data = dictionary.get(moveId);
+
+      if (data) {
+        result.push({
+          index: i,
+          status: 'configured',
+          name: data.name,
+          type: data.type,
+          typeLabel: data.type.charAt(0).toUpperCase() + data.type.slice(1),
+          power: typeof data.power === 'number' ? data.power : '—',
+          accuracy: typeof data.accuracy === 'number' ? data.accuracy : '—',
+          pp: data.pp,
+          category: data.category,
+        });
+      } else {
+        result.push({
+          index: i,
+          status: 'unconfigured',
+          fallbackName: this.formatMoveName(moveId),
+        });
+      }
+    }
+
+    return result;
+  });
+
+  hasAnyMove = computed(() => this.moveSlots().some((slot) => slot.status !== 'empty'));
+
+  private formatMoveName(move: string): string {
     return move
       .split('-')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+
+  getMoveData(moveId: string): MoveData | undefined {
+    return this.allMoves().find((m) => m.id === moveId);
   }
 }
