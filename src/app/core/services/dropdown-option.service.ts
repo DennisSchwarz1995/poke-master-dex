@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CustomDropdownOption } from '../../shared/components/custom-dropdown/custom-dropdown.component';
 import {
-  AbilityData,
   ItemData,
   MarkData,
   MoveData,
@@ -12,6 +11,7 @@ import {
 } from '../../shared/models/dataset.model';
 import { Trainer } from '../../shared/models/trainer.model';
 import { AVAILABLE_SPRITES } from '../constants/available-sprites.constants';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DropdownOptionService {
@@ -116,12 +116,30 @@ export class DropdownOptionService {
   mapMoves(moves: MoveData[]): CustomDropdownOption[] {
     return [
       { id: '', name: 'None', description: 'Empty move slot' },
-      ...moves.map((m) => ({
-        id: m.id,
-        name: m.name,
-        description: `${m.type.charAt(0).toUpperCase() + m.type.slice(1)} | Power: ${m.power || '—'} | PP: ${m.pp}`,
-        category: `Generation ${m.gen}`,
-      })),
+      ...moves.map((m) => {
+        const typeUrl = `${environment.cdnUrl}/types/${m.type}.png`;
+        const typeBadge = `<img src="${typeUrl}" alt="${m.type}" class="w-6 h-6 object-contain inline-block drop-shadow-sm" />`;
+
+        return {
+          id: m.id,
+          name: m.name,
+          description: `${m.type} | Power: ${m.power || '—'} | PP: ${m.pp}`,
+          descriptionHtml: `<div class="flex flex-col gap-1.5 mt-1 whitespace-normal">
+            <div class="flex items-center gap-3 text-xs text-secondary font-medium">
+              ${typeBadge}
+              <div class="flex items-center gap-2">
+                <span title="PP">PP: ${m.pp}</span>
+                <span class="text-secondary">|</span>
+                <span title="Power">Power: ${m.power || '—'}</span>
+                <span class="text-secondary">|</span>
+                <span title="Accuracy">Acc: ${m.accuracy === true ? '—' : m.accuracy || '—'}</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-secondary leading-tight italic">${m.shortDesc}</div>
+          </div>`,
+          category: `Generation ${m.gen}`,
+        };
+      }),
     ];
   }
 
