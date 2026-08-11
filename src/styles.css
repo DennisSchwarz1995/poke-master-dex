@@ -1,16 +1,19 @@
 :root,
 [data-theme='light'] {
-  --color-primary: #3b82f6;
+  --color-primary: #090a0c;
   --color-primary-hover: #2563eb;
   --color-primary-light: #dbeafe;
+  --color-active: #3b82f6;
 
   --color-bg-primary: #ffffff;
   --color-bg-secondary: #f9fafb;
   --color-bg-tertiary: #f3f4f6;
+  --color-bg-active: #284b82;
+  --color-bg-delete: #741515;
 
-  --color-text-primary: #111827;
+  --color-text-primary: #000000;
   --color-text-secondary: #6b7280;
-  --color-text-tertiary: #9ca3af;
+  --color-text-tertiary: #fcfcfc;
 
   --color-border: #e5e7eb;
   --color-border-hover: #d1d5db;
@@ -22,6 +25,9 @@
   --color-success: #15996d;
   --color-error: #ef4444;
   --color-warning: #f59e0b;
+  --color-save: #3b82f6;
+  --color-male: #1d3de0;
+  --color-female: #ec0018;
 
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
@@ -32,12 +38,10 @@
   --color-primary: #ededed;
   --color-primary-hover: #cccccc;
   --color-primary-light: #1e3a8a;
-  --color-active: #3b82f6;
 
   --color-bg-primary: #000000;
   --color-bg-secondary: #0f0f0f;
   --color-bg-tertiary: #303031;
-  --color-bg-active: #224a8a;
 
   --color-text-primary: #f2f2f2;
   --color-text-secondary: #a1a1aa;
@@ -60,12 +64,33 @@
 @tailwind utilities;
 
 @layer components {
+  .btn {
+    @apply p-2.5 flex items-center gap-2 border justify-center border-theme rounded-lg transition-all font-semibold has-[svg,img,i]:ps-2.5
+           disabled:opacity-80 disabled:cursor-not-allowed;
+  }
+
   .btn-primary {
-    @apply p-2.5 flex items-center gap-2 border border-theme rounded-lg bg-[var(--color-primary)] text-[var(--color-text-tertiary)] transition-all font-semibold  hover:bg-[var(--color-primary-hover)] has-[svg,img,i]:ps-4;
+    @apply bg-[var(--color-primary)] text-[var(--color-text-tertiary)] 
+           hover:bg-[var(---color-bg-primary)] hover:text-[var(--color-primary)]
+           disabled:hover:bg-[var(--color-primary)];
   }
 
   .btn-secondary {
-    @apply p-2.5 flex items-center gap-2 border border-theme rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] transition-all font-semibold  hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] has-[svg,img,i]:ps-4;
+    @apply bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] 
+           hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)]
+           disabled:hover:bg-[var(--color-bg-secondary)] disabled:hover:text-[var(--color-text-secondary)];
+  }
+
+  .btn-save {
+    @apply bg-[var(--color-bg-active)] text-[var(--color-text-primary)] 
+           hover:bg-[var(--color-save)]
+           disabled:hover:bg-[var(--color-bg-active)] disabled:hover:text-[var(--color-text-secondary)];
+  }
+
+  .btn-delete {
+    @apply bg-[var(--color-bg-delete)] text-[var(--color-text-primary)]
+           hover:bg-[var(--color-error)]
+           disabled:hover:bg-[var(--color-error)] disabled:hover:text-[var(--color-text-secondary)];
   }
 }
 
@@ -268,4 +293,16 @@ body {
   transform: translateY(-50%);
   border-width: 5px 5px 5px 0;
   border-color: transparent var(--color-text-primary, #333) transparent transparent;
+}
+
+.card-raised {
+  background: var(--color-surface-raised);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }

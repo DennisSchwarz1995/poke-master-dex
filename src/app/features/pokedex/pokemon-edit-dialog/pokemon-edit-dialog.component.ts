@@ -16,7 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { GameDefinition } from '../../../shared/models/game-definitions.model';
-import { BoxSlot } from '../../../shared/models/dex.model';
+import { BoxSlot, StatsMap } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { DatasetPokemon, SimplePokemon } from '../../../shared/models/dataset.model';
@@ -37,8 +37,13 @@ import { GameDataService } from '../../../core/services/game-data.service';
 import { DropdownOptionService } from '../../../core/services/dropdown-option.service';
 import { PokemonEditHeaderComponent } from './components/pokemon-edit-header.component';
 import { PokemonEditStatsComponent } from './components/pokemon-edit-stats.component';
-import { PokemonEditAttributesComponent } from './components/pokemon-edit-attributes.component';
+import { PokemonEditAttributesComponent } from './components/pokemon-edit-general.component';
+import { PokemonEditMovesComponent } from './components/pokemon-edit-moves.component';
+import { PokemonEditRibbonsComponent } from './components/pokemon-edit-ribbons.component';
+import { PokemonEditOriginComponent } from './components/pokemon-edit-origin.component';
 import { CustomDropdownComponent } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
+import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 
 @Component({
   selector: 'app-pokemon-edit-dialog',
@@ -50,7 +55,12 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
     PokemonEditHeaderComponent,
     PokemonEditStatsComponent,
     PokemonEditAttributesComponent,
+    PokemonEditMovesComponent,
+    PokemonEditRibbonsComponent,
+    PokemonEditOriginComponent,
     CustomDropdownComponent,
+    IconComponent,
+    TooltipDirective,
   ],
   template: `
     <div
@@ -61,7 +71,7 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
       (click)="close()"
     >
       <div
-        class="bg-surface border border-theme rounded-2xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+        class="bg-surface border border-theme rounded-2xl w-full max-w-3xl h-[90vh] flex flex-col shadow-2xl overflow-hidden"
         (click)="$event.stopPropagation()"
       >
         @if (pokemon(); as pkmn) {
@@ -89,107 +99,275 @@ import { CustomDropdownComponent } from '../../../shared/components/custom-dropd
             </div>
           </div>
 
-          <div class="flex-1 overflow-y-auto custom-scrollbar p-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div class="flex flex-col gap-[18px]">
-                <app-pokemon-edit-attributes
-                  [pokemonData]="pokemonData()"
-                  [genderState]="genderState()"
-                  [languageOptions]="languageOptions()"
-                  [pokeballOptions]="pokeballOptions()"
-                  [itemOptions]="itemOptions()"
-                  [ribbonOptions]="ribbonOptions()"
-                  [markOptions]="markOptions()"
-                  [trainerOptions]="trainerOptions()"
-                  [originGameOptions]="originGameOptions()"
-                  [form]="form"
-                  (trainerSelected)="onTrainerSelect($event)"
-                ></app-pokemon-edit-attributes>
-              </div>
-              <div class="flex flex-col gap-[18px]">
-                <div class="grid grid-cols-2 gap-4">
-                  <app-custom-dropdown
-                    [label]="'Nature'"
-                    [options]="natureOptions()"
-                    [selectedId]="form.get('nature')?.value || ''"
-                    [placeholder]="'Select Nature'"
-                    (valueChanged)="form.get('nature')?.setValue($event)"
-                  />
-                  <app-custom-dropdown
-                    [label]="'Ability'"
-                    [options]="abilityOptions()"
-                    [selectedId]="form.get('ability')?.value || ''"
-                    [placeholder]="'Select Ability'"
-                    [searchable]="false"
-                    (valueChanged)="form.get('ability')?.setValue($event)"
-                  />
+          <div class="flex flex-1 overflow-hidden bg-secondary/10">
+            <div
+              class="w-20 sm:w-24 flex-none border-r border-theme bg-surface z-10 flex flex-col items-center justify-center py-4 gap-4 shadow-[2px_0_8px_-4px_rgba(0,0,0,0.1)]"
+            >
+              <button
+                (click)="activeTabIndex.set(0)"
+                class="w-16 h-16 flex flex-col items-center justify-center rounded-xl transition-all"
+                [ngClass]="
+                  activeTabIndex() === 0
+                    ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
+                    : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
+                "
+                [appTooltip]="'General'"
+                tooltipPosition="right"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-info size-5"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 16v-4"></path>
+                  <path d="M12 8h.01"></path>
+                </svg>
+              </button>
+              <button
+                (click)="activeTabIndex.set(1)"
+                class="w-16 h-16 flex flex-col items-center justify-center rounded-xl transition-all"
+                [ngClass]="
+                  activeTabIndex() === 1
+                    ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
+                    : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
+                "
+                [appTooltip]="'Moves'"
+                tooltipPosition="right"
+              >
+                <app-icon name="moves" size="1.25em"></app-icon>
+              </button>
+              <button
+                (click)="activeTabIndex.set(2)"
+                class="w-16 h-16 flex flex-col items-center justify-center rounded-xl transition-all"
+                [ngClass]="
+                  activeTabIndex() === 2
+                    ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
+                    : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
+                "
+                [appTooltip]="'Stats'"
+                tooltipPosition="right"
+              >
+                <app-icon name="stat-chart" size="1.25em"></app-icon>
+              </button>
+              <button
+                (click)="activeTabIndex.set(3)"
+                class="w-16 h-16 flex flex-col items-center justify-center rounded-xl transition-all"
+                [ngClass]="
+                  activeTabIndex() === 3
+                    ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
+                    : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
+                "
+                [appTooltip]="'Origin'"
+                tooltipPosition="right"
+              >
+                <app-icon name="user" size="1.25em"></app-icon>
+              </button>
+              <button
+                (click)="activeTabIndex.set(4)"
+                class="w-16 h-16 flex flex-col items-center justify-center rounded-xl transition-all"
+                [ngClass]="
+                  activeTabIndex() === 4
+                    ? 'bg-[--color-surface-hover] hover:bg-[--color-bg-tertiary]'
+                    : 'text-secondary hover:bg-surface-hover hover:text-primary opacity-100 hover:opacity-100'
+                "
+                [appTooltip]="'Ribbons & Marks'"
+                tooltipPosition="right"
+              >
+                <app-icon name="ribbon"></app-icon>
+              </button>
+            </div>
+
+            <div class="flex-1 relative overflow-hidden bg-secondary/5">
+              <div
+                class="flex transition-transform duration-300 ease-in-out h-full w-full"
+                [style.transform]="'translateX(-' + activeTabIndex() * 100 + '%)'"
+              >
+                <div class="w-full shrink-0 overflow-y-auto custom-scrollbar p-6 h-full">
+                  <div class="flex flex-col gap-6">
+                    <app-pokemon-edit-general
+                      [pokemonData]="pokemonData()"
+                      [genderState]="genderState()"
+                      [pokeballOptions]="pokeballOptions()"
+                      [itemOptions]="itemOptions()"
+                      [form]="form"
+                    ></app-pokemon-edit-general>
+                  </div>
                 </div>
 
-                <app-pokemon-edit-stats
-                  [ivs]="form.get('ivs')?.value!"
-                  [evs]="form.get('evs')?.value!"
-                  [raisedStat]="selectedNature?.raises || null"
-                  [loweredStat]="selectedNature?.lowers || null"
-                  (ivsChanged)="form.get('ivs')?.setValue($event)"
-                  (evsChanged)="form.get('evs')?.setValue($event)"
-                ></app-pokemon-edit-stats>
+                <div class="w-full shrink-0 overflow-y-auto custom-scrollbar p-6 h-full">
+                  <app-pokemon-edit-moves
+                    [form]="form"
+                    [moveOptions]="moveOptions()"
+                  ></app-pokemon-edit-moves>
+                </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                  <app-custom-dropdown
-                    [label]="'Move 1'"
-                    [options]="moveOptions()"
-                    [selectedId]="form.get('move1')?.value || ''"
-                    [placeholder]="'Select Move'"
-                    [searchable]="true"
-                    (valueChanged)="form.get('move1')?.setValue($event)"
-                  />
-                  <app-custom-dropdown
-                    [label]="'Move 2'"
-                    [options]="moveOptions()"
-                    [selectedId]="form.get('move2')?.value || ''"
-                    [placeholder]="'Select Move'"
-                    [searchable]="true"
-                    (valueChanged)="form.get('move2')?.setValue($event)"
-                  />
-                  <app-custom-dropdown
-                    [label]="'Move 3'"
-                    [options]="moveOptions()"
-                    [selectedId]="form.get('move3')?.value || ''"
-                    [placeholder]="'Select Move'"
-                    [searchable]="true"
-                    (valueChanged)="form.get('move3')?.setValue($event)"
-                  />
-                  <app-custom-dropdown
-                    [label]="'Move 4'"
-                    [options]="moveOptions()"
-                    [selectedId]="form.get('move4')?.value || ''"
-                    [placeholder]="'Select Move'"
-                    [searchable]="true"
-                    (valueChanged)="form.get('move4')?.setValue($event)"
-                  />
+                <div class="w-full shrink-0 overflow-y-auto custom-scrollbar p-6 h-full">
+                  <div class="flex flex-col gap-[18px]">
+                    <div class="grid grid-cols-2 gap-4">
+                      <app-custom-dropdown
+                        [label]="'Nature'"
+                        [options]="natureOptions()"
+                        [selectedId]="form.get('nature')?.value || ''"
+                        [placeholder]="'Select Nature'"
+                        (valueChanged)="
+                          form.get('nature')?.setValue($event); form.get('nature')?.markAsDirty()
+                        "
+                      />
+                      <app-custom-dropdown
+                        [label]="'Mint'"
+                        [options]="natureOptions()"
+                        [selectedId]="form.get('mint')?.value || ''"
+                        [placeholder]="'Select Mint'"
+                        (valueChanged)="
+                          form.get('mint')?.setValue($event); form.get('mint')?.markAsDirty()
+                        "
+                      />
+                      <app-custom-dropdown
+                        [label]="'Ability'"
+                        [options]="abilityOptions()"
+                        [selectedId]="form.get('ability')?.value || ''"
+                        [placeholder]="'Select Ability'"
+                        [searchable]="false"
+                        (valueChanged)="
+                          form.get('ability')?.setValue($event); form.get('ability')?.markAsDirty()
+                        "
+                      />
+                      <app-custom-dropdown
+                        [label]="'Tera Type'"
+                        [options]="teraTypeOptions()"
+                        [selectedId]="form.get('teraType')?.value || ''"
+                        [placeholder]="'Select Tera Type'"
+                        [searchable]="false"
+                        (valueChanged)="
+                          form.get('teraType')?.setValue($event);
+                          form.get('teraType')?.markAsDirty()
+                        "
+                      />
+                    </div>
+
+                    <app-pokemon-edit-stats
+                      [ivs]="form.get('ivs')?.value!"
+                      [evs]="form.get('evs')?.value!"
+                      [hyperTrained]="form.get('hyperTrained')?.value!"
+                      [raisedStat]="activeNature?.raises || null"
+                      [loweredStat]="activeNature?.lowers || null"
+                      [baseStats]="baseStats"
+                      [level]="form.get('level')?.value || 100"
+                      (ivsChanged)="
+                        form.get('ivs')?.setValue($event); form.get('ivs')?.markAsDirty()
+                      "
+                      (evsChanged)="
+                        form.get('evs')?.setValue($event); form.get('evs')?.markAsDirty()
+                      "
+                      (hyperTrainedChanged)="
+                        form.get('hyperTrained')?.setValue($event);
+                        form.get('hyperTrained')?.markAsDirty()
+                      "
+                    ></app-pokemon-edit-stats>
+                  </div>
+                </div>
+
+                <div class="w-full shrink-0 overflow-y-auto custom-scrollbar p-6 h-full">
+                  <app-pokemon-edit-origin
+                    [form]="form"
+                    [languageOptions]="languageOptions()"
+                    [trainerOptions]="trainerOptions()"
+                    [originGameOptions]="originGameOptions()"
+                    [storedInOptions]="storedInOptions()"
+                    (trainerSelected)="onTrainerSelect($event)"
+                  ></app-pokemon-edit-origin>
+                </div>
+
+                <div class="w-full shrink-0 overflow-y-auto custom-scrollbar p-6 h-full">
+                  <app-pokemon-edit-ribbons
+                    [ribbonOptions]="ribbonOptions()"
+                    [markOptions]="markOptions()"
+                    [selectedRibbons]="selectedRibbons()"
+                    [selectedMarks]="selectedMarks()"
+                    (ribbonsChanged)="onRibbonsChanged($event)"
+                    (marksChanged)="onMarksChanged($event)"
+                  ></app-pokemon-edit-ribbons>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="p-6 pt-4 border-t border-theme flex-none bg-surface z-10">
-            <div class="flex justify-between items-center">
-              <div class="text-xs text-secondary">Last updated: {{ 'Just now' }}</div>
-              <div class="flex gap-3">
+          <div
+            class="p-4 border-t border-theme bg-surface flex justify-between items-center z-20 flex-none"
+          >
+            <div class="flex items-center gap-4">
+              <div class="flex gap-2">
                 <button
-                  (click)="close()"
-                  class="px-5 py-2 rounded-lg font-medium text-secondary hover:bg-secondary/50 transition-all"
+                  class="px-3 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold hover:bg-theme"
+                  (click)="previous.emit()"
+                  [appTooltip]="'Previous Pokémon'"
+                  tooltipPosition="top"
                 >
-                  Cancel
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 19l-7-7 7-7"
+                    ></path>
+                  </svg>
                 </button>
                 <button
-                  (click)="save()"
-                  [disabled]="saving()"
-                  class="px-6 py-2 rounded-lg font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
+                  class="px-3 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold hover:bg-theme"
+                  (click)="next.emit()"
+                  [appTooltip]="'Next Pokémon'"
+                  tooltipPosition="top"
                 >
-                  {{ saving() ? 'Saving...' : 'Save Changes' }}
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    ></path>
+                  </svg>
                 </button>
               </div>
+              <div class="text-xs text-secondary hidden sm:block">
+                Last updated:
+                @if (justSaved()) {
+                  Just now
+                } @else if (lastSavedAt()) {
+                  {{ lastSavedAt() | date: 'short' }}
+                } @else {
+                  Never
+                }
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <button
+                class="px-5 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold hover:bg-theme whitespace-nowrap"
+                (click)="backToView.emit(activeTabIndex())"
+              >
+                Back to view
+              </button>
+              <button
+                class="px-5 py-1.5 border border-theme rounded-lg bg-surface-hover text-secondary hover:text-primary transition-all font-semibold hover:bg-theme"
+                (click)="close()"
+              >
+                Close
+              </button>
+              <button
+                (click)="save()"
+                [disabled]="saving() || form.pristine"
+                class="px-6 py-2 rounded-lg font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap"
+              >
+                {{ saving() ? 'Saving...' : 'Save Changes' }}
+              </button>
             </div>
           </div>
         }
@@ -233,12 +411,17 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
   pokemon = input.required<BoxSlot>();
   dexId = input.required<string>();
   boxNumber = input.required<number>();
+  initialTab = input<number>(0);
 
   closed = output<void>();
   saved = output<void>();
+  previous = output<void>();
+  next = output<void>();
+  backToView = output<number>();
 
   localPokemonSlug = signal<string | null>(null);
   showTrainerPromptDialog = signal(false);
+  activeTabIndex = signal<number>(0);
 
   private datasetService = inject(DatasetService);
   private firestoreService = inject(FirestoreService);
@@ -249,6 +432,8 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   renderer = inject(Renderer2);
   document = inject(DOCUMENT);
+
+  private initialized = false;
 
   constructor() {
     effect(() => {
@@ -263,6 +448,12 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
           if (currentGender !== 'female') this.form.patchValue({ gender: 'female' });
         }
       });
+    });
+
+    effect(() => {
+      const pkmn = this.pokemon();
+      if (!this.initialized) return;
+      this.initializePokemon(pkmn);
     });
   }
 
@@ -287,8 +478,13 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     notes: [''],
     ability: [''],
     nature: [''],
+    mint: [''],
+    teraType: [''],
     mark: [''],
     ribbon: [''],
+    ribbons: [[] as string[]],
+    marks: [[] as string[]],
+    size: [''],
     gender: [''],
     move1: [''],
     move2: [''],
@@ -296,6 +492,7 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     move4: [''],
     ivs: [{ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }],
     evs: [{ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }],
+    hyperTrained: [[] as string[]],
   });
 
   pokemonData = signal<DatasetPokemon | null>(null);
@@ -308,6 +505,7 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
   allRibbons = signal<RibbonData[]>([]);
   allPokemon = signal<SimplePokemon[]>([]);
   allMoves = signal<MoveData[]>([]);
+  allowedMoveIds = signal<Set<string> | null>(null);
 
   genderState = computed(() => {
     const data = this.pokemonData();
@@ -328,6 +526,11 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
   markOptions = computed<CustomDropdownOption[]>(() =>
     this.dropdownOptionService.mapMarks(this.allMarks()),
   );
+
+  selectedRibbons = signal<string[]>([]);
+  selectedMarks = signal<string[]>([]);
+  lastSavedAt = signal<Date | null>(null);
+  justSaved = signal<boolean>(false);
   pokemonSearchOptions = computed<CustomDropdownOption[]>(() =>
     this.dropdownOptionService.mapPokemonSearchOptions(this.allPokemon()),
   );
@@ -347,8 +550,39 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     this.dropdownOptionService.mapNatures(this.allNatures()),
   );
 
-  get selectedNature() {
-    return this.allNatures().find((n) => n.id === this.form.get('nature')?.value) || null;
+  teraTypeOptions = signal<CustomDropdownOption[]>(
+    [
+      'normal',
+      'fire',
+      'water',
+      'electric',
+      'grass',
+      'ice',
+      'fighting',
+      'poison',
+      'ground',
+      'flying',
+      'psychic',
+      'bug',
+      'rock',
+      'ghost',
+      'dragon',
+      'dark',
+      'steel',
+      'fairy',
+      'stellar',
+    ].map((type) => ({
+      id: type,
+      name: type.charAt(0).toUpperCase() + type.slice(1),
+      iconPath: `${type}.png`,
+      cdnFolder: 'types',
+    })),
+  );
+
+  get activeNature() {
+    const mint = this.form.get('mint')?.value;
+    const natureId = mint || this.form.get('nature')?.value;
+    return this.allNatures().find((n) => n.id === natureId) || null;
   }
 
   languageOptions = computed<CustomDropdownOption[]>(() =>
@@ -365,9 +599,23 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
   itemOptions = computed<CustomDropdownOption[]>(() =>
     this.dropdownOptionService.mapItems(this.allItems()),
   );
-  moveOptions = computed<CustomDropdownOption[]>(() =>
-    this.dropdownOptionService.mapMoves(this.allMoves()),
-  );
+  moveOptions = computed<CustomDropdownOption[]>(() => {
+    const all = this.allMoves();
+    const allowed = this.allowedMoveIds();
+
+    let filteredMoves = all;
+    if (allowed !== null) {
+      if (allowed.size > 0) {
+        filteredMoves = all.filter((m) => allowed.has(m.id) || allowed.has(m.id.replace(/-/g, '')));
+      } else {
+        filteredMoves = all;
+      }
+    } else {
+      return [];
+    }
+
+    return this.dropdownOptionService.mapMoves(filteredMoves);
+  });
 
   pokemonGenus = computed(() => {
     const data = this.pokemonData();
@@ -375,6 +623,19 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     const lang = this.langService.currentLang();
     return data.genus?.[lang] || data.genus?.['eng'] || 'Pokémon';
   });
+
+  get baseStats(): StatsMap | undefined {
+    const data = this.pokemonData();
+    if (!data) return undefined;
+    return {
+      hp: data.baseHp,
+      atk: data.baseAtk,
+      def: data.baseDef,
+      spa: data.baseSpAtk,
+      spd: data.baseSpDef,
+      spe: data.baseSpeed,
+    };
+  }
 
   localizedName = computed(() => {
     const data = this.pokemonData();
@@ -453,8 +714,6 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.renderer.addClass(this.document.body, 'overflow-hidden');
-    const pkmn = this.pokemon();
-    this.localPokemonSlug.set(pkmn.pokemonSlug);
 
     this.form
       .get('isOwned')
@@ -464,6 +723,22 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
       .get('isShiny')
       ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.updateSpritePreview());
+
+    this.initializePokemon(this.pokemon());
+    this.loadReferenceData();
+    this.initialized = true;
+  }
+
+  private initializePokemon(pkmn: BoxSlot): void {
+    this.localPokemonSlug.set(pkmn.pokemonSlug);
+    this.activeTabIndex.set(this.initialTab());
+    this.justSaved.set(false);
+
+    if (pkmn.updatedAt) {
+      this.lastSavedAt.set(new Date(pkmn.updatedAt));
+    } else {
+      this.lastSavedAt.set(null);
+    }
 
     this.form.patchValue({
       isOwned: pkmn.isOwned,
@@ -484,8 +759,13 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
       item: pkmn.item || '',
       ability: pkmn.ability || '',
       nature: pkmn.nature || '',
+      mint: pkmn.mint || '',
+      teraType: pkmn.teraType || '',
       mark: pkmn.mark || '',
       ribbon: pkmn.ribbon || '',
+      ribbons: pkmn.ribbons || (pkmn.ribbon ? [pkmn.ribbon] : []),
+      marks: pkmn.marks || (pkmn.mark ? [pkmn.mark] : []),
+      size: pkmn.size || '',
       gender: pkmn.gender || '',
       move1: pkmn.moves?.[0] || '',
       move2: pkmn.moves?.[1] || '',
@@ -493,16 +773,27 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
       move4: pkmn.moves?.[3] || '',
       ivs: pkmn.ivs ? { ...pkmn.ivs } : { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
       evs: pkmn.evs ? { ...pkmn.evs } : { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+      hyperTrained: pkmn.hyperTrained ? [...pkmn.hyperTrained] : [],
     });
+    this.form.markAsPristine();
 
-    this.loadData();
+    this.selectedRibbons.set(pkmn.ribbons || (pkmn.ribbon ? [pkmn.ribbon] : []));
+    this.selectedMarks.set(pkmn.marks || (pkmn.mark ? [pkmn.mark] : []));
+
+    if (pkmn.pokemonSlug) {
+      this.datasetService.loadPokemonBySlug(pkmn.pokemonSlug).subscribe((data) => {
+        this.pokemonData.set(data);
+        this.updateSpritePreview();
+        this.loadAllowedMovesFromPokeApi(data);
+      });
+    }
   }
 
   ngOnDestroy(): void {
     this.renderer.removeClass(this.document.body, 'overflow-hidden');
   }
 
-  loadData() {
+  private loadReferenceData(): void {
     this.firestoreService.getUserTrainers().subscribe((trainers) => this.trainers.set(trainers));
     this.datasetService.loadAbilities().subscribe((abilities) => this.allAbilities.set(abilities));
     this.datasetService.loadPokeballs().subscribe((pokeballs) => this.allPokeballs.set(pokeballs));
@@ -514,13 +805,13 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
     this.datasetService.getSimplePokemonList().subscribe((pokemonList) => {
       this.allPokemon.set(pokemonList);
     });
+  }
 
-    if (this.localPokemonSlug()) {
-      this.datasetService.loadPokemonBySlug(this.localPokemonSlug()!).subscribe((data) => {
-        this.pokemonData.set(data);
-        this.updateSpritePreview();
-      });
-    }
+  loadAllowedMovesFromPokeApi(data: DatasetPokemon) {
+    const slug = data.refs?.pkApiFormSlug || data.refs?.pkApiId || data.id;
+    this.datasetService.loadPokemonMovesFromPokeApi(slug).subscribe((moveIds) => {
+      this.allowedMoveIds.set(moveIds);
+    });
   }
 
   updateSpritePreview() {
@@ -584,6 +875,24 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
       if (trainer.game && this.isObtainableIn(trainer.game)) {
         this.form.patchValue({ originGame: trainer.game });
       }
+    }
+  }
+
+  onRibbonsChanged(ribbons: string[]) {
+    this.selectedRibbons.set(ribbons);
+    const control = this.form.get('ribbons');
+    if (control) {
+      control.setValue(ribbons);
+      control.markAsDirty();
+    }
+  }
+
+  onMarksChanged(marks: string[]) {
+    this.selectedMarks.set(marks);
+    const control = this.form.get('marks');
+    if (control) {
+      control.setValue(marks);
+      control.markAsDirty();
     }
   }
 
@@ -664,12 +973,19 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
         notes: fv.notes || null,
         ability: fv.ability || null,
         nature: fv.nature || null,
-        mark: fv.mark || null,
-        ribbon: fv.ribbon || null,
+        mint: fv.mint || null,
+        teraType: fv.teraType || null,
+        hyperTrained: fv.hyperTrained?.length ? fv.hyperTrained : null,
+        mark: fv.marks?.length ? fv.marks[0] : fv.mark || null,
+        ribbon: fv.ribbons?.length ? fv.ribbons[0] : fv.ribbon || null,
+        ribbons: fv.ribbons?.length ? fv.ribbons : null,
+        marks: fv.marks?.length ? fv.marks : null,
+        size: fv.size || null,
         gender: fv.gender || null,
         moves: [fv.move1 || '', fv.move2 || '', fv.move3 || '', fv.move4 || ''],
         ivs: { ...fv.ivs },
         evs: { ...fv.evs },
+        updatedAt: new Date().toISOString(),
       };
       Object.keys(updates).forEach((key) => updates[key] === undefined && delete updates[key]);
 
@@ -681,7 +997,9 @@ export class PokemonEditDialogComponent implements OnInit, OnDestroy {
       );
 
       this.saved.emit();
-      this.close();
+      this.lastSavedAt.set(new Date());
+      this.justSaved.set(true);
+      this.form.markAsPristine();
       this.toastService.success('Pokemon saved successfully');
     } catch (e) {
       this.toastService.error(`Error ${e} saving Pokemon`);
