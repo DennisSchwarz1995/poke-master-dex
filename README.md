@@ -10,7 +10,7 @@ A professional Angular Pokemon Dex web application with Firebase backend and Pok
 - Detailed Pokemon Management
 - Pokemon HOME-Style Legality Checking
 - Offline Support with Sync Queue
-- Multilingual Support (DE, EN, FR, ES, JP)
+- Multilingual Support for Pokémon (DE, EN, FR, ES, JP)
 - All 9 Generations (~1025 Pokemon)
 
 ## Tech Stack
@@ -43,30 +43,3 @@ npm start
 3. Create Firestore Database
 4. Add Web App and copy config
 5. Create `.env` file (template: `.env.example`)
-
-## Project Structure
-
-```
-src/app/
-├── core/                 # Singleton Services
-│   ├── auth/            # Authentication
-│   ├── api/             # API Services
-│   └── state/           # State Management
-├── features/            # Feature Modules
-│   ├── auth/           # Login, Profile
-│   ├── pokedex/        # Box View, Pokemon Detail
-│   └── dashboard/      # Main Dashboard
-└── shared/              # Reusable Components
-    ├── components/
-    ├── pipes/
-    ├── directives/
-    └── models/
-```
-
-## Supported Languages
-
-- German
-- English
-- French
-- Spanish
-- Japanese
