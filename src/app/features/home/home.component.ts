@@ -329,10 +329,6 @@ import { CdnUrlPipe } from '../../shared/pipes/cdnUrl.pipe';
       <div
         class="max-w-[600px] mx-auto py-16 px-6 sm:px-12 bg-surface border border-theme rounded-3xl relative overflow-hidden"
       >
-        <div
-          class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-500 via-purple-500 to-red-500"
-        ></div>
-
         <h2 class="text-2xl md:text-3xl font-extrabold text-primary mb-4 tracking-tight">
           Ready to complete your Pokédex?
         </h2>
@@ -342,19 +338,19 @@ import { CdnUrlPipe } from '../../shared/pipes/cdnUrl.pipe';
         </p>
         <a
           routerLink="/pokedex"
-          class="inline-flex items-center gap-2.5 py-4 px-10 rounded-2xl text-lg font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600 shadow-[0_4px_14px_rgba(59,130,246,0.35)] hover:shadow-[0_8px_25px_rgba(59,130,246,0.45)] hover:-translate-y-0.5 transition-all duration-300"
+          class="flex flex-col items-center gap-2.5 py-4 px-10 rounded-2xl text-lg font-bold text-white bg-blue-500 hover:bg-blue-600 hover:-translate-y-0.5 transform transition duration-300"
         >
           Start collecting now
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M3 12a9 9 0 1 1 18 0a9 9 0 0 1-18 0m2.07 1a7.002 7.002 0 0 0 13.86 0h-4.1a3.001 3.001 0 0 1-5.66 0zm13.86-2a7.001 7.001 0 0 0-13.86 0h4.1a3.001 3.001 0 0 1 5.66 0zM12 13a1 1 0 1 0 0-2a1 1 0 0 0 0 2"
+              clip-rule="evenodd"
+            />
+          </svg>
         </a>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M0 0h24v24H0z" fill="none" />
-          <path
-            fill="currentColor"
-            fill-rule="evenodd"
-            d="M3 12a9 9 0 1 1 18 0a9 9 0 0 1-18 0m2.07 1a7.002 7.002 0 0 0 13.86 0h-4.1a3.001 3.001 0 0 1-5.66 0zm13.86-2a7.001 7.001 0 0 0-13.86 0h4.1a3.001 3.001 0 0 1 5.66 0zM12 13a1 1 0 1 0 0-2a1 1 0 0 0 0 2"
-            clip-rule="evenodd"
-          />
-        </svg>
       </div>
     </section>
   `,

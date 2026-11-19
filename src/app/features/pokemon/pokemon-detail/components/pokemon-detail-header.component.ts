@@ -10,6 +10,7 @@ import { DexNumberPipe } from '../../../../shared/pipes/dex-number.pipe';
 import { StatPercentPipe } from '../../../../shared/pipes/stat-percent.pipe';
 import { StatColorPipe } from '../../../../shared/pipes/stat-color.pipe';
 import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
+import { IconComponent } from '../../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-pokemon-detail-header',
@@ -22,6 +23,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
     StatPercentPipe,
     StatColorPipe,
     CdnUrlPipe,
+    IconComponent,
   ],
   template: `
     <div
@@ -91,7 +93,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
         </div>
       </div>
       <div
-        class="md:w-1/3 flex items-center justify-center flex-col p-4 bg-secondary/10 relative min-h-[300px]"
+        class="md:w-1/3 flex items-center justify-center flex-col p-4 bg-tertiary relative min-h-[300px]"
       >
         <img
           [src]="imageUrl()"
@@ -101,37 +103,12 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
         />
 
         <div class="flex gap-2 absolute bottom-4 right-4">
-          <a [href]="serebiiUrl()" target="_blank" class="btn-secondary"
-            >Serebii
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
-              class="bi bi-arrow-right-short"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
-              />
-            </svg>
+          <a [href]="serebiiUrl()" target="_blank" class="btn btn-secondary"
+            >Serebii <app-icon name="next" size="0.75em"></app-icon>
           </a>
-          <a [href]="bulbapediaUrl()" target="_blank" class="btn-secondary"
+          <a [href]="bulbapediaUrl()" target="_blank" class="btn btn-secondary"
             >Bulbapedia
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
-              class="bi bi-arrow-right-short"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
-              />
-            </svg>
+            <app-icon name="next" size="0.75em"></app-icon>
           </a>
         </div>
       </div>

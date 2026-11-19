@@ -7,11 +7,12 @@ import { GameCard } from '../game-card/game-card.component';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { GameDataService } from '../../../core/services/game-data.service';
 import { IconComponent } from '../../../shared/components/icon/icon.component';
+import { FallbackImageDirective } from '../../../shared/directives/fallback-image/fallback-image.directive';
 
 @Component({
   selector: 'app-game-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, GameCard, CdnUrlPipe, IconComponent],
+  imports: [CommonModule, RouterLink, GameCard, CdnUrlPipe, IconComponent, FallbackImageDirective],
   template: `
     <div class="flex flex-col bg-bg-secondary p-4 sm:p-6 lg:p-8">
       <div class="max-w-5xl mx-auto w-full space-y-6">
@@ -33,7 +34,7 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
                     <img
                       [src]="gameIconPath() | cdnUrl: 'games'"
                       class="inline-block w-16 h-16 object-fit z-20 drop-shadow flex-shrink-0 border border-theme rounded-xl"
-                      (error)="onImageError($event)"
+                      appFallback
                     />
                   }
                 </div>
@@ -108,14 +109,14 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
               </div>
 
               <div
-                class="md:w-5/12 flex items-center justify-center flex-col relative min-h-[300px] bg-secondary/10 rounded-2xl md:bg-transparent"
+                class="md:w-5/12 flex items-center justify-center flex-col relative min-h-[300px] bg-tertiary rounded-2xl md:bg-transparent"
               >
                 <div class="relative w-full h-full">
                   <img
                     [src]="gameIconPath() | cdnUrl: 'gametiles'"
                     [alt]="game.name"
                     class="w-full h-full object-cover rounded-2xl drop-shadow-xl z-10 transition-transform duration-500 hover:scale-105"
-                    (error)="onImageError($event)"
+                    appFallback
                     draggable="false"
                   />
                 </div>
@@ -305,10 +306,5 @@ export class GameDetailComponent implements OnInit {
         this.isLoading.set(false);
       },
     });
-  }
-
-  onImageError(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.style.display = 'none';
   }
 }

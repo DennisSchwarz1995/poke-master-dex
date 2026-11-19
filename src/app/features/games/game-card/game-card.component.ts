@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { GameData } from '../../../shared/models/dataset.model';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
+import { FallbackImageDirective } from '../../../shared/directives/fallback-image/fallback-image.directive';
 
 @Component({
   selector: 'app-game-card',
   standalone: true,
-  imports: [CommonModule, RouterLink, CdnUrlPipe],
+  imports: [CommonModule, RouterLink, CdnUrlPipe, FallbackImageDirective],
   template: `
     <a
       [routerLink]="game.type === 'dlc' ? null : ['/games', game.nameSlug]"
@@ -26,7 +27,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
             [src]="getGameImage(game) | cdnUrl: 'gametiles'"
             [alt]="game.name"
             class="rounded-2xl w-full h-full object-cover select-none pointer-events-none"
-            (error)="onImageError($event)"
+            appFallback
             loading="lazy"
           />
         </div>
@@ -69,10 +70,5 @@ export class GameCard {
 
     const slug = specialCases[game.nameSlug] || game.nameSlug.replace(/-/g, '_');
     return `${slug}.webp`;
-  }
-
-  onImageError(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.style.display = 'none';
   }
 }
