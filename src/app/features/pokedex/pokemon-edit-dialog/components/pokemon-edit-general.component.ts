@@ -36,7 +36,7 @@ import { PokemonEditSizeComponent } from './pokemon-edit-size.component';
         />
 
         <div class="flex flex-col gap-1.5 relative group">
-          <label class="text-[12px] font-bold text-secondary uppercase pl-2 z-10"> Level </label>
+          <label class="text-[12px] font-bold text-secondary uppercase pl-2 z-10 "> Level </label>
           <input
             type="number"
             formControlName="level"
@@ -44,7 +44,7 @@ import { PokemonEditSizeComponent } from './pokemon-edit-size.component';
             max="100"
             (keydown)="preventNonNumbers($event)"
             (input)="enforceLevelConstraints($event)"
-            class="w-full bg-surface border-2 border-theme rounded-xl p-4 text-sm text-primary focus:border-blue-500 outline-none transition-colors no-spinners"
+            class="w-full bg-surface border-2 border-theme rounded-xl p-4 text-sm text-primary focus:border-[--color-active] outline-none transition-colors no-spinners transition-colors hover:bg-[--color-surface-hover]"
             placeholder="Level"
           />
         </div>
@@ -157,7 +157,7 @@ import { PokemonEditSizeComponent } from './pokemon-edit-size.component';
           <input
             formControlName="nickname"
             placeholder="Nickname"
-            class="w-full bg-surface border-2 border-theme rounded-xl px-4 py-3 text-sm text-primary focus:border-blue-500 outline-none transition-colors h-full"
+            class="w-full bg-surface border-2 border-theme rounded-xl p-4 text-sm text-primary focus:border-[--color-active] outline-none transition-colors no-spinners transition-colors hover:bg-[--color-surface-hover]"
           />
         </div>
       </div>

@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { DexStateService } from '../../../core/services/dex-state.service';
 import { Dex, Box } from '../../../shared/models/dex.model';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-dex-overview',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   template: `
     <div class="min-h-screen bg-secondary">
       <main class="flex flex-col gap-6 container mx-auto pt-6 pb-2 px-4">
@@ -34,18 +35,18 @@ import { Dex, Box } from '../../../shared/models/dex.model';
                     class="w-8 h-8 rounded flex items-center justify-center text-lg"
                     [ngClass]="getBoxIconClass(box)"
                   >
-                    📦
+                    <app-icon name="box"> </app-icon>
                   </div>
 
                   <div class="text-center">
                     <div class="font-bold text-xs text-primary">{{ box.boxNumber }}</div>
                     <div
-                      class="text-[10px] text-secondary font-medium truncate max-w-[60px]"
+                      class="text-[12px] text-secondary font-medium truncate max-w-[60px]"
                       [title]="box.name"
                     >
                       {{ box.name }}
                     </div>
-                    <div class="text-[10px] text-tertiary">{{ getOwnedCount(box) }}/30</div>
+                    <div class="text-[10px] text-secondary">{{ getOwnedCount(box) }}/30</div>
                   </div>
                 </div>
 

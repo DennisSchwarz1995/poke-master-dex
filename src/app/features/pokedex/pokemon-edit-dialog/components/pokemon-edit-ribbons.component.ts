@@ -12,11 +12,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CustomDropdownOption } from '../../../../shared/components/custom-dropdown/custom-dropdown.component';
 import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
+import { FallbackImageDirective } from '../../../../shared/directives/fallback-image/fallback-image.directive';
+import { IconComponent } from '../../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-pokemon-edit-ribbons',
   standalone: true,
-  imports: [CommonModule, FormsModule, CdnUrlPipe],
+  imports: [CommonModule, FormsModule, CdnUrlPipe, FallbackImageDirective, IconComponent],
   template: `
     <section class="flex flex-col gap-8">
       <div>
@@ -24,7 +26,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
           <div class="flex flex-col gap-2 mb-4">
             @for (ribbonId of selectedRibbons(); track ribbonId) {
               <div
-                class="flex items-center gap-3 px-3 py-2 bg-secondary/10 border border-theme rounded-lg group"
+                class="flex items-center gap-3 px-3 py-2 bg-tertiary border border-theme rounded-lg group"
               >
                 @if (getRibbonOption(ribbonId); as opt) {
                   @if (opt.iconPath) {
@@ -32,7 +34,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
                       [src]="opt.iconPath | cdnUrl: opt.cdnFolder"
                       [alt]="opt.name"
                       class="w-7 h-7 object-contain flex-shrink-0"
-                      (error)="onImageError($event)"
+                      appFallback
                     />
                   }
                   <span class="flex-1 font-medium text-primary text-sm truncate">{{
@@ -70,14 +72,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
             (click)="toggleRibbonDropdown()"
             class="flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-dashed border-theme text-secondary hover:text-primary hover:border-blue-500 transition-all text-sm font-medium w-full justify-center"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
+            <app-icon name="plus" size="1em"></app-icon>
             Add Ribbon
           </button>
 
@@ -118,7 +113,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
                           [src]="option.iconPath | cdnUrl: option.cdnFolder"
                           [alt]="option.name"
                           class="w-6 h-6 object-contain flex-shrink-0"
-                          (error)="onImageError($event)"
+                          appFallback
                         />
                       }
                       <span class="font-medium text-primary text-sm">{{ option.name }}</span>
@@ -144,7 +139,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
           <div class="flex flex-col gap-2 mb-4">
             @for (markId of selectedMarks(); track markId) {
               <div
-                class="flex items-center gap-3 px-3 py-2 bg-secondary/10 border border-theme rounded-lg group"
+                class="flex items-center gap-3 px-3 py-2 bg-tertiary border border-theme rounded-lg group"
               >
                 @if (getMarkOption(markId); as opt) {
                   @if (opt.iconPath) {
@@ -152,7 +147,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
                       [src]="opt.iconPath | cdnUrl: opt.cdnFolder"
                       [alt]="opt.name"
                       class="w-7 h-7 object-contain flex-shrink-0"
-                      (error)="onImageError($event)"
+                      appFallback
                     />
                   }
                   <span class="flex-1 font-medium text-primary text-sm truncate">{{
@@ -188,14 +183,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
             (click)="toggleMarkDropdown()"
             class="flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-dashed border-theme text-secondary hover:text-primary hover:border-blue-500 transition-all text-sm font-medium w-full justify-center"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
+            <app-icon name="plus" size="1em"></app-icon>
             Add Mark
           </button>
 
@@ -236,7 +224,7 @@ import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
                           [src]="option.iconPath | cdnUrl: option.cdnFolder"
                           [alt]="option.name"
                           class="w-6 h-6 object-contain flex-shrink-0"
-                          (error)="onImageError($event)"
+                          appFallback
                         />
                       }
                       <span class="font-medium text-primary text-sm">{{ option.name }}</span>
@@ -350,10 +338,6 @@ export class PokemonEditRibbonsComponent {
   removeMark(id: string) {
     const current = this.selectedMarks().filter((m) => m !== id);
     this.marksChanged.emit(current);
-  }
-
-  onImageError(event: Event) {
-    (event.target as HTMLImageElement).style.display = 'none';
   }
 
   @HostListener('document:mousedown', ['$event'])

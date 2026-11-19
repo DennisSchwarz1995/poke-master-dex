@@ -26,7 +26,7 @@ import {
         />
       </div>
 
-      <div class="bg-secondary/10 border border-theme rounded-xl p-4">
+      <div class="bg-tertiary border border-theme rounded-xl p-4">
         <div class="flex items-center justify-between mb-3">
           <h4 class="text-sm font-bold text-primary">Original Trainer</h4>
           <div class="w-40">

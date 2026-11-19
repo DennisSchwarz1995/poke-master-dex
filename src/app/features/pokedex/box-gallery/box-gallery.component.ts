@@ -36,6 +36,7 @@ import { AVAILABLE_SPRITES } from '../../../core/constants/available-sprites.con
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { ToolbarService } from '../../../core/services/toolbar.service';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 export interface EnrichedSlot {
   originalSlot: BoxSlot | null;
@@ -74,6 +75,7 @@ export interface BoxWithSprites {
     ScrollingModule,
     CdnUrlPipe,
     SearchInputComponent,
+    IconComponent,
   ],
   templateUrl: 'box-gallery.component.html',
   styles: [

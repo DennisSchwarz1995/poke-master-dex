@@ -24,6 +24,7 @@ import { RouterLink } from '@angular/router';
 import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 import { ToolbarService } from '../../../core/services/toolbar.service';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-box-view',
@@ -38,6 +39,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
     ToolbarComponent,
     TooltipDirective,
     CdnUrlPipe,
+    IconComponent,
   ],
   template: `
     <div class="min-h-[calc(100vh-16rem)] bg-secondary flex flex-col">
@@ -84,22 +86,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
                   [appTooltip]="'Previous Box'"
                   tooltipPosition="top"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="28.45"
-                    height="16"
-                    viewBox="0 0 16 9"
-                  >
-                    <path d="M0 0h16v9H0z" fill="none" />
-                    <path
-                      fill="currentColor"
-                      d="M12.5 5h-9c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h9c.28 0 .5.22.5.5s-.22.5-.5.5"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M6 8.5a.47.47 0 0 1-.35-.15l-3.5-3.5c-.2-.2-.2-.51 0-.71L5.65.65c.2-.2.51-.2.71 0s.2.51 0 .71L3.21 4.51l3.15 3.15c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z"
-                    />
-                  </svg>
+                  <app-icon name="previous"></app-icon>
                 </button>
                 <div
                   class="px-3 font-bold text-sm sm:text-base text-center whitespace-nowrap text-text-primary"
@@ -112,7 +99,7 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
                   [appTooltip]="'Next Box'"
                   tooltipPosition="top"
                 >
-                  <img [src]="'next.svg' | cdnUrl: 'icons'" alt="next" fill="currentColor" />
+                  <app-icon name="previous" class="rotate-180"></app-icon>
                 </button>
               </div>
 
@@ -167,8 +154,12 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
         [pokemon]="selectedSlot()!"
         [dexId]="dexId()"
         [boxNumber]="currentBox()"
+        [initialTab]="currentDialogTab()"
         (closed)="closeDetailDialog()"
         (saved)="onDetailSaved()"
+        (previous)="onEditPrevious()"
+        (next)="onEditNext()"
+        (backToView)="onEditBackToView($event)"
       />
     }
 
@@ -177,10 +168,11 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
         [pokemon]="selectedSlot()!"
         [dexId]="dexId()"
         [boxNumber]="currentBox()"
+        [initialTab]="currentDialogTab()"
         (closed)="closeViewDialog()"
         (previous)="onViewPrevious()"
         (next)="onViewNext()"
-        (edit)="onViewEdit()"
+        (edit)="onViewEdit($event)"
       />
     }
 
@@ -223,6 +215,8 @@ export class BoxViewComponent implements OnInit {
   showOptionsDialog = signal(false);
   autoFillOptions = signal<AutoFillOption[]>([]);
   pendingSelectPosition: number | null = null;
+  pendingDialogMode: 'view' | 'edit' | null = null;
+  currentDialogTab = signal<number>(0);
 
   onPreviousBox() {
     const prevBox = this.currentBox() === 1 ? 200 : this.currentBox() - 1;
@@ -284,6 +278,15 @@ export class BoxViewComponent implements OnInit {
           const target = sortedSlots.find((s) => s.position === this.pendingSelectPosition);
           if (target) this.selectedSlot.set(target);
           this.pendingSelectPosition = null;
+
+          if (this.pendingDialogMode === 'edit') {
+            this.showViewDialog.set(false);
+            this.showDetailDialog.set(true);
+          } else if (this.pendingDialogMode === 'view') {
+            this.showDetailDialog.set(false);
+            this.showViewDialog.set(true);
+          }
+          this.pendingDialogMode = null;
         }
       },
       error: (err) => {
@@ -300,6 +303,7 @@ export class BoxViewComponent implements OnInit {
   }
 
   async onSlotClick(slot: BoxSlot) {
+    this.currentDialogTab.set(0);
     const quickEditState = this.currentQuickEditState();
 
     if (quickEditState.active && quickEditState.mode !== 'None') {
@@ -343,49 +347,70 @@ export class BoxViewComponent implements OnInit {
   closeDetailDialog() {
     this.showDetailDialog.set(false);
     this.selectedSlot.set(null);
+    this.currentDialogTab.set(0);
+  }
+
+  onEditPrevious() {
+    this.navigateSlot('previous', 'edit');
+  }
+
+  onEditNext() {
+    this.navigateSlot('next', 'edit');
+  }
+
+  onEditBackToView(tabIndex: number) {
+    this.currentDialogTab.set(tabIndex);
+    this.showDetailDialog.set(false);
+    this.showViewDialog.set(true);
   }
 
   closeViewDialog() {
     this.showViewDialog.set(false);
     this.selectedSlot.set(null);
+    this.currentDialogTab.set(0);
   }
 
   onViewPrevious() {
-    const current = this.selectedSlot();
-    if (!current) return;
-    let newPos = current.position - 1;
-    if (newPos < 1) {
-      this.pendingSelectPosition = 30;
-      let newBoxNum = this.currentBox() - 1;
-      if (newBoxNum < 1) newBoxNum = 200;
-      this.router.navigate(['/dex', this.dexId(), 'box', newBoxNum]);
-      return;
-    }
-    const prevSlot = this.slots().find((s) => s.position === newPos);
-    if (prevSlot) this.selectedSlot.set(prevSlot);
+    this.navigateSlot('previous', 'view');
   }
 
   onViewNext() {
+    this.navigateSlot('next', 'view');
+  }
+
+  private navigateSlot(direction: 'previous' | 'next', mode: 'view' | 'edit'): void {
     const current = this.selectedSlot();
     if (!current) return;
-    let newPos = current.position + 1;
-    if (newPos > 30) {
-      this.pendingSelectPosition = 1;
-      let newBoxNum = this.currentBox() + 1;
+
+    const delta = direction === 'previous' ? -1 : 1;
+    const newPos = current.position + delta;
+
+    if (newPos < 1 || newPos > 30) {
+      this.pendingSelectPosition = direction === 'previous' ? 30 : 1;
+      this.pendingDialogMode = mode;
+      let newBoxNum = this.currentBox() + delta;
+      if (newBoxNum < 1) newBoxNum = 200;
       if (newBoxNum > 200) newBoxNum = 1;
       this.router.navigate(['/dex', this.dexId(), 'box', newBoxNum]);
       return;
     }
-    const nextSlot = this.slots().find((s) => s.position === newPos);
-    if (nextSlot) this.selectedSlot.set(nextSlot);
+
+    const targetSlot = this.slots().find((s) => s.position === newPos);
+    if (targetSlot) this.selectedSlot.set(targetSlot);
   }
 
-  onViewEdit() {
+  onViewEdit(tabIndex: number) {
+    this.currentDialogTab.set(tabIndex);
     this.showViewDialog.set(false);
     this.showDetailDialog.set(true);
   }
 
   onDetailSaved() {
+    if (this.selectedSlot()) {
+      this.pendingSelectPosition = this.selectedSlot()!.position;
+    }
+    this.showDetailDialog.set(false);
+    this.showViewDialog.set(true);
     this.loadBox(this.dexId(), this.currentBox());
   }
 
@@ -427,12 +452,14 @@ export class BoxViewComponent implements OnInit {
       const pokemonPerBox = 30;
       const neededBoxes = Math.ceil(totalPokemon / pokemonPerBox);
 
-      // Get localized names from SimplePokemon map
+      // Get localized names and dex numbers from SimplePokemon map
       const basePokemonList = await firstValueFrom(this.datasetService.getSimplePokemonList());
       const nameMap = new Map<string, string>();
+      const dexNumMap = new Map<string, number>();
       const lang = this.pokemonLangService.currentLang();
       basePokemonList.forEach((p) => {
         nameMap.set(p.slug, p.allNames?.[lang] || p.name);
+        dexNumMap.set(p.slug, p.dexNum);
       });
 
       for (let offset = 0; offset < neededBoxes; offset++) {
@@ -445,8 +472,8 @@ export class BoxViewComponent implements OnInit {
         const firstPoke = chunk[0]!;
         const lastPoke = chunk[chunk.length - 1]!;
 
-        const numStart = String(firstPoke.dexNum).padStart(4, '0');
-        const numEnd = String(lastPoke.dexNum).padStart(4, '0');
+        const numStart = String(dexNumMap.get(firstPoke.slug) ?? firstPoke.dexNum).padStart(4, '0');
+        const numEnd = String(dexNumMap.get(lastPoke.slug) ?? lastPoke.dexNum).padStart(4, '0');
 
         const nameStart = nameMap.get(firstPoke.slug) || this.capitalize(firstPoke.slug);
         const nameEnd = nameMap.get(lastPoke.slug) || this.capitalize(lastPoke.slug);

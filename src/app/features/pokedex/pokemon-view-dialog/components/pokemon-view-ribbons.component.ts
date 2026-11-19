@@ -2,59 +2,72 @@ import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoxSlot } from '../../../../shared/models/dex.model';
 import { CdnUrlPipe } from '../../../../shared/pipes/cdnUrl.pipe';
+import { TooltipDirective } from '../../../../shared/directives/tooltip/tooltip.directive';
 
 @Component({
   selector: 'app-pokemon-view-ribbons',
   standalone: true,
-  imports: [CommonModule, CdnUrlPipe],
+  imports: [CommonModule, CdnUrlPipe, TooltipDirective],
+  host: { class: 'flex flex-col min-h-full gap-6' },
   template: `
-    <div class="max-w-md mx-auto space-y-8">
-      <div>
-        <h3
-          class="text-sm font-bold text-secondary uppercase tracking-wider mb-4 border-b border-theme pb-2"
-        >
-          Ribbons
-        </h3>
-        @if (pokemon().ribbon) {
-          <div class="flex items-center gap-4 p-3 bg-secondary/10 rounded-lg">
-            <img
-              [src]="ribbonSpriteUrl() | cdnUrl: 'ribbons'"
-              [alt]="ribbonName() || pokemon().ribbon"
-              class="w-10 h-10 object-contain drop-shadow-md"
-            />
-            <span class="font-bold text-lg">{{ ribbonName() || pokemon().ribbon }}</span>
-          </div>
+    <section class="flex flex-col flex-1 gap-4">
+      <h3 class="text-sm font-bold text-secondary uppercase tracking-wider shrink-0">Ribbons</h3>
+      <div
+        class="min-h-[128px] grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6 border border-theme rounded-xl p-6"
+      >
+        @if (equippedRibbons() && equippedRibbons().length > 0) {
+          @for (ribbon of equippedRibbons(); track ribbon.id) {
+            <div class="flex flex-col items-center gap-2">
+              <div class="flex items-center justify-center">
+                <img
+                  [src]="ribbon.spriteUrl | cdnUrl: 'ribbons'"
+                  [alt]="ribbon.name"
+                  class="w-10 h-10 object-contain drop-shadow-md"
+                  [appTooltip]="ribbon.name"
+                />
+              </div>
+              <span class="font-semibold text-xs text-center text-secondary leading-tight">{{
+                ribbon.name
+              }}</span>
+            </div>
+          }
         } @else {
-          <p class="text-tertiary text-sm italic">None equipped</p>
+          <p class="text-secondary text-sm italic col-span-full">No Ribbons equipped</p>
         }
       </div>
+    </section>
 
-      <div>
-        <h3
-          class="text-sm font-bold text-secondary uppercase tracking-wider mb-4 border-b border-theme pb-2"
-        >
-          Marks
-        </h3>
-        @if (pokemon().mark) {
-          <div class="flex items-center gap-4 p-3 bg-secondary/10 rounded-lg">
-            <img
-              [src]="markSpriteUrl() | cdnUrl: 'marks'"
-              [alt]="markName() || pokemon().mark"
-              class="w-10 h-10 object-contain drop-shadow-md"
-            />
-            <span class="font-bold text-lg">{{ markName() || pokemon().mark }}</span>
-          </div>
+    <section class="flex flex-col flex-1 gap-4">
+      <h3 class="text-sm font-bold text-secondary uppercase tracking-wider shrink-0">Marks</h3>
+      <div
+        class="min-h-[128px] grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6 border border-theme rounded-xl p-6"
+      >
+        @if (equippedMarks() && equippedMarks().length > 0) {
+          @for (mark of equippedMarks(); track mark.id) {
+            <div class="flex flex-col items-center gap-2">
+              <div class="flex items-center justify-center">
+                <img
+                  [src]="mark.spriteUrl | cdnUrl: 'marks'"
+                  [alt]="mark.name"
+                  class="w-10 h-10 object-contain drop-shadow-md"
+                  [appTooltip]="mark.name"
+                />
+              </div>
+              <span
+                class="font-semibold text-xs text-center text-secondary text-primary leading-tight"
+                >{{ mark.name }}</span
+              >
+            </div>
+          }
         } @else {
-          <p class="text-tertiary text-sm italic">None equipped</p>
+          <p class="text-secondary text-sm italic col-span-full">No Marks equipped</p>
         }
       </div>
-    </div>
+    </section>
   `,
 })
 export class PokemonViewRibbonsComponent {
   pokemon = input.required<BoxSlot>();
-  ribbonName = input<string>('');
-  ribbonSpriteUrl = input<string>('');
-  markName = input<string>('');
-  markSpriteUrl = input<string>('');
+  equippedRibbons = input<{ id: string; name: string; spriteUrl: string }[]>([]);
+  equippedMarks = input<{ id: string; name: string; spriteUrl: string }[]>([]);
 }

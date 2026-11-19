@@ -5,11 +5,12 @@ import {
   CustomDropdownComponent,
   CustomDropdownOption,
 } from '../../../../shared/components/custom-dropdown/custom-dropdown.component';
+import { FallbackImageDirective } from '../../../../shared/directives/fallback-image/fallback-image.directive';
 
 @Component({
   selector: 'app-pokemon-edit-header',
   standalone: true,
-  imports: [CommonModule, CustomDropdownComponent],
+  imports: [CommonModule, CustomDropdownComponent, FallbackImageDirective],
   template: `
     <div class="flex items-center gap-6">
       <div class="flex items-center gap-4">
@@ -23,7 +24,7 @@ import {
                   [src]="currentSpriteUrl()"
                   [alt]="pokemonData()?.names?.['eng'] || 'Pokemon'"
                   class="w-32 h-32 overflow-hidden object-contain drop-shadow-md z-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                  (error)="onImageError($event)"
+                  appFallback
                 />
               }
             </div>
@@ -56,9 +57,4 @@ export class PokemonEditHeaderComponent {
 
   pokemonChanged = output<string>();
   shinyToggled = output<void>();
-
-  onImageError(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.style.display = 'none';
-  }
 }

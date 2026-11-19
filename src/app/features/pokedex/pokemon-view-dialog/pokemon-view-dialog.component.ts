@@ -12,23 +12,23 @@ import {
 } from '@angular/core';
 import { toObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap, of } from 'rxjs';
-
 import { BoxSlot } from '../../../shared/models/dex.model';
 import { ThemeService } from '../../../core/services/theme.service';
-import { NatureData, RibbonData, MarkData } from '../../../shared/models/dataset.model';
+import { NatureData, RibbonData, MarkData, MoveData } from '../../../shared/models/dataset.model';
 import { DatasetService } from '../../../core/api/services/dataset.service';
 import { DatasetPokemon } from '../../../shared/models/dataset.model';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
-import { PokemonStatchartComponent } from '../../../shared/components/pokemon-statchart/pokemon-statchart.component';
 import { PokemonViewGeneralComponent } from './components/pokemon-view-general.component';
 import { PokemonViewMovesComponent } from './components/pokemon-view-moves.component';
 import { PokemonViewRibbonsComponent } from './components/pokemon-view-ribbons.component';
+import { PokemonViewStatsComponent } from './components/pokemon-view-stats.component';
+import { PokemonViewOriginComponent } from './components/pokemon-view-origin.component';
+import { PokemonViewHeaderComponent } from './components/pokemon-view-header.component';
 import { GameDataService } from '../../../core/services/game-data.service';
 import { CommonModule } from '@angular/common';
-import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
-import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 import { DOCUMENT } from '@angular/common';
+import { DialogSidebarComponent } from '../../../shared/components/dialog-sidebar/dialog-sidebar.component';
 import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
@@ -37,12 +37,13 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
   imports: [
     CommonModule,
     TooltipDirective,
-    CdnUrlPipe,
-    CapitalizePipe,
-    PokemonStatchartComponent,
+    PokemonViewHeaderComponent,
     PokemonViewGeneralComponent,
     PokemonViewMovesComponent,
     PokemonViewRibbonsComponent,
+    PokemonViewStatsComponent,
+    PokemonViewOriginComponent,
+    DialogSidebarComponent,
     IconComponent,
   ],
   templateUrl: './pokemon-view-dialog.component.html',
@@ -59,16 +60,18 @@ export class PokemonViewDialogComponent implements OnInit, OnDestroy {
   pokemon = input.required<BoxSlot>();
   dexId = input.required<string>();
   boxNumber = input.required<number>();
+  initialTab = input<number>(0);
 
   closed = output<void>();
   previous = output<void>();
   next = output<void>();
-  edit = output<void>();
+  edit = output<number>();
 
   pokemonData = signal<DatasetPokemon | null>(null);
   allNatures = signal<NatureData[]>([]);
   allRibbons = signal<RibbonData[]>([]);
   allMarks = signal<MarkData[]>([]);
+  allMoves = signal<MoveData[]>([]);
   activeTabIndex = signal<number>(0);
 
   constructor() {
@@ -89,38 +92,43 @@ export class PokemonViewDialogComponent implements OnInit, OnDestroy {
     this.datasetService.loadNatures().subscribe((natures) => this.allNatures.set(natures));
     this.datasetService.loadRibbons().subscribe((ribbons) => this.allRibbons.set(ribbons));
     this.datasetService.loadMarks().subscribe((marks) => this.allMarks.set(marks));
+    this.datasetService.loadMoves().subscribe((moves) => this.allMoves.set(moves));
   }
 
   ngOnInit() {
     this.renderer.addClass(this.document.body, 'overflow-hidden');
+    this.activeTabIndex.set(this.initialTab());
   }
 
   ngOnDestroy() {
     this.renderer.removeClass(this.document.body, 'overflow-hidden');
   }
 
-  ribbonName = computed(() => {
+  equippedRibbons = computed(() => {
     const pkmn = this.pokemon();
-    const found = this.allRibbons().find((r) => r.id === pkmn.ribbon);
-    return found ? found.name : '';
+    const ids =
+      pkmn.ribbons && pkmn.ribbons.length > 0 ? pkmn.ribbons : pkmn.ribbon ? [pkmn.ribbon] : [];
+    return ids.map((id) => {
+      const found = this.allRibbons().find((r) => r.id === id);
+      return {
+        id,
+        name: found ? found.name : id,
+        spriteUrl: found ? `${found.id}.png` : '',
+      };
+    });
   });
 
-  ribbonSpriteUrl = computed(() => {
+  equippedMarks = computed(() => {
     const pkmn = this.pokemon();
-    const found = this.allRibbons().find((r) => r.id === pkmn.ribbon);
-    return found ? `${found.id}.png` : '';
-  });
-
-  markName = computed(() => {
-    const pkmn = this.pokemon();
-    const found = this.allMarks().find((m) => m.id === pkmn.mark);
-    return found ? found.name : '';
-  });
-
-  markSpriteUrl = computed(() => {
-    const pkmn = this.pokemon();
-    const found = this.allMarks().find((m) => m.id === pkmn.mark);
-    return found ? `${found.id}.png` : '';
+    const ids = pkmn.marks && pkmn.marks.length > 0 ? pkmn.marks : pkmn.mark ? [pkmn.mark] : [];
+    return ids.map((id) => {
+      const found = this.allMarks().find((m) => m.id === id);
+      return {
+        id,
+        name: found ? found.name : id,
+        spriteUrl: found ? `${found.id}.png` : '',
+      };
+    });
   });
 
   localizedName = computed(() => {
@@ -140,6 +148,13 @@ export class PokemonViewDialogComponent implements OnInit, OnDestroy {
     if (!natureId) return '—';
     const nature = this.allNatures().find((n) => n.id === natureId);
     return nature ? this.capitalize(nature.name) : this.capitalize(natureId);
+  });
+
+  size = computed(() => {
+    const sizeId = this.pokemon().size;
+    if (!sizeId) return '—';
+
+    return this.capitalize(sizeId);
   });
 
   originGameName = computed(() => {
@@ -202,11 +217,6 @@ export class PokemonViewDialogComponent implements OnInit, OnDestroy {
   capitalize(str: string | undefined | null): string {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  onImageError(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.style.display = 'none';
   }
 
   close() {
