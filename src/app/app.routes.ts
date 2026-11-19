@@ -31,6 +31,21 @@ export const routes: Routes = [
       import('./features/auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
+    path: 'auth/email-callback',
+    loadComponent: () =>
+      import('./features/auth/email-link-callback/email-link-callback.component').then(
+        (m) => m.EmailLinkCallbackComponent,
+      ),
+  },
+  {
+    path: 'auth/setup-profile',
+    loadComponent: () =>
+      import('./features/auth/setup-profile/setup-profile.component').then(
+        (m) => m.SetupProfileComponent,
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: 'profile',
     loadComponent: () =>
       import('./features/auth/profile/profile.component').then((m) => m.ProfileComponent),
@@ -46,7 +61,6 @@ export const routes: Routes = [
     path: 'games',
     loadComponent: () =>
       import('./features/games/games-list/games-list.component').then((m) => m.GamesList),
-    canActivate: [authGuard],
   },
   {
     path: 'games/:id',
@@ -54,7 +68,6 @@ export const routes: Routes = [
       import('./features/games/game-detail/game-detail.component').then(
         (m) => m.GameDetailComponent,
       ),
-    canActivate: [authGuard],
   },
   {
     path: 'dex/:id',

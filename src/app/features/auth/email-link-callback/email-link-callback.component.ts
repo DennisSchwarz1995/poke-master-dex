@@ -13,10 +13,6 @@ import { AuthService } from '../../../core/auth/services/auth.service';
       <div
         class="bg-surface border border-theme rounded-2xl shadow-lg p-8 max-w-md w-full relative overflow-hidden"
       >
-        <div
-          class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-500 via-purple-500 to-red-500"
-        ></div>
-
         @if (loading()) {
           <div class="text-center py-8 pt-4">
             <div

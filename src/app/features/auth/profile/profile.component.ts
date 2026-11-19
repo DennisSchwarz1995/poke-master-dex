@@ -1,4 +1,4 @@
-import { Component, inject, HostListener, ElementRef } from '@angular/core';
+import { Component, inject, signal, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { AuthService } from '../../../core/auth/services/auth.service';
 import {
   PokemonLanguageService,
   POKEMON_LANGUAGES,
+  PokemonLangCode,
 } from '../../../core/services/pokemon-language.service';
 import {
   AppearanceState,
@@ -13,11 +14,26 @@ import {
 } from '../../../shared/components/toolbar/toolbar.component';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
 import { ThemeService } from '../../../core/services/theme.service';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
+import { TrainerManagementDialogComponent } from '../../dashboard/trainer-management-dialog/trainer-management-dialog.component';
+import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
+import {
+  CustomDropdownComponent,
+  CustomDropdownOption,
+} from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, CdnUrlPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CdnUrlPipe,
+    IconComponent,
+    TrainerManagementDialogComponent,
+    TooltipDirective,
+    CustomDropdownComponent,
+  ],
   template: `
     <div class="container mx-auto px-4 pt-6 max-w-4xl">
       @if (user(); as currentUser) {
@@ -37,20 +53,18 @@ import { ThemeService } from '../../../core/services/theme.service';
               </div>
             }
 
-            <div>
+            <div class="flex flex-col gap-2 items-start">
               <h3 class="text-3xl font-bold text-primary">{{ currentUser.displayName }}</h3>
               <p class="text-secondary mt-1">{{ currentUser.email }}</p>
               @if (currentUser.emailVerified) {
-                <span
-                  class="inline-block mt-2 bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full"
-                >
-                  ✓ Verified
+                <span class="self-start bg-surface-raised text-xs py-1 px-2 rounded-full">
+                  E-Mail Verified
                 </span>
               }
             </div>
           </div>
 
-          <div class="flex flex-col gap-6 border-b border-theme py-6">
+          <div class="flex flex-col gap-6 py-6">
             <div class="flex items-center justify-between">
               <div>
                 <p class="font-medium text-primary">App Theme</p>
@@ -58,31 +72,18 @@ import { ThemeService } from '../../../core/services/theme.service';
               </div>
               <button
                 (click)="themeService.toggleTheme()"
-                class="p-2.5 rounded-xl text-secondary hover:text-primary hover:bg-surface-hover transition-colors focus:ring-2 focus:ring-primary/20 outline-none"
-                [title]="
+                class="p-2 flex items-center rounded-xl text-secondary hover:text-primary hover:bg-surface-hover transition-colors focus:ring-2 focus:ring-primary/20 outline-none"
+                [appTooltip]="
                   themeService.currentTheme() === 'dark'
                     ? 'Switch to Light Mode'
                     : 'Switch to Dark Mode'
                 "
+                tooltipPosition="top"
               >
                 @if (themeService.currentTheme() === 'light') {
-                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                    ></path>
-                  </svg>
+                  <app-icon name="sun"></app-icon>
                 } @else {
-                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                    ></path>
-                  </svg>
+                  <app-icon name="moon"></app-icon>
                 }
               </button>
             </div>
@@ -92,21 +93,20 @@ import { ThemeService } from '../../../core/services/theme.service';
                 <p class="font-medium text-primary">Pokémon Language</p>
                 <p class="text-sm text-secondary">Choose the display language for Pokémon names</p>
               </div>
-              <select
-                [ngModel]="pokemonLangService.currentLang()"
-                (ngModelChange)="pokemonLangService.setLanguage($event)"
-                class="bg-surface border border-theme rounded-lg px-3 py-2 text-sm text-primary focus:border-blue-500 outline-none transition-colors cursor-pointer"
-              >
-                @for (lang of languages; track lang.code) {
-                  <option [value]="lang.code">{{ lang.flag }} {{ lang.label }}</option>
-                }
-              </select>
+              <app-custom-dropdown
+                [options]="languageOptions"
+                [selectedId]="pokemonLangService.currentLang()"
+                (valueChanged)="onLanguageChange($event)"
+              />
             </div>
 
             <div class="flex items-center justify-between">
               <div>
                 <p class="font-medium text-primary">Ask to save Trainer</p>
-                <p class="text-sm text-secondary">Ask to save new trainers</p>
+                <p class="text-sm text-secondary">
+                  If adding an Trainer which is not in the List to a Pokemon, a Dialog will open
+                  asking you if you want to save the Trainer.
+                </p>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input
@@ -122,7 +122,7 @@ import { ThemeService } from '../../../core/services/theme.service';
             </div>
           </div>
 
-          <div class="flex items-center justify-between gap-6 border-b border-theme py-6">
+          <div class="flex items-center justify-between py-6">
             <div>
               <p class="font-medium text-primary">Appearance Icons</p>
               <p class="text-sm text-secondary">
@@ -130,25 +130,12 @@ import { ThemeService } from '../../../core/services/theme.service';
               </p>
             </div>
 
-            <div class="relative flex items-center">
+            <div class="relative flex items-center" #appearanceDropdown>
               <button
                 (click)="toggleAppearanceDropdown()"
                 class="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-surface hover:bg-surface-hover text-primary shadow-sm border border-theme"
               >
-                <svg fill="none" width="20" height="20" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  ></path>
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  ></path>
-                </svg>
+                <app-icon name="appearance"></app-icon>
                 Appearance Icons
               </button>
 
@@ -181,44 +168,45 @@ import { ThemeService } from '../../../core/services/theme.service';
             </div>
           </div>
 
+          <div class="flex items-center justify-between gap-6 border-b border-theme py-6">
+            <div>
+              <p class="font-medium text-primary">Manage Trainers</p>
+              <p class="text-sm text-secondary">
+                Add, edit or remove trainers for your Pokédex collections.
+              </p>
+            </div>
+            <button
+              (click)="openTrainerManagement()"
+              class="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-surface hover:bg-surface-hover text-primary shadow-sm border border-theme"
+            >
+              <app-icon name="forms"></app-icon>
+              Trainers
+            </button>
+          </div>
+
           <div class="flex justify-end pt-6 gap-6">
             <button
               (click)="goBack()"
               class="flex flex-row items-center gap-1 bg-blue-500 text-white px-4 py-2.5 rounded-lg hover:bg-blue-600 transition font-semibold flex items-center gap-2"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 1024 1024"
-              >
-                <path d="M0 0h1024v1024H0z" fill="none" />
-                <path fill="currentColor" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64" />
-                <path
-                  fill="currentColor"
-                  d="m237.2 512l265.5 265.3a32 32 0 0 1-45.4 45.4l-288-288a32 32 0 0 1 0-45.4l288-288a32 32 0 1 1 45.4 45.4z"
-                />
-              </svg>
-
+              <app-icon name="previous"></app-icon>
               Back
             </button>
             <button
               (click)="signOut()"
               class="flex flex-row items-center gap-1 bg-red-500 text-white px-4 py-2.5 rounded-lg hover:bg-red-600 transition font-semibold"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path
-                  fill="currentColor"
-                  d="M4 12a.5.5 0 0 0 .5.5h8.793l-2.647 2.646a.5.5 0 1 0 .707.708l3.5-3.5a.5.5 0 0 0 0-.707l-3.5-3.5a.5.5 0 0 0-.707.707l2.647 2.646H4.5a.5.5 0 0 0-.5.5M17.5 2h-11A2.5 2.5 0 0 0 4 4.5v4a.5.5 0 0 0 1 0v-4A1.5 1.5 0 0 1 6.5 3h11A1.5 1.5 0 0 1 19 4.5v15a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19.5v-4a.5.5 0 0 0-1 0v4A2.5 2.5 0 0 0 6.5 22h11a2.5 2.5 0 0 0 2.5-2.5v-15A2.5 2.5 0 0 0 17.5 2"
-                />
-              </svg>
+              <app-icon name="sign-out"></app-icon>
               Sign Out
             </button>
           </div>
         </div>
       }
     </div>
+
+    @if (showTrainerDialog()) {
+      <app-trainer-management-dialog (closed)="closeTrainerDialog()" />
+    }
   `,
   styles: [],
 })
@@ -229,8 +217,15 @@ export class ProfileComponent {
   pokemonLangService = inject(PokemonLanguageService);
   languages = POKEMON_LANGUAGES;
 
+  languageOptions: CustomDropdownOption[] = this.languages.map((lang) => ({
+    id: lang.code,
+    name: lang.label,
+    iconHtml: `<span class="border text-primary rounded-md px-4 py-[4px] text-[10px] leading-none font-bold w-9 flex items-center justify-center">${lang.badge}</span>`,
+  }));
+
   user = this.authService.user;
   promptDisabled = localStorage.getItem('disableAutoTrainerPrompt') === 'true';
+  showTrainerDialog = signal(false);
 
   availableAppearances = AVAILABLE_APPEARANCES;
   isAppearanceDropdownOpen = false;
@@ -254,10 +249,14 @@ export class ProfileComponent {
     }
   }
 
+  @ViewChild('appearanceDropdown') appearanceDropdownRef?: ElementRef;
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
-    if (!this.elRef.nativeElement.contains(event.target)) {
-      this.isAppearanceDropdownOpen = false;
+    if (this.isAppearanceDropdownOpen && this.appearanceDropdownRef) {
+      if (!this.appearanceDropdownRef.nativeElement.contains(event.target)) {
+        this.isAppearanceDropdownOpen = false;
+      }
     }
   }
 
@@ -279,6 +278,12 @@ export class ProfileComponent {
     }
   }
 
+  onLanguageChange(langId: string) {
+    if (langId) {
+      this.pokemonLangService.setLanguage(langId as PokemonLangCode);
+    }
+  }
+
   getInitials(name: string | null): string {
     if (!name) return '?';
     return name
@@ -291,12 +296,20 @@ export class ProfileComponent {
 
   async signOut() {
     await this.authService.signOut();
-    await this.router.navigate(['/login']);
+    await this.router.navigate(['/home']);
   }
 
   private location = inject(Location);
 
   goBack() {
     this.location.back();
+  }
+
+  openTrainerManagement() {
+    this.showTrainerDialog.set(true);
+  }
+
+  closeTrainerDialog() {
+    this.showTrainerDialog.set(false);
   }
 }

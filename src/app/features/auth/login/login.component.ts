@@ -15,9 +15,7 @@ type LoginStep = 'providers' | 'email-input' | 'email-sent';
       <div
         class="bg-surface border border-theme rounded-2xl shadow-lg p-8 max-w-md w-full relative overflow-hidden"
       >
-        <div
-          class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-500 via-purple-500 to-red-500"
-        ></div>
+        <div class="absolute top-0 left-0 right-0 h-[3px]"></div>
         <div class="text-center mb-8 pt-2">
           <img src="/favicon.ico" alt="Poke Master Dex" class="w-16 h-16 mx-auto mb-4 rounded-xl" />
           <h1 class="text-3xl font-extrabold text-primary tracking-tight mb-2">
@@ -294,7 +292,15 @@ export class LoginComponent {
       this.step.set('email-sent');
     } catch (err: any) {
       console.error('Magic link error:', err);
-      this.error.set('Failed to send magic link. Please try again.');
+      if (err.code === 'auth/invalid-email') {
+        this.error.set('Please enter a valid email address.');
+      } else if (err.code === 'auth/too-many-requests') {
+        this.error.set('Too many requests. Please wait a moment and try again.');
+      } else if (err.code === 'auth/operation-not-allowed') {
+        this.error.set('Email link sign-in is currently not enabled.');
+      } else {
+        this.error.set('Failed to send magic link. Please try again.');
+      }
     } finally {
       this.loading.set(false);
     }
