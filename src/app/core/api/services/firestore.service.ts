@@ -306,11 +306,11 @@ export class FirestoreService {
     const userId = this.requireUserId();
     const trainersCollection = collection(this.firestore, `users/${userId}/trainers`);
 
-    const newTrainer = {
+    const newTrainer = this.cleanUndefinedProperties({
       ...trainer,
       userId,
       createdAt: Timestamp.now(),
-    };
+    });
 
     const docRef = await addDoc(trainersCollection, newTrainer);
     return docRef.id;
@@ -320,6 +320,12 @@ export class FirestoreService {
     const userId = this.requireUserId();
     const trainerRef = doc(this.firestore, `users/${userId}/trainers/${trainerId}`);
     return deleteDoc(trainerRef);
+  }
+
+  async updateTrainer(trainerId: string, updates: Partial<Trainer>): Promise<void> {
+    const userId = this.requireUserId();
+    const trainerRef = doc(this.firestore, `users/${userId}/trainers/${trainerId}`);
+    return updateDoc(trainerRef, this.cleanUndefinedProperties(updates));
   }
 
   async updateDexName(dexId: string, newName: string): Promise<void> {

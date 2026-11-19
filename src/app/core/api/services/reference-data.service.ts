@@ -61,7 +61,7 @@ export class ReferenceDataService {
           const moveIds = new Set<string>();
           if (res && res.moves) {
             res.moves.forEach((m: any) => {
-              moveIds.add(m.move.name);
+              moveIds.add(m.move.name.replace(/-/g, ''));
             });
           }
           return moveIds;

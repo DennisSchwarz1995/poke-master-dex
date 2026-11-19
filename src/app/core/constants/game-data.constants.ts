@@ -482,7 +482,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
   {
     id: 'colosseum',
     name: 'Pokémon Colosseum',
-    iconFilename: 'coloseum.webp',
+    iconFilename: 'colosseum.webp',
     category: 'Other',
     gen: 3,
     region: 'orre',

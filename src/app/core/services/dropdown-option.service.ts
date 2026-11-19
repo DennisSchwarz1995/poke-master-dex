@@ -12,9 +12,20 @@ import {
 import { Trainer } from '../../shared/models/trainer.model';
 import { AVAILABLE_SPRITES } from '../constants/available-sprites.constants';
 import { environment } from '../../../environments/environment';
+import { TypeData } from '../services/type-color.service';
+import { POKEMON_LANGUAGES } from './pokemon-language.service';
 
 @Injectable({ providedIn: 'root' })
 export class DropdownOptionService {
+  mapTypes(types: TypeData[]): CustomDropdownOption[] {
+    return types.map((type) => ({
+      id: type.id,
+      name: type.name,
+      iconPath: `${type.id}.png`,
+      cdnFolder: 'types',
+    }));
+  }
+
   getNatureStatLabel(stat: string): string {
     const labels: Record<string, string> = {
       atk: 'Atk',
@@ -84,7 +95,7 @@ export class DropdownOptionService {
         name: ribbon.name,
         description: ribbon.shortDesc,
         category: `Gen ${ribbon.gen}`,
-        iconPath: AVAILABLE_SPRITES.ribbons.has(ribbon.id) ? `${ribbon.id}.png` : undefined,
+        iconPath: `${ribbon.id}.png`,
         cdnFolder: 'ribbons',
       }))
       .sort((a, b) => {
@@ -102,7 +113,7 @@ export class DropdownOptionService {
         name: mark.name,
         description: mark.shortDesc,
         category: `Gen ${mark.gen}`,
-        iconPath: AVAILABLE_SPRITES.marks.has(mark.id) ? `${mark.id}.png` : undefined,
+        iconPath: `${mark.id}.png`,
         cdnFolder: 'marks',
       }))
       .sort((a, b) => {
@@ -123,6 +134,8 @@ export class DropdownOptionService {
         return {
           id: m.id,
           name: m.name,
+          iconPath: `${m.type}.png`,
+          cdnFolder: 'types',
           description: `${m.type} | Power: ${m.power || '—'} | PP: ${m.pp}`,
           descriptionHtml: `<div class="flex flex-col gap-1.5 mt-1 whitespace-normal">
             <div class="flex items-center gap-3 text-xs text-secondary font-medium">
@@ -144,18 +157,17 @@ export class DropdownOptionService {
   }
 
   getLanguageOptions(): CustomDropdownOption[] {
-    return [
-      { id: '', name: 'None' },
-      { id: 'ENG', name: 'ENG', description: 'English' },
-      { id: 'DEU', name: 'DEU', description: 'German' },
-      { id: 'JPN', name: 'JPN', description: 'Japanese' },
-      { id: 'FRA', name: 'FRA', description: 'French' },
-      { id: 'ITA', name: 'ITA', description: 'Italian' },
-      { id: 'ESP', name: 'ESP', description: 'Spanish' },
-      { id: 'KOR', name: 'KOR', description: 'Korean' },
-      { id: 'CHS', name: 'CHS', description: 'Chinese (Simp)' },
-      { id: 'CHT', name: 'CHT', description: 'Chinese (Trad)' },
-    ];
+    const options: CustomDropdownOption[] = [{ id: '', name: 'None' }];
+    
+    POKEMON_LANGUAGES.forEach((lang) => {
+      options.push({
+        id: lang.badge,
+        name: lang.label,
+        iconHtml: `<span class="border text-primary rounded-md px-4 py-[4px] text-[10px] leading-none font-bold w-9 flex items-center justify-center">${lang.badge}</span>`,
+      });
+    });
+
+    return options;
   }
 
   mapTrainers(

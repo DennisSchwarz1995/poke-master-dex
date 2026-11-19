@@ -3,6 +3,8 @@ export interface Trainer {
   userId: string;
   name: string;
   trainerId: string;
-  game?: string;
+  secretId?: string;
+  gender?: string;
+  game: string;
   createdAt: Date;
 }

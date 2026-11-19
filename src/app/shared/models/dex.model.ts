@@ -52,10 +52,17 @@ export interface BoxSlot {
   trainerId?: string;
   mark?: string;
   ribbon?: string;
+  marks?: string[];
+  ribbons?: string[];
+  size?: string;
   ivs?: StatsMap;
   evs?: StatsMap;
   gender?: string;
   moves?: string[];
+  mint?: string;
+  teraType?: string;
+  hyperTrained?: string[];
+  updatedAt?: string;
 }
 
 export interface Box {
@@ -73,7 +80,6 @@ export interface DexTypeConfig {
   type: DexType;
   name: string;
   description: string;
-  icon: string;
   color: string;
   supportedLayouts?: DexLayoutOption[];
 }

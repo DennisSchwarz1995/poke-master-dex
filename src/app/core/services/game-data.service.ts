@@ -81,6 +81,7 @@ export class GameDataService {
           name: game.name,
           category: group.label,
           iconPath: this.getGameIconPath(game.id) || undefined,
+          cdnFolder: 'games',
         });
       });
     });
@@ -105,6 +106,7 @@ export class GameDataService {
           name: game.name,
           category: game.gen === 0 ? 'Special' : `Generation ${game.gen}`,
           iconPath: this.getGameIconPath(game.id) || undefined,
+          cdnFolder: 'games',
         });
       }
     });

@@ -202,3 +202,8 @@ export interface MoveData {
   isZ: boolean;
   isGmax: boolean;
 }
+
+export interface PokemonMoves {
+  id: string;
+  moves: string[];
+}

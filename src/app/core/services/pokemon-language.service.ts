@@ -1,16 +1,35 @@
 import { Injectable, signal } from '@angular/core';
 import { DatasetPokemon } from '../../shared/models/dataset.model';
 
-export type PokemonLangCode = 'eng' | 'fra' | 'deu' | 'jap' | 'kor' | 'chs' | 'cht';
+export type PokemonLangCode =
+  | 'eng'
+  | 'spa'
+  | 'spa-la'
+  | 'fra'
+  | 'deu'
+  | 'ita'
+  | 'jap'
+  | 'kor'
+  | 'chs'
+  | 'cht'
+  | 'por';
 
-export const POKEMON_LANGUAGES: { code: PokemonLangCode; label: string; flag: string }[] = [
-  { code: 'eng', label: 'English', flag: '🇬🇧' },
-  { code: 'deu', label: 'Deutsch', flag: '🇩🇪' },
-  { code: 'fra', label: 'Français', flag: '🇫🇷' },
-  { code: 'jap', label: '日本語', flag: '🇯🇵' },
-  { code: 'kor', label: '한국어', flag: '🇰🇷' },
-  { code: 'chs', label: '简体中文', flag: '🇨🇳' },
-  { code: 'cht', label: '繁體中文', flag: '🇹🇼' },
+export const POKEMON_LANGUAGES: {
+  code: PokemonLangCode;
+  label: string;
+  badge: string;
+}[] = [
+  { code: 'eng', label: 'English', badge: 'ENG' },
+  { code: 'spa', label: 'Spanish (Spain)', badge: 'ES-ES' },
+  { code: 'spa-la', label: 'Spanish (Latin-America)', badge: 'ES-LA' },
+  { code: 'deu', label: 'German', badge: 'DEU' },
+  { code: 'fra', label: 'French', badge: 'FRA' },
+  { code: 'ita', label: 'Italian', badge: 'ITA' },
+  { code: 'jap', label: 'Japanese', badge: 'JPN' },
+  { code: 'kor', label: 'Korean', badge: 'KOR' },
+  { code: 'cht', label: 'Chinese (Traditional)', badge: 'CHT' },
+  { code: 'chs', label: 'Chinese (Simplified)', badge: 'CHS' },
+  { code: 'por', label: 'Portuguese (Brazil)', badge: 'PT-BR' },
 ];
 
 const STORAGE_KEY = 'pokemon-language';
@@ -34,10 +53,22 @@ export class PokemonLanguageService {
     }
   }
 
-  private detectFromBrowser(): PokemonLangCode {
+  public detectFromBrowser(): PokemonLangCode {
     const browserLang = navigator.language.toLowerCase();
+    if (browserLang.startsWith('pt')) return 'por';
+    if (
+      browserLang.startsWith('es-ar') ||
+      browserLang.startsWith('es-mx') ||
+      browserLang.startsWith('es-co') ||
+      browserLang.startsWith('es-cl') ||
+      browserLang.startsWith('es-pe') ||
+      browserLang.startsWith('es-419')
+    )
+      return 'spa-la';
+    if (browserLang.startsWith('es')) return 'spa';
     if (browserLang.startsWith('de')) return 'deu';
     if (browserLang.startsWith('fr')) return 'fra';
+    if (browserLang.startsWith('it')) return 'ita';
     if (browserLang.startsWith('ja')) return 'jap';
     if (browserLang.startsWith('ko')) return 'kor';
     if (browserLang.startsWith('zh-tw') || browserLang.startsWith('zh-hant')) return 'cht';
@@ -55,12 +86,10 @@ export class PokemonLanguageService {
     if (pkmn.speciesNames?.[lang]) {
       return pkmn.speciesNames[lang]!;
     }
-    // Fallback: names[lang] with form suffix stripped
     const localizedName = pkmn.names?.[lang];
     if (localizedName) {
       return localizedName.replace(/\s*\(.*\)\s*$/, '');
     }
-    // Ultimate fallback: English speciesNames or names
     if (pkmn.speciesNames?.['eng']) return pkmn.speciesNames['eng']!;
     const engName = pkmn.names?.['eng'] || pkmn.id;
     return engName.replace(/\s*\(.*\)\s*$/, '');
