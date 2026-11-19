@@ -1,0 +1,213 @@
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  (click)="close()"
+>
+  <div
+    class="bg-surface rounded-lg p-6 max-w-2xl w-full mx-4 border border-theme overflow-hidden flex flex-col"
+    (click)="$event.stopPropagation()"
+  >
+    <h2 class="text-2xl font-bold mb-6 text-primary shrink-0">Create New Dex</h2>
+
+    <div class="relative w-full overflow-hidden">
+      <div
+        class="flex transition-transform duration-300 ease-in-out w-full"
+        [style.transform]="'translateX(-' + (step() - 1) * 100 + '%)'"
+      >
+        <div class="w-full shrink-0">
+          <div class="space-y-4 px-1">
+            <h3 class="font-semibold mb-4 text-primary">Select Dex Category:</h3>
+
+            @for (cat of categories; track cat.id) {
+              <button
+                type="button"
+                (click)="selectCategory(cat)"
+                class="w-full text-left p-4 rounded-lg border-2 transition-all"
+                [ngClass]="
+                  selectedCategory()?.id === cat.id
+                    ? 'border-blue-500 bg-secondary/50'
+                    : 'border-theme hover:border-blue-500/50'
+                "
+              >
+                <div class="flex items-start gap-4">
+                  <div class="flex-1">
+                    <h4 class="font-bold text-lg text-primary">{{ cat.name }}</h4>
+                    <p class="text-secondary text-sm">{{ cat.description }}</p>
+                  </div>
+                </div>
+              </button>
+            }
+
+            <div class="flex justify-end gap-3 mt-6">
+              <button
+                type="button"
+                (click)="close()"
+                class="px-4 py-2 text-secondary hover:text-primary"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                (click)="goToStep(2)"
+                [disabled]="!selectedCategory()"
+                class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full shrink-0">
+          <div class="space-y-4 px-1">
+            <h3 class="font-semibold mb-4 text-primary">Select Dex Type:</h3>
+
+            @for (config of availableTypes(); track config.type) {
+              <button
+                type="button"
+                (click)="selectDexType(config.type)"
+                class="w-full text-left p-4 rounded-lg border-2 transition-all"
+                [ngClass]="
+                  selectedType() === config.type
+                    ? 'border-blue-500 bg-secondary/50'
+                    : 'border-theme hover:border-blue-500/50'
+                "
+              >
+                <div class="flex items-start gap-4">
+                  <div class="flex-1">
+                    <h4 class="font-bold text-lg text-primary">{{ config.name }}</h4>
+                    <p class="text-secondary text-sm">{{ config.description }}</p>
+                  </div>
+                </div>
+              </button>
+            }
+
+            <div class="flex justify-end gap-3 mt-6">
+              <button
+                type="button"
+                (click)="goToStep(1)"
+                class="px-4 py-2 text-secondary hover:text-primary"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                (click)="nextToConfig()"
+                [disabled]="!selectedType()"
+                class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full shrink-0">
+          <form class="space-y-4 px-1" (ngSubmit)="createDex()">
+            @if (errorMessage()) {
+              <div class="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded text-sm">
+                {{ errorMessage() }}
+              </div>
+            }
+
+            <div>
+              <label class="block font-semibold mb-2 text-primary">Dex Name:</label>
+              <input
+                [ngModel]="dexName()"
+                (ngModelChange)="dexName.set($event)"
+                name="dexName"
+                type="text"
+                placeholder="My Living Dex"
+                class="w-full px-4 py-2 bg-surface border-theme rounded text-primary placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
+              />
+            </div>
+
+            <div>
+              <label class="block font-semibold mb-2 text-primary">Start Box (1-200):</label>
+              <input
+                [ngModel]="startBox()"
+                (ngModelChange)="startBox.set($event)"
+                name="startBox"
+                type="number"
+                min="1"
+                max="200"
+                class="w-full px-4 py-2 bg-surface border-theme rounded text-primary placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
+              />
+              <p class="text-sm text-secondary mt-1">
+                Pokemon will be populated starting from this box. Box {{ startBox() }} will contain
+                Pokemon #1-30.
+              </p>
+            </div>
+
+            @if (selectedTypeConfig()?.supportedLayouts?.length) {
+              <div>
+                <label class="block font-semibold mb-2 text-primary">Arrangement:</label>
+                <div class="space-y-3">
+                  @for (layout of selectedTypeConfig()!.supportedLayouts; track layout.id) {
+                    <label
+                      class="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-secondary/20 transition-colors border border-transparent"
+                      [ngClass]="{
+                        'border-blue-500/50 bg-tertiary': selectedLayout() === layout.id,
+                      }"
+                    >
+                      <input
+                        type="radio"
+                        name="selectedLayout"
+                        [value]="layout.id"
+                        [ngModel]="selectedLayout()"
+                        (ngModelChange)="onLayoutChange($event)"
+                        class="w-4 h-4 text-blue-500 bg-surface border-theme focus:ring-blue-500 focus:ring-2"
+                      />
+                      <span class="text-primary text-sm font-medium">{{ layout.name }}</span>
+                    </label>
+                  }
+                </div>
+              </div>
+            }
+
+            <div class="bg-secondary/50 border border-theme p-4 rounded">
+              @if (loadingCount()) {
+                <p class="text-sm text-primary flex items-center gap-2">
+                  <span
+                    class="animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"
+                  ></span>
+                  Calculating population data...
+                </p>
+              } @else {
+                <p class="text-sm text-primary">
+                  <strong>Auto-population:</strong> All {{ expectedPokemonCount() }} Pokemon will be
+                  filled across {{ expectedBoxCount() }} boxes starting from Box {{ startBox() }}.
+                  All Pokemon will be grayed out until you mark them as owned.
+                </p>
+              }
+            </div>
+
+            <div class="flex justify-end gap-3 mt-6">
+              <button
+                type="button"
+                (click)="goToStep(2)"
+                class="px-4 py-2 text-secondary hover:text-primary"
+                [disabled]="creating()"
+              >
+                Back
+              </button>
+              <button
+                type="submit"
+                [disabled]="!dexName() || creating() || loadingCount()"
+                class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 transition-colors flex items-center gap-2"
+              >
+                @if (creating()) {
+                  <span
+                    class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"
+                  ></span>
+                  Creating...
+                } @else {
+                  Create Dex
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,11 +7,22 @@ import { GameDefinition } from '../../../shared/models/game-definitions.model';
 import { GAME_DEFINITIONS } from '../../../core/constants/game-data.constants';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ToastService } from '../../../core/services/toast.service';
+import { GameDataService } from '../../../core/services/game-data.service';
+import { CustomDropdownComponent } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
+import { TrainerCardComponent } from './components/trainer-card.component';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-trainer-management-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmDialogComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ConfirmDialogComponent,
+    CustomDropdownComponent,
+    TrainerCardComponent,
+    IconComponent,
+  ],
   template: `
     <div
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -28,52 +39,120 @@ import { ToastService } from '../../../core/services/toast.service';
 
         @if (showForm()) {
           <div class="bg-secondary p-4 rounded-lg mb-6 border border-theme">
-            <h3 class="font-semibold mb-4 text-primary">Add New Trainer Profile</h3>
+            <h3 class="font-semibold mb-4 text-primary">
+              {{ editingTrainerId() ? 'Edit Trainer Profile' : 'Add New Trainer Profile' }}
+            </h3>
 
             <div class="space-y-3">
               <div>
-                <label class="block text-sm font-semibold mb-1 text-secondary"
-                  >Trainer Name (OT)</label
-                >
+                <label class="block text-sm font-semibold mb-1 text-secondary">Trainer Name</label>
                 <input
                   [(ngModel)]="newTrainerName"
                   type="text"
                   maxlength="12"
-                  class="w-full px-3 py-2 bg-surface border-theme rounded text-primary placeholder:text-tertiary focus:outline-none focus:border-blue-500"
-                  placeholder="e.g., ASH"
+                  class="w-full px-3 py-2 bg-surface border-theme rounded text-primary placeholder:text-secondary focus:outline-none focus:border-blue-500"
+                  placeholder="e.g. ASH"
                 />
               </div>
 
               <div>
-                <label class="block text-sm font-semibold mb-1 text-secondary"
-                  >Trainer ID (TID)</label
-                >
+                <label class="block text-sm font-semibold mb-1 text-secondary">Trainer ID</label>
                 <input
                   [(ngModel)]="newTrainerId"
                   type="text"
                   maxlength="6"
-                  class="w-full px-3 py-2 bg-surface border-theme rounded text-primary placeholder:text-tertiary focus:outline-none focus:border-blue-500"
-                  placeholder="e.g., 30850"
+                  class="w-full px-3 py-2 bg-surface border-theme rounded text-primary placeholder:text-secondary focus:outline-none focus:border-blue-500"
+                  placeholder="e.g. 30850"
                 />
               </div>
 
               <div>
                 <label class="block text-sm font-semibold mb-1 text-secondary"
-                  >Game (Optional)</label
+                  >Secret ID (SID) - Optional</label
                 >
-                <select
-                  [(ngModel)]="newTrainerGame"
-                  class="w-full px-3 py-2 bg-surface border-theme rounded text-primary focus:outline-none focus:border-blue-500"
+                <input
+                  [(ngModel)]="newTrainerSecretId"
+                  type="text"
+                  maxlength="6"
+                  class="w-full px-3 py-2 bg-surface border-theme rounded text-primary placeholder:text-secondary focus:outline-none focus:border-blue-500"
+                  placeholder="e.g. 11111"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold mb-2 text-secondary"
+                  >Gender (Optional)</label
                 >
-                  <option value="">Select Game</option>
-                  @for (genGroup of gameOptions(); track genGroup.gen) {
-                    <optgroup [label]="genGroup.label">
-                      @for (game of genGroup.games; track game.id) {
-                        <option [value]="game.id">{{ game.name }}</option>
-                      }
-                    </optgroup>
-                  }
-                </select>
+                <div
+                  class="flex bg-surface-raised rounded-xl overflow-hidden h-10 border border-theme shadow-inner relative"
+                >
+                  <div
+                    class="absolute top-0 bottom-0 w-1/2 transition-all duration-300 ease-in-out z-0"
+                    [ngClass]="{
+                      'translate-x-0': newTrainerGender === 'male',
+                      'translate-x-full': newTrainerGender === 'female',
+                      'opacity-0': newTrainerGender === '',
+                    }"
+                  ></div>
+
+                  <button
+                    (click)="setGender('male')"
+                    class="flex-1 flex items-center justify-center gap-2 transition-all duration-200 font-bold text-sm z-0 relative"
+                    [ngClass]="{ 'bg-[--color-male]': newTrainerGender === 'male' }"
+                  >
+                    <app-icon
+                      name="male"
+                      size="1.5em"
+                      class="transition-colors duration-200"
+                      [ngClass]="{
+                        'text-white': newTrainerGender === 'male',
+                        'text-[--color-male]': newTrainerGender !== 'male',
+                      }"
+                    ></app-icon>
+                    <span
+                      class="transition-colors duration-200"
+                      [ngClass]="{
+                        'text-white': newTrainerGender === 'male',
+                        'text-secondary': newTrainerGender !== 'male',
+                      }"
+                      >Male</span
+                    >
+                  </button>
+
+                  <button
+                    (click)="setGender('female')"
+                    class="flex-1 flex items-center justify-center gap-2 transition-all duration-200 font-bold text-sm z-0 relative"
+                    [ngClass]="{ 'bg-[--color-female]': newTrainerGender === 'female' }"
+                  >
+                    <app-icon
+                      name="female"
+                      size="1.5em"
+                      class="transition-colors duration-200"
+                      [ngClass]="{
+                        'text-white': newTrainerGender === 'female',
+                        'text-[--color-female]': newTrainerGender !== 'female',
+                      }"
+                    ></app-icon>
+                    <span
+                      class="transition-colors duration-200"
+                      [ngClass]="{
+                        'text-white': newTrainerGender === 'female',
+                        'text-secondary': newTrainerGender !== 'female',
+                      }"
+                      >Female</span
+                    >
+                  </button>
+                </div>
+              </div>
+
+              <div class="relative mt-2">
+                <app-custom-dropdown
+                  [label]="'Game'"
+                  [options]="dropdownGameOptions()"
+                  [selectedId]="newTrainerGame"
+                  (valueChanged)="newTrainerGame = $event"
+                  [placeholder]="'Select Game'"
+                />
               </div>
             </div>
 
@@ -93,9 +172,10 @@ import { ToastService } from '../../../core/services/toast.service';
         } @else {
           <button
             (click)="showForm.set(true)"
-            class="w-full mb-6 px-4 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 font-medium"
+            class="flex items-center justify-center gap-4 w-full mb-6 px-4 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 font-medium"
           >
-            + Add New Trainer Profile
+            <app-icon name="plus" size="1.25em"></app-icon>
+            Add New Trainer Profile
           </button>
         }
 
@@ -103,27 +183,30 @@ import { ToastService } from '../../../core/services/toast.service';
           <div class="space-y-3">
             <h3 class="font-semibold text-secondary">Saved Trainers:</h3>
 
-            @for (trainer of trainers(); track trainer.id) {
-              <div
-                class="flex items-center justify-between p-4 bg-secondary rounded-lg hover:bg-surface border border-theme"
-              >
-                <div>
-                  <div class="font-bold text-primary">{{ trainer.name }}</div>
-                  <div class="text-sm text-secondary">
-                    TID: {{ trainer.trainerId }}
-                    @if (trainer.game) {
-                      <span class="ml-2">• {{ trainer.game }}</span>
-                    }
-                  </div>
+            <div class="grid grid-cols-1 gap-4">
+              @for (trainer of trainers(); track trainer.id) {
+                <div class="relative group">
+                  <app-trainer-card
+                    [trainer]="trainer"
+                    (cardClick)="editTrainer(trainer)"
+                  ></app-trainer-card>
+                  <button
+                    (click)="deleteTrainer(trainer.id); $event.stopPropagation()"
+                    class="absolute top-2 right-2 bg-surface text-red-500 hover:text-white hover:bg-red-500 rounded-lg p-1.5 opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+                    title="Delete Trainer"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
                 </div>
-                <button
-                  (click)="deleteTrainer(trainer.id)"
-                  class="text-red-500 hover:text-red-700 px-3 py-1"
-                >
-                  Delete
-                </button>
-              </div>
-            }
+              }
+            </div>
           </div>
         } @else {
           <p class="text-secondary text-center py-8">No trainer profiles saved yet.</p>
@@ -148,6 +231,7 @@ import { ToastService } from '../../../core/services/toast.service';
 export class TrainerManagementDialogComponent {
   private firestoreService = inject(FirestoreService);
   private toastService = inject(ToastService);
+  private gameDataService = inject(GameDataService);
 
   closed = output<void>();
 
@@ -155,9 +239,12 @@ export class TrainerManagementDialogComponent {
   showForm = signal(false);
   saving = signal(false);
   trainerToDelete = signal<string | null>(null);
+  editingTrainerId = signal<string | null>(null);
 
   newTrainerName = '';
   newTrainerId = '';
+  newTrainerSecretId = '';
+  newTrainerGender = '';
   newTrainerGame = '';
   gameOptions = computed(() => {
     const games = GAME_DEFINITIONS;
@@ -183,6 +270,10 @@ export class TrainerManagementDialogComponent {
       }));
   });
 
+  dropdownGameOptions = computed(() =>
+    this.gameDataService.getOriginGameOptions(this.gameOptions()),
+  );
+
   constructor() {
     this.loadTrainers();
   }
@@ -197,22 +288,51 @@ export class TrainerManagementDialogComponent {
     this.saving.set(true);
 
     try {
-      await this.firestoreService.createTrainer({
-        name: this.newTrainerName,
-        trainerId: this.newTrainerId,
-        game: this.newTrainerGame || undefined,
-      });
+      if (this.editingTrainerId()) {
+        await this.firestoreService.updateTrainer(this.editingTrainerId()!, {
+          name: this.newTrainerName,
+          trainerId: this.newTrainerId,
+          secretId: this.newTrainerSecretId || undefined,
+          gender: this.newTrainerGender || undefined,
+          game: this.newTrainerGame || undefined,
+        });
+        this.toastService.success('Trainer updated successfully');
+      } else {
+        await this.firestoreService.createTrainer({
+          name: this.newTrainerName,
+          trainerId: this.newTrainerId,
+          secretId: this.newTrainerSecretId || undefined,
+          gender: this.newTrainerGender || undefined,
+          game: this.newTrainerGame,
+        });
+        this.toastService.success('Trainer saved successfully');
+      }
 
-      this.newTrainerName = '';
-      this.newTrainerId = '';
-      this.newTrainerGame = '';
-      this.showForm.set(false);
+      this.cancelForm();
       this.saving.set(false);
       this.loadTrainers();
-      this.toastService.success('Trainer saved successfully');
     } catch (err) {
       console.error('Failed to save trainer:', err);
       this.saving.set(false);
+      this.toastService.error('Failed to save trainer');
+    }
+  }
+
+  editTrainer(trainer: Trainer) {
+    this.editingTrainerId.set(trainer.id);
+    this.newTrainerName = trainer.name;
+    this.newTrainerId = trainer.trainerId;
+    this.newTrainerSecretId = trainer.secretId || '';
+    this.newTrainerGender = trainer.gender || '';
+    this.newTrainerGame = trainer.game || '';
+    this.showForm.set(true);
+  }
+
+  setGender(gender: string) {
+    if (this.newTrainerGender === gender) {
+      this.newTrainerGender = '';
+    } else {
+      this.newTrainerGender = gender;
     }
   }
 
@@ -240,8 +360,11 @@ export class TrainerManagementDialogComponent {
   }
 
   cancelForm() {
+    this.editingTrainerId.set(null);
     this.newTrainerName = '';
     this.newTrainerId = '';
+    this.newTrainerSecretId = '';
+    this.newTrainerGender = '';
     this.newTrainerGame = '';
     this.showForm.set(false);
   }

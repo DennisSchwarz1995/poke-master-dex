@@ -33,7 +33,7 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
               class="w-full px-4 py-2 bg-secondary border border-theme rounded-lg text-primary placeholder:text-tertiary focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow"
               (keyup.enter)="save()"
             />
-            <p class="text-xs text-tertiary mt-1 text-right">{{ newName.length }} / 16</p>
+            <p class="text-xs text-secondary mt-1 text-right">{{ newName.length }} / 16</p>
           </div>
 
           <div class="h-px bg-theme w-full"></div>
