@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
   >
     <div class="flex items-center gap-4">
       <img src="/favicon.ico" alt="Poke Master Dex" class="size-10 rounded-xl shrink-0" />
-      <span class="text-sm font-bold tracking-wider text-[var(--color-text-tertiary)] max-w-md"
+      <span class="text-sm font-bold tracking-wider text-[var(--color-text-secondary)] max-w-md"
         >Poke-Master-Dex is a fan site and is not affiliated with or endorsed by Pokémon, Nintendo,
         Game Freak, or The Pokémon Company.</span
       >

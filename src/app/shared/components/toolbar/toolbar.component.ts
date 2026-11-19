@@ -1,4 +1,13 @@
-import { Component, inject, output, input, signal, computed, ElementRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  output,
+  input,
+  signal,
+  computed,
+  ElementRef,
+  OnInit,
+} from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,6 +24,7 @@ import {
 import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
 import { CdnUrlPipe } from '../../pipes/cdnUrl.pipe';
 import { SafeHtmlPipe } from '../../pipes/safeHtml.pipe';
+import { IconComponent } from '../icon/icon.component';
 
 export type QuickEditMode =
   | 'None'
@@ -91,6 +101,7 @@ export interface QuickEditState {
     TooltipDirective,
     CdnUrlPipe,
     SafeHtmlPipe,
+    IconComponent,
   ],
   host: {
     '(document:click)': 'onDocumentClick($event)',
@@ -135,6 +146,8 @@ export interface QuickEditState {
                     [alt]="activeMode()?.label"
                     class="w-5 h-5 object-contain"
                   />
+                } @else if (activeMode()?.svgIcon) {
+                  <app-icon [name]="activeMode()!.svgIcon!" size="1.25rem"></app-icon>
                 } @else if (activeMode()?.svgString) {
                   <span
                     [innerHTML]="activeMode()?.svgString | safeHtml"
@@ -169,6 +182,8 @@ export interface QuickEditState {
                         [alt]="mode.label"
                         class="w-5 h-5 object-contain"
                       />
+                    } @else if (mode.svgIcon) {
+                      <app-icon [name]="mode.svgIcon" size="1.25rem"></app-icon>
                     } @else if (mode.svgString) {
                       <span
                         [innerHTML]="mode.svgString | safeHtml"
@@ -368,7 +383,7 @@ export interface QuickEditState {
     </div>
   `,
 })
-export class ToolbarComponent {
+export class ToolbarComponent implements OnInit {
   private readonly firestoreService = inject(FirestoreService);
   private readonly authService = inject(AuthService);
   private readonly datasetService = inject(DatasetService);
@@ -406,13 +421,13 @@ export class ToolbarComponent {
     label: string;
     icon?: string;
     cdnFolder?: string;
+    svgIcon?: string;
     svgString?: string;
   }[] = [
     {
       value: 'Edit',
       label: 'Edit',
-      icon: 'options-black.png',
-      cdnFolder: 'icons',
+      svgIcon: 'edit',
     },
     {
       value: 'Owned',
@@ -431,8 +446,7 @@ export class ToolbarComponent {
     {
       value: 'Shiny',
       label: 'Shiny',
-      icon: 'shiny.png',
-      cdnFolder: 'special_attributes',
+      svgIcon: 'shiny',
     },
     {
       value: 'Gmax',
@@ -449,7 +463,7 @@ export class ToolbarComponent {
     {
       value: 'Trainer',
       label: 'Set Trainer',
-      cdnFolder: 'icons',
+      svgIcon: 'set-trainer',
     },
   ];
 
@@ -533,6 +547,9 @@ export class ToolbarComponent {
     this.initAppearanceState();
     this.loadTrainers();
     this.loadPokeballs();
+  }
+
+  ngOnInit() {
     this.emitState();
   }
 

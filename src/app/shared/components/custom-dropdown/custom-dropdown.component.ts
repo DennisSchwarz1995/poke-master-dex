@@ -22,6 +22,7 @@ export interface CustomDropdownOption {
   active?: boolean;
   searchTerms?: string[];
   iconPath?: string;
+  iconHtml?: string;
   cdnFolder?: string;
 }
 
@@ -47,6 +48,11 @@ export interface CustomDropdownOption {
               loading="lazy"
             />
           </div>
+        } @else if (selectedOption()?.iconHtml) {
+          <div
+            class="absolute z-20 flex items-center pointer-events-none left-4"
+            [innerHTML]="selectedOption()!.iconHtml"
+          ></div>
         }
 
         <input
@@ -54,8 +60,8 @@ export interface CustomDropdownOption {
           [value]="selectedOption() ? selectedOption()!.name : ''"
           [placeholder]="placeholder()"
           readonly
-          class="w-full bg-surface border-2 rounded-xl pr-8 py-4 text-sm text-primary placeholder-tertiary outline-none transition-colors cursor-pointer"
-          [ngClass]="selectedOption()?.iconPath ? 'pl-12' : 'pl-4'"
+          class="w-full bg-surface border-2 rounded-xl pr-8 py-4 text-sm text-primary placeholder-tertiary outline-none transition-colors cursor-pointer hover:bg-[--color-surface-hover]"
+          [ngClass]="selectedOption()?.iconPath || selectedOption()?.iconHtml ? 'pl-16' : 'pl-4'"
           style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"
           [class.border-[var(--color-active)]]="isOpen()"
           [class.border-theme]="!isOpen()"
@@ -131,7 +137,7 @@ export interface CustomDropdownOption {
               @for (group of groupedOptions(); track group.label) {
                 @if (group.label) {
                   <div
-                    class="px-3 py-2 min-h-[40px] flex items-center text-sm font-bold text-secondary bg-secondary/10 border-b border-theme"
+                    class="px-3 py-2 min-h-[40px] flex items-center text-sm font-bold text-secondary bg-tertiary border-b border-theme"
                   >
                     {{ group.label }}
                   </div>
@@ -141,7 +147,7 @@ export interface CustomDropdownOption {
                     type="button"
                     (click)="selectOption(option)"
                     [disabled]="option.id === undefined"
-                    class="w-full text-left px-3 py-2.5 transition-colors border-b border-theme last:border-b-0"
+                    class="w-full text-left px-3 py-2.5 transition-colors border-b border-theme last:border-b-0 min-h-[64px]"
                     [ngClass]="{
                       'hover:bg-surface-hover cursor-pointer':
                         option.id !== undefined && option.id !== selectedId() && !option.active,
@@ -149,7 +155,10 @@ export interface CustomDropdownOption {
                       'opacity-50 cursor-not-allowed bg-surface-hover': option.id === undefined,
 
                       'bg-blue-500/10 text-blue-500 dark:text-blue-400 font-semibold':
-                        option.id !== undefined && (option.id === selectedId() || option.active || highlightedIds().includes(option.id)),
+                        option.id !== undefined &&
+                        (option.id === selectedId() ||
+                          option.active ||
+                          highlightedIds().includes(option.id)),
                     }"
                   >
                     <div class="flex items-center gap-3">
@@ -161,14 +170,16 @@ export interface CustomDropdownOption {
                           (error)="onImgError($event)"
                           loading="lazy"
                         />
+                      } @else if (option.iconHtml) {
+                        <div
+                          class="flex-shrink-0 flex items-center"
+                          [innerHTML]="option.iconHtml"
+                        ></div>
                       }
                       <div class="flex flex-col min-w-0 flex-1">
                         <span class="font-medium text-primary truncate">{{ option.name }}</span>
                         @if (option.descriptionHtml) {
-                          <div
-                            class="text-xs mt-0.5"
-                            [innerHTML]="option.descriptionHtml"
-                          ></div>
+                          <div class="text-xs mt-0.5" [innerHTML]="option.descriptionHtml"></div>
                         } @else if (option.description) {
                           <span class="text-xs text-secondary mt-0.5 truncate">{{
                             option.description
@@ -315,13 +326,13 @@ export class CustomDropdownComponent {
 
   selectOption(option: CustomDropdownOption) {
     if (option.id === undefined) return;
-    
+
     if (option.id === this.selectedId()) {
       this.valueChanged.emit('');
     } else {
       this.valueChanged.emit(option.id);
     }
-    
+
     this.isOpen.set(false);
     this.searchQuery.set('');
   }

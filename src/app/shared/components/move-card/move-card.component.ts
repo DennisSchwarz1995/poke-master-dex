@@ -69,7 +69,7 @@ export type MoveViewSlot = { index: number } & (
               <span class="text-[10px] text-secondary font-bold uppercase leading-none mb-1"
                 >Power</span
               >
-              <span class="text-xs font-bold text-primary">{{ move.power }}</span>
+              <span class="text-sm font-bold text-primary">{{ move.power }}</span>
             </div>
             <div
               class="flex flex-col items-center justify-center h-full w-1/4 px-1"
@@ -79,7 +79,7 @@ export type MoveViewSlot = { index: number } & (
               <span class="text-[10px] text-secondary font-bold uppercase leading-none mb-1"
                 >Acc</span
               >
-              <span class="text-xs font-bold text-primary">{{ move.accuracy }}</span>
+              <span class="text-sm font-bold text-primary">{{ move.accuracy }}</span>
             </div>
             <div
               class="flex flex-col items-center justify-center h-full w-1/4 px-1"
@@ -89,7 +89,7 @@ export type MoveViewSlot = { index: number } & (
               <span class="text-[10px] text-secondary font-bold uppercase leading-none mb-1"
                 >PP</span
               >
-              <span class="text-xs font-bold text-primary">{{ move.pp }}</span>
+              <span class="text-sm font-bold text-primary">{{ move.pp }}</span>
             </div>
           </div>
         } @else if (move.status === 'unconfigured') {

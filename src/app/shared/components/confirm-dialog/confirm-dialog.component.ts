@@ -38,7 +38,7 @@ import { CommonModule } from '@angular/common';
           <p class="whitespace-pre-line">{{ message() }}</p>
         </div>
 
-        <div class="p-4 border-t border-theme bg-secondary/10 flex justify-end gap-3">
+        <div class="p-4 border-t border-theme bg-tertiary flex justify-end gap-3">
           <button
             (click)="cancel()"
             class="px-4 py-2 rounded-lg font-medium text-secondary hover:bg-secondary/50 transition-colors"

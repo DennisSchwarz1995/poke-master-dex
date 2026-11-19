@@ -33,7 +33,7 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
       @if (value()) {
         <button
           (click)="clear()"
-          class="absolute right-4 top-1/2 -translate-y-1/2 text-tertiary hover:text-secondary transition-colors"
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-secondary hover:text-secondary transition-colors"
           [appTooltip]="'Clear Search'"
           tooltipPosition="top"
         >

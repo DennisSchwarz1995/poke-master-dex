@@ -8,12 +8,20 @@ import { PokemonLanguageService } from '../../../core/services/pokemon-language.
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 import { CdnUrlPipe } from '../../pipes/cdnUrl.pipe';
 import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
+import { FallbackImageDirective } from '../../directives/fallback-image/fallback-image.directive';
 
 @Component({
   selector: 'app-dataset-pokemon-card',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterLink, CapitalizePipe, CdnUrlPipe, TooltipDirective],
+  imports: [
+    CommonModule,
+    RouterLink,
+    CapitalizePipe,
+    CdnUrlPipe,
+    TooltipDirective,
+    FallbackImageDirective,
+  ],
   template: `
     <a
       [routerLink]="['/pokemon', pokemon().id]"
@@ -35,7 +43,7 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
           [alt]="pokemon().type1 | capitalize"
           [appTooltip]="pokemon().type1 | capitalize"
           class="h-4 drop-shadow-md rounded-full bg-surface"
-          (error)="onImageError($event)"
+          appFallback
           draggable="false"
           [appTooltip]="pokemon().type1 | capitalize"
         />
@@ -45,7 +53,7 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
             [alt]="pokemon().type2 | capitalize"
             [appTooltip]="pokemon().type2 | capitalize"
             class="h-4 drop-shadow-md rounded-full bg-surface"
-            (error)="onImageError($event)"
+            appFallback
             draggable="false"
           />
         }
@@ -57,7 +65,7 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
         [title]="getPrimaryName()"
         class="w-20 h-20 sm:w-24 sm:h-24 object-contain transition-transform duration-300 group-hover:scale-110 drop-shadow-lg z-10 mt-1"
         loading="lazy"
-        (error)="onImageError($event)"
+        appFallback
         draggable="false"
       />
 
@@ -124,10 +132,5 @@ export class DatasetPokemonCardComponent {
       'background-clip': 'padding-box, border-box',
       'border-color': 'transparent',
     };
-  }
-
-  onImageError(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.style.display = 'none';
   }
 }

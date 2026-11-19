@@ -13,7 +13,7 @@ import { Component, input } from '@angular/core';
         }
         <ng-content select="[slot=label]"></ng-content>
       </div>
-      <div class="flex justify-end font-bold text-[16px] text-primary w-1/2">
+      <div class="flex justify-end font-bold text-[16px] text-primary w-1/2 gap-2">
         <ng-content></ng-content>
       </div>
     </div>
