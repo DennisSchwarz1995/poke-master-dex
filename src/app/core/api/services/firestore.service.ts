@@ -84,7 +84,10 @@ export class FirestoreService {
     return collectionData(dexCollection, { idField: 'id' }) as Observable<Dex[]>;
   }
 
-  async createDex(dex: Omit<Dex, 'id' | 'userId' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async createDex(
+    dex: Omit<Dex, 'id' | 'userId' | 'createdAt' | 'updatedAt'>,
+    silent: boolean = false,
+  ): Promise<string> {
     const userId = this.requireUserId();
     const dexCollection = collection(this.firestore, `users/${userId}/dexes`);
     const newDex = {
@@ -95,7 +98,9 @@ export class FirestoreService {
     };
 
     const docRef = await addDoc(dexCollection, newDex);
-    this.toastService.success(`Dex ${dex.name} created successfully`);
+    if (!silent) {
+      this.toastService.success(`Dex ${dex.name} created successfully`);
+    }
     return docRef.id;
   }
 
@@ -105,6 +110,7 @@ export class FirestoreService {
     startBox: number,
     pokemonList: Array<{ slug: string; position: number; isShiny?: boolean } | null>,
     boxNames?: string[],
+    slotOverrides?: Record<string, Partial<BoxSlot>>,
   ): Promise<void> {
     const batch = writeBatch(this.firestore);
 
@@ -117,12 +123,22 @@ export class FirestoreService {
         const globalIndex = offset * POKEMON_PER_BOX + i;
         const pokemon = globalIndex < pokemonList.length ? pokemonList[globalIndex] : null;
 
-        return {
+        const baseSlot: BoxSlot = {
           position: slotIndex,
           pokemonSlug: pokemon?.slug || null,
           isShiny: pokemon?.isShiny || false,
           isOwned: false,
         };
+
+        const override = pokemon?.slug ? slotOverrides?.[pokemon.slug] : undefined;
+        return override
+          ? this.cleanUndefinedProperties({
+              ...baseSlot,
+              ...override,
+              position: slotIndex,
+              pokemonSlug: pokemon!.slug,
+            })
+          : baseSlot;
       });
 
       batch.set(boxRef, {
@@ -279,7 +295,7 @@ export class FirestoreService {
     return docData(dexDoc, { idField: 'id' }) as Observable<Dex>;
   }
 
-  async deleteDex(dexId: string): Promise<void> {
+  async deleteDex(dexId: string, silent: boolean = false): Promise<void> {
     const userId = this.requireUserId();
     const batch = writeBatch(this.firestore);
 
@@ -290,7 +306,9 @@ export class FirestoreService {
 
     const dexRef = doc(this.firestore, `users/${userId}/dexes/${dexId}`);
     batch.delete(dexRef);
-    this.toastService.success(`Dex ${dexId} deleted successfully`);
+    if (!silent) {
+      this.toastService.success(`Dex ${dexId} deleted successfully`);
+    }
     return batch.commit();
   }
 

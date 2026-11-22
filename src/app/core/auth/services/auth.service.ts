@@ -5,7 +5,9 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
   signInWithPopup,
+  signInAnonymously,
   signOut,
+  deleteUser,
   sendSignInLinkToEmail,
   isSignInWithEmailLink,
   signInWithEmailLink,
@@ -24,6 +26,7 @@ export class AuthService {
   private auth = inject(Auth);
 
   user = signal<User | null>(null);
+  isDemoUser = signal<boolean>(false);
   isAuthenticated = computed(() => !!this.user());
   needsDisplayName = computed(() => {
     const u = this.user();
@@ -33,6 +36,7 @@ export class AuthService {
   constructor() {
     authState(this.auth).subscribe((user) => {
       this.user.set(user);
+      this.isDemoUser.set(!!user?.isAnonymous);
     });
   }
 
@@ -47,6 +51,22 @@ export class AuthService {
   async signInWithGitHub(): Promise<UserCredential> {
     const provider = new GithubAuthProvider();
     return signInWithPopup(this.auth, provider);
+  }
+
+  async signInAsDemo(): Promise<UserCredential> {
+    const result = await signInAnonymously(this.auth);
+    await updateProfile(result.user, { displayName: 'Demo Trainer' });
+    this.isDemoUser.set(true);
+    this.user.set({
+      ...result.user,
+      uid: result.user.uid,
+      displayName: 'Demo Trainer',
+      email: result.user.email,
+      photoURL: result.user.photoURL,
+      emailVerified: result.user.emailVerified,
+      isAnonymous: true,
+    } as User);
+    return result;
   }
 
   async sendSignInLink(email: string): Promise<void> {
@@ -83,6 +103,20 @@ export class AuthService {
 
   async signOut(): Promise<void> {
     return signOut(this.auth);
+  }
+
+  async signOutAndCleanup(): Promise<void> {
+    const currentUser = this.auth.currentUser;
+    if (currentUser?.isAnonymous) {
+      try {
+        await deleteUser(currentUser);
+      } catch {
+        await signOut(this.auth);
+      }
+    } else {
+      await signOut(this.auth);
+    }
+    this.isDemoUser.set(false);
   }
 
   getAuthState(): Observable<User | null> {

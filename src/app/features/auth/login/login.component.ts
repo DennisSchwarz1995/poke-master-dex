@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { DemoSeedService } from '../../../core/services/demo-seed.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 type LoginStep = 'providers' | 'email-input' | 'email-sent';
 
@@ -51,7 +53,7 @@ type LoginStep = 'providers' | 'email-input' | 'email-sent';
             <div
               class="animate-spin rounded-full h-12 w-12 border-[3px] border-[var(--color-border)] border-t-[var(--color-active)] mx-auto"
             ></div>
-            <p class="mt-4 text-secondary text-sm font-medium">Signing in...</p>
+            <p class="mt-4 text-secondary text-sm font-medium">{{ loadingMessage() }}</p>
           </div>
         } @else {
           @if (error()) {
@@ -133,6 +135,36 @@ type LoginStep = 'providers' | 'email-input' | 'email-sent';
                   </svg>
                   <span class="text-sm">Continue with Email</span>
                 </button>
+
+                <div class="flex items-center gap-3 my-1">
+                  <div class="flex-1 h-px bg-[var(--color-border)]"></div>
+                  <span class="text-xs text-secondary font-medium uppercase tracking-wider"
+                    >demo</span
+                  >
+                  <div class="flex-1 h-px bg-[var(--color-border)]"></div>
+                </div>
+
+                <button
+                  type="button"
+                  (click)="signInAsDemo()"
+                  class="w-full flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-xl font-semibold text-sm transition-all bg-[var(--color-primary)] text-[var(--color-text-tertiary)] hover:opacity-90 shadow-sm"
+                >
+                  <svg
+                    class="w-5 h-5 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polygon points="6 3 20 12 6 21 6 3" />
+                  </svg>
+                  <span>Try Live Demo (No Sign-Up)</span>
+                </button>
+                <p class="text-center text-xs text-secondary -mt-1">
+                  Explore with pre-filled sample Pokédex data — no account required
+                </p>
               </div>
 
               <p class="mt-6 text-center text-xs text-secondary">
@@ -234,13 +266,42 @@ type LoginStep = 'providers' | 'email-input' | 'email-sent';
 })
 export class LoginComponent {
   private authService = inject(AuthService);
+  private demoSeedService = inject(DemoSeedService);
+  private toastService = inject(ToastService);
   private router = inject(Router);
 
   loading = signal(false);
+  loadingMessage = signal('Signing in...');
   error = signal<string | null>(null);
   step = signal<LoginStep>('providers');
   emailInput = '';
   sentToEmail = signal('');
+
+  async signInAsDemo() {
+    this.loadingMessage.set('Setting up your live demo...');
+    this.loading.set(true);
+    this.error.set(null);
+
+    try {
+      const result = await this.authService.signInAsDemo();
+      await this.demoSeedService.seedDemoAccount(result.user.uid);
+      this.toastService.success('Welcome to the Live Demo! Explore with pre-filled sample data.');
+      await this.router.navigate(['/pokedex']);
+    } catch (err: any) {
+      console.error('Demo login error:', err);
+      if (
+        err.code === 'auth/operation-not-allowed' ||
+        err.code === 'auth/admin-restricted-operation'
+      ) {
+        this.error.set('Anonymous demo sign-in is currently not enabled.');
+      } else {
+        this.error.set('Failed to start live demo. Please try again.');
+      }
+    } finally {
+      this.loading.set(false);
+      this.loadingMessage.set('Signing in...');
+    }
+  }
 
   async signInWithGoogle() {
     this.loading.set(true);
