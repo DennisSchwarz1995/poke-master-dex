@@ -68,7 +68,7 @@ import { IconComponent } from '../icon/icon.component';
               @if (user()) {
                 <a routerLink="/profile" routerLinkActive="active">
                   <app-icon name="profile"></app-icon>
-                  Profile</a
+                  {{ isDemoUser() ? 'Demo' : 'Profile' }}</a
                 >
               } @else {
                 <a routerLink="/login" routerLinkActive="active">
@@ -277,6 +277,7 @@ export class HeaderComponent {
   private router = inject(Router);
 
   user = this.authService.user;
+  isDemoUser = this.authService.isDemoUser;
   currentDex = this.dexStateService.currentDex;
 
   private currentUrl = toSignal(

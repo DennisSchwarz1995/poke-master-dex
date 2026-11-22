@@ -2,6 +2,8 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FirestoreService } from '../../core/api/services/firestore.service';
+import { AuthService } from '../../core/auth/services/auth.service';
+import { DemoSeedService } from '../../core/services/demo-seed.service';
 import { CreateDexDialogComponent } from './create-dex-dialog/create-dex-dialog.component';
 import { DexCardComponent } from './dex-card/dex-card.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -26,6 +28,33 @@ import { ThemeService } from '../../core/services/theme.service';
           <h2 class="text-3xl font-bold text-primary mb-2">Your Dex Collection</h2>
           <p class="text-secondary">Manage your Pokemon collections</p>
         </div>
+
+        @if (isDemoUser()) {
+          <div
+            class="mb-6 bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+          >
+            <div class="flex items-start gap-3">
+              <span
+                class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-500/15 text-blue-500 border border-blue-500/25 shrink-0 mt-0.5"
+              >
+                Live Demo
+              </span>
+              <p class="text-sm text-primary">
+                You are exploring an isolated demo session with pre-filled sample data. Feel free
+                to edit Pokémon, test Quick-Edit tools, or create boxes — everything is cleared on
+                exit.
+              </p>
+            </div>
+            <button
+              type="button"
+              (click)="exitDemo()"
+              [disabled]="exitingDemo()"
+              class="shrink-0 px-4 py-2 rounded-lg text-sm font-semibold border border-theme bg-surface hover:bg-surface-hover text-primary transition-colors disabled:opacity-50"
+            >
+              {{ exitingDemo() ? 'Exiting...' : 'Exit Demo' }}
+            </button>
+          </div>
+        }
 
         @if (loading()) {
           <div class="text-center py-12">
@@ -90,9 +119,13 @@ import { ThemeService } from '../../core/services/theme.service';
 })
 export class DexListComponent implements OnInit {
   private firestoreService = inject(FirestoreService);
+  private authService = inject(AuthService);
+  private demoSeedService = inject(DemoSeedService);
   private router = inject(Router);
   themeService = inject(ThemeService);
 
+  isDemoUser = this.authService.isDemoUser;
+  exitingDemo = signal(false);
   dexList = signal<Dex[]>([]);
   loading = signal(true);
   showCreateDialog = signal(false);
@@ -186,5 +219,17 @@ export class DexListComponent implements OnInit {
 
   openDex(dex: Dex) {
     this.router.navigate(['/dex', dex.id, 'box', 1]);
+  }
+
+  async exitDemo() {
+    if (this.exitingDemo()) return;
+    this.exitingDemo.set(true);
+    try {
+      await this.demoSeedService.cleanupDemoAccount();
+      await this.authService.signOutAndCleanup();
+      await this.router.navigate(['/home']);
+    } finally {
+      this.exitingDemo.set(false);
+    }
   }
 }

@@ -3,6 +3,7 @@ import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { DemoSeedService } from '../../../core/services/demo-seed.service';
 import {
   PokemonLanguageService,
   POKEMON_LANGUAGES,
@@ -54,12 +55,29 @@ import {
             }
 
             <div class="flex flex-col gap-2 items-start">
-              <h3 class="text-3xl font-bold text-primary">{{ currentUser.displayName }}</h3>
-              <p class="text-secondary mt-1">{{ currentUser.email }}</p>
-              @if (currentUser.emailVerified) {
-                <span class="self-start bg-surface-raised text-xs py-1 px-2 rounded-full">
-                  E-Mail Verified
-                </span>
+              <div class="flex items-center gap-3 flex-wrap">
+                <h3 class="text-3xl font-bold text-primary">
+                  {{ currentUser.displayName || (isDemoUser() ? 'Demo Trainer' : '') }}
+                </h3>
+                @if (isDemoUser()) {
+                  <span
+                    class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20"
+                  >
+                    Demo Session
+                  </span>
+                }
+              </div>
+              @if (isDemoUser()) {
+                <p class="text-secondary text-sm mt-1">
+                  Temporary guest session, demo data is cleared on sign out
+                </p>
+              } @else {
+                <p class="text-secondary mt-1">{{ currentUser.email }}</p>
+                @if (currentUser.emailVerified) {
+                  <span class="self-start bg-surface-raised text-xs py-1 px-2 rounded-full">
+                    E-Mail Verified
+                  </span>
+                }
               }
             </div>
           </div>
@@ -212,6 +230,7 @@ import {
 })
 export class ProfileComponent {
   private authService = inject(AuthService);
+  private demoSeedService = inject(DemoSeedService);
   private router = inject(Router);
   public themeService = inject(ThemeService);
   pokemonLangService = inject(PokemonLanguageService);
@@ -224,6 +243,7 @@ export class ProfileComponent {
   }));
 
   user = this.authService.user;
+  isDemoUser = this.authService.isDemoUser;
   promptDisabled = localStorage.getItem('disableAutoTrainerPrompt') === 'true';
   showTrainerDialog = signal(false);
 
@@ -295,7 +315,10 @@ export class ProfileComponent {
   }
 
   async signOut() {
-    await this.authService.signOut();
+    if (this.isDemoUser()) {
+      await this.demoSeedService.cleanupDemoAccount();
+    }
+    await this.authService.signOutAndCleanup();
     await this.router.navigate(['/home']);
   }
 
