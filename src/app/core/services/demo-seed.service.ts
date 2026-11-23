@@ -394,15 +394,7 @@ export class DemoSeedService {
 
   async cleanupDemoAccount(): Promise<void> {
     try {
-      const [dexes, trainers] = await Promise.all([
-        firstValueFrom(this.firestoreService.getUserDexList()),
-        firstValueFrom(this.firestoreService.getUserTrainers()),
-      ]);
-
-      await Promise.allSettled([
-        ...dexes.map((dex) => this.firestoreService.deleteDex(dex.id, true)),
-        ...trainers.map((trainer) => this.firestoreService.deleteTrainer(trainer.id)),
-      ]);
+      await this.firestoreService.deleteAllUserData();
     } catch (err) {
       console.error('Failed to clean up demo account data:', err);
     }
