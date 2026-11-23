@@ -1,6 +1,7 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { FirestoreService } from '../../core/api/services/firestore.service';
 import { AuthService } from '../../core/auth/services/auth.service';
 import { DemoSeedService } from '../../core/services/demo-seed.service';
@@ -117,13 +118,14 @@ import { ThemeService } from '../../core/services/theme.service';
   `,
   styles: [],
 })
-export class DexListComponent implements OnInit {
+export class DexListComponent implements OnInit, OnDestroy {
   private firestoreService = inject(FirestoreService);
   private authService = inject(AuthService);
   private demoSeedService = inject(DemoSeedService);
   private router = inject(Router);
   themeService = inject(ThemeService);
 
+  private dexListSub?: Subscription;
   isDemoUser = this.authService.isDemoUser;
   exitingDemo = signal(false);
   dexList = signal<Dex[]>([]);
@@ -137,8 +139,13 @@ export class DexListComponent implements OnInit {
     this.loadDexList();
   }
 
+  ngOnDestroy() {
+    this.dexListSub?.unsubscribe();
+  }
+
   loadDexList() {
-    this.firestoreService.getUserDexList().subscribe({
+    this.dexListSub?.unsubscribe();
+    this.dexListSub = this.firestoreService.getUserDexList().subscribe({
       next: (dexes) => {
         this.dexList.set(dexes);
         this.loading.set(false);
@@ -225,6 +232,7 @@ export class DexListComponent implements OnInit {
     if (this.exitingDemo()) return;
     this.exitingDemo.set(true);
     try {
+      this.authService.prepareSignOut();
       await this.demoSeedService.cleanupDemoAccount();
       await this.authService.signOutAndCleanup();
       await this.router.navigate(['/home']);
