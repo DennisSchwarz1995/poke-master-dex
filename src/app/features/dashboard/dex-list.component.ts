@@ -35,15 +35,9 @@ import { ThemeService } from '../../core/services/theme.service';
             class="mb-6 bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
           >
             <div class="flex items-start gap-3">
-              <span
-                class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-500/15 text-blue-500 border border-blue-500/25 shrink-0 mt-0.5"
-              >
-                Live Demo
-              </span>
               <p class="text-sm text-primary">
-                You are exploring an isolated demo session with pre-filled sample data. Feel free
-                to edit Pokémon, test Quick-Edit tools, or create boxes — everything is cleared on
-                exit.
+                You are exploring an isolated demo session with pre-filled sample data. Feel free to
+                edit Pokémon, test Quick-Edit tools, or create boxes. Everything is cleared on exit.
               </p>
             </div>
             <button
