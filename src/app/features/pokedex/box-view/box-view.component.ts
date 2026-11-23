@@ -20,7 +20,6 @@ import {
   ToolbarComponent,
 } from '../../../shared/components/toolbar/toolbar.component';
 import { PokemonLanguageService } from '../../../core/services/pokemon-language.service';
-import { RouterLink } from '@angular/router';
 import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
 import { ToolbarService } from '../../../core/services/toolbar.service';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
@@ -109,19 +108,11 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
                 </div>
                 <button
                   (click)="showOptionsDialog.set(true)"
-                  class="text-tertiary hover:text-blue-500 px-2 flex items-center justify-center transition-colors"
-                  title="Box Options"
+                  class="p-1 hover:bg-surface-hover rounded transition-colors flex justify-center text-gray-400 hover:text-white"
+                  appTooltip="Box Options"
+                  tooltipPosition="top"
                 >
-                  <img
-                    [src]="
-                      (themeService.currentTheme() === 'dark'
-                        ? 'options-white.png'
-                        : 'options-black.png'
-                      ) | cdnUrl: 'icons'
-                    "
-                    class="w-5 h-5 opacity-70 hover:opacity-100"
-                    alt="Options"
-                  />
+                  <app-icon name="edit-dots" size="1.5em" alt="Options"></app-icon>
                 </button>
               </div>
             </div>
