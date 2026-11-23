@@ -15,7 +15,7 @@ import {
   User,
   UserCredential,
 } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 const EMAIL_LINK_KEY = 'emailForSignIn';
 
@@ -24,6 +24,8 @@ const EMAIL_LINK_KEY = 'emailForSignIn';
 })
 export class AuthService {
   private auth = inject(Auth);
+  private beforeSignOutSubject = new Subject<void>();
+  readonly beforeSignOut$ = this.beforeSignOutSubject.asObservable();
 
   user = signal<User | null>(null);
   isDemoUser = signal<boolean>(false);
@@ -101,11 +103,17 @@ export class AuthService {
     }
   }
 
+  prepareSignOut(): void {
+    this.beforeSignOutSubject.next();
+  }
+
   async signOut(): Promise<void> {
+    this.prepareSignOut();
     return signOut(this.auth);
   }
 
   async signOutAndCleanup(): Promise<void> {
+    this.prepareSignOut();
     const currentUser = this.auth.currentUser;
     if (currentUser?.isAnonymous) {
       try {
