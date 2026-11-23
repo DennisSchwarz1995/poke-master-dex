@@ -11,35 +11,33 @@ import { IconComponent } from '../icon/icon.component';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    RouterLink,
-    RouterLinkActive,
-    CommonModule,
-    TooltipDirective,
-    IconComponent,
-  ],
+  imports: [RouterLink, RouterLinkActive, CommonModule, TooltipDirective, IconComponent],
   template: `
     <header
-      class="top-0 z-50 w-full backdrop-blur-md bg-secondary shadow-sm supports-[backdrop-filter]:bg-surface/60"
+      class="w-full backdrop-blur-md bg-secondary shadow-sm supports-[backdrop-filter]:bg-surface/60"
       [class.border-b]="!getDexIdFromUrl()"
       [class.border-theme]="!getDexIdFromUrl()"
     >
-      <div class="container mx-auto px-4 h-16 flex items-center justify-between relative">
-        <div class="flex items-center gap-6">
+      <div
+        class="container mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2 sm:gap-4"
+      >
+        <div class="flex-1 min-w-fit flex items-center gap-6">
           <a
             routerLink="/"
-            class="flex items-center gap-2"
+            class="flex items-center gap-2 shrink-0"
             [appTooltip]="'Home'"
             tooltipPosition="right"
           >
-            <img src="/favicon.ico" alt="Poke Master Dex" class="size-10 rounded-xl" />
+            <img
+              src="/favicon.ico"
+              alt="Poke Master Dex"
+              class="size-9 sm:size-10 rounded-xl shrink-0"
+            />
           </a>
         </div>
 
-        <div
-          class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block z-20"
-        >
-          <div class="nav-wrap scale-[0.70] lg:scale-90 origin-center">
+        <div class="flex justify-center shrink-0">
+          <div class="nav-wrap">
             <div class="bubble active"></div>
             <div class="bubble hover"></div>
             <nav class="nav">
@@ -47,43 +45,47 @@ import { IconComponent } from '../icon/icon.component';
                 routerLink="/home"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
+                aria-label="Home"
               >
                 <app-icon name="home"></app-icon>
-                Home</a
+                <span class="hidden md:inline">Home</span></a
               >
 
-              <a routerLink="/pokemon" routerLinkActive="active">
+              <a routerLink="/pokemon" routerLinkActive="active" aria-label="Pokémon">
                 <app-icon name="pokemon"></app-icon>
-                Pokémon</a
+                <span class="hidden md:inline">Pokémon</span></a
               >
 
-              <a routerLink="/games" routerLinkActive="active">
+              <a routerLink="/games" routerLinkActive="active" aria-label="Games">
                 <app-icon name="gamepad"></app-icon>
-                Games</a
+                <span class="hidden md:inline">Games</span></a
               >
-              <a routerLink="/pokedex" [class.active]="isPokedexRoute()"
-                ><app-icon name="pokedex"></app-icon> Pokédex</a
-              >
+              <a routerLink="/pokedex" [class.active]="isPokedexRoute()" aria-label="Pokédex"
+                ><app-icon name="pokedex"></app-icon>
+                <span class="hidden md:inline">Pokédex</span>
+              </a>
 
               @if (user()) {
-                <a routerLink="/profile" routerLinkActive="active">
+                <a routerLink="/profile" routerLinkActive="active" aria-label="Profile">
                   <app-icon name="profile"></app-icon>
-                  {{ isDemoUser() ? 'Demo' : 'Profile' }}</a
-                >
+                  <span class="hidden md:inline">Profile</span>
+                </a>
               } @else {
-                <a routerLink="/login" routerLinkActive="active">
+                <a routerLink="/login" routerLinkActive="active" aria-label="Sign In">
                   <app-icon name="sign-in"></app-icon>
-                  Sign In</a
-                >
+                  <span class="hidden md:inline">Sign In</span>
+                </a>
               }
             </nav>
           </div>
         </div>
+
+        <div class="flex-1 hidden sm:flex justify-end"></div>
       </div>
     </header>
 
     @if (getDexIdFromUrl(); as currentId) {
-      <nav class="sub-nav-bar border-b border-theme bg-secondary top-16 z-40">
+      <nav class="sub-nav-bar border-b border-theme bg-secondary">
         <div class="container mx-auto px-4">
           <div class="flex items-center gap-6">
             <a
@@ -114,10 +116,17 @@ import { IconComponent } from '../icon/icon.component';
         </div>
       </nav>
     }
-
   `,
   styles: [
     `
+      :host {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: block;
+        width: 100%;
+      }
+
       .nav-wrap {
         border: 1px solid var(--color-border);
         width: fit-content;
@@ -150,12 +159,43 @@ import { IconComponent } from '../icon/icon.component';
         position: relative;
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px 24px;
+        gap: 0;
+        padding: 8px 10px;
+        font-size: 0.875rem;
+        white-space: nowrap;
         color: var(--color-text-secondary);
         text-decoration: none;
         font-weight: bold;
         transition: color 0.2s;
+      }
+
+      @media (min-width: 640px) {
+        .nav a {
+          padding: 8px 14px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .nav a {
+          gap: 6px;
+          padding: 6px 12px;
+          font-size: 0.875rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .nav a {
+          gap: 8px;
+          padding: 8px 20px;
+          font-size: 0.95rem;
+        }
+      }
+
+      @media (min-width: 1280px) {
+        .nav a {
+          padding: 8px 24px;
+          font-size: 1rem;
+        }
       }
 
       :host-context([data-theme='dark']) .nav a {
