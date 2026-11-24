@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../core/services/theme.service';
 import { Dex, DexType } from '../../../shared/models/dex.model';
 import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
+import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-dex-card',
   standalone: true,
-  imports: [CommonModule, CdnUrlPipe],
+  imports: [CommonModule, CdnUrlPipe, TooltipDirective, IconComponent],
   template: `
     @if (dex(); as currentDex) {
       <div
@@ -15,48 +17,35 @@ import { CdnUrlPipe } from '../../../shared/pipes/cdnUrl.pipe';
       >
         <div (click)="onClick()" class="cursor-pointer flex-1 flex flex-col">
           <div class="flex items-start justify-between mb-4">
-            <div>
-              <span class="text-3xl">{{ dexIcon() }}</span>
-            </div>
-
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 w-full justify-end">
               <span class="text-xs text-secondary font-mono">
                 {{ currentDex.totalBoxes }} boxes
               </span>
               <button
                 (click)="onOptions($event)"
-                class="p-1 hover:bg-black/10 dark:hover:bg-white/10 rounded transition-colors"
-                title="Dex Options"
+                class="p-1 hover:bg-surface-hover rounded transition-colors flex justify-center text-gray-400 hover:text-white"
+                appTooltip="Dex Options"
+                tooltipPosition="top"
               >
-                <img
-                  [src]="
-                    (themeService.currentTheme() === 'dark'
-                      ? 'options-white.png'
-                      : 'options-black.png'
-                    ) | cdnUrl: 'icons'
-                  "
-                  class="w-5 h-5 opacity-70 hover:opacity-100"
-                  alt="Options"
-                />
+                <app-icon name="edit-dots" size="1.5em" alt="Options"></app-icon>
               </button>
             </div>
           </div>
 
-          <h3 class="text-xl font-bold text-primary mb-2">
+          <h3 class="text-xl font-bold text-primary mb-4">
             {{ currentDex.name }}
           </h3>
-          <p class="text-secondary text-sm flex-1">
+          <p class="text-secondary text-sm flex-1 mb-4">
             {{ currentDex.description }}
           </p>
 
-          <div class="mb-4">
-            <span class="text-xs text-secondary font-medium">Type: </span>
-            <span class="text-sm font-semibold text-primary pl-1">{{ dexTypeName() }}</span>
-          </div>
-
           <div class="flex items-center justify-between text-sm">
             <span class="text-secondary"> Start: Box {{ currentDex.startBox }} </span>
-            <span class="px-3 py-1 rounded-full text-xs font-medium bg-surface-raised text-primary">
+            <span
+              class="px-3 py-1 rounded text-xs font-medium bg-surface-raised text-primary"
+              [appTooltip]="dexTypeName() + '-Dex'"
+              tooltipPosition="top"
+            >
               {{ dexTypeName() }}
             </span>
           </div>
@@ -81,20 +70,6 @@ export class DexCardComponent {
     event.stopPropagation();
     this.optionsClicked.emit(this.dex());
   }
-
-  dexIcon = computed(() => {
-    const type = this.dex().type;
-    const icons: Record<DexType, string> = {
-      [DexType.STANDARD]: '📋',
-      [DexType.LIVING]: '🌱',
-      [DexType.SHINY_LIVING]: '✨',
-      [DexType.COMBINED_SHINY_LIVING]: '1',
-      [DexType.FORM]: '🔄',
-      [DexType.ORIGIN]: '🏆',
-      [DexType.ORIGIN_FORM]: '🌍',
-    };
-    return icons[type] || '📋';
-  });
 
   dexTypeName = computed(() => {
     const type = this.dex().type;
