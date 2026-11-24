@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,7 +14,7 @@ import {
   AutoFillOption,
 } from '../box-options-dialog/box-options-dialog.component';
 import { Box, BoxSlot, Dex } from '../../../shared/models/dex.model';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import {
   QuickEditState,
   ToolbarComponent,
@@ -193,7 +193,7 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
   `,
   styles: [],
 })
-export class BoxViewComponent implements OnInit {
+export class BoxViewComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private firestoreService = inject(FirestoreService);
@@ -202,6 +202,9 @@ export class BoxViewComponent implements OnInit {
   toolbarService = inject(ToolbarService);
   themeService = inject(ThemeService);
   private pokemonLangService = inject(PokemonLanguageService);
+
+  private dexSub?: Subscription;
+  private boxSub?: Subscription;
 
   dexId = signal('');
   currentBox = signal(1);
@@ -248,8 +251,14 @@ export class BoxViewComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.dexSub?.unsubscribe();
+    this.boxSub?.unsubscribe();
+  }
+
   loadDexInfo(dexId: string) {
-    this.firestoreService.getDex(dexId).subscribe((dexData: Dex) => {
+    this.dexSub?.unsubscribe();
+    this.dexSub = this.firestoreService.getDex(dexId).subscribe((dexData: Dex) => {
       if (!dexData) return;
       this.dex.set(dexData);
       this.dexStateService.setCurrentDex(dexData);
@@ -259,7 +268,8 @@ export class BoxViewComponent implements OnInit {
 
   loadBox(dexId: string, boxNum: number) {
     this.loading.set(true);
-    this.firestoreService.getBox(dexId, boxNum).subscribe({
+    this.boxSub?.unsubscribe();
+    this.boxSub = this.firestoreService.getBox(dexId, boxNum).subscribe({
       next: (boxData) => {
         if (!boxData) {
           this.loading.set(false);

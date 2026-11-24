@@ -1,6 +1,7 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { FirestoreService } from '../../../core/api/services/firestore.service';
 import { DexStateService } from '../../../core/services/dex-state.service';
 import { Dex, Box } from '../../../shared/models/dex.model';
@@ -67,11 +68,14 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
   `,
   styles: [],
 })
-export class DexOverviewComponent implements OnInit {
+export class DexOverviewComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private firestoreService = inject(FirestoreService);
   private dexStateService = inject(DexStateService);
+
+  private dexSub?: Subscription;
+  private boxesSub?: Subscription;
 
   dexId = signal<string>('');
   dex = signal<Dex | undefined>(undefined);
@@ -90,13 +94,21 @@ export class DexOverviewComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.dexSub?.unsubscribe();
+    this.boxesSub?.unsubscribe();
+  }
+
   loadDexData(id: string) {
     this.loading.set(true);
-    this.firestoreService.getDex(id).subscribe((dex) => {
+    this.dexSub?.unsubscribe();
+    this.boxesSub?.unsubscribe();
+
+    this.dexSub = this.firestoreService.getDex(id).subscribe((dex) => {
       this.dex.set(dex);
       this.dexStateService.setCurrentDex(dex);
     });
-    this.firestoreService.getDexBoxes(id).subscribe({
+    this.boxesSub = this.firestoreService.getDexBoxes(id).subscribe({
       next: (boxes) => {
         const sorted = boxes.sort((a, b) => a.boxNumber - b.boxNumber);
         this.boxes.set(boxes);

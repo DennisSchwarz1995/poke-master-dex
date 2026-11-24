@@ -212,10 +212,18 @@ import {
             </button>
             <button
               (click)="signOut()"
-              class="flex flex-row items-center gap-1 bg-red-500 text-white px-4 py-2.5 rounded-lg hover:bg-red-600 transition font-semibold"
+              [disabled]="signingOut()"
+              class="flex flex-row items-center gap-2 bg-red-500 text-white px-4 py-2.5 rounded-lg hover:bg-red-600 transition font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <app-icon name="sign-out"></app-icon>
-              Sign Out
+              @if (signingOut()) {
+                <span
+                  class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+                ></span>
+                Signing out...
+              } @else {
+                <app-icon name="sign-out"></app-icon>
+                Sign Out
+              }
             </button>
           </div>
         </div>
@@ -244,6 +252,7 @@ export class ProfileComponent {
 
   user = this.authService.user;
   isDemoUser = this.authService.isDemoUser;
+  signingOut = signal(false);
   promptDisabled = localStorage.getItem('disableAutoTrainerPrompt') === 'true';
   showTrainerDialog = signal(false);
 
@@ -315,11 +324,18 @@ export class ProfileComponent {
   }
 
   async signOut() {
-    if (this.isDemoUser()) {
-      await this.demoSeedService.cleanupDemoAccount();
+    if (this.signingOut()) return;
+    this.signingOut.set(true);
+    try {
+      this.authService.prepareSignOut();
+      if (this.isDemoUser()) {
+        await this.demoSeedService.cleanupDemoAccount();
+      }
+      await this.authService.signOutAndCleanup();
+      await this.router.navigate(['/home']);
+    } finally {
+      this.signingOut.set(false);
     }
-    await this.authService.signOutAndCleanup();
-    await this.router.navigate(['/home']);
   }
 
   private location = inject(Location);

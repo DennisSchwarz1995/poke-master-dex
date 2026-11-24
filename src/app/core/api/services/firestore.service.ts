@@ -6,6 +6,7 @@ import {
   doc,
   docData,
   getDoc,
+  getDocs,
   addDoc,
   updateDoc,
   writeBatch,
@@ -15,7 +16,7 @@ import {
   DocumentData,
 } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../auth/services/auth.service';
 import { Dex, Box, BoxSlot } from '../../../shared/models/dex.model';
 import { Trainer } from '../../../shared/models/trainer.model';
@@ -40,6 +41,10 @@ export class FirestoreService {
 
   private getOptionalUserId(): string | undefined {
     return this.authService.user()?.uid;
+  }
+
+  private scopedToSession<T>(source$: Observable<T>): Observable<T> {
+    return source$.pipe(takeUntil(this.authService.beforeSignOut$));
   }
 
   private getBoxDocRef(
@@ -81,7 +86,7 @@ export class FirestoreService {
     if (!userId) return of([]);
 
     const dexCollection = collection(this.firestore, `users/${userId}/dexes`);
-    return collectionData(dexCollection, { idField: 'id' }) as Observable<Dex[]>;
+    return this.scopedToSession(collectionData(dexCollection, { idField: 'id' }) as Observable<Dex[]>);
   }
 
   async createDex(
@@ -159,7 +164,7 @@ export class FirestoreService {
     if (!userId) return of({} as Box);
 
     const boxDoc = this.getBoxDocRef(userId, dexId, boxNumber);
-    return docData(boxDoc) as Observable<Box>;
+    return this.scopedToSession(docData(boxDoc) as Observable<Box>);
   }
 
   async updateSlot(
@@ -219,7 +224,7 @@ export class FirestoreService {
     if (!userId) return of([]);
 
     const boxesCollection = collection(this.firestore, `users/${userId}/dexes/${dexId}/boxes`);
-    return collectionData(boxesCollection) as Observable<Box[]>;
+    return this.scopedToSession(collectionData(boxesCollection) as Observable<Box[]>);
   }
 
   getDexBox(dexId: string, boxNumber: number): Observable<Box | undefined> {
@@ -292,7 +297,7 @@ export class FirestoreService {
     if (!userId) return of({} as Dex);
 
     const dexDoc = doc(this.firestore, `users/${userId}/dexes/${dexId}`);
-    return docData(dexDoc, { idField: 'id' }) as Observable<Dex>;
+    return this.scopedToSession(docData(dexDoc, { idField: 'id' }) as Observable<Dex>);
   }
 
   async deleteDex(dexId: string, silent: boolean = false): Promise<void> {
@@ -317,7 +322,40 @@ export class FirestoreService {
     if (!userId) return of([]);
 
     const trainersCollection = collection(this.firestore, `users/${userId}/trainers`);
-    return collectionData(trainersCollection, { idField: 'id' }) as Observable<Trainer[]>;
+    return this.scopedToSession(
+      collectionData(trainersCollection, { idField: 'id' }) as Observable<Trainer[]>,
+    );
+  }
+
+  async deleteAllUserData(): Promise<void> {
+    const userId = this.getOptionalUserId();
+    if (!userId) return;
+
+    const [dexesSnap, trainersSnap] = await Promise.all([
+      getDocs(collection(this.firestore, `users/${userId}/dexes`)),
+      getDocs(collection(this.firestore, `users/${userId}/trainers`)),
+    ]);
+
+    const refsToDelete: DocumentReference<DocumentData>[] = [];
+
+    dexesSnap.forEach((dexDoc) => {
+      for (let boxNum = 1; boxNum <= MAX_BOXES; boxNum++) {
+        refsToDelete.push(this.getBoxDocRef(userId, dexDoc.id, boxNum));
+      }
+      refsToDelete.push(dexDoc.ref);
+    });
+
+    trainersSnap.forEach((trainerDoc) => {
+      refsToDelete.push(trainerDoc.ref);
+    });
+
+    const BATCH_LIMIT = 450;
+    for (let i = 0; i < refsToDelete.length; i += BATCH_LIMIT) {
+      const batch = writeBatch(this.firestore);
+      const chunk = refsToDelete.slice(i, i + BATCH_LIMIT);
+      chunk.forEach((ref) => batch.delete(ref));
+      await batch.commit();
+    }
   }
 
   async createTrainer(trainer: Omit<Trainer, 'id' | 'userId' | 'createdAt'>): Promise<string> {
