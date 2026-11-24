@@ -1,0 +1,5122 @@
+[
+  {
+    "slug": "bulbasaur",
+    "dexNum": 1,
+    "position": 1
+  },
+  {
+    "slug": "ivysaur",
+    "dexNum": 2,
+    "position": 2
+  },
+  {
+    "slug": "venusaur",
+    "dexNum": 3,
+    "position": 3
+  },
+  {
+    "slug": "charmander",
+    "dexNum": 4,
+    "position": 4
+  },
+  {
+    "slug": "charmeleon",
+    "dexNum": 5,
+    "position": 5
+  },
+  {
+    "slug": "charizard",
+    "dexNum": 6,
+    "position": 6
+  },
+  {
+    "slug": "squirtle",
+    "dexNum": 7,
+    "position": 7
+  },
+  {
+    "slug": "wartortle",
+    "dexNum": 8,
+    "position": 8
+  },
+  {
+    "slug": "blastoise",
+    "dexNum": 9,
+    "position": 9
+  },
+  {
+    "slug": "caterpie",
+    "dexNum": 10,
+    "position": 10
+  },
+  {
+    "slug": "metapod",
+    "dexNum": 11,
+    "position": 11
+  },
+  {
+    "slug": "butterfree",
+    "dexNum": 12,
+    "position": 12
+  },
+  {
+    "slug": "weedle",
+    "dexNum": 13,
+    "position": 13
+  },
+  {
+    "slug": "kakuna",
+    "dexNum": 14,
+    "position": 14
+  },
+  {
+    "slug": "beedrill",
+    "dexNum": 15,
+    "position": 15
+  },
+  {
+    "slug": "pidgey",
+    "dexNum": 16,
+    "position": 16
+  },
+  {
+    "slug": "pidgeotto",
+    "dexNum": 17,
+    "position": 17
+  },
+  {
+    "slug": "pidgeot",
+    "dexNum": 18,
+    "position": 18
+  },
+  {
+    "slug": "rattata",
+    "dexNum": 19,
+    "position": 19
+  },
+  {
+    "slug": "raticate",
+    "dexNum": 20,
+    "position": 20
+  },
+  {
+    "slug": "spearow",
+    "dexNum": 21,
+    "position": 21
+  },
+  {
+    "slug": "fearow",
+    "dexNum": 22,
+    "position": 22
+  },
+  {
+    "slug": "ekans",
+    "dexNum": 23,
+    "position": 23
+  },
+  {
+    "slug": "arbok",
+    "dexNum": 24,
+    "position": 24
+  },
+  {
+    "slug": "pikachu",
+    "dexNum": 25,
+    "position": 25
+  },
+  {
+    "slug": "raichu",
+    "dexNum": 26,
+    "position": 26
+  },
+  {
+    "slug": "sandshrew",
+    "dexNum": 27,
+    "position": 27
+  },
+  {
+    "slug": "sandslash",
+    "dexNum": 28,
+    "position": 28
+  },
+  {
+    "slug": "nidoranf",
+    "dexNum": 29,
+    "position": 29
+  },
+  {
+    "slug": "nidorina",
+    "dexNum": 30,
+    "position": 30
+  },
+  {
+    "slug": "nidoqueen",
+    "dexNum": 31,
+    "position": 31
+  },
+  {
+    "slug": "nidoranm",
+    "dexNum": 32,
+    "position": 32
+  },
+  {
+    "slug": "nidorino",
+    "dexNum": 33,
+    "position": 33
+  },
+  {
+    "slug": "nidoking",
+    "dexNum": 34,
+    "position": 34
+  },
+  {
+    "slug": "clefairy",
+    "dexNum": 35,
+    "position": 35
+  },
+  {
+    "slug": "clefable",
+    "dexNum": 36,
+    "position": 36
+  },
+  {
+    "slug": "vulpix",
+    "dexNum": 37,
+    "position": 37
+  },
+  {
+    "slug": "ninetales",
+    "dexNum": 38,
+    "position": 38
+  },
+  {
+    "slug": "jigglypuff",
+    "dexNum": 39,
+    "position": 39
+  },
+  {
+    "slug": "wigglytuff",
+    "dexNum": 40,
+    "position": 40
+  },
+  {
+    "slug": "zubat",
+    "dexNum": 41,
+    "position": 41
+  },
+  {
+    "slug": "golbat",
+    "dexNum": 42,
+    "position": 42
+  },
+  {
+    "slug": "oddish",
+    "dexNum": 43,
+    "position": 43
+  },
+  {
+    "slug": "gloom",
+    "dexNum": 44,
+    "position": 44
+  },
+  {
+    "slug": "vileplume",
+    "dexNum": 45,
+    "position": 45
+  },
+  {
+    "slug": "paras",
+    "dexNum": 46,
+    "position": 46
+  },
+  {
+    "slug": "parasect",
+    "dexNum": 47,
+    "position": 47
+  },
+  {
+    "slug": "venonat",
+    "dexNum": 48,
+    "position": 48
+  },
+  {
+    "slug": "venomoth",
+    "dexNum": 49,
+    "position": 49
+  },
+  {
+    "slug": "diglett",
+    "dexNum": 50,
+    "position": 50
+  },
+  {
+    "slug": "dugtrio",
+    "dexNum": 51,
+    "position": 51
+  },
+  {
+    "slug": "meowth",
+    "dexNum": 52,
+    "position": 52
+  },
+  {
+    "slug": "persian",
+    "dexNum": 53,
+    "position": 53
+  },
+  {
+    "slug": "psyduck",
+    "dexNum": 54,
+    "position": 54
+  },
+  {
+    "slug": "golduck",
+    "dexNum": 55,
+    "position": 55
+  },
+  {
+    "slug": "mankey",
+    "dexNum": 56,
+    "position": 56
+  },
+  {
+    "slug": "primeape",
+    "dexNum": 57,
+    "position": 57
+  },
+  {
+    "slug": "growlithe",
+    "dexNum": 58,
+    "position": 58
+  },
+  {
+    "slug": "arcanine",
+    "dexNum": 59,
+    "position": 59
+  },
+  {
+    "slug": "poliwag",
+    "dexNum": 60,
+    "position": 60
+  },
+  {
+    "slug": "poliwhirl",
+    "dexNum": 61,
+    "position": 61
+  },
+  {
+    "slug": "poliwrath",
+    "dexNum": 62,
+    "position": 62
+  },
+  {
+    "slug": "abra",
+    "dexNum": 63,
+    "position": 63
+  },
+  {
+    "slug": "kadabra",
+    "dexNum": 64,
+    "position": 64
+  },
+  {
+    "slug": "alakazam",
+    "dexNum": 65,
+    "position": 65
+  },
+  {
+    "slug": "machop",
+    "dexNum": 66,
+    "position": 66
+  },
+  {
+    "slug": "machoke",
+    "dexNum": 67,
+    "position": 67
+  },
+  {
+    "slug": "machamp",
+    "dexNum": 68,
+    "position": 68
+  },
+  {
+    "slug": "bellsprout",
+    "dexNum": 69,
+    "position": 69
+  },
+  {
+    "slug": "weepinbell",
+    "dexNum": 70,
+    "position": 70
+  },
+  {
+    "slug": "victreebel",
+    "dexNum": 71,
+    "position": 71
+  },
+  {
+    "slug": "tentacool",
+    "dexNum": 72,
+    "position": 72
+  },
+  {
+    "slug": "tentacruel",
+    "dexNum": 73,
+    "position": 73
+  },
+  {
+    "slug": "geodude",
+    "dexNum": 74,
+    "position": 74
+  },
+  {
+    "slug": "graveler",
+    "dexNum": 75,
+    "position": 75
+  },
+  {
+    "slug": "golem",
+    "dexNum": 76,
+    "position": 76
+  },
+  {
+    "slug": "ponyta",
+    "dexNum": 77,
+    "position": 77
+  },
+  {
+    "slug": "rapidash",
+    "dexNum": 78,
+    "position": 78
+  },
+  {
+    "slug": "slowpoke",
+    "dexNum": 79,
+    "position": 79
+  },
+  {
+    "slug": "slowbro",
+    "dexNum": 80,
+    "position": 80
+  },
+  {
+    "slug": "magnemite",
+    "dexNum": 81,
+    "position": 81
+  },
+  {
+    "slug": "magneton",
+    "dexNum": 82,
+    "position": 82
+  },
+  {
+    "slug": "farfetchd",
+    "dexNum": 83,
+    "position": 83
+  },
+  {
+    "slug": "doduo",
+    "dexNum": 84,
+    "position": 84
+  },
+  {
+    "slug": "dodrio",
+    "dexNum": 85,
+    "position": 85
+  },
+  {
+    "slug": "seel",
+    "dexNum": 86,
+    "position": 86
+  },
+  {
+    "slug": "dewgong",
+    "dexNum": 87,
+    "position": 87
+  },
+  {
+    "slug": "grimer",
+    "dexNum": 88,
+    "position": 88
+  },
+  {
+    "slug": "muk",
+    "dexNum": 89,
+    "position": 89
+  },
+  {
+    "slug": "shellder",
+    "dexNum": 90,
+    "position": 90
+  },
+  {
+    "slug": "cloyster",
+    "dexNum": 91,
+    "position": 91
+  },
+  {
+    "slug": "gastly",
+    "dexNum": 92,
+    "position": 92
+  },
+  {
+    "slug": "haunter",
+    "dexNum": 93,
+    "position": 93
+  },
+  {
+    "slug": "gengar",
+    "dexNum": 94,
+    "position": 94
+  },
+  {
+    "slug": "onix",
+    "dexNum": 95,
+    "position": 95
+  },
+  {
+    "slug": "drowzee",
+    "dexNum": 96,
+    "position": 96
+  },
+  {
+    "slug": "hypno",
+    "dexNum": 97,
+    "position": 97
+  },
+  {
+    "slug": "krabby",
+    "dexNum": 98,
+    "position": 98
+  },
+  {
+    "slug": "kingler",
+    "dexNum": 99,
+    "position": 99
+  },
+  {
+    "slug": "voltorb",
+    "dexNum": 100,
+    "position": 100
+  },
+  {
+    "slug": "electrode",
+    "dexNum": 101,
+    "position": 101
+  },
+  {
+    "slug": "exeggcute",
+    "dexNum": 102,
+    "position": 102
+  },
+  {
+    "slug": "exeggutor",
+    "dexNum": 103,
+    "position": 103
+  },
+  {
+    "slug": "cubone",
+    "dexNum": 104,
+    "position": 104
+  },
+  {
+    "slug": "marowak",
+    "dexNum": 105,
+    "position": 105
+  },
+  {
+    "slug": "hitmonlee",
+    "dexNum": 106,
+    "position": 106
+  },
+  {
+    "slug": "hitmonchan",
+    "dexNum": 107,
+    "position": 107
+  },
+  {
+    "slug": "lickitung",
+    "dexNum": 108,
+    "position": 108
+  },
+  {
+    "slug": "koffing",
+    "dexNum": 109,
+    "position": 109
+  },
+  {
+    "slug": "weezing",
+    "dexNum": 110,
+    "position": 110
+  },
+  {
+    "slug": "rhyhorn",
+    "dexNum": 111,
+    "position": 111
+  },
+  {
+    "slug": "rhydon",
+    "dexNum": 112,
+    "position": 112
+  },
+  {
+    "slug": "chansey",
+    "dexNum": 113,
+    "position": 113
+  },
+  {
+    "slug": "tangela",
+    "dexNum": 114,
+    "position": 114
+  },
+  {
+    "slug": "kangaskhan",
+    "dexNum": 115,
+    "position": 115
+  },
+  {
+    "slug": "horsea",
+    "dexNum": 116,
+    "position": 116
+  },
+  {
+    "slug": "seadra",
+    "dexNum": 117,
+    "position": 117
+  },
+  {
+    "slug": "goldeen",
+    "dexNum": 118,
+    "position": 118
+  },
+  {
+    "slug": "seaking",
+    "dexNum": 119,
+    "position": 119
+  },
+  {
+    "slug": "staryu",
+    "dexNum": 120,
+    "position": 120
+  },
+  {
+    "slug": "starmie",
+    "dexNum": 121,
+    "position": 121
+  },
+  {
+    "slug": "mrmime",
+    "dexNum": 122,
+    "position": 122
+  },
+  {
+    "slug": "scyther",
+    "dexNum": 123,
+    "position": 123
+  },
+  {
+    "slug": "jynx",
+    "dexNum": 124,
+    "position": 124
+  },
+  {
+    "slug": "electabuzz",
+    "dexNum": 125,
+    "position": 125
+  },
+  {
+    "slug": "magmar",
+    "dexNum": 126,
+    "position": 126
+  },
+  {
+    "slug": "pinsir",
+    "dexNum": 127,
+    "position": 127
+  },
+  {
+    "slug": "tauros",
+    "dexNum": 128,
+    "position": 128
+  },
+  {
+    "slug": "magikarp",
+    "dexNum": 129,
+    "position": 129
+  },
+  {
+    "slug": "gyarados",
+    "dexNum": 130,
+    "position": 130
+  },
+  {
+    "slug": "lapras",
+    "dexNum": 131,
+    "position": 131
+  },
+  {
+    "slug": "ditto",
+    "dexNum": 132,
+    "position": 132
+  },
+  {
+    "slug": "eevee",
+    "dexNum": 133,
+    "position": 133
+  },
+  {
+    "slug": "vaporeon",
+    "dexNum": 134,
+    "position": 134
+  },
+  {
+    "slug": "jolteon",
+    "dexNum": 135,
+    "position": 135
+  },
+  {
+    "slug": "flareon",
+    "dexNum": 136,
+    "position": 136
+  },
+  {
+    "slug": "porygon",
+    "dexNum": 137,
+    "position": 137
+  },
+  {
+    "slug": "omanyte",
+    "dexNum": 138,
+    "position": 138
+  },
+  {
+    "slug": "omastar",
+    "dexNum": 139,
+    "position": 139
+  },
+  {
+    "slug": "kabuto",
+    "dexNum": 140,
+    "position": 140
+  },
+  {
+    "slug": "kabutops",
+    "dexNum": 141,
+    "position": 141
+  },
+  {
+    "slug": "aerodactyl",
+    "dexNum": 142,
+    "position": 142
+  },
+  {
+    "slug": "snorlax",
+    "dexNum": 143,
+    "position": 143
+  },
+  {
+    "slug": "articuno",
+    "dexNum": 144,
+    "position": 144
+  },
+  {
+    "slug": "zapdos",
+    "dexNum": 145,
+    "position": 145
+  },
+  {
+    "slug": "moltres",
+    "dexNum": 146,
+    "position": 146
+  },
+  {
+    "slug": "dratini",
+    "dexNum": 147,
+    "position": 147
+  },
+  {
+    "slug": "dragonair",
+    "dexNum": 148,
+    "position": 148
+  },
+  {
+    "slug": "dragonite",
+    "dexNum": 149,
+    "position": 149
+  },
+  {
+    "slug": "mewtwo",
+    "dexNum": 150,
+    "position": 150
+  },
+  {
+    "slug": "mew",
+    "dexNum": 151,
+    "position": 151
+  },
+  {
+    "slug": "chikorita",
+    "dexNum": 152,
+    "position": 152
+  },
+  {
+    "slug": "bayleef",
+    "dexNum": 153,
+    "position": 153
+  },
+  {
+    "slug": "meganium",
+    "dexNum": 154,
+    "position": 154
+  },
+  {
+    "slug": "cyndaquil",
+    "dexNum": 155,
+    "position": 155
+  },
+  {
+    "slug": "quilava",
+    "dexNum": 156,
+    "position": 156
+  },
+  {
+    "slug": "typhlosion",
+    "dexNum": 157,
+    "position": 157
+  },
+  {
+    "slug": "totodile",
+    "dexNum": 158,
+    "position": 158
+  },
+  {
+    "slug": "croconaw",
+    "dexNum": 159,
+    "position": 159
+  },
+  {
+    "slug": "feraligatr",
+    "dexNum": 160,
+    "position": 160
+  },
+  {
+    "slug": "sentret",
+    "dexNum": 161,
+    "position": 161
+  },
+  {
+    "slug": "furret",
+    "dexNum": 162,
+    "position": 162
+  },
+  {
+    "slug": "hoothoot",
+    "dexNum": 163,
+    "position": 163
+  },
+  {
+    "slug": "noctowl",
+    "dexNum": 164,
+    "position": 164
+  },
+  {
+    "slug": "ledyba",
+    "dexNum": 165,
+    "position": 165
+  },
+  {
+    "slug": "ledian",
+    "dexNum": 166,
+    "position": 166
+  },
+  {
+    "slug": "spinarak",
+    "dexNum": 167,
+    "position": 167
+  },
+  {
+    "slug": "ariados",
+    "dexNum": 168,
+    "position": 168
+  },
+  {
+    "slug": "crobat",
+    "dexNum": 169,
+    "position": 169
+  },
+  {
+    "slug": "chinchou",
+    "dexNum": 170,
+    "position": 170
+  },
+  {
+    "slug": "lanturn",
+    "dexNum": 171,
+    "position": 171
+  },
+  {
+    "slug": "pichu",
+    "dexNum": 172,
+    "position": 172
+  },
+  {
+    "slug": "cleffa",
+    "dexNum": 173,
+    "position": 173
+  },
+  {
+    "slug": "igglybuff",
+    "dexNum": 174,
+    "position": 174
+  },
+  {
+    "slug": "togepi",
+    "dexNum": 175,
+    "position": 175
+  },
+  {
+    "slug": "togetic",
+    "dexNum": 176,
+    "position": 176
+  },
+  {
+    "slug": "natu",
+    "dexNum": 177,
+    "position": 177
+  },
+  {
+    "slug": "xatu",
+    "dexNum": 178,
+    "position": 178
+  },
+  {
+    "slug": "mareep",
+    "dexNum": 179,
+    "position": 179
+  },
+  {
+    "slug": "flaaffy",
+    "dexNum": 180,
+    "position": 180
+  },
+  {
+    "slug": "ampharos",
+    "dexNum": 181,
+    "position": 181
+  },
+  {
+    "slug": "bellossom",
+    "dexNum": 182,
+    "position": 182
+  },
+  {
+    "slug": "marill",
+    "dexNum": 183,
+    "position": 183
+  },
+  {
+    "slug": "azumarill",
+    "dexNum": 184,
+    "position": 184
+  },
+  {
+    "slug": "sudowoodo",
+    "dexNum": 185,
+    "position": 185
+  },
+  {
+    "slug": "politoed",
+    "dexNum": 186,
+    "position": 186
+  },
+  {
+    "slug": "hoppip",
+    "dexNum": 187,
+    "position": 187
+  },
+  {
+    "slug": "skiploom",
+    "dexNum": 188,
+    "position": 188
+  },
+  {
+    "slug": "jumpluff",
+    "dexNum": 189,
+    "position": 189
+  },
+  {
+    "slug": "aipom",
+    "dexNum": 190,
+    "position": 190
+  },
+  {
+    "slug": "sunkern",
+    "dexNum": 191,
+    "position": 191
+  },
+  {
+    "slug": "sunflora",
+    "dexNum": 192,
+    "position": 192
+  },
+  {
+    "slug": "yanma",
+    "dexNum": 193,
+    "position": 193
+  },
+  {
+    "slug": "wooper",
+    "dexNum": 194,
+    "position": 194
+  },
+  {
+    "slug": "quagsire",
+    "dexNum": 195,
+    "position": 195
+  },
+  {
+    "slug": "espeon",
+    "dexNum": 196,
+    "position": 196
+  },
+  {
+    "slug": "umbreon",
+    "dexNum": 197,
+    "position": 197
+  },
+  {
+    "slug": "murkrow",
+    "dexNum": 198,
+    "position": 198
+  },
+  {
+    "slug": "slowking",
+    "dexNum": 199,
+    "position": 199
+  },
+  {
+    "slug": "misdreavus",
+    "dexNum": 200,
+    "position": 200
+  },
+  {
+    "slug": "unown",
+    "dexNum": 201,
+    "position": 201
+  },
+  {
+    "slug": "wobbuffet",
+    "dexNum": 202,
+    "position": 202
+  },
+  {
+    "slug": "girafarig",
+    "dexNum": 203,
+    "position": 203
+  },
+  {
+    "slug": "pineco",
+    "dexNum": 204,
+    "position": 204
+  },
+  {
+    "slug": "forretress",
+    "dexNum": 205,
+    "position": 205
+  },
+  {
+    "slug": "dunsparce",
+    "dexNum": 206,
+    "position": 206
+  },
+  {
+    "slug": "gligar",
+    "dexNum": 207,
+    "position": 207
+  },
+  {
+    "slug": "steelix",
+    "dexNum": 208,
+    "position": 208
+  },
+  {
+    "slug": "snubbull",
+    "dexNum": 209,
+    "position": 209
+  },
+  {
+    "slug": "granbull",
+    "dexNum": 210,
+    "position": 210
+  },
+  {
+    "slug": "qwilfish",
+    "dexNum": 211,
+    "position": 211
+  },
+  {
+    "slug": "scizor",
+    "dexNum": 212,
+    "position": 212
+  },
+  {
+    "slug": "shuckle",
+    "dexNum": 213,
+    "position": 213
+  },
+  {
+    "slug": "heracross",
+    "dexNum": 214,
+    "position": 214
+  },
+  {
+    "slug": "sneasel",
+    "dexNum": 215,
+    "position": 215
+  },
+  {
+    "slug": "teddiursa",
+    "dexNum": 216,
+    "position": 216
+  },
+  {
+    "slug": "ursaring",
+    "dexNum": 217,
+    "position": 217
+  },
+  {
+    "slug": "slugma",
+    "dexNum": 218,
+    "position": 218
+  },
+  {
+    "slug": "magcargo",
+    "dexNum": 219,
+    "position": 219
+  },
+  {
+    "slug": "swinub",
+    "dexNum": 220,
+    "position": 220
+  },
+  {
+    "slug": "piloswine",
+    "dexNum": 221,
+    "position": 221
+  },
+  {
+    "slug": "corsola",
+    "dexNum": 222,
+    "position": 222
+  },
+  {
+    "slug": "remoraid",
+    "dexNum": 223,
+    "position": 223
+  },
+  {
+    "slug": "octillery",
+    "dexNum": 224,
+    "position": 224
+  },
+  {
+    "slug": "delibird",
+    "dexNum": 225,
+    "position": 225
+  },
+  {
+    "slug": "mantine",
+    "dexNum": 226,
+    "position": 226
+  },
+  {
+    "slug": "skarmory",
+    "dexNum": 227,
+    "position": 227
+  },
+  {
+    "slug": "houndour",
+    "dexNum": 228,
+    "position": 228
+  },
+  {
+    "slug": "houndoom",
+    "dexNum": 229,
+    "position": 229
+  },
+  {
+    "slug": "kingdra",
+    "dexNum": 230,
+    "position": 230
+  },
+  {
+    "slug": "phanpy",
+    "dexNum": 231,
+    "position": 231
+  },
+  {
+    "slug": "donphan",
+    "dexNum": 232,
+    "position": 232
+  },
+  {
+    "slug": "porygon2",
+    "dexNum": 233,
+    "position": 233
+  },
+  {
+    "slug": "stantler",
+    "dexNum": 234,
+    "position": 234
+  },
+  {
+    "slug": "smeargle",
+    "dexNum": 235,
+    "position": 235
+  },
+  {
+    "slug": "tyrogue",
+    "dexNum": 236,
+    "position": 236
+  },
+  {
+    "slug": "hitmontop",
+    "dexNum": 237,
+    "position": 237
+  },
+  {
+    "slug": "smoochum",
+    "dexNum": 238,
+    "position": 238
+  },
+  {
+    "slug": "elekid",
+    "dexNum": 239,
+    "position": 239
+  },
+  {
+    "slug": "magby",
+    "dexNum": 240,
+    "position": 240
+  },
+  {
+    "slug": "miltank",
+    "dexNum": 241,
+    "position": 241
+  },
+  {
+    "slug": "blissey",
+    "dexNum": 242,
+    "position": 242
+  },
+  {
+    "slug": "raikou",
+    "dexNum": 243,
+    "position": 243
+  },
+  {
+    "slug": "entei",
+    "dexNum": 244,
+    "position": 244
+  },
+  {
+    "slug": "suicune",
+    "dexNum": 245,
+    "position": 245
+  },
+  {
+    "slug": "larvitar",
+    "dexNum": 246,
+    "position": 246
+  },
+  {
+    "slug": "pupitar",
+    "dexNum": 247,
+    "position": 247
+  },
+  {
+    "slug": "tyranitar",
+    "dexNum": 248,
+    "position": 248
+  },
+  {
+    "slug": "lugia",
+    "dexNum": 249,
+    "position": 249
+  },
+  {
+    "slug": "hooh",
+    "dexNum": 250,
+    "position": 250
+  },
+  {
+    "slug": "celebi",
+    "dexNum": 251,
+    "position": 251
+  },
+  {
+    "slug": "treecko",
+    "dexNum": 252,
+    "position": 252
+  },
+  {
+    "slug": "grovyle",
+    "dexNum": 253,
+    "position": 253
+  },
+  {
+    "slug": "sceptile",
+    "dexNum": 254,
+    "position": 254
+  },
+  {
+    "slug": "torchic",
+    "dexNum": 255,
+    "position": 255
+  },
+  {
+    "slug": "combusken",
+    "dexNum": 256,
+    "position": 256
+  },
+  {
+    "slug": "blaziken",
+    "dexNum": 257,
+    "position": 257
+  },
+  {
+    "slug": "mudkip",
+    "dexNum": 258,
+    "position": 258
+  },
+  {
+    "slug": "marshtomp",
+    "dexNum": 259,
+    "position": 259
+  },
+  {
+    "slug": "swampert",
+    "dexNum": 260,
+    "position": 260
+  },
+  {
+    "slug": "poochyena",
+    "dexNum": 261,
+    "position": 261
+  },
+  {
+    "slug": "mightyena",
+    "dexNum": 262,
+    "position": 262
+  },
+  {
+    "slug": "zigzagoon",
+    "dexNum": 263,
+    "position": 263
+  },
+  {
+    "slug": "linoone",
+    "dexNum": 264,
+    "position": 264
+  },
+  {
+    "slug": "wurmple",
+    "dexNum": 265,
+    "position": 265
+  },
+  {
+    "slug": "silcoon",
+    "dexNum": 266,
+    "position": 266
+  },
+  {
+    "slug": "beautifly",
+    "dexNum": 267,
+    "position": 267
+  },
+  {
+    "slug": "cascoon",
+    "dexNum": 268,
+    "position": 268
+  },
+  {
+    "slug": "dustox",
+    "dexNum": 269,
+    "position": 269
+  },
+  {
+    "slug": "lotad",
+    "dexNum": 270,
+    "position": 270
+  },
+  {
+    "slug": "lombre",
+    "dexNum": 271,
+    "position": 271
+  },
+  {
+    "slug": "ludicolo",
+    "dexNum": 272,
+    "position": 272
+  },
+  {
+    "slug": "seedot",
+    "dexNum": 273,
+    "position": 273
+  },
+  {
+    "slug": "nuzleaf",
+    "dexNum": 274,
+    "position": 274
+  },
+  {
+    "slug": "shiftry",
+    "dexNum": 275,
+    "position": 275
+  },
+  {
+    "slug": "taillow",
+    "dexNum": 276,
+    "position": 276
+  },
+  {
+    "slug": "swellow",
+    "dexNum": 277,
+    "position": 277
+  },
+  {
+    "slug": "wingull",
+    "dexNum": 278,
+    "position": 278
+  },
+  {
+    "slug": "pelipper",
+    "dexNum": 279,
+    "position": 279
+  },
+  {
+    "slug": "ralts",
+    "dexNum": 280,
+    "position": 280
+  },
+  {
+    "slug": "kirlia",
+    "dexNum": 281,
+    "position": 281
+  },
+  {
+    "slug": "gardevoir",
+    "dexNum": 282,
+    "position": 282
+  },
+  {
+    "slug": "surskit",
+    "dexNum": 283,
+    "position": 283
+  },
+  {
+    "slug": "masquerain",
+    "dexNum": 284,
+    "position": 284
+  },
+  {
+    "slug": "shroomish",
+    "dexNum": 285,
+    "position": 285
+  },
+  {
+    "slug": "breloom",
+    "dexNum": 286,
+    "position": 286
+  },
+  {
+    "slug": "slakoth",
+    "dexNum": 287,
+    "position": 287
+  },
+  {
+    "slug": "vigoroth",
+    "dexNum": 288,
+    "position": 288
+  },
+  {
+    "slug": "slaking",
+    "dexNum": 289,
+    "position": 289
+  },
+  {
+    "slug": "nincada",
+    "dexNum": 290,
+    "position": 290
+  },
+  {
+    "slug": "ninjask",
+    "dexNum": 291,
+    "position": 291
+  },
+  {
+    "slug": "shedinja",
+    "dexNum": 292,
+    "position": 292
+  },
+  {
+    "slug": "whismur",
+    "dexNum": 293,
+    "position": 293
+  },
+  {
+    "slug": "loudred",
+    "dexNum": 294,
+    "position": 294
+  },
+  {
+    "slug": "exploud",
+    "dexNum": 295,
+    "position": 295
+  },
+  {
+    "slug": "makuhita",
+    "dexNum": 296,
+    "position": 296
+  },
+  {
+    "slug": "hariyama",
+    "dexNum": 297,
+    "position": 297
+  },
+  {
+    "slug": "azurill",
+    "dexNum": 298,
+    "position": 298
+  },
+  {
+    "slug": "nosepass",
+    "dexNum": 299,
+    "position": 299
+  },
+  {
+    "slug": "skitty",
+    "dexNum": 300,
+    "position": 300
+  },
+  {
+    "slug": "delcatty",
+    "dexNum": 301,
+    "position": 301
+  },
+  {
+    "slug": "sableye",
+    "dexNum": 302,
+    "position": 302
+  },
+  {
+    "slug": "mawile",
+    "dexNum": 303,
+    "position": 303
+  },
+  {
+    "slug": "aron",
+    "dexNum": 304,
+    "position": 304
+  },
+  {
+    "slug": "lairon",
+    "dexNum": 305,
+    "position": 305
+  },
+  {
+    "slug": "aggron",
+    "dexNum": 306,
+    "position": 306
+  },
+  {
+    "slug": "meditite",
+    "dexNum": 307,
+    "position": 307
+  },
+  {
+    "slug": "medicham",
+    "dexNum": 308,
+    "position": 308
+  },
+  {
+    "slug": "electrike",
+    "dexNum": 309,
+    "position": 309
+  },
+  {
+    "slug": "manectric",
+    "dexNum": 310,
+    "position": 310
+  },
+  {
+    "slug": "plusle",
+    "dexNum": 311,
+    "position": 311
+  },
+  {
+    "slug": "minun",
+    "dexNum": 312,
+    "position": 312
+  },
+  {
+    "slug": "volbeat",
+    "dexNum": 313,
+    "position": 313
+  },
+  {
+    "slug": "illumise",
+    "dexNum": 314,
+    "position": 314
+  },
+  {
+    "slug": "roselia",
+    "dexNum": 315,
+    "position": 315
+  },
+  {
+    "slug": "gulpin",
+    "dexNum": 316,
+    "position": 316
+  },
+  {
+    "slug": "swalot",
+    "dexNum": 317,
+    "position": 317
+  },
+  {
+    "slug": "carvanha",
+    "dexNum": 318,
+    "position": 318
+  },
+  {
+    "slug": "sharpedo",
+    "dexNum": 319,
+    "position": 319
+  },
+  {
+    "slug": "wailmer",
+    "dexNum": 320,
+    "position": 320
+  },
+  {
+    "slug": "wailord",
+    "dexNum": 321,
+    "position": 321
+  },
+  {
+    "slug": "numel",
+    "dexNum": 322,
+    "position": 322
+  },
+  {
+    "slug": "camerupt",
+    "dexNum": 323,
+    "position": 323
+  },
+  {
+    "slug": "torkoal",
+    "dexNum": 324,
+    "position": 324
+  },
+  {
+    "slug": "spoink",
+    "dexNum": 325,
+    "position": 325
+  },
+  {
+    "slug": "grumpig",
+    "dexNum": 326,
+    "position": 326
+  },
+  {
+    "slug": "spinda",
+    "dexNum": 327,
+    "position": 327
+  },
+  {
+    "slug": "trapinch",
+    "dexNum": 328,
+    "position": 328
+  },
+  {
+    "slug": "vibrava",
+    "dexNum": 329,
+    "position": 329
+  },
+  {
+    "slug": "flygon",
+    "dexNum": 330,
+    "position": 330
+  },
+  {
+    "slug": "cacnea",
+    "dexNum": 331,
+    "position": 331
+  },
+  {
+    "slug": "cacturne",
+    "dexNum": 332,
+    "position": 332
+  },
+  {
+    "slug": "swablu",
+    "dexNum": 333,
+    "position": 333
+  },
+  {
+    "slug": "altaria",
+    "dexNum": 334,
+    "position": 334
+  },
+  {
+    "slug": "zangoose",
+    "dexNum": 335,
+    "position": 335
+  },
+  {
+    "slug": "seviper",
+    "dexNum": 336,
+    "position": 336
+  },
+  {
+    "slug": "lunatone",
+    "dexNum": 337,
+    "position": 337
+  },
+  {
+    "slug": "solrock",
+    "dexNum": 338,
+    "position": 338
+  },
+  {
+    "slug": "barboach",
+    "dexNum": 339,
+    "position": 339
+  },
+  {
+    "slug": "whiscash",
+    "dexNum": 340,
+    "position": 340
+  },
+  {
+    "slug": "corphish",
+    "dexNum": 341,
+    "position": 341
+  },
+  {
+    "slug": "crawdaunt",
+    "dexNum": 342,
+    "position": 342
+  },
+  {
+    "slug": "baltoy",
+    "dexNum": 343,
+    "position": 343
+  },
+  {
+    "slug": "claydol",
+    "dexNum": 344,
+    "position": 344
+  },
+  {
+    "slug": "lileep",
+    "dexNum": 345,
+    "position": 345
+  },
+  {
+    "slug": "cradily",
+    "dexNum": 346,
+    "position": 346
+  },
+  {
+    "slug": "anorith",
+    "dexNum": 347,
+    "position": 347
+  },
+  {
+    "slug": "armaldo",
+    "dexNum": 348,
+    "position": 348
+  },
+  {
+    "slug": "feebas",
+    "dexNum": 349,
+    "position": 349
+  },
+  {
+    "slug": "milotic",
+    "dexNum": 350,
+    "position": 350
+  },
+  {
+    "slug": "castform",
+    "dexNum": 351,
+    "position": 351
+  },
+  {
+    "slug": "kecleon",
+    "dexNum": 352,
+    "position": 352
+  },
+  {
+    "slug": "shuppet",
+    "dexNum": 353,
+    "position": 353
+  },
+  {
+    "slug": "banette",
+    "dexNum": 354,
+    "position": 354
+  },
+  {
+    "slug": "duskull",
+    "dexNum": 355,
+    "position": 355
+  },
+  {
+    "slug": "dusclops",
+    "dexNum": 356,
+    "position": 356
+  },
+  {
+    "slug": "tropius",
+    "dexNum": 357,
+    "position": 357
+  },
+  {
+    "slug": "chimecho",
+    "dexNum": 358,
+    "position": 358
+  },
+  {
+    "slug": "absol",
+    "dexNum": 359,
+    "position": 359
+  },
+  {
+    "slug": "wynaut",
+    "dexNum": 360,
+    "position": 360
+  },
+  {
+    "slug": "snorunt",
+    "dexNum": 361,
+    "position": 361
+  },
+  {
+    "slug": "glalie",
+    "dexNum": 362,
+    "position": 362
+  },
+  {
+    "slug": "spheal",
+    "dexNum": 363,
+    "position": 363
+  },
+  {
+    "slug": "sealeo",
+    "dexNum": 364,
+    "position": 364
+  },
+  {
+    "slug": "walrein",
+    "dexNum": 365,
+    "position": 365
+  },
+  {
+    "slug": "clamperl",
+    "dexNum": 366,
+    "position": 366
+  },
+  {
+    "slug": "huntail",
+    "dexNum": 367,
+    "position": 367
+  },
+  {
+    "slug": "gorebyss",
+    "dexNum": 368,
+    "position": 368
+  },
+  {
+    "slug": "relicanth",
+    "dexNum": 369,
+    "position": 369
+  },
+  {
+    "slug": "luvdisc",
+    "dexNum": 370,
+    "position": 370
+  },
+  {
+    "slug": "bagon",
+    "dexNum": 371,
+    "position": 371
+  },
+  {
+    "slug": "shelgon",
+    "dexNum": 372,
+    "position": 372
+  },
+  {
+    "slug": "salamence",
+    "dexNum": 373,
+    "position": 373
+  },
+  {
+    "slug": "beldum",
+    "dexNum": 374,
+    "position": 374
+  },
+  {
+    "slug": "metang",
+    "dexNum": 375,
+    "position": 375
+  },
+  {
+    "slug": "metagross",
+    "dexNum": 376,
+    "position": 376
+  },
+  {
+    "slug": "regirock",
+    "dexNum": 377,
+    "position": 377
+  },
+  {
+    "slug": "regice",
+    "dexNum": 378,
+    "position": 378
+  },
+  {
+    "slug": "registeel",
+    "dexNum": 379,
+    "position": 379
+  },
+  {
+    "slug": "latias",
+    "dexNum": 380,
+    "position": 380
+  },
+  {
+    "slug": "latios",
+    "dexNum": 381,
+    "position": 381
+  },
+  {
+    "slug": "kyogre",
+    "dexNum": 382,
+    "position": 382
+  },
+  {
+    "slug": "groudon",
+    "dexNum": 383,
+    "position": 383
+  },
+  {
+    "slug": "rayquaza",
+    "dexNum": 384,
+    "position": 384
+  },
+  {
+    "slug": "jirachi",
+    "dexNum": 385,
+    "position": 385
+  },
+  {
+    "slug": "deoxys",
+    "dexNum": 386,
+    "position": 386
+  },
+  {
+    "slug": "turtwig",
+    "dexNum": 387,
+    "position": 387
+  },
+  {
+    "slug": "grotle",
+    "dexNum": 388,
+    "position": 388
+  },
+  {
+    "slug": "torterra",
+    "dexNum": 389,
+    "position": 389
+  },
+  {
+    "slug": "chimchar",
+    "dexNum": 390,
+    "position": 390
+  },
+  {
+    "slug": "monferno",
+    "dexNum": 391,
+    "position": 391
+  },
+  {
+    "slug": "infernape",
+    "dexNum": 392,
+    "position": 392
+  },
+  {
+    "slug": "piplup",
+    "dexNum": 393,
+    "position": 393
+  },
+  {
+    "slug": "prinplup",
+    "dexNum": 394,
+    "position": 394
+  },
+  {
+    "slug": "empoleon",
+    "dexNum": 395,
+    "position": 395
+  },
+  {
+    "slug": "starly",
+    "dexNum": 396,
+    "position": 396
+  },
+  {
+    "slug": "staravia",
+    "dexNum": 397,
+    "position": 397
+  },
+  {
+    "slug": "staraptor",
+    "dexNum": 398,
+    "position": 398
+  },
+  {
+    "slug": "bidoof",
+    "dexNum": 399,
+    "position": 399
+  },
+  {
+    "slug": "bibarel",
+    "dexNum": 400,
+    "position": 400
+  },
+  {
+    "slug": "kricketot",
+    "dexNum": 401,
+    "position": 401
+  },
+  {
+    "slug": "kricketune",
+    "dexNum": 402,
+    "position": 402
+  },
+  {
+    "slug": "shinx",
+    "dexNum": 403,
+    "position": 403
+  },
+  {
+    "slug": "luxio",
+    "dexNum": 404,
+    "position": 404
+  },
+  {
+    "slug": "luxray",
+    "dexNum": 405,
+    "position": 405
+  },
+  {
+    "slug": "budew",
+    "dexNum": 406,
+    "position": 406
+  },
+  {
+    "slug": "roserade",
+    "dexNum": 407,
+    "position": 407
+  },
+  {
+    "slug": "cranidos",
+    "dexNum": 408,
+    "position": 408
+  },
+  {
+    "slug": "rampardos",
+    "dexNum": 409,
+    "position": 409
+  },
+  {
+    "slug": "shieldon",
+    "dexNum": 410,
+    "position": 410
+  },
+  {
+    "slug": "bastiodon",
+    "dexNum": 411,
+    "position": 411
+  },
+  {
+    "slug": "burmy",
+    "dexNum": 412,
+    "position": 412
+  },
+  {
+    "slug": "wormadam",
+    "dexNum": 413,
+    "position": 413
+  },
+  {
+    "slug": "mothim",
+    "dexNum": 414,
+    "position": 414
+  },
+  {
+    "slug": "combee",
+    "dexNum": 415,
+    "position": 415
+  },
+  {
+    "slug": "vespiquen",
+    "dexNum": 416,
+    "position": 416
+  },
+  {
+    "slug": "pachirisu",
+    "dexNum": 417,
+    "position": 417
+  },
+  {
+    "slug": "buizel",
+    "dexNum": 418,
+    "position": 418
+  },
+  {
+    "slug": "floatzel",
+    "dexNum": 419,
+    "position": 419
+  },
+  {
+    "slug": "cherubi",
+    "dexNum": 420,
+    "position": 420
+  },
+  {
+    "slug": "cherrim",
+    "dexNum": 421,
+    "position": 421
+  },
+  {
+    "slug": "shellos",
+    "dexNum": 422,
+    "position": 422
+  },
+  {
+    "slug": "gastrodon",
+    "dexNum": 423,
+    "position": 423
+  },
+  {
+    "slug": "ambipom",
+    "dexNum": 424,
+    "position": 424
+  },
+  {
+    "slug": "drifloon",
+    "dexNum": 425,
+    "position": 425
+  },
+  {
+    "slug": "drifblim",
+    "dexNum": 426,
+    "position": 426
+  },
+  {
+    "slug": "buneary",
+    "dexNum": 427,
+    "position": 427
+  },
+  {
+    "slug": "lopunny",
+    "dexNum": 428,
+    "position": 428
+  },
+  {
+    "slug": "mismagius",
+    "dexNum": 429,
+    "position": 429
+  },
+  {
+    "slug": "honchkrow",
+    "dexNum": 430,
+    "position": 430
+  },
+  {
+    "slug": "glameow",
+    "dexNum": 431,
+    "position": 431
+  },
+  {
+    "slug": "purugly",
+    "dexNum": 432,
+    "position": 432
+  },
+  {
+    "slug": "chingling",
+    "dexNum": 433,
+    "position": 433
+  },
+  {
+    "slug": "stunky",
+    "dexNum": 434,
+    "position": 434
+  },
+  {
+    "slug": "skuntank",
+    "dexNum": 435,
+    "position": 435
+  },
+  {
+    "slug": "bronzor",
+    "dexNum": 436,
+    "position": 436
+  },
+  {
+    "slug": "bronzong",
+    "dexNum": 437,
+    "position": 437
+  },
+  {
+    "slug": "bonsly",
+    "dexNum": 438,
+    "position": 438
+  },
+  {
+    "slug": "mimejr",
+    "dexNum": 439,
+    "position": 439
+  },
+  {
+    "slug": "happiny",
+    "dexNum": 440,
+    "position": 440
+  },
+  {
+    "slug": "chatot",
+    "dexNum": 441,
+    "position": 441
+  },
+  {
+    "slug": "spiritomb",
+    "dexNum": 442,
+    "position": 442
+  },
+  {
+    "slug": "gible",
+    "dexNum": 443,
+    "position": 443
+  },
+  {
+    "slug": "gabite",
+    "dexNum": 444,
+    "position": 444
+  },
+  {
+    "slug": "garchomp",
+    "dexNum": 445,
+    "position": 445
+  },
+  {
+    "slug": "munchlax",
+    "dexNum": 446,
+    "position": 446
+  },
+  {
+    "slug": "riolu",
+    "dexNum": 447,
+    "position": 447
+  },
+  {
+    "slug": "lucario",
+    "dexNum": 448,
+    "position": 448
+  },
+  {
+    "slug": "hippopotas",
+    "dexNum": 449,
+    "position": 449
+  },
+  {
+    "slug": "hippowdon",
+    "dexNum": 450,
+    "position": 450
+  },
+  {
+    "slug": "skorupi",
+    "dexNum": 451,
+    "position": 451
+  },
+  {
+    "slug": "drapion",
+    "dexNum": 452,
+    "position": 452
+  },
+  {
+    "slug": "croagunk",
+    "dexNum": 453,
+    "position": 453
+  },
+  {
+    "slug": "toxicroak",
+    "dexNum": 454,
+    "position": 454
+  },
+  {
+    "slug": "carnivine",
+    "dexNum": 455,
+    "position": 455
+  },
+  {
+    "slug": "finneon",
+    "dexNum": 456,
+    "position": 456
+  },
+  {
+    "slug": "lumineon",
+    "dexNum": 457,
+    "position": 457
+  },
+  {
+    "slug": "mantyke",
+    "dexNum": 458,
+    "position": 458
+  },
+  {
+    "slug": "snover",
+    "dexNum": 459,
+    "position": 459
+  },
+  {
+    "slug": "abomasnow",
+    "dexNum": 460,
+    "position": 460
+  },
+  {
+    "slug": "weavile",
+    "dexNum": 461,
+    "position": 461
+  },
+  {
+    "slug": "magnezone",
+    "dexNum": 462,
+    "position": 462
+  },
+  {
+    "slug": "lickilicky",
+    "dexNum": 463,
+    "position": 463
+  },
+  {
+    "slug": "rhyperior",
+    "dexNum": 464,
+    "position": 464
+  },
+  {
+    "slug": "tangrowth",
+    "dexNum": 465,
+    "position": 465
+  },
+  {
+    "slug": "electivire",
+    "dexNum": 466,
+    "position": 466
+  },
+  {
+    "slug": "magmortar",
+    "dexNum": 467,
+    "position": 467
+  },
+  {
+    "slug": "togekiss",
+    "dexNum": 468,
+    "position": 468
+  },
+  {
+    "slug": "yanmega",
+    "dexNum": 469,
+    "position": 469
+  },
+  {
+    "slug": "leafeon",
+    "dexNum": 470,
+    "position": 470
+  },
+  {
+    "slug": "glaceon",
+    "dexNum": 471,
+    "position": 471
+  },
+  {
+    "slug": "gliscor",
+    "dexNum": 472,
+    "position": 472
+  },
+  {
+    "slug": "mamoswine",
+    "dexNum": 473,
+    "position": 473
+  },
+  {
+    "slug": "porygonz",
+    "dexNum": 474,
+    "position": 474
+  },
+  {
+    "slug": "gallade",
+    "dexNum": 475,
+    "position": 475
+  },
+  {
+    "slug": "probopass",
+    "dexNum": 476,
+    "position": 476
+  },
+  {
+    "slug": "dusknoir",
+    "dexNum": 477,
+    "position": 477
+  },
+  {
+    "slug": "froslass",
+    "dexNum": 478,
+    "position": 478
+  },
+  {
+    "slug": "rotom",
+    "dexNum": 479,
+    "position": 479
+  },
+  {
+    "slug": "uxie",
+    "dexNum": 480,
+    "position": 480
+  },
+  {
+    "slug": "mesprit",
+    "dexNum": 481,
+    "position": 481
+  },
+  {
+    "slug": "azelf",
+    "dexNum": 482,
+    "position": 482
+  },
+  {
+    "slug": "dialga",
+    "dexNum": 483,
+    "position": 483
+  },
+  {
+    "slug": "palkia",
+    "dexNum": 484,
+    "position": 484
+  },
+  {
+    "slug": "heatran",
+    "dexNum": 485,
+    "position": 485
+  },
+  {
+    "slug": "regigigas",
+    "dexNum": 486,
+    "position": 486
+  },
+  {
+    "slug": "giratina",
+    "dexNum": 487,
+    "position": 487
+  },
+  {
+    "slug": "cresselia",
+    "dexNum": 488,
+    "position": 488
+  },
+  {
+    "slug": "phione",
+    "dexNum": 489,
+    "position": 489
+  },
+  {
+    "slug": "manaphy",
+    "dexNum": 490,
+    "position": 490
+  },
+  {
+    "slug": "darkrai",
+    "dexNum": 491,
+    "position": 491
+  },
+  {
+    "slug": "shaymin",
+    "dexNum": 492,
+    "position": 492
+  },
+  {
+    "slug": "arceus",
+    "dexNum": 493,
+    "position": 493
+  },
+  {
+    "slug": "victini",
+    "dexNum": 494,
+    "position": 494
+  },
+  {
+    "slug": "snivy",
+    "dexNum": 495,
+    "position": 495
+  },
+  {
+    "slug": "servine",
+    "dexNum": 496,
+    "position": 496
+  },
+  {
+    "slug": "serperior",
+    "dexNum": 497,
+    "position": 497
+  },
+  {
+    "slug": "tepig",
+    "dexNum": 498,
+    "position": 498
+  },
+  {
+    "slug": "pignite",
+    "dexNum": 499,
+    "position": 499
+  },
+  {
+    "slug": "emboar",
+    "dexNum": 500,
+    "position": 500
+  },
+  {
+    "slug": "oshawott",
+    "dexNum": 501,
+    "position": 501
+  },
+  {
+    "slug": "dewott",
+    "dexNum": 502,
+    "position": 502
+  },
+  {
+    "slug": "samurott",
+    "dexNum": 503,
+    "position": 503
+  },
+  {
+    "slug": "patrat",
+    "dexNum": 504,
+    "position": 504
+  },
+  {
+    "slug": "watchog",
+    "dexNum": 505,
+    "position": 505
+  },
+  {
+    "slug": "lillipup",
+    "dexNum": 506,
+    "position": 506
+  },
+  {
+    "slug": "herdier",
+    "dexNum": 507,
+    "position": 507
+  },
+  {
+    "slug": "stoutland",
+    "dexNum": 508,
+    "position": 508
+  },
+  {
+    "slug": "purrloin",
+    "dexNum": 509,
+    "position": 509
+  },
+  {
+    "slug": "liepard",
+    "dexNum": 510,
+    "position": 510
+  },
+  {
+    "slug": "pansage",
+    "dexNum": 511,
+    "position": 511
+  },
+  {
+    "slug": "simisage",
+    "dexNum": 512,
+    "position": 512
+  },
+  {
+    "slug": "pansear",
+    "dexNum": 513,
+    "position": 513
+  },
+  {
+    "slug": "simisear",
+    "dexNum": 514,
+    "position": 514
+  },
+  {
+    "slug": "panpour",
+    "dexNum": 515,
+    "position": 515
+  },
+  {
+    "slug": "simipour",
+    "dexNum": 516,
+    "position": 516
+  },
+  {
+    "slug": "munna",
+    "dexNum": 517,
+    "position": 517
+  },
+  {
+    "slug": "musharna",
+    "dexNum": 518,
+    "position": 518
+  },
+  {
+    "slug": "pidove",
+    "dexNum": 519,
+    "position": 519
+  },
+  {
+    "slug": "tranquill",
+    "dexNum": 520,
+    "position": 520
+  },
+  {
+    "slug": "unfezant",
+    "dexNum": 521,
+    "position": 521
+  },
+  {
+    "slug": "blitzle",
+    "dexNum": 522,
+    "position": 522
+  },
+  {
+    "slug": "zebstrika",
+    "dexNum": 523,
+    "position": 523
+  },
+  {
+    "slug": "roggenrola",
+    "dexNum": 524,
+    "position": 524
+  },
+  {
+    "slug": "boldore",
+    "dexNum": 525,
+    "position": 525
+  },
+  {
+    "slug": "gigalith",
+    "dexNum": 526,
+    "position": 526
+  },
+  {
+    "slug": "woobat",
+    "dexNum": 527,
+    "position": 527
+  },
+  {
+    "slug": "swoobat",
+    "dexNum": 528,
+    "position": 528
+  },
+  {
+    "slug": "drilbur",
+    "dexNum": 529,
+    "position": 529
+  },
+  {
+    "slug": "excadrill",
+    "dexNum": 530,
+    "position": 530
+  },
+  {
+    "slug": "audino",
+    "dexNum": 531,
+    "position": 531
+  },
+  {
+    "slug": "timburr",
+    "dexNum": 532,
+    "position": 532
+  },
+  {
+    "slug": "gurdurr",
+    "dexNum": 533,
+    "position": 533
+  },
+  {
+    "slug": "conkeldurr",
+    "dexNum": 534,
+    "position": 534
+  },
+  {
+    "slug": "tympole",
+    "dexNum": 535,
+    "position": 535
+  },
+  {
+    "slug": "palpitoad",
+    "dexNum": 536,
+    "position": 536
+  },
+  {
+    "slug": "seismitoad",
+    "dexNum": 537,
+    "position": 537
+  },
+  {
+    "slug": "throh",
+    "dexNum": 538,
+    "position": 538
+  },
+  {
+    "slug": "sawk",
+    "dexNum": 539,
+    "position": 539
+  },
+  {
+    "slug": "sewaddle",
+    "dexNum": 540,
+    "position": 540
+  },
+  {
+    "slug": "swadloon",
+    "dexNum": 541,
+    "position": 541
+  },
+  {
+    "slug": "leavanny",
+    "dexNum": 542,
+    "position": 542
+  },
+  {
+    "slug": "venipede",
+    "dexNum": 543,
+    "position": 543
+  },
+  {
+    "slug": "whirlipede",
+    "dexNum": 544,
+    "position": 544
+  },
+  {
+    "slug": "scolipede",
+    "dexNum": 545,
+    "position": 545
+  },
+  {
+    "slug": "cottonee",
+    "dexNum": 546,
+    "position": 546
+  },
+  {
+    "slug": "whimsicott",
+    "dexNum": 547,
+    "position": 547
+  },
+  {
+    "slug": "petilil",
+    "dexNum": 548,
+    "position": 548
+  },
+  {
+    "slug": "lilligant",
+    "dexNum": 549,
+    "position": 549
+  },
+  {
+    "slug": "basculin",
+    "dexNum": 550,
+    "position": 550
+  },
+  {
+    "slug": "sandile",
+    "dexNum": 551,
+    "position": 551
+  },
+  {
+    "slug": "krokorok",
+    "dexNum": 552,
+    "position": 552
+  },
+  {
+    "slug": "krookodile",
+    "dexNum": 553,
+    "position": 553
+  },
+  {
+    "slug": "darumaka",
+    "dexNum": 554,
+    "position": 554
+  },
+  {
+    "slug": "darmanitan",
+    "dexNum": 555,
+    "position": 555
+  },
+  {
+    "slug": "maractus",
+    "dexNum": 556,
+    "position": 556
+  },
+  {
+    "slug": "dwebble",
+    "dexNum": 557,
+    "position": 557
+  },
+  {
+    "slug": "crustle",
+    "dexNum": 558,
+    "position": 558
+  },
+  {
+    "slug": "scraggy",
+    "dexNum": 559,
+    "position": 559
+  },
+  {
+    "slug": "scrafty",
+    "dexNum": 560,
+    "position": 560
+  },
+  {
+    "slug": "sigilyph",
+    "dexNum": 561,
+    "position": 561
+  },
+  {
+    "slug": "yamask",
+    "dexNum": 562,
+    "position": 562
+  },
+  {
+    "slug": "cofagrigus",
+    "dexNum": 563,
+    "position": 563
+  },
+  {
+    "slug": "tirtouga",
+    "dexNum": 564,
+    "position": 564
+  },
+  {
+    "slug": "carracosta",
+    "dexNum": 565,
+    "position": 565
+  },
+  {
+    "slug": "archen",
+    "dexNum": 566,
+    "position": 566
+  },
+  {
+    "slug": "archeops",
+    "dexNum": 567,
+    "position": 567
+  },
+  {
+    "slug": "trubbish",
+    "dexNum": 568,
+    "position": 568
+  },
+  {
+    "slug": "garbodor",
+    "dexNum": 569,
+    "position": 569
+  },
+  {
+    "slug": "zorua",
+    "dexNum": 570,
+    "position": 570
+  },
+  {
+    "slug": "zoroark",
+    "dexNum": 571,
+    "position": 571
+  },
+  {
+    "slug": "minccino",
+    "dexNum": 572,
+    "position": 572
+  },
+  {
+    "slug": "cinccino",
+    "dexNum": 573,
+    "position": 573
+  },
+  {
+    "slug": "gothita",
+    "dexNum": 574,
+    "position": 574
+  },
+  {
+    "slug": "gothorita",
+    "dexNum": 575,
+    "position": 575
+  },
+  {
+    "slug": "gothitelle",
+    "dexNum": 576,
+    "position": 576
+  },
+  {
+    "slug": "solosis",
+    "dexNum": 577,
+    "position": 577
+  },
+  {
+    "slug": "duosion",
+    "dexNum": 578,
+    "position": 578
+  },
+  {
+    "slug": "reuniclus",
+    "dexNum": 579,
+    "position": 579
+  },
+  {
+    "slug": "ducklett",
+    "dexNum": 580,
+    "position": 580
+  },
+  {
+    "slug": "swanna",
+    "dexNum": 581,
+    "position": 581
+  },
+  {
+    "slug": "vanillite",
+    "dexNum": 582,
+    "position": 582
+  },
+  {
+    "slug": "vanillish",
+    "dexNum": 583,
+    "position": 583
+  },
+  {
+    "slug": "vanilluxe",
+    "dexNum": 584,
+    "position": 584
+  },
+  {
+    "slug": "deerling",
+    "dexNum": 585,
+    "position": 585
+  },
+  {
+    "slug": "sawsbuck",
+    "dexNum": 586,
+    "position": 586
+  },
+  {
+    "slug": "emolga",
+    "dexNum": 587,
+    "position": 587
+  },
+  {
+    "slug": "karrablast",
+    "dexNum": 588,
+    "position": 588
+  },
+  {
+    "slug": "escavalier",
+    "dexNum": 589,
+    "position": 589
+  },
+  {
+    "slug": "foongus",
+    "dexNum": 590,
+    "position": 590
+  },
+  {
+    "slug": "amoonguss",
+    "dexNum": 591,
+    "position": 591
+  },
+  {
+    "slug": "frillish",
+    "dexNum": 592,
+    "position": 592
+  },
+  {
+    "slug": "jellicent",
+    "dexNum": 593,
+    "position": 593
+  },
+  {
+    "slug": "alomomola",
+    "dexNum": 594,
+    "position": 594
+  },
+  {
+    "slug": "joltik",
+    "dexNum": 595,
+    "position": 595
+  },
+  {
+    "slug": "galvantula",
+    "dexNum": 596,
+    "position": 596
+  },
+  {
+    "slug": "ferroseed",
+    "dexNum": 597,
+    "position": 597
+  },
+  {
+    "slug": "ferrothorn",
+    "dexNum": 598,
+    "position": 598
+  },
+  {
+    "slug": "klink",
+    "dexNum": 599,
+    "position": 599
+  },
+  {
+    "slug": "klang",
+    "dexNum": 600,
+    "position": 600
+  },
+  {
+    "slug": "klinklang",
+    "dexNum": 601,
+    "position": 601
+  },
+  {
+    "slug": "tynamo",
+    "dexNum": 602,
+    "position": 602
+  },
+  {
+    "slug": "eelektrik",
+    "dexNum": 603,
+    "position": 603
+  },
+  {
+    "slug": "eelektross",
+    "dexNum": 604,
+    "position": 604
+  },
+  {
+    "slug": "elgyem",
+    "dexNum": 605,
+    "position": 605
+  },
+  {
+    "slug": "beheeyem",
+    "dexNum": 606,
+    "position": 606
+  },
+  {
+    "slug": "litwick",
+    "dexNum": 607,
+    "position": 607
+  },
+  {
+    "slug": "lampent",
+    "dexNum": 608,
+    "position": 608
+  },
+  {
+    "slug": "chandelure",
+    "dexNum": 609,
+    "position": 609
+  },
+  {
+    "slug": "axew",
+    "dexNum": 610,
+    "position": 610
+  },
+  {
+    "slug": "fraxure",
+    "dexNum": 611,
+    "position": 611
+  },
+  {
+    "slug": "haxorus",
+    "dexNum": 612,
+    "position": 612
+  },
+  {
+    "slug": "cubchoo",
+    "dexNum": 613,
+    "position": 613
+  },
+  {
+    "slug": "beartic",
+    "dexNum": 614,
+    "position": 614
+  },
+  {
+    "slug": "cryogonal",
+    "dexNum": 615,
+    "position": 615
+  },
+  {
+    "slug": "shelmet",
+    "dexNum": 616,
+    "position": 616
+  },
+  {
+    "slug": "accelgor",
+    "dexNum": 617,
+    "position": 617
+  },
+  {
+    "slug": "stunfisk",
+    "dexNum": 618,
+    "position": 618
+  },
+  {
+    "slug": "mienfoo",
+    "dexNum": 619,
+    "position": 619
+  },
+  {
+    "slug": "mienshao",
+    "dexNum": 620,
+    "position": 620
+  },
+  {
+    "slug": "druddigon",
+    "dexNum": 621,
+    "position": 621
+  },
+  {
+    "slug": "golett",
+    "dexNum": 622,
+    "position": 622
+  },
+  {
+    "slug": "golurk",
+    "dexNum": 623,
+    "position": 623
+  },
+  {
+    "slug": "pawniard",
+    "dexNum": 624,
+    "position": 624
+  },
+  {
+    "slug": "bisharp",
+    "dexNum": 625,
+    "position": 625
+  },
+  {
+    "slug": "bouffalant",
+    "dexNum": 626,
+    "position": 626
+  },
+  {
+    "slug": "rufflet",
+    "dexNum": 627,
+    "position": 627
+  },
+  {
+    "slug": "braviary",
+    "dexNum": 628,
+    "position": 628
+  },
+  {
+    "slug": "vullaby",
+    "dexNum": 629,
+    "position": 629
+  },
+  {
+    "slug": "mandibuzz",
+    "dexNum": 630,
+    "position": 630
+  },
+  {
+    "slug": "heatmor",
+    "dexNum": 631,
+    "position": 631
+  },
+  {
+    "slug": "durant",
+    "dexNum": 632,
+    "position": 632
+  },
+  {
+    "slug": "deino",
+    "dexNum": 633,
+    "position": 633
+  },
+  {
+    "slug": "zweilous",
+    "dexNum": 634,
+    "position": 634
+  },
+  {
+    "slug": "hydreigon",
+    "dexNum": 635,
+    "position": 635
+  },
+  {
+    "slug": "larvesta",
+    "dexNum": 636,
+    "position": 636
+  },
+  {
+    "slug": "volcarona",
+    "dexNum": 637,
+    "position": 637
+  },
+  {
+    "slug": "cobalion",
+    "dexNum": 638,
+    "position": 638
+  },
+  {
+    "slug": "terrakion",
+    "dexNum": 639,
+    "position": 639
+  },
+  {
+    "slug": "virizion",
+    "dexNum": 640,
+    "position": 640
+  },
+  {
+    "slug": "tornadus",
+    "dexNum": 641,
+    "position": 641
+  },
+  {
+    "slug": "thundurus",
+    "dexNum": 642,
+    "position": 642
+  },
+  {
+    "slug": "reshiram",
+    "dexNum": 643,
+    "position": 643
+  },
+  {
+    "slug": "zekrom",
+    "dexNum": 644,
+    "position": 644
+  },
+  {
+    "slug": "landorus",
+    "dexNum": 645,
+    "position": 645
+  },
+  {
+    "slug": "kyurem",
+    "dexNum": 646,
+    "position": 646
+  },
+  {
+    "slug": "keldeo",
+    "dexNum": 647,
+    "position": 647
+  },
+  {
+    "slug": "meloetta",
+    "dexNum": 648,
+    "position": 648
+  },
+  {
+    "slug": "genesect",
+    "dexNum": 649,
+    "position": 649
+  },
+  {
+    "slug": "chespin",
+    "dexNum": 650,
+    "position": 650
+  },
+  {
+    "slug": "quilladin",
+    "dexNum": 651,
+    "position": 651
+  },
+  {
+    "slug": "chesnaught",
+    "dexNum": 652,
+    "position": 652
+  },
+  {
+    "slug": "fennekin",
+    "dexNum": 653,
+    "position": 653
+  },
+  {
+    "slug": "braixen",
+    "dexNum": 654,
+    "position": 654
+  },
+  {
+    "slug": "delphox",
+    "dexNum": 655,
+    "position": 655
+  },
+  {
+    "slug": "froakie",
+    "dexNum": 656,
+    "position": 656
+  },
+  {
+    "slug": "frogadier",
+    "dexNum": 657,
+    "position": 657
+  },
+  {
+    "slug": "greninja",
+    "dexNum": 658,
+    "position": 658
+  },
+  {
+    "slug": "bunnelby",
+    "dexNum": 659,
+    "position": 659
+  },
+  {
+    "slug": "diggersby",
+    "dexNum": 660,
+    "position": 660
+  },
+  {
+    "slug": "fletchling",
+    "dexNum": 661,
+    "position": 661
+  },
+  {
+    "slug": "fletchinder",
+    "dexNum": 662,
+    "position": 662
+  },
+  {
+    "slug": "talonflame",
+    "dexNum": 663,
+    "position": 663
+  },
+  {
+    "slug": "scatterbug",
+    "dexNum": 664,
+    "position": 664
+  },
+  {
+    "slug": "spewpa",
+    "dexNum": 665,
+    "position": 665
+  },
+  {
+    "slug": "vivillon",
+    "dexNum": 666,
+    "position": 666
+  },
+  {
+    "slug": "litleo",
+    "dexNum": 667,
+    "position": 667
+  },
+  {
+    "slug": "pyroar",
+    "dexNum": 668,
+    "position": 668
+  },
+  {
+    "slug": "flabebe",
+    "dexNum": 669,
+    "position": 669
+  },
+  {
+    "slug": "floette",
+    "dexNum": 670,
+    "position": 670
+  },
+  {
+    "slug": "florges",
+    "dexNum": 671,
+    "position": 671
+  },
+  {
+    "slug": "skiddo",
+    "dexNum": 672,
+    "position": 672
+  },
+  {
+    "slug": "gogoat",
+    "dexNum": 673,
+    "position": 673
+  },
+  {
+    "slug": "pancham",
+    "dexNum": 674,
+    "position": 674
+  },
+  {
+    "slug": "pangoro",
+    "dexNum": 675,
+    "position": 675
+  },
+  {
+    "slug": "furfrou",
+    "dexNum": 676,
+    "position": 676
+  },
+  {
+    "slug": "espurr",
+    "dexNum": 677,
+    "position": 677
+  },
+  {
+    "slug": "meowstic",
+    "dexNum": 678,
+    "position": 678
+  },
+  {
+    "slug": "honedge",
+    "dexNum": 679,
+    "position": 679
+  },
+  {
+    "slug": "doublade",
+    "dexNum": 680,
+    "position": 680
+  },
+  {
+    "slug": "aegislash",
+    "dexNum": 681,
+    "position": 681
+  },
+  {
+    "slug": "spritzee",
+    "dexNum": 682,
+    "position": 682
+  },
+  {
+    "slug": "aromatisse",
+    "dexNum": 683,
+    "position": 683
+  },
+  {
+    "slug": "swirlix",
+    "dexNum": 684,
+    "position": 684
+  },
+  {
+    "slug": "slurpuff",
+    "dexNum": 685,
+    "position": 685
+  },
+  {
+    "slug": "inkay",
+    "dexNum": 686,
+    "position": 686
+  },
+  {
+    "slug": "malamar",
+    "dexNum": 687,
+    "position": 687
+  },
+  {
+    "slug": "binacle",
+    "dexNum": 688,
+    "position": 688
+  },
+  {
+    "slug": "barbaracle",
+    "dexNum": 689,
+    "position": 689
+  },
+  {
+    "slug": "skrelp",
+    "dexNum": 690,
+    "position": 690
+  },
+  {
+    "slug": "dragalge",
+    "dexNum": 691,
+    "position": 691
+  },
+  {
+    "slug": "clauncher",
+    "dexNum": 692,
+    "position": 692
+  },
+  {
+    "slug": "clawitzer",
+    "dexNum": 693,
+    "position": 693
+  },
+  {
+    "slug": "helioptile",
+    "dexNum": 694,
+    "position": 694
+  },
+  {
+    "slug": "heliolisk",
+    "dexNum": 695,
+    "position": 695
+  },
+  {
+    "slug": "tyrunt",
+    "dexNum": 696,
+    "position": 696
+  },
+  {
+    "slug": "tyrantrum",
+    "dexNum": 697,
+    "position": 697
+  },
+  {
+    "slug": "amaura",
+    "dexNum": 698,
+    "position": 698
+  },
+  {
+    "slug": "aurorus",
+    "dexNum": 699,
+    "position": 699
+  },
+  {
+    "slug": "sylveon",
+    "dexNum": 700,
+    "position": 700
+  },
+  {
+    "slug": "hawlucha",
+    "dexNum": 701,
+    "position": 701
+  },
+  {
+    "slug": "dedenne",
+    "dexNum": 702,
+    "position": 702
+  },
+  {
+    "slug": "carbink",
+    "dexNum": 703,
+    "position": 703
+  },
+  {
+    "slug": "goomy",
+    "dexNum": 704,
+    "position": 704
+  },
+  {
+    "slug": "sliggoo",
+    "dexNum": 705,
+    "position": 705
+  },
+  {
+    "slug": "goodra",
+    "dexNum": 706,
+    "position": 706
+  },
+  {
+    "slug": "klefki",
+    "dexNum": 707,
+    "position": 707
+  },
+  {
+    "slug": "phantump",
+    "dexNum": 708,
+    "position": 708
+  },
+  {
+    "slug": "trevenant",
+    "dexNum": 709,
+    "position": 709
+  },
+  {
+    "slug": "pumpkaboo",
+    "dexNum": 710,
+    "position": 710
+  },
+  {
+    "slug": "gourgeist",
+    "dexNum": 711,
+    "position": 711
+  },
+  {
+    "slug": "bergmite",
+    "dexNum": 712,
+    "position": 712
+  },
+  {
+    "slug": "avalugg",
+    "dexNum": 713,
+    "position": 713
+  },
+  {
+    "slug": "noibat",
+    "dexNum": 714,
+    "position": 714
+  },
+  {
+    "slug": "noivern",
+    "dexNum": 715,
+    "position": 715
+  },
+  {
+    "slug": "xerneas",
+    "dexNum": 716,
+    "position": 716
+  },
+  {
+    "slug": "yveltal",
+    "dexNum": 717,
+    "position": 717
+  },
+  {
+    "slug": "zygarde",
+    "dexNum": 718,
+    "position": 718
+  },
+  {
+    "slug": "diancie",
+    "dexNum": 719,
+    "position": 719
+  },
+  {
+    "slug": "hoopa",
+    "dexNum": 720,
+    "position": 720
+  },
+  {
+    "slug": "volcanion",
+    "dexNum": 721,
+    "position": 721
+  },
+  {
+    "slug": "rowlet",
+    "dexNum": 722,
+    "position": 722
+  },
+  {
+    "slug": "dartrix",
+    "dexNum": 723,
+    "position": 723
+  },
+  {
+    "slug": "decidueye",
+    "dexNum": 724,
+    "position": 724
+  },
+  {
+    "slug": "litten",
+    "dexNum": 725,
+    "position": 725
+  },
+  {
+    "slug": "torracat",
+    "dexNum": 726,
+    "position": 726
+  },
+  {
+    "slug": "incineroar",
+    "dexNum": 727,
+    "position": 727
+  },
+  {
+    "slug": "popplio",
+    "dexNum": 728,
+    "position": 728
+  },
+  {
+    "slug": "brionne",
+    "dexNum": 729,
+    "position": 729
+  },
+  {
+    "slug": "primarina",
+    "dexNum": 730,
+    "position": 730
+  },
+  {
+    "slug": "pikipek",
+    "dexNum": 731,
+    "position": 731
+  },
+  {
+    "slug": "trumbeak",
+    "dexNum": 732,
+    "position": 732
+  },
+  {
+    "slug": "toucannon",
+    "dexNum": 733,
+    "position": 733
+  },
+  {
+    "slug": "yungoos",
+    "dexNum": 734,
+    "position": 734
+  },
+  {
+    "slug": "gumshoos",
+    "dexNum": 735,
+    "position": 735
+  },
+  {
+    "slug": "grubbin",
+    "dexNum": 736,
+    "position": 736
+  },
+  {
+    "slug": "charjabug",
+    "dexNum": 737,
+    "position": 737
+  },
+  {
+    "slug": "vikavolt",
+    "dexNum": 738,
+    "position": 738
+  },
+  {
+    "slug": "crabrawler",
+    "dexNum": 739,
+    "position": 739
+  },
+  {
+    "slug": "crabominable",
+    "dexNum": 740,
+    "position": 740
+  },
+  {
+    "slug": "oricorio",
+    "dexNum": 741,
+    "position": 741
+  },
+  {
+    "slug": "cutiefly",
+    "dexNum": 742,
+    "position": 742
+  },
+  {
+    "slug": "ribombee",
+    "dexNum": 743,
+    "position": 743
+  },
+  {
+    "slug": "rockruff",
+    "dexNum": 744,
+    "position": 744
+  },
+  {
+    "slug": "lycanroc",
+    "dexNum": 745,
+    "position": 745
+  },
+  {
+    "slug": "wishiwashi",
+    "dexNum": 746,
+    "position": 746
+  },
+  {
+    "slug": "mareanie",
+    "dexNum": 747,
+    "position": 747
+  },
+  {
+    "slug": "toxapex",
+    "dexNum": 748,
+    "position": 748
+  },
+  {
+    "slug": "mudbray",
+    "dexNum": 749,
+    "position": 749
+  },
+  {
+    "slug": "mudsdale",
+    "dexNum": 750,
+    "position": 750
+  },
+  {
+    "slug": "dewpider",
+    "dexNum": 751,
+    "position": 751
+  },
+  {
+    "slug": "araquanid",
+    "dexNum": 752,
+    "position": 752
+  },
+  {
+    "slug": "fomantis",
+    "dexNum": 753,
+    "position": 753
+  },
+  {
+    "slug": "lurantis",
+    "dexNum": 754,
+    "position": 754
+  },
+  {
+    "slug": "morelull",
+    "dexNum": 755,
+    "position": 755
+  },
+  {
+    "slug": "shiinotic",
+    "dexNum": 756,
+    "position": 756
+  },
+  {
+    "slug": "salandit",
+    "dexNum": 757,
+    "position": 757
+  },
+  {
+    "slug": "salazzle",
+    "dexNum": 758,
+    "position": 758
+  },
+  {
+    "slug": "stufful",
+    "dexNum": 759,
+    "position": 759
+  },
+  {
+    "slug": "bewear",
+    "dexNum": 760,
+    "position": 760
+  },
+  {
+    "slug": "bounsweet",
+    "dexNum": 761,
+    "position": 761
+  },
+  {
+    "slug": "steenee",
+    "dexNum": 762,
+    "position": 762
+  },
+  {
+    "slug": "tsareena",
+    "dexNum": 763,
+    "position": 763
+  },
+  {
+    "slug": "comfey",
+    "dexNum": 764,
+    "position": 764
+  },
+  {
+    "slug": "oranguru",
+    "dexNum": 765,
+    "position": 765
+  },
+  {
+    "slug": "passimian",
+    "dexNum": 766,
+    "position": 766
+  },
+  {
+    "slug": "wimpod",
+    "dexNum": 767,
+    "position": 767
+  },
+  {
+    "slug": "golisopod",
+    "dexNum": 768,
+    "position": 768
+  },
+  {
+    "slug": "sandygast",
+    "dexNum": 769,
+    "position": 769
+  },
+  {
+    "slug": "palossand",
+    "dexNum": 770,
+    "position": 770
+  },
+  {
+    "slug": "pyukumuku",
+    "dexNum": 771,
+    "position": 771
+  },
+  {
+    "slug": "typenull",
+    "dexNum": 772,
+    "position": 772
+  },
+  {
+    "slug": "silvally",
+    "dexNum": 773,
+    "position": 773
+  },
+  {
+    "slug": "komala",
+    "dexNum": 775,
+    "position": 774
+  },
+  {
+    "slug": "turtonator",
+    "dexNum": 776,
+    "position": 775
+  },
+  {
+    "slug": "togedemaru",
+    "dexNum": 777,
+    "position": 776
+  },
+  {
+    "slug": "mimikyu",
+    "dexNum": 778,
+    "position": 777
+  },
+  {
+    "slug": "bruxish",
+    "dexNum": 779,
+    "position": 778
+  },
+  {
+    "slug": "drampa",
+    "dexNum": 780,
+    "position": 779
+  },
+  {
+    "slug": "dhelmise",
+    "dexNum": 781,
+    "position": 780
+  },
+  {
+    "slug": "jangmoo",
+    "dexNum": 782,
+    "position": 781
+  },
+  {
+    "slug": "hakamoo",
+    "dexNum": 783,
+    "position": 782
+  },
+  {
+    "slug": "kommoo",
+    "dexNum": 784,
+    "position": 783
+  },
+  {
+    "slug": "tapukoko",
+    "dexNum": 785,
+    "position": 784
+  },
+  {
+    "slug": "tapulele",
+    "dexNum": 786,
+    "position": 785
+  },
+  {
+    "slug": "tapubulu",
+    "dexNum": 787,
+    "position": 786
+  },
+  {
+    "slug": "tapufini",
+    "dexNum": 788,
+    "position": 787
+  },
+  {
+    "slug": "cosmog",
+    "dexNum": 789,
+    "position": 788
+  },
+  {
+    "slug": "cosmoem",
+    "dexNum": 790,
+    "position": 789
+  },
+  {
+    "slug": "solgaleo",
+    "dexNum": 791,
+    "position": 790
+  },
+  {
+    "slug": "lunala",
+    "dexNum": 792,
+    "position": 791
+  },
+  {
+    "slug": "nihilego",
+    "dexNum": 793,
+    "position": 792
+  },
+  {
+    "slug": "buzzwole",
+    "dexNum": 794,
+    "position": 793
+  },
+  {
+    "slug": "pheromosa",
+    "dexNum": 795,
+    "position": 794
+  },
+  {
+    "slug": "xurkitree",
+    "dexNum": 796,
+    "position": 795
+  },
+  {
+    "slug": "celesteela",
+    "dexNum": 797,
+    "position": 796
+  },
+  {
+    "slug": "kartana",
+    "dexNum": 798,
+    "position": 797
+  },
+  {
+    "slug": "guzzlord",
+    "dexNum": 799,
+    "position": 798
+  },
+  {
+    "slug": "necrozma",
+    "dexNum": 800,
+    "position": 799
+  },
+  {
+    "slug": "magearna",
+    "dexNum": 801,
+    "position": 800
+  },
+  {
+    "slug": "marshadow",
+    "dexNum": 802,
+    "position": 801
+  },
+  {
+    "slug": "poipole",
+    "dexNum": 803,
+    "position": 802
+  },
+  {
+    "slug": "naganadel",
+    "dexNum": 804,
+    "position": 803
+  },
+  {
+    "slug": "stakataka",
+    "dexNum": 805,
+    "position": 804
+  },
+  {
+    "slug": "blacephalon",
+    "dexNum": 806,
+    "position": 805
+  },
+  {
+    "slug": "zeraora",
+    "dexNum": 807,
+    "position": 806
+  },
+  {
+    "slug": "meltan",
+    "dexNum": 808,
+    "position": 807
+  },
+  {
+    "slug": "melmetal",
+    "dexNum": 809,
+    "position": 808
+  },
+  {
+    "slug": "grookey",
+    "dexNum": 810,
+    "position": 809
+  },
+  {
+    "slug": "thwackey",
+    "dexNum": 811,
+    "position": 810
+  },
+  {
+    "slug": "rillaboom",
+    "dexNum": 812,
+    "position": 811
+  },
+  {
+    "slug": "scorbunny",
+    "dexNum": 813,
+    "position": 812
+  },
+  {
+    "slug": "raboot",
+    "dexNum": 814,
+    "position": 813
+  },
+  {
+    "slug": "cinderace",
+    "dexNum": 815,
+    "position": 814
+  },
+  {
+    "slug": "sobble",
+    "dexNum": 816,
+    "position": 815
+  },
+  {
+    "slug": "drizzile",
+    "dexNum": 817,
+    "position": 816
+  },
+  {
+    "slug": "inteleon",
+    "dexNum": 818,
+    "position": 817
+  },
+  {
+    "slug": "skwovet",
+    "dexNum": 819,
+    "position": 818
+  },
+  {
+    "slug": "greedent",
+    "dexNum": 820,
+    "position": 819
+  },
+  {
+    "slug": "rookidee",
+    "dexNum": 821,
+    "position": 820
+  },
+  {
+    "slug": "corvisquire",
+    "dexNum": 822,
+    "position": 821
+  },
+  {
+    "slug": "corviknight",
+    "dexNum": 823,
+    "position": 822
+  },
+  {
+    "slug": "blipbug",
+    "dexNum": 824,
+    "position": 823
+  },
+  {
+    "slug": "dottler",
+    "dexNum": 825,
+    "position": 824
+  },
+  {
+    "slug": "orbeetle",
+    "dexNum": 826,
+    "position": 825
+  },
+  {
+    "slug": "nickit",
+    "dexNum": 827,
+    "position": 826
+  },
+  {
+    "slug": "thievul",
+    "dexNum": 828,
+    "position": 827
+  },
+  {
+    "slug": "gossifleur",
+    "dexNum": 829,
+    "position": 828
+  },
+  {
+    "slug": "eldegoss",
+    "dexNum": 830,
+    "position": 829
+  },
+  {
+    "slug": "wooloo",
+    "dexNum": 831,
+    "position": 830
+  },
+  {
+    "slug": "dubwool",
+    "dexNum": 832,
+    "position": 831
+  },
+  {
+    "slug": "chewtle",
+    "dexNum": 833,
+    "position": 832
+  },
+  {
+    "slug": "drednaw",
+    "dexNum": 834,
+    "position": 833
+  },
+  {
+    "slug": "yamper",
+    "dexNum": 835,
+    "position": 834
+  },
+  {
+    "slug": "boltund",
+    "dexNum": 836,
+    "position": 835
+  },
+  {
+    "slug": "rolycoly",
+    "dexNum": 837,
+    "position": 836
+  },
+  {
+    "slug": "carkol",
+    "dexNum": 838,
+    "position": 837
+  },
+  {
+    "slug": "coalossal",
+    "dexNum": 839,
+    "position": 838
+  },
+  {
+    "slug": "applin",
+    "dexNum": 840,
+    "position": 839
+  },
+  {
+    "slug": "flapple",
+    "dexNum": 841,
+    "position": 840
+  },
+  {
+    "slug": "appletun",
+    "dexNum": 842,
+    "position": 841
+  },
+  {
+    "slug": "silicobra",
+    "dexNum": 843,
+    "position": 842
+  },
+  {
+    "slug": "sandaconda",
+    "dexNum": 844,
+    "position": 843
+  },
+  {
+    "slug": "cramorant",
+    "dexNum": 845,
+    "position": 844
+  },
+  {
+    "slug": "arrokuda",
+    "dexNum": 846,
+    "position": 845
+  },
+  {
+    "slug": "barraskewda",
+    "dexNum": 847,
+    "position": 846
+  },
+  {
+    "slug": "toxel",
+    "dexNum": 848,
+    "position": 847
+  },
+  {
+    "slug": "toxtricity",
+    "dexNum": 849,
+    "position": 848
+  },
+  {
+    "slug": "sizzlipede",
+    "dexNum": 850,
+    "position": 849
+  },
+  {
+    "slug": "centiskorch",
+    "dexNum": 851,
+    "position": 850
+  },
+  {
+    "slug": "clobbopus",
+    "dexNum": 852,
+    "position": 851
+  },
+  {
+    "slug": "grapploct",
+    "dexNum": 853,
+    "position": 852
+  },
+  {
+    "slug": "sinistea",
+    "dexNum": 854,
+    "position": 853
+  },
+  {
+    "slug": "polteageist",
+    "dexNum": 855,
+    "position": 854
+  },
+  {
+    "slug": "hatenna",
+    "dexNum": 856,
+    "position": 855
+  },
+  {
+    "slug": "hattrem",
+    "dexNum": 857,
+    "position": 856
+  },
+  {
+    "slug": "hatterene",
+    "dexNum": 858,
+    "position": 857
+  },
+  {
+    "slug": "impidimp",
+    "dexNum": 859,
+    "position": 858
+  },
+  {
+    "slug": "morgrem",
+    "dexNum": 860,
+    "position": 859
+  },
+  {
+    "slug": "grimmsnarl",
+    "dexNum": 861,
+    "position": 860
+  },
+  {
+    "slug": "obstagoon",
+    "dexNum": 862,
+    "position": 861
+  },
+  {
+    "slug": "perrserker",
+    "dexNum": 863,
+    "position": 862
+  },
+  {
+    "slug": "cursola",
+    "dexNum": 864,
+    "position": 863
+  },
+  {
+    "slug": "sirfetchd",
+    "dexNum": 865,
+    "position": 864
+  },
+  {
+    "slug": "mrrime",
+    "dexNum": 866,
+    "position": 865
+  },
+  {
+    "slug": "runerigus",
+    "dexNum": 867,
+    "position": 866
+  },
+  {
+    "slug": "milcery",
+    "dexNum": 868,
+    "position": 867
+  },
+  {
+    "slug": "alcremie",
+    "dexNum": 869,
+    "position": 868
+  },
+  {
+    "slug": "falinks",
+    "dexNum": 870,
+    "position": 869
+  },
+  {
+    "slug": "pincurchin",
+    "dexNum": 871,
+    "position": 870
+  },
+  {
+    "slug": "snom",
+    "dexNum": 872,
+    "position": 871
+  },
+  {
+    "slug": "frosmoth",
+    "dexNum": 873,
+    "position": 872
+  },
+  {
+    "slug": "stonjourner",
+    "dexNum": 874,
+    "position": 873
+  },
+  {
+    "slug": "eiscue",
+    "dexNum": 875,
+    "position": 874
+  },
+  {
+    "slug": "indeedee",
+    "dexNum": 876,
+    "position": 875
+  },
+  {
+    "slug": "morpeko",
+    "dexNum": 877,
+    "position": 876
+  },
+  {
+    "slug": "cufant",
+    "dexNum": 878,
+    "position": 877
+  },
+  {
+    "slug": "copperajah",
+    "dexNum": 879,
+    "position": 878
+  },
+  {
+    "slug": "dracozolt",
+    "dexNum": 880,
+    "position": 879
+  },
+  {
+    "slug": "arctozolt",
+    "dexNum": 881,
+    "position": 880
+  },
+  {
+    "slug": "dracovish",
+    "dexNum": 882,
+    "position": 881
+  },
+  {
+    "slug": "arctovish",
+    "dexNum": 883,
+    "position": 882
+  },
+  {
+    "slug": "duraludon",
+    "dexNum": 884,
+    "position": 883
+  },
+  {
+    "slug": "dreepy",
+    "dexNum": 885,
+    "position": 884
+  },
+  {
+    "slug": "drakloak",
+    "dexNum": 886,
+    "position": 885
+  },
+  {
+    "slug": "dragapult",
+    "dexNum": 887,
+    "position": 886
+  },
+  {
+    "slug": "zacian",
+    "dexNum": 888,
+    "position": 887
+  },
+  {
+    "slug": "zamazenta",
+    "dexNum": 889,
+    "position": 888
+  },
+  {
+    "slug": "eternatus",
+    "dexNum": 890,
+    "position": 889
+  },
+  {
+    "slug": "kubfu",
+    "dexNum": 891,
+    "position": 890
+  },
+  {
+    "slug": "urshifu",
+    "dexNum": 892,
+    "position": 891
+  },
+  {
+    "slug": "zarude",
+    "dexNum": 893,
+    "position": 892
+  },
+  {
+    "slug": "regieleki",
+    "dexNum": 894,
+    "position": 893
+  },
+  {
+    "slug": "regidrago",
+    "dexNum": 895,
+    "position": 894
+  },
+  {
+    "slug": "glastrier",
+    "dexNum": 896,
+    "position": 895
+  },
+  {
+    "slug": "spectrier",
+    "dexNum": 897,
+    "position": 896
+  },
+  {
+    "slug": "calyrex",
+    "dexNum": 898,
+    "position": 897
+  },
+  {
+    "slug": "wyrdeer",
+    "dexNum": 899,
+    "position": 898
+  },
+  {
+    "slug": "kleavor",
+    "dexNum": 900,
+    "position": 899
+  },
+  {
+    "slug": "ursaluna",
+    "dexNum": 901,
+    "position": 900
+  },
+  {
+    "slug": "basculegion",
+    "dexNum": 902,
+    "position": 901
+  },
+  {
+    "slug": "sneasler",
+    "dexNum": 903,
+    "position": 902
+  },
+  {
+    "slug": "overqwil",
+    "dexNum": 904,
+    "position": 903
+  },
+  {
+    "slug": "enamorus",
+    "dexNum": 905,
+    "position": 904
+  },
+  {
+    "slug": "sprigatito",
+    "dexNum": 906,
+    "position": 905
+  },
+  {
+    "slug": "floragato",
+    "dexNum": 907,
+    "position": 906
+  },
+  {
+    "slug": "meowscarada",
+    "dexNum": 908,
+    "position": 907
+  },
+  {
+    "slug": "fuecoco",
+    "dexNum": 909,
+    "position": 908
+  },
+  {
+    "slug": "crocalor",
+    "dexNum": 910,
+    "position": 909
+  },
+  {
+    "slug": "skeledirge",
+    "dexNum": 911,
+    "position": 910
+  },
+  {
+    "slug": "quaxly",
+    "dexNum": 912,
+    "position": 911
+  },
+  {
+    "slug": "quaxwell",
+    "dexNum": 913,
+    "position": 912
+  },
+  {
+    "slug": "quaquaval",
+    "dexNum": 914,
+    "position": 913
+  },
+  {
+    "slug": "lechonk",
+    "dexNum": 915,
+    "position": 914
+  },
+  {
+    "slug": "oinkologne",
+    "dexNum": 916,
+    "position": 915
+  },
+  {
+    "slug": "tarountula",
+    "dexNum": 917,
+    "position": 916
+  },
+  {
+    "slug": "spidops",
+    "dexNum": 918,
+    "position": 917
+  },
+  {
+    "slug": "nymble",
+    "dexNum": 919,
+    "position": 918
+  },
+  {
+    "slug": "lokix",
+    "dexNum": 920,
+    "position": 919
+  },
+  {
+    "slug": "pawmi",
+    "dexNum": 921,
+    "position": 920
+  },
+  {
+    "slug": "pawmo",
+    "dexNum": 922,
+    "position": 921
+  },
+  {
+    "slug": "pawmot",
+    "dexNum": 923,
+    "position": 922
+  },
+  {
+    "slug": "tandemaus",
+    "dexNum": 924,
+    "position": 923
+  },
+  {
+    "slug": "maushold",
+    "dexNum": 925,
+    "position": 924
+  },
+  {
+    "slug": "fidough",
+    "dexNum": 926,
+    "position": 925
+  },
+  {
+    "slug": "dachsbun",
+    "dexNum": 927,
+    "position": 926
+  },
+  {
+    "slug": "smoliv",
+    "dexNum": 928,
+    "position": 927
+  },
+  {
+    "slug": "dolliv",
+    "dexNum": 929,
+    "position": 928
+  },
+  {
+    "slug": "arboliva",
+    "dexNum": 930,
+    "position": 929
+  },
+  {
+    "slug": "squawkabilly",
+    "dexNum": 931,
+    "position": 930
+  },
+  {
+    "slug": "nacli",
+    "dexNum": 932,
+    "position": 931
+  },
+  {
+    "slug": "naclstack",
+    "dexNum": 933,
+    "position": 932
+  },
+  {
+    "slug": "garganacl",
+    "dexNum": 934,
+    "position": 933
+  },
+  {
+    "slug": "charcadet",
+    "dexNum": 935,
+    "position": 934
+  },
+  {
+    "slug": "armarouge",
+    "dexNum": 936,
+    "position": 935
+  },
+  {
+    "slug": "ceruledge",
+    "dexNum": 937,
+    "position": 936
+  },
+  {
+    "slug": "tadbulb",
+    "dexNum": 938,
+    "position": 937
+  },
+  {
+    "slug": "bellibolt",
+    "dexNum": 939,
+    "position": 938
+  },
+  {
+    "slug": "wattrel",
+    "dexNum": 940,
+    "position": 939
+  },
+  {
+    "slug": "kilowattrel",
+    "dexNum": 941,
+    "position": 940
+  },
+  {
+    "slug": "maschiff",
+    "dexNum": 942,
+    "position": 941
+  },
+  {
+    "slug": "mabosstiff",
+    "dexNum": 943,
+    "position": 942
+  },
+  {
+    "slug": "shroodle",
+    "dexNum": 944,
+    "position": 943
+  },
+  {
+    "slug": "grafaiai",
+    "dexNum": 945,
+    "position": 944
+  },
+  {
+    "slug": "bramblin",
+    "dexNum": 946,
+    "position": 945
+  },
+  {
+    "slug": "brambleghast",
+    "dexNum": 947,
+    "position": 946
+  },
+  {
+    "slug": "toedscool",
+    "dexNum": 948,
+    "position": 947
+  },
+  {
+    "slug": "toedscruel",
+    "dexNum": 949,
+    "position": 948
+  },
+  {
+    "slug": "klawf",
+    "dexNum": 950,
+    "position": 949
+  },
+  {
+    "slug": "capsakid",
+    "dexNum": 951,
+    "position": 950
+  },
+  {
+    "slug": "scovillain",
+    "dexNum": 952,
+    "position": 951
+  },
+  {
+    "slug": "rellor",
+    "dexNum": 953,
+    "position": 952
+  },
+  {
+    "slug": "rabsca",
+    "dexNum": 954,
+    "position": 953
+  },
+  {
+    "slug": "flittle",
+    "dexNum": 955,
+    "position": 954
+  },
+  {
+    "slug": "espathra",
+    "dexNum": 956,
+    "position": 955
+  },
+  {
+    "slug": "tinkatink",
+    "dexNum": 957,
+    "position": 956
+  },
+  {
+    "slug": "tinkatuff",
+    "dexNum": 958,
+    "position": 957
+  },
+  {
+    "slug": "tinkaton",
+    "dexNum": 959,
+    "position": 958
+  },
+  {
+    "slug": "wiglett",
+    "dexNum": 960,
+    "position": 959
+  },
+  {
+    "slug": "wugtrio",
+    "dexNum": 961,
+    "position": 960
+  },
+  {
+    "slug": "bombirdier",
+    "dexNum": 962,
+    "position": 961
+  },
+  {
+    "slug": "finizen",
+    "dexNum": 963,
+    "position": 962
+  },
+  {
+    "slug": "palafin",
+    "dexNum": 964,
+    "position": 963
+  },
+  {
+    "slug": "varoom",
+    "dexNum": 965,
+    "position": 964
+  },
+  {
+    "slug": "revavroom",
+    "dexNum": 966,
+    "position": 965
+  },
+  {
+    "slug": "cyclizar",
+    "dexNum": 967,
+    "position": 966
+  },
+  {
+    "slug": "orthworm",
+    "dexNum": 968,
+    "position": 967
+  },
+  {
+    "slug": "glimmet",
+    "dexNum": 969,
+    "position": 968
+  },
+  {
+    "slug": "glimmora",
+    "dexNum": 970,
+    "position": 969
+  },
+  {
+    "slug": "greavard",
+    "dexNum": 971,
+    "position": 970
+  },
+  {
+    "slug": "houndstone",
+    "dexNum": 972,
+    "position": 971
+  },
+  {
+    "slug": "flamigo",
+    "dexNum": 973,
+    "position": 972
+  },
+  {
+    "slug": "cetoddle",
+    "dexNum": 974,
+    "position": 973
+  },
+  {
+    "slug": "cetitan",
+    "dexNum": 975,
+    "position": 974
+  },
+  {
+    "slug": "veluza",
+    "dexNum": 976,
+    "position": 975
+  },
+  {
+    "slug": "dondozo",
+    "dexNum": 977,
+    "position": 976
+  },
+  {
+    "slug": "tatsugiri",
+    "dexNum": 978,
+    "position": 977
+  },
+  {
+    "slug": "annihilape",
+    "dexNum": 979,
+    "position": 978
+  },
+  {
+    "slug": "clodsire",
+    "dexNum": 980,
+    "position": 979
+  },
+  {
+    "slug": "farigiraf",
+    "dexNum": 981,
+    "position": 980
+  },
+  {
+    "slug": "dudunsparce",
+    "dexNum": 982,
+    "position": 981
+  },
+  {
+    "slug": "kingambit",
+    "dexNum": 983,
+    "position": 982
+  },
+  {
+    "slug": "greattusk",
+    "dexNum": 984,
+    "position": 983
+  },
+  {
+    "slug": "screamtail",
+    "dexNum": 985,
+    "position": 984
+  },
+  {
+    "slug": "brutebonnet",
+    "dexNum": 986,
+    "position": 985
+  },
+  {
+    "slug": "fluttermane",
+    "dexNum": 987,
+    "position": 986
+  },
+  {
+    "slug": "slitherwing",
+    "dexNum": 988,
+    "position": 987
+  },
+  {
+    "slug": "sandyshocks",
+    "dexNum": 989,
+    "position": 988
+  },
+  {
+    "slug": "irontreads",
+    "dexNum": 990,
+    "position": 989
+  },
+  {
+    "slug": "ironbundle",
+    "dexNum": 991,
+    "position": 990
+  },
+  {
+    "slug": "ironhands",
+    "dexNum": 992,
+    "position": 991
+  },
+  {
+    "slug": "ironjugulis",
+    "dexNum": 993,
+    "position": 992
+  },
+  {
+    "slug": "ironmoth",
+    "dexNum": 994,
+    "position": 993
+  },
+  {
+    "slug": "ironthorns",
+    "dexNum": 995,
+    "position": 994
+  },
+  {
+    "slug": "frigibax",
+    "dexNum": 996,
+    "position": 995
+  },
+  {
+    "slug": "arctibax",
+    "dexNum": 997,
+    "position": 996
+  },
+  {
+    "slug": "baxcalibur",
+    "dexNum": 998,
+    "position": 997
+  },
+  {
+    "slug": "gimmighoul",
+    "dexNum": 999,
+    "position": 998
+  },
+  {
+    "slug": "gholdengo",
+    "dexNum": 1000,
+    "position": 999
+  },
+  {
+    "slug": "wochien",
+    "dexNum": 1001,
+    "position": 1000
+  },
+  {
+    "slug": "chienpao",
+    "dexNum": 1002,
+    "position": 1001
+  },
+  {
+    "slug": "tinglu",
+    "dexNum": 1003,
+    "position": 1002
+  },
+  {
+    "slug": "chiyu",
+    "dexNum": 1004,
+    "position": 1003
+  },
+  {
+    "slug": "roaringmoon",
+    "dexNum": 1005,
+    "position": 1004
+  },
+  {
+    "slug": "ironvaliant",
+    "dexNum": 1006,
+    "position": 1005
+  },
+  {
+    "slug": "koraidon",
+    "dexNum": 1007,
+    "position": 1006
+  },
+  {
+    "slug": "miraidon",
+    "dexNum": 1008,
+    "position": 1007
+  },
+  {
+    "slug": "walkingwake",
+    "dexNum": 1009,
+    "position": 1008
+  },
+  {
+    "slug": "ironleaves",
+    "dexNum": 1010,
+    "position": 1009
+  },
+  {
+    "slug": "dipplin",
+    "dexNum": 1011,
+    "position": 1010
+  },
+  {
+    "slug": "poltchageist",
+    "dexNum": 1012,
+    "position": 1011
+  },
+  {
+    "slug": "sinistcha",
+    "dexNum": 1013,
+    "position": 1012
+  },
+  {
+    "slug": "okidogi",
+    "dexNum": 1014,
+    "position": 1013
+  },
+  {
+    "slug": "munkidori",
+    "dexNum": 1015,
+    "position": 1014
+  },
+  {
+    "slug": "fezandipiti",
+    "dexNum": 1016,
+    "position": 1015
+  },
+  {
+    "slug": "ogerpon",
+    "dexNum": 1017,
+    "position": 1016
+  },
+  {
+    "slug": "archaludon",
+    "dexNum": 1018,
+    "position": 1017
+  },
+  {
+    "slug": "hydrapple",
+    "dexNum": 1019,
+    "position": 1018
+  },
+  {
+    "slug": "gougingfire",
+    "dexNum": 1020,
+    "position": 1019
+  },
+  {
+    "slug": "ragingbolt",
+    "dexNum": 1021,
+    "position": 1020
+  },
+  {
+    "slug": "ironboulder",
+    "dexNum": 1022,
+    "position": 1021
+  },
+  {
+    "slug": "ironcrown",
+    "dexNum": 1023,
+    "position": 1022
+  },
+  {
+    "slug": "terapagos",
+    "dexNum": 1024,
+    "position": 1023
+  },
+  {
+    "slug": "pecharunt",
+    "dexNum": 1025,
+    "position": 1024
+  }
+]

@@ -1,0 +1,8737 @@
+[
+  {
+    "slug": "bulbasaur",
+    "dexNum": 1,
+    "position": 1,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "ivysaur",
+    "dexNum": 2,
+    "position": 2,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "venusaur",
+    "dexNum": 3,
+    "position": 3,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "charmander",
+    "dexNum": 4,
+    "position": 4,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "charmeleon",
+    "dexNum": 5,
+    "position": 5,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "charizard",
+    "dexNum": 6,
+    "position": 6,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "squirtle",
+    "dexNum": 7,
+    "position": 7,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "wartortle",
+    "dexNum": 8,
+    "position": 8,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "blastoise",
+    "dexNum": 9,
+    "position": 9,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "caterpie",
+    "dexNum": 10,
+    "position": 10,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "metapod",
+    "dexNum": 11,
+    "position": 11,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "butterfree",
+    "dexNum": 12,
+    "position": 12,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "weedle",
+    "dexNum": 13,
+    "position": 13,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "kakuna",
+    "dexNum": 14,
+    "position": 14,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "beedrill",
+    "dexNum": 15,
+    "position": 15,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "pidgey",
+    "dexNum": 16,
+    "position": 16,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "pidgeotto",
+    "dexNum": 17,
+    "position": 17,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "pidgeot",
+    "dexNum": 18,
+    "position": 18,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "rattata",
+    "dexNum": 19,
+    "position": 19,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "raticate",
+    "dexNum": 20,
+    "position": 20,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "spearow",
+    "dexNum": 21,
+    "position": 21,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "fearow",
+    "dexNum": 22,
+    "position": 22,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "ekans",
+    "dexNum": 23,
+    "position": 23,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "arbok",
+    "dexNum": 24,
+    "position": 24,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "pikachu",
+    "dexNum": 25,
+    "position": 25,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "raichu",
+    "dexNum": 26,
+    "position": 26,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "sandshrew",
+    "dexNum": 27,
+    "position": 27,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "sandslash",
+    "dexNum": 28,
+    "position": 28,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "nidoranf",
+    "dexNum": 29,
+    "position": 29,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "nidorina",
+    "dexNum": 30,
+    "position": 30,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "nidoqueen",
+    "dexNum": 31,
+    "position": 31,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "nidoranm",
+    "dexNum": 32,
+    "position": 32,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "nidorino",
+    "dexNum": 33,
+    "position": 33,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "nidoking",
+    "dexNum": 34,
+    "position": 34,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "clefairy",
+    "dexNum": 35,
+    "position": 35,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "clefable",
+    "dexNum": 36,
+    "position": 36,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "vulpix",
+    "dexNum": 37,
+    "position": 37,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "ninetales",
+    "dexNum": 38,
+    "position": 38,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "jigglypuff",
+    "dexNum": 39,
+    "position": 39,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "wigglytuff",
+    "dexNum": 40,
+    "position": 40,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "zubat",
+    "dexNum": 41,
+    "position": 41,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "golbat",
+    "dexNum": 42,
+    "position": 42,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "oddish",
+    "dexNum": 43,
+    "position": 43,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "gloom",
+    "dexNum": 44,
+    "position": 44,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "vileplume",
+    "dexNum": 45,
+    "position": 45,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "paras",
+    "dexNum": 46,
+    "position": 46,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "parasect",
+    "dexNum": 47,
+    "position": 47,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "venonat",
+    "dexNum": 48,
+    "position": 48,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "venomoth",
+    "dexNum": 49,
+    "position": 49,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "diglett",
+    "dexNum": 50,
+    "position": 50,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "dugtrio",
+    "dexNum": 51,
+    "position": 51,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "meowth",
+    "dexNum": 52,
+    "position": 52,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "persian",
+    "dexNum": 53,
+    "position": 53,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "psyduck",
+    "dexNum": 54,
+    "position": 54,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "golduck",
+    "dexNum": 55,
+    "position": 55,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "mankey",
+    "dexNum": 56,
+    "position": 56,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "primeape",
+    "dexNum": 57,
+    "position": 57,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "growlithe",
+    "dexNum": 58,
+    "position": 58,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "arcanine",
+    "dexNum": 59,
+    "position": 59,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "poliwag",
+    "dexNum": 60,
+    "position": 60,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "poliwhirl",
+    "dexNum": 61,
+    "position": 61,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "poliwrath",
+    "dexNum": 62,
+    "position": 62,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "abra",
+    "dexNum": 63,
+    "position": 63,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "kadabra",
+    "dexNum": 64,
+    "position": 64,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "alakazam",
+    "dexNum": 65,
+    "position": 65,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "machop",
+    "dexNum": 66,
+    "position": 66,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "machoke",
+    "dexNum": 67,
+    "position": 67,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "machamp",
+    "dexNum": 68,
+    "position": 68,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "bellsprout",
+    "dexNum": 69,
+    "position": 69,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "weepinbell",
+    "dexNum": 70,
+    "position": 70,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "victreebel",
+    "dexNum": 71,
+    "position": 71,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "tentacool",
+    "dexNum": 72,
+    "position": 72,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "tentacruel",
+    "dexNum": 73,
+    "position": 73,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "geodude",
+    "dexNum": 74,
+    "position": 74,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "graveler",
+    "dexNum": 75,
+    "position": 75,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "golem",
+    "dexNum": 76,
+    "position": 76,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "ponyta",
+    "dexNum": 77,
+    "position": 77,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "rapidash",
+    "dexNum": 78,
+    "position": 78,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "slowpoke",
+    "dexNum": 79,
+    "position": 79,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "slowbro",
+    "dexNum": 80,
+    "position": 80,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "magnemite",
+    "dexNum": 81,
+    "position": 81,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "magneton",
+    "dexNum": 82,
+    "position": 82,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "farfetchd",
+    "dexNum": 83,
+    "position": 83,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "doduo",
+    "dexNum": 84,
+    "position": 84,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "dodrio",
+    "dexNum": 85,
+    "position": 85,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "seel",
+    "dexNum": 86,
+    "position": 86,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "dewgong",
+    "dexNum": 87,
+    "position": 87,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "grimer",
+    "dexNum": 88,
+    "position": 88,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "muk",
+    "dexNum": 89,
+    "position": 89,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "shellder",
+    "dexNum": 90,
+    "position": 90,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "cloyster",
+    "dexNum": 91,
+    "position": 91,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "gastly",
+    "dexNum": 92,
+    "position": 92,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "haunter",
+    "dexNum": 93,
+    "position": 93,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "gengar",
+    "dexNum": 94,
+    "position": 94,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "onix",
+    "dexNum": 95,
+    "position": 95,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "drowzee",
+    "dexNum": 96,
+    "position": 96,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "hypno",
+    "dexNum": 97,
+    "position": 97,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "krabby",
+    "dexNum": 98,
+    "position": 98,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "kingler",
+    "dexNum": 99,
+    "position": 99,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "voltorb",
+    "dexNum": 100,
+    "position": 100,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "electrode",
+    "dexNum": 101,
+    "position": 101,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "exeggcute",
+    "dexNum": 102,
+    "position": 102,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "exeggutor",
+    "dexNum": 103,
+    "position": 103,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "cubone",
+    "dexNum": 104,
+    "position": 104,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "marowak",
+    "dexNum": 105,
+    "position": 105,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "hitmonlee",
+    "dexNum": 106,
+    "position": 106,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "hitmonchan",
+    "dexNum": 107,
+    "position": 107,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "lickitung",
+    "dexNum": 108,
+    "position": 108,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "koffing",
+    "dexNum": 109,
+    "position": 109,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "weezing",
+    "dexNum": 110,
+    "position": 110,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "rhyhorn",
+    "dexNum": 111,
+    "position": 111,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "rhydon",
+    "dexNum": 112,
+    "position": 112,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "chansey",
+    "dexNum": 113,
+    "position": 113,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "tangela",
+    "dexNum": 114,
+    "position": 114,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "kangaskhan",
+    "dexNum": 115,
+    "position": 115,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "horsea",
+    "dexNum": 116,
+    "position": 116,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "seadra",
+    "dexNum": 117,
+    "position": 117,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "goldeen",
+    "dexNum": 118,
+    "position": 118,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "seaking",
+    "dexNum": 119,
+    "position": 119,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "staryu",
+    "dexNum": 120,
+    "position": 120,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "starmie",
+    "dexNum": 121,
+    "position": 121,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "mrmime",
+    "dexNum": 122,
+    "position": 122,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "scyther",
+    "dexNum": 123,
+    "position": 123,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "jynx",
+    "dexNum": 124,
+    "position": 124,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "electabuzz",
+    "dexNum": 125,
+    "position": 125,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "magmar",
+    "dexNum": 126,
+    "position": 126,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "pinsir",
+    "dexNum": 127,
+    "position": 127,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "tauros",
+    "dexNum": 128,
+    "position": 128,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "magikarp",
+    "dexNum": 129,
+    "position": 129,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "gyarados",
+    "dexNum": 130,
+    "position": 130,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "lapras",
+    "dexNum": 131,
+    "position": 131,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "ditto",
+    "dexNum": 132,
+    "position": 132,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "eevee",
+    "dexNum": 133,
+    "position": 133,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "vaporeon",
+    "dexNum": 134,
+    "position": 134,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "jolteon",
+    "dexNum": 135,
+    "position": 135,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "flareon",
+    "dexNum": 136,
+    "position": 136,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "porygon",
+    "dexNum": 137,
+    "position": 137,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "omanyte",
+    "dexNum": 138,
+    "position": 138,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "omastar",
+    "dexNum": 139,
+    "position": 139,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "kabuto",
+    "dexNum": 140,
+    "position": 140,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "kabutops",
+    "dexNum": 141,
+    "position": 141,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "aerodactyl",
+    "dexNum": 142,
+    "position": 142,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "snorlax",
+    "dexNum": 143,
+    "position": 143,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "articuno",
+    "dexNum": 144,
+    "position": 144,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "zapdos",
+    "dexNum": 145,
+    "position": 145,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "moltres",
+    "dexNum": 146,
+    "position": 146,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "dratini",
+    "dexNum": 147,
+    "position": 147,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "dragonair",
+    "dexNum": 148,
+    "position": 148,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "dragonite",
+    "dexNum": 149,
+    "position": 149,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "mewtwo",
+    "dexNum": 150,
+    "position": 150,
+    "boxGroup": "Gen 1 Bases"
+  },
+  {
+    "slug": "mew",
+    "dexNum": 151,
+    "position": 151,
+    "boxGroup": "Gen 1 Bases"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "venusaur-f",
+    "dexNum": 3,
+    "position": 181,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "butterfree-f",
+    "dexNum": 12,
+    "position": 182,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "rattata-f",
+    "dexNum": 19,
+    "position": 183,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "raticate-f",
+    "dexNum": 20,
+    "position": 184,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "pikachu-f",
+    "dexNum": 25,
+    "position": 185,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "raichu-f",
+    "dexNum": 26,
+    "position": 186,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "zubat-f",
+    "dexNum": 41,
+    "position": 187,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "golbat-f",
+    "dexNum": 42,
+    "position": 188,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "gloom-f",
+    "dexNum": 44,
+    "position": 189,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "vileplume-f",
+    "dexNum": 45,
+    "position": 190,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "kadabra-f",
+    "dexNum": 64,
+    "position": 191,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "alakazam-f",
+    "dexNum": 65,
+    "position": 192,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "doduo-f",
+    "dexNum": 84,
+    "position": 193,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "dodrio-f",
+    "dexNum": 85,
+    "position": 194,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "hypno-f",
+    "dexNum": 97,
+    "position": 195,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "rhyhorn-f",
+    "dexNum": 111,
+    "position": 196,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "rhydon-f",
+    "dexNum": 112,
+    "position": 197,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "goldeen-f",
+    "dexNum": 118,
+    "position": 198,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "seaking-f",
+    "dexNum": 119,
+    "position": 199,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "scyther-f",
+    "dexNum": 123,
+    "position": 200,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "magikarp-f",
+    "dexNum": 129,
+    "position": 201,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "gyarados-f",
+    "dexNum": 130,
+    "position": 202,
+    "boxGroup": "Gen 1 Females"
+  },
+  {
+    "slug": "eevee-f",
+    "dexNum": 133,
+    "position": 203,
+    "boxGroup": "Gen 1 Females"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "pikachu-original",
+    "dexNum": 25,
+    "position": 211,
+    "boxGroup": "Cap Pikachu"
+  },
+  {
+    "slug": "pikachu-hoenn",
+    "dexNum": 25,
+    "position": 212,
+    "boxGroup": "Cap Pikachu"
+  },
+  {
+    "slug": "pikachu-sinnoh",
+    "dexNum": 25,
+    "position": 213,
+    "boxGroup": "Cap Pikachu"
+  },
+  {
+    "slug": "pikachu-unova",
+    "dexNum": 25,
+    "position": 214,
+    "boxGroup": "Cap Pikachu"
+  },
+  {
+    "slug": "pikachu-kalos",
+    "dexNum": 25,
+    "position": 215,
+    "boxGroup": "Cap Pikachu"
+  },
+  {
+    "slug": "pikachu-alola",
+    "dexNum": 25,
+    "position": 216,
+    "boxGroup": "Cap Pikachu"
+  },
+  {
+    "slug": "pikachu-partner",
+    "dexNum": 25,
+    "position": 217,
+    "boxGroup": "Cap Pikachu"
+  },
+  {
+    "slug": "pikachu-world",
+    "dexNum": 25,
+    "position": 218,
+    "boxGroup": "Cap Pikachu"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "chikorita",
+    "dexNum": 152,
+    "position": 241,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "bayleef",
+    "dexNum": 153,
+    "position": 242,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "meganium",
+    "dexNum": 154,
+    "position": 243,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "cyndaquil",
+    "dexNum": 155,
+    "position": 244,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "quilava",
+    "dexNum": 156,
+    "position": 245,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "typhlosion",
+    "dexNum": 157,
+    "position": 246,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "totodile",
+    "dexNum": 158,
+    "position": 247,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "croconaw",
+    "dexNum": 159,
+    "position": 248,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "feraligatr",
+    "dexNum": 160,
+    "position": 249,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "sentret",
+    "dexNum": 161,
+    "position": 250,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "furret",
+    "dexNum": 162,
+    "position": 251,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "hoothoot",
+    "dexNum": 163,
+    "position": 252,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "noctowl",
+    "dexNum": 164,
+    "position": 253,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "ledyba",
+    "dexNum": 165,
+    "position": 254,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "ledian",
+    "dexNum": 166,
+    "position": 255,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "spinarak",
+    "dexNum": 167,
+    "position": 256,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "ariados",
+    "dexNum": 168,
+    "position": 257,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "crobat",
+    "dexNum": 169,
+    "position": 258,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "chinchou",
+    "dexNum": 170,
+    "position": 259,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "lanturn",
+    "dexNum": 171,
+    "position": 260,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "pichu",
+    "dexNum": 172,
+    "position": 261,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "cleffa",
+    "dexNum": 173,
+    "position": 262,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "igglybuff",
+    "dexNum": 174,
+    "position": 263,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "togepi",
+    "dexNum": 175,
+    "position": 264,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "togetic",
+    "dexNum": 176,
+    "position": 265,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "natu",
+    "dexNum": 177,
+    "position": 266,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "xatu",
+    "dexNum": 178,
+    "position": 267,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "mareep",
+    "dexNum": 179,
+    "position": 268,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "flaaffy",
+    "dexNum": 180,
+    "position": 269,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "ampharos",
+    "dexNum": 181,
+    "position": 270,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "bellossom",
+    "dexNum": 182,
+    "position": 271,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "marill",
+    "dexNum": 183,
+    "position": 272,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "azumarill",
+    "dexNum": 184,
+    "position": 273,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "sudowoodo",
+    "dexNum": 185,
+    "position": 274,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "politoed",
+    "dexNum": 186,
+    "position": 275,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "hoppip",
+    "dexNum": 187,
+    "position": 276,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "skiploom",
+    "dexNum": 188,
+    "position": 277,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "jumpluff",
+    "dexNum": 189,
+    "position": 278,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "aipom",
+    "dexNum": 190,
+    "position": 279,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "sunkern",
+    "dexNum": 191,
+    "position": 280,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "sunflora",
+    "dexNum": 192,
+    "position": 281,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "yanma",
+    "dexNum": 193,
+    "position": 282,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "wooper",
+    "dexNum": 194,
+    "position": 283,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "quagsire",
+    "dexNum": 195,
+    "position": 284,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "espeon",
+    "dexNum": 196,
+    "position": 285,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "umbreon",
+    "dexNum": 197,
+    "position": 286,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "murkrow",
+    "dexNum": 198,
+    "position": 287,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "slowking",
+    "dexNum": 199,
+    "position": 288,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "misdreavus",
+    "dexNum": 200,
+    "position": 289,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "wobbuffet",
+    "dexNum": 202,
+    "position": 290,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "girafarig",
+    "dexNum": 203,
+    "position": 291,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "pineco",
+    "dexNum": 204,
+    "position": 292,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "forretress",
+    "dexNum": 205,
+    "position": 293,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "dunsparce",
+    "dexNum": 206,
+    "position": 294,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "gligar",
+    "dexNum": 207,
+    "position": 295,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "steelix",
+    "dexNum": 208,
+    "position": 296,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "snubbull",
+    "dexNum": 209,
+    "position": 297,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "granbull",
+    "dexNum": 210,
+    "position": 298,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "qwilfish",
+    "dexNum": 211,
+    "position": 299,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "scizor",
+    "dexNum": 212,
+    "position": 300,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "shuckle",
+    "dexNum": 213,
+    "position": 301,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "heracross",
+    "dexNum": 214,
+    "position": 302,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "sneasel",
+    "dexNum": 215,
+    "position": 303,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "teddiursa",
+    "dexNum": 216,
+    "position": 304,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "ursaring",
+    "dexNum": 217,
+    "position": 305,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "slugma",
+    "dexNum": 218,
+    "position": 306,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "magcargo",
+    "dexNum": 219,
+    "position": 307,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "swinub",
+    "dexNum": 220,
+    "position": 308,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "piloswine",
+    "dexNum": 221,
+    "position": 309,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "corsola",
+    "dexNum": 222,
+    "position": 310,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "remoraid",
+    "dexNum": 223,
+    "position": 311,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "octillery",
+    "dexNum": 224,
+    "position": 312,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "delibird",
+    "dexNum": 225,
+    "position": 313,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "mantine",
+    "dexNum": 226,
+    "position": 314,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "skarmory",
+    "dexNum": 227,
+    "position": 315,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "houndour",
+    "dexNum": 228,
+    "position": 316,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "houndoom",
+    "dexNum": 229,
+    "position": 317,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "kingdra",
+    "dexNum": 230,
+    "position": 318,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "phanpy",
+    "dexNum": 231,
+    "position": 319,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "donphan",
+    "dexNum": 232,
+    "position": 320,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "porygon2",
+    "dexNum": 233,
+    "position": 321,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "stantler",
+    "dexNum": 234,
+    "position": 322,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "smeargle",
+    "dexNum": 235,
+    "position": 323,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "tyrogue",
+    "dexNum": 236,
+    "position": 324,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "hitmontop",
+    "dexNum": 237,
+    "position": 325,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "smoochum",
+    "dexNum": 238,
+    "position": 326,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "elekid",
+    "dexNum": 239,
+    "position": 327,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "magby",
+    "dexNum": 240,
+    "position": 328,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "miltank",
+    "dexNum": 241,
+    "position": 329,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "blissey",
+    "dexNum": 242,
+    "position": 330,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "raikou",
+    "dexNum": 243,
+    "position": 331,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "entei",
+    "dexNum": 244,
+    "position": 332,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "suicune",
+    "dexNum": 245,
+    "position": 333,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "larvitar",
+    "dexNum": 246,
+    "position": 334,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "pupitar",
+    "dexNum": 247,
+    "position": 335,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "tyranitar",
+    "dexNum": 248,
+    "position": 336,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "lugia",
+    "dexNum": 249,
+    "position": 337,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "hooh",
+    "dexNum": 250,
+    "position": 338,
+    "boxGroup": "Gen 2 Bases"
+  },
+  {
+    "slug": "celebi",
+    "dexNum": 251,
+    "position": 339,
+    "boxGroup": "Gen 2 Bases"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "meganium-f",
+    "dexNum": 154,
+    "position": 361,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "ledyba-f",
+    "dexNum": 165,
+    "position": 362,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "ledian-f",
+    "dexNum": 166,
+    "position": 363,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "xatu-f",
+    "dexNum": 178,
+    "position": 364,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "sudowoodo-f",
+    "dexNum": 185,
+    "position": 365,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "politoed-f",
+    "dexNum": 186,
+    "position": 366,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "aipom-f",
+    "dexNum": 190,
+    "position": 367,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "wooper-f",
+    "dexNum": 194,
+    "position": 368,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "quagsire-f",
+    "dexNum": 195,
+    "position": 369,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "murkrow-f",
+    "dexNum": 198,
+    "position": 370,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "wobbuffet-f",
+    "dexNum": 202,
+    "position": 371,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "girafarig-f",
+    "dexNum": 203,
+    "position": 372,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "gligar-f",
+    "dexNum": 207,
+    "position": 373,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "steelix-f",
+    "dexNum": 208,
+    "position": 374,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "scizor-f",
+    "dexNum": 212,
+    "position": 375,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "heracross-f",
+    "dexNum": 214,
+    "position": 376,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "sneasel-f",
+    "dexNum": 215,
+    "position": 377,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "ursaring-f",
+    "dexNum": 217,
+    "position": 378,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "piloswine-f",
+    "dexNum": 221,
+    "position": 379,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "octillery-f",
+    "dexNum": 224,
+    "position": 380,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "houndoom-f",
+    "dexNum": 229,
+    "position": 381,
+    "boxGroup": "Gen 2 Females"
+  },
+  {
+    "slug": "donphan-f",
+    "dexNum": 232,
+    "position": 382,
+    "boxGroup": "Gen 2 Females"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "unown",
+    "dexNum": 201,
+    "position": 391,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-b",
+    "dexNum": 201,
+    "position": 392,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-c",
+    "dexNum": 201,
+    "position": 393,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-d",
+    "dexNum": 201,
+    "position": 394,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-e",
+    "dexNum": 201,
+    "position": 395,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-f",
+    "dexNum": 201,
+    "position": 396,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-g",
+    "dexNum": 201,
+    "position": 397,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-h",
+    "dexNum": 201,
+    "position": 398,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-i",
+    "dexNum": 201,
+    "position": 399,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-j",
+    "dexNum": 201,
+    "position": 400,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-k",
+    "dexNum": 201,
+    "position": 401,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-l",
+    "dexNum": 201,
+    "position": 402,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-m",
+    "dexNum": 201,
+    "position": 403,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-n",
+    "dexNum": 201,
+    "position": 404,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-o",
+    "dexNum": 201,
+    "position": 405,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-p",
+    "dexNum": 201,
+    "position": 406,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-q",
+    "dexNum": 201,
+    "position": 407,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-r",
+    "dexNum": 201,
+    "position": 408,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-s",
+    "dexNum": 201,
+    "position": 409,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-t",
+    "dexNum": 201,
+    "position": 410,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-u",
+    "dexNum": 201,
+    "position": 411,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-v",
+    "dexNum": 201,
+    "position": 412,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-w",
+    "dexNum": 201,
+    "position": 413,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-x",
+    "dexNum": 201,
+    "position": 414,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-y",
+    "dexNum": 201,
+    "position": 415,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-z",
+    "dexNum": 201,
+    "position": 416,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-exclamation",
+    "dexNum": 201,
+    "position": 417,
+    "boxGroup": "Unown"
+  },
+  {
+    "slug": "unown-question",
+    "dexNum": 201,
+    "position": 418,
+    "boxGroup": "Unown"
+  },
+  null,
+  null,
+  {
+    "slug": "treecko",
+    "dexNum": 252,
+    "position": 421,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "grovyle",
+    "dexNum": 253,
+    "position": 422,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "sceptile",
+    "dexNum": 254,
+    "position": 423,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "torchic",
+    "dexNum": 255,
+    "position": 424,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "combusken",
+    "dexNum": 256,
+    "position": 425,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "blaziken",
+    "dexNum": 257,
+    "position": 426,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "mudkip",
+    "dexNum": 258,
+    "position": 427,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "marshtomp",
+    "dexNum": 259,
+    "position": 428,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "swampert",
+    "dexNum": 260,
+    "position": 429,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "poochyena",
+    "dexNum": 261,
+    "position": 430,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "mightyena",
+    "dexNum": 262,
+    "position": 431,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "zigzagoon",
+    "dexNum": 263,
+    "position": 432,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "linoone",
+    "dexNum": 264,
+    "position": 433,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "wurmple",
+    "dexNum": 265,
+    "position": 434,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "silcoon",
+    "dexNum": 266,
+    "position": 435,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "beautifly",
+    "dexNum": 267,
+    "position": 436,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "cascoon",
+    "dexNum": 268,
+    "position": 437,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "dustox",
+    "dexNum": 269,
+    "position": 438,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "lotad",
+    "dexNum": 270,
+    "position": 439,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "lombre",
+    "dexNum": 271,
+    "position": 440,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "ludicolo",
+    "dexNum": 272,
+    "position": 441,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "seedot",
+    "dexNum": 273,
+    "position": 442,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "nuzleaf",
+    "dexNum": 274,
+    "position": 443,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "shiftry",
+    "dexNum": 275,
+    "position": 444,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "taillow",
+    "dexNum": 276,
+    "position": 445,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "swellow",
+    "dexNum": 277,
+    "position": 446,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "wingull",
+    "dexNum": 278,
+    "position": 447,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "pelipper",
+    "dexNum": 279,
+    "position": 448,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "ralts",
+    "dexNum": 280,
+    "position": 449,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "kirlia",
+    "dexNum": 281,
+    "position": 450,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "gardevoir",
+    "dexNum": 282,
+    "position": 451,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "surskit",
+    "dexNum": 283,
+    "position": 452,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "masquerain",
+    "dexNum": 284,
+    "position": 453,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "shroomish",
+    "dexNum": 285,
+    "position": 454,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "breloom",
+    "dexNum": 286,
+    "position": 455,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "slakoth",
+    "dexNum": 287,
+    "position": 456,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "vigoroth",
+    "dexNum": 288,
+    "position": 457,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "slaking",
+    "dexNum": 289,
+    "position": 458,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "nincada",
+    "dexNum": 290,
+    "position": 459,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "ninjask",
+    "dexNum": 291,
+    "position": 460,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "shedinja",
+    "dexNum": 292,
+    "position": 461,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "whismur",
+    "dexNum": 293,
+    "position": 462,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "loudred",
+    "dexNum": 294,
+    "position": 463,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "exploud",
+    "dexNum": 295,
+    "position": 464,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "makuhita",
+    "dexNum": 296,
+    "position": 465,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "hariyama",
+    "dexNum": 297,
+    "position": 466,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "azurill",
+    "dexNum": 298,
+    "position": 467,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "nosepass",
+    "dexNum": 299,
+    "position": 468,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "skitty",
+    "dexNum": 300,
+    "position": 469,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "delcatty",
+    "dexNum": 301,
+    "position": 470,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "sableye",
+    "dexNum": 302,
+    "position": 471,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "mawile",
+    "dexNum": 303,
+    "position": 472,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "aron",
+    "dexNum": 304,
+    "position": 473,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "lairon",
+    "dexNum": 305,
+    "position": 474,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "aggron",
+    "dexNum": 306,
+    "position": 475,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "meditite",
+    "dexNum": 307,
+    "position": 476,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "medicham",
+    "dexNum": 308,
+    "position": 477,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "electrike",
+    "dexNum": 309,
+    "position": 478,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "manectric",
+    "dexNum": 310,
+    "position": 479,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "plusle",
+    "dexNum": 311,
+    "position": 480,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "minun",
+    "dexNum": 312,
+    "position": 481,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "volbeat",
+    "dexNum": 313,
+    "position": 482,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "illumise",
+    "dexNum": 314,
+    "position": 483,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "roselia",
+    "dexNum": 315,
+    "position": 484,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "gulpin",
+    "dexNum": 316,
+    "position": 485,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "swalot",
+    "dexNum": 317,
+    "position": 486,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "carvanha",
+    "dexNum": 318,
+    "position": 487,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "sharpedo",
+    "dexNum": 319,
+    "position": 488,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "wailmer",
+    "dexNum": 320,
+    "position": 489,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "wailord",
+    "dexNum": 321,
+    "position": 490,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "numel",
+    "dexNum": 322,
+    "position": 491,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "camerupt",
+    "dexNum": 323,
+    "position": 492,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "torkoal",
+    "dexNum": 324,
+    "position": 493,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "spoink",
+    "dexNum": 325,
+    "position": 494,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "grumpig",
+    "dexNum": 326,
+    "position": 495,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "spinda",
+    "dexNum": 327,
+    "position": 496,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "trapinch",
+    "dexNum": 328,
+    "position": 497,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "vibrava",
+    "dexNum": 329,
+    "position": 498,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "flygon",
+    "dexNum": 330,
+    "position": 499,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "cacnea",
+    "dexNum": 331,
+    "position": 500,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "cacturne",
+    "dexNum": 332,
+    "position": 501,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "swablu",
+    "dexNum": 333,
+    "position": 502,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "altaria",
+    "dexNum": 334,
+    "position": 503,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "zangoose",
+    "dexNum": 335,
+    "position": 504,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "seviper",
+    "dexNum": 336,
+    "position": 505,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "lunatone",
+    "dexNum": 337,
+    "position": 506,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "solrock",
+    "dexNum": 338,
+    "position": 507,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "barboach",
+    "dexNum": 339,
+    "position": 508,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "whiscash",
+    "dexNum": 340,
+    "position": 509,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "corphish",
+    "dexNum": 341,
+    "position": 510,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "crawdaunt",
+    "dexNum": 342,
+    "position": 511,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "baltoy",
+    "dexNum": 343,
+    "position": 512,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "claydol",
+    "dexNum": 344,
+    "position": 513,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "lileep",
+    "dexNum": 345,
+    "position": 514,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "cradily",
+    "dexNum": 346,
+    "position": 515,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "anorith",
+    "dexNum": 347,
+    "position": 516,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "armaldo",
+    "dexNum": 348,
+    "position": 517,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "feebas",
+    "dexNum": 349,
+    "position": 518,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "milotic",
+    "dexNum": 350,
+    "position": 519,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "castform",
+    "dexNum": 351,
+    "position": 520,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "kecleon",
+    "dexNum": 352,
+    "position": 521,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "shuppet",
+    "dexNum": 353,
+    "position": 522,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "banette",
+    "dexNum": 354,
+    "position": 523,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "duskull",
+    "dexNum": 355,
+    "position": 524,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "dusclops",
+    "dexNum": 356,
+    "position": 525,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "tropius",
+    "dexNum": 357,
+    "position": 526,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "chimecho",
+    "dexNum": 358,
+    "position": 527,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "absol",
+    "dexNum": 359,
+    "position": 528,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "wynaut",
+    "dexNum": 360,
+    "position": 529,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "snorunt",
+    "dexNum": 361,
+    "position": 530,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "glalie",
+    "dexNum": 362,
+    "position": 531,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "spheal",
+    "dexNum": 363,
+    "position": 532,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "sealeo",
+    "dexNum": 364,
+    "position": 533,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "walrein",
+    "dexNum": 365,
+    "position": 534,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "clamperl",
+    "dexNum": 366,
+    "position": 535,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "huntail",
+    "dexNum": 367,
+    "position": 536,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "gorebyss",
+    "dexNum": 368,
+    "position": 537,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "relicanth",
+    "dexNum": 369,
+    "position": 538,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "luvdisc",
+    "dexNum": 370,
+    "position": 539,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "bagon",
+    "dexNum": 371,
+    "position": 540,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "shelgon",
+    "dexNum": 372,
+    "position": 541,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "salamence",
+    "dexNum": 373,
+    "position": 542,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "beldum",
+    "dexNum": 374,
+    "position": 543,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "metang",
+    "dexNum": 375,
+    "position": 544,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "metagross",
+    "dexNum": 376,
+    "position": 545,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "regirock",
+    "dexNum": 377,
+    "position": 546,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "regice",
+    "dexNum": 378,
+    "position": 547,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "registeel",
+    "dexNum": 379,
+    "position": 548,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "latias",
+    "dexNum": 380,
+    "position": 549,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "latios",
+    "dexNum": 381,
+    "position": 550,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "kyogre",
+    "dexNum": 382,
+    "position": 551,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "groudon",
+    "dexNum": 383,
+    "position": 552,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "rayquaza",
+    "dexNum": 384,
+    "position": 553,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "jirachi",
+    "dexNum": 385,
+    "position": 554,
+    "boxGroup": "Gen 3 Bases"
+  },
+  {
+    "slug": "deoxys",
+    "dexNum": 386,
+    "position": 555,
+    "boxGroup": "Gen 3 Bases"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "torchic-f",
+    "dexNum": 255,
+    "position": 571,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "combusken-f",
+    "dexNum": 256,
+    "position": 572,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "blaziken-f",
+    "dexNum": 257,
+    "position": 573,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "beautifly-f",
+    "dexNum": 267,
+    "position": 574,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "dustox-f",
+    "dexNum": 269,
+    "position": 575,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "ludicolo-f",
+    "dexNum": 272,
+    "position": 576,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "nuzleaf-f",
+    "dexNum": 274,
+    "position": 577,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "shiftry-f",
+    "dexNum": 275,
+    "position": 578,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "meditite-f",
+    "dexNum": 307,
+    "position": 579,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "medicham-f",
+    "dexNum": 308,
+    "position": 580,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "roselia-f",
+    "dexNum": 315,
+    "position": 581,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "gulpin-f",
+    "dexNum": 316,
+    "position": 582,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "swalot-f",
+    "dexNum": 317,
+    "position": 583,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "numel-f",
+    "dexNum": 322,
+    "position": 584,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "camerupt-f",
+    "dexNum": 323,
+    "position": 585,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "cacturne-f",
+    "dexNum": 332,
+    "position": 586,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "milotic-f",
+    "dexNum": 350,
+    "position": 587,
+    "boxGroup": "Gen 3 Females"
+  },
+  {
+    "slug": "relicanth-f",
+    "dexNum": 369,
+    "position": 588,
+    "boxGroup": "Gen 3 Females"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "deoxys-attack",
+    "dexNum": 386,
+    "position": 601,
+    "boxGroup": "Gen 3 Alternates"
+  },
+  {
+    "slug": "deoxys-defense",
+    "dexNum": 386,
+    "position": 602,
+    "boxGroup": "Gen 3 Alternates"
+  },
+  {
+    "slug": "deoxys-speed",
+    "dexNum": 386,
+    "position": 603,
+    "boxGroup": "Gen 3 Alternates"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "turtwig",
+    "dexNum": 387,
+    "position": 631,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "grotle",
+    "dexNum": 388,
+    "position": 632,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "torterra",
+    "dexNum": 389,
+    "position": 633,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "chimchar",
+    "dexNum": 390,
+    "position": 634,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "monferno",
+    "dexNum": 391,
+    "position": 635,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "infernape",
+    "dexNum": 392,
+    "position": 636,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "piplup",
+    "dexNum": 393,
+    "position": 637,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "prinplup",
+    "dexNum": 394,
+    "position": 638,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "empoleon",
+    "dexNum": 395,
+    "position": 639,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "starly",
+    "dexNum": 396,
+    "position": 640,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "staravia",
+    "dexNum": 397,
+    "position": 641,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "staraptor",
+    "dexNum": 398,
+    "position": 642,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "bidoof",
+    "dexNum": 399,
+    "position": 643,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "bibarel",
+    "dexNum": 400,
+    "position": 644,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "kricketot",
+    "dexNum": 401,
+    "position": 645,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "kricketune",
+    "dexNum": 402,
+    "position": 646,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "shinx",
+    "dexNum": 403,
+    "position": 647,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "luxio",
+    "dexNum": 404,
+    "position": 648,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "luxray",
+    "dexNum": 405,
+    "position": 649,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "budew",
+    "dexNum": 406,
+    "position": 650,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "roserade",
+    "dexNum": 407,
+    "position": 651,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "cranidos",
+    "dexNum": 408,
+    "position": 652,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "rampardos",
+    "dexNum": 409,
+    "position": 653,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "shieldon",
+    "dexNum": 410,
+    "position": 654,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "bastiodon",
+    "dexNum": 411,
+    "position": 655,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "burmy",
+    "dexNum": 412,
+    "position": 656,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "wormadam",
+    "dexNum": 413,
+    "position": 657,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "mothim",
+    "dexNum": 414,
+    "position": 658,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "combee",
+    "dexNum": 415,
+    "position": 659,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "vespiquen",
+    "dexNum": 416,
+    "position": 660,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "pachirisu",
+    "dexNum": 417,
+    "position": 661,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "buizel",
+    "dexNum": 418,
+    "position": 662,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "floatzel",
+    "dexNum": 419,
+    "position": 663,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "cherubi",
+    "dexNum": 420,
+    "position": 664,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "cherrim",
+    "dexNum": 421,
+    "position": 665,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "shellos",
+    "dexNum": 422,
+    "position": 666,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "gastrodon",
+    "dexNum": 423,
+    "position": 667,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "ambipom",
+    "dexNum": 424,
+    "position": 668,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "drifloon",
+    "dexNum": 425,
+    "position": 669,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "drifblim",
+    "dexNum": 426,
+    "position": 670,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "buneary",
+    "dexNum": 427,
+    "position": 671,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "lopunny",
+    "dexNum": 428,
+    "position": 672,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "mismagius",
+    "dexNum": 429,
+    "position": 673,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "honchkrow",
+    "dexNum": 430,
+    "position": 674,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "glameow",
+    "dexNum": 431,
+    "position": 675,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "purugly",
+    "dexNum": 432,
+    "position": 676,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "chingling",
+    "dexNum": 433,
+    "position": 677,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "stunky",
+    "dexNum": 434,
+    "position": 678,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "skuntank",
+    "dexNum": 435,
+    "position": 679,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "bronzor",
+    "dexNum": 436,
+    "position": 680,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "bronzong",
+    "dexNum": 437,
+    "position": 681,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "bonsly",
+    "dexNum": 438,
+    "position": 682,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "mimejr",
+    "dexNum": 439,
+    "position": 683,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "happiny",
+    "dexNum": 440,
+    "position": 684,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "chatot",
+    "dexNum": 441,
+    "position": 685,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "spiritomb",
+    "dexNum": 442,
+    "position": 686,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "gible",
+    "dexNum": 443,
+    "position": 687,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "gabite",
+    "dexNum": 444,
+    "position": 688,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "garchomp",
+    "dexNum": 445,
+    "position": 689,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "munchlax",
+    "dexNum": 446,
+    "position": 690,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "riolu",
+    "dexNum": 447,
+    "position": 691,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "lucario",
+    "dexNum": 448,
+    "position": 692,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "hippopotas",
+    "dexNum": 449,
+    "position": 693,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "hippowdon",
+    "dexNum": 450,
+    "position": 694,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "skorupi",
+    "dexNum": 451,
+    "position": 695,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "drapion",
+    "dexNum": 452,
+    "position": 696,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "croagunk",
+    "dexNum": 453,
+    "position": 697,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "toxicroak",
+    "dexNum": 454,
+    "position": 698,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "carnivine",
+    "dexNum": 455,
+    "position": 699,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "finneon",
+    "dexNum": 456,
+    "position": 700,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "lumineon",
+    "dexNum": 457,
+    "position": 701,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "mantyke",
+    "dexNum": 458,
+    "position": 702,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "snover",
+    "dexNum": 459,
+    "position": 703,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "abomasnow",
+    "dexNum": 460,
+    "position": 704,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "weavile",
+    "dexNum": 461,
+    "position": 705,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "magnezone",
+    "dexNum": 462,
+    "position": 706,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "lickilicky",
+    "dexNum": 463,
+    "position": 707,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "rhyperior",
+    "dexNum": 464,
+    "position": 708,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "tangrowth",
+    "dexNum": 465,
+    "position": 709,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "electivire",
+    "dexNum": 466,
+    "position": 710,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "magmortar",
+    "dexNum": 467,
+    "position": 711,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "togekiss",
+    "dexNum": 468,
+    "position": 712,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "yanmega",
+    "dexNum": 469,
+    "position": 713,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "leafeon",
+    "dexNum": 470,
+    "position": 714,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "glaceon",
+    "dexNum": 471,
+    "position": 715,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "gliscor",
+    "dexNum": 472,
+    "position": 716,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "mamoswine",
+    "dexNum": 473,
+    "position": 717,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "porygonz",
+    "dexNum": 474,
+    "position": 718,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "gallade",
+    "dexNum": 475,
+    "position": 719,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "probopass",
+    "dexNum": 476,
+    "position": 720,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "dusknoir",
+    "dexNum": 477,
+    "position": 721,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "froslass",
+    "dexNum": 478,
+    "position": 722,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "rotom",
+    "dexNum": 479,
+    "position": 723,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "uxie",
+    "dexNum": 480,
+    "position": 724,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "mesprit",
+    "dexNum": 481,
+    "position": 725,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "azelf",
+    "dexNum": 482,
+    "position": 726,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "dialga",
+    "dexNum": 483,
+    "position": 727,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "palkia",
+    "dexNum": 484,
+    "position": 728,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "heatran",
+    "dexNum": 485,
+    "position": 729,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "regigigas",
+    "dexNum": 486,
+    "position": 730,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "giratina",
+    "dexNum": 487,
+    "position": 731,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "cresselia",
+    "dexNum": 488,
+    "position": 732,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "phione",
+    "dexNum": 489,
+    "position": 733,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "manaphy",
+    "dexNum": 490,
+    "position": 734,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "darkrai",
+    "dexNum": 491,
+    "position": 735,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "shaymin",
+    "dexNum": 492,
+    "position": 736,
+    "boxGroup": "Gen 4 Bases"
+  },
+  {
+    "slug": "arceus",
+    "dexNum": 493,
+    "position": 737,
+    "boxGroup": "Gen 4 Bases"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "starly-f",
+    "dexNum": 396,
+    "position": 751,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "staravia-f",
+    "dexNum": 397,
+    "position": 752,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "staraptor-f",
+    "dexNum": 398,
+    "position": 753,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "bidoof-f",
+    "dexNum": 399,
+    "position": 754,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "bibarel-f",
+    "dexNum": 400,
+    "position": 755,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "kricketot-f",
+    "dexNum": 401,
+    "position": 756,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "kricketune-f",
+    "dexNum": 402,
+    "position": 757,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "shinx-f",
+    "dexNum": 403,
+    "position": 758,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "luxio-f",
+    "dexNum": 404,
+    "position": 759,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "luxray-f",
+    "dexNum": 405,
+    "position": 760,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "roserade-f",
+    "dexNum": 407,
+    "position": 761,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "combee-f",
+    "dexNum": 415,
+    "position": 762,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "pachirisu-f",
+    "dexNum": 417,
+    "position": 763,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "buizel-f",
+    "dexNum": 418,
+    "position": 764,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "floatzel-f",
+    "dexNum": 419,
+    "position": 765,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "ambipom-f",
+    "dexNum": 424,
+    "position": 766,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "gible-f",
+    "dexNum": 443,
+    "position": 767,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "gabite-f",
+    "dexNum": 444,
+    "position": 768,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "garchomp-f",
+    "dexNum": 445,
+    "position": 769,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "hippopotas-f",
+    "dexNum": 449,
+    "position": 770,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "hippowdon-f",
+    "dexNum": 450,
+    "position": 771,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "croagunk-f",
+    "dexNum": 453,
+    "position": 772,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "toxicroak-f",
+    "dexNum": 454,
+    "position": 773,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "finneon-f",
+    "dexNum": 456,
+    "position": 774,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "lumineon-f",
+    "dexNum": 457,
+    "position": 775,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "snover-f",
+    "dexNum": 459,
+    "position": 776,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "abomasnow-f",
+    "dexNum": 460,
+    "position": 777,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "weavile-f",
+    "dexNum": 461,
+    "position": 778,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "rhyperior-f",
+    "dexNum": 464,
+    "position": 779,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "tangrowth-f",
+    "dexNum": 465,
+    "position": 780,
+    "boxGroup": "Gen 4 Females"
+  },
+  {
+    "slug": "mamoswine-f",
+    "dexNum": 473,
+    "position": 781,
+    "boxGroup": "Gen 4 Females"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "burmy-sandy",
+    "dexNum": 412,
+    "position": 811,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "burmy-trash",
+    "dexNum": 412,
+    "position": 812,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "wormadam-sandy",
+    "dexNum": 413,
+    "position": 813,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "wormadam-trash",
+    "dexNum": 413,
+    "position": 814,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "shellos-east",
+    "dexNum": 422,
+    "position": 815,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "gastrodon-east",
+    "dexNum": 423,
+    "position": 816,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "rotom-fan",
+    "dexNum": 479,
+    "position": 817,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "rotom-frost",
+    "dexNum": 479,
+    "position": 818,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "rotom-heat",
+    "dexNum": 479,
+    "position": 819,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "rotom-mow",
+    "dexNum": 479,
+    "position": 820,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "rotom-wash",
+    "dexNum": 479,
+    "position": 821,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  {
+    "slug": "shaymin-sky",
+    "dexNum": 492,
+    "position": 822,
+    "boxGroup": "Gen 4 Alternates"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "victini",
+    "dexNum": 494,
+    "position": 841,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "snivy",
+    "dexNum": 495,
+    "position": 842,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "servine",
+    "dexNum": 496,
+    "position": 843,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "serperior",
+    "dexNum": 497,
+    "position": 844,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "tepig",
+    "dexNum": 498,
+    "position": 845,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "pignite",
+    "dexNum": 499,
+    "position": 846,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "emboar",
+    "dexNum": 500,
+    "position": 847,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "oshawott",
+    "dexNum": 501,
+    "position": 848,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "dewott",
+    "dexNum": 502,
+    "position": 849,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "samurott",
+    "dexNum": 503,
+    "position": 850,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "patrat",
+    "dexNum": 504,
+    "position": 851,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "watchog",
+    "dexNum": 505,
+    "position": 852,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "lillipup",
+    "dexNum": 506,
+    "position": 853,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "herdier",
+    "dexNum": 507,
+    "position": 854,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "stoutland",
+    "dexNum": 508,
+    "position": 855,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "purrloin",
+    "dexNum": 509,
+    "position": 856,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "liepard",
+    "dexNum": 510,
+    "position": 857,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "pansage",
+    "dexNum": 511,
+    "position": 858,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "simisage",
+    "dexNum": 512,
+    "position": 859,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "pansear",
+    "dexNum": 513,
+    "position": 860,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "simisear",
+    "dexNum": 514,
+    "position": 861,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "panpour",
+    "dexNum": 515,
+    "position": 862,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "simipour",
+    "dexNum": 516,
+    "position": 863,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "munna",
+    "dexNum": 517,
+    "position": 864,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "musharna",
+    "dexNum": 518,
+    "position": 865,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "pidove",
+    "dexNum": 519,
+    "position": 866,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "tranquill",
+    "dexNum": 520,
+    "position": 867,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "unfezant",
+    "dexNum": 521,
+    "position": 868,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "blitzle",
+    "dexNum": 522,
+    "position": 869,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "zebstrika",
+    "dexNum": 523,
+    "position": 870,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "roggenrola",
+    "dexNum": 524,
+    "position": 871,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "boldore",
+    "dexNum": 525,
+    "position": 872,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "gigalith",
+    "dexNum": 526,
+    "position": 873,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "woobat",
+    "dexNum": 527,
+    "position": 874,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "swoobat",
+    "dexNum": 528,
+    "position": 875,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "drilbur",
+    "dexNum": 529,
+    "position": 876,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "excadrill",
+    "dexNum": 530,
+    "position": 877,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "audino",
+    "dexNum": 531,
+    "position": 878,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "timburr",
+    "dexNum": 532,
+    "position": 879,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "gurdurr",
+    "dexNum": 533,
+    "position": 880,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "conkeldurr",
+    "dexNum": 534,
+    "position": 881,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "tympole",
+    "dexNum": 535,
+    "position": 882,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "palpitoad",
+    "dexNum": 536,
+    "position": 883,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "seismitoad",
+    "dexNum": 537,
+    "position": 884,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "throh",
+    "dexNum": 538,
+    "position": 885,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "sawk",
+    "dexNum": 539,
+    "position": 886,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "sewaddle",
+    "dexNum": 540,
+    "position": 887,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "swadloon",
+    "dexNum": 541,
+    "position": 888,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "leavanny",
+    "dexNum": 542,
+    "position": 889,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "venipede",
+    "dexNum": 543,
+    "position": 890,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "whirlipede",
+    "dexNum": 544,
+    "position": 891,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "scolipede",
+    "dexNum": 545,
+    "position": 892,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "cottonee",
+    "dexNum": 546,
+    "position": 893,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "whimsicott",
+    "dexNum": 547,
+    "position": 894,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "petilil",
+    "dexNum": 548,
+    "position": 895,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "lilligant",
+    "dexNum": 549,
+    "position": 896,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "basculin",
+    "dexNum": 550,
+    "position": 897,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "sandile",
+    "dexNum": 551,
+    "position": 898,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "krokorok",
+    "dexNum": 552,
+    "position": 899,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "krookodile",
+    "dexNum": 553,
+    "position": 900,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "darumaka",
+    "dexNum": 554,
+    "position": 901,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "darmanitan",
+    "dexNum": 555,
+    "position": 902,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "maractus",
+    "dexNum": 556,
+    "position": 903,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "dwebble",
+    "dexNum": 557,
+    "position": 904,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "crustle",
+    "dexNum": 558,
+    "position": 905,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "scraggy",
+    "dexNum": 559,
+    "position": 906,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "scrafty",
+    "dexNum": 560,
+    "position": 907,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "sigilyph",
+    "dexNum": 561,
+    "position": 908,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "yamask",
+    "dexNum": 562,
+    "position": 909,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "cofagrigus",
+    "dexNum": 563,
+    "position": 910,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "tirtouga",
+    "dexNum": 564,
+    "position": 911,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "carracosta",
+    "dexNum": 565,
+    "position": 912,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "archen",
+    "dexNum": 566,
+    "position": 913,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "archeops",
+    "dexNum": 567,
+    "position": 914,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "trubbish",
+    "dexNum": 568,
+    "position": 915,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "garbodor",
+    "dexNum": 569,
+    "position": 916,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "zorua",
+    "dexNum": 570,
+    "position": 917,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "zoroark",
+    "dexNum": 571,
+    "position": 918,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "minccino",
+    "dexNum": 572,
+    "position": 919,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "cinccino",
+    "dexNum": 573,
+    "position": 920,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "gothita",
+    "dexNum": 574,
+    "position": 921,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "gothorita",
+    "dexNum": 575,
+    "position": 922,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "gothitelle",
+    "dexNum": 576,
+    "position": 923,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "solosis",
+    "dexNum": 577,
+    "position": 924,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "duosion",
+    "dexNum": 578,
+    "position": 925,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "reuniclus",
+    "dexNum": 579,
+    "position": 926,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "ducklett",
+    "dexNum": 580,
+    "position": 927,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "swanna",
+    "dexNum": 581,
+    "position": 928,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "vanillite",
+    "dexNum": 582,
+    "position": 929,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "vanillish",
+    "dexNum": 583,
+    "position": 930,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "vanilluxe",
+    "dexNum": 584,
+    "position": 931,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "deerling",
+    "dexNum": 585,
+    "position": 932,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "sawsbuck",
+    "dexNum": 586,
+    "position": 933,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "emolga",
+    "dexNum": 587,
+    "position": 934,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "karrablast",
+    "dexNum": 588,
+    "position": 935,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "escavalier",
+    "dexNum": 589,
+    "position": 936,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "foongus",
+    "dexNum": 590,
+    "position": 937,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "amoonguss",
+    "dexNum": 591,
+    "position": 938,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "frillish",
+    "dexNum": 592,
+    "position": 939,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "jellicent",
+    "dexNum": 593,
+    "position": 940,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "alomomola",
+    "dexNum": 594,
+    "position": 941,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "joltik",
+    "dexNum": 595,
+    "position": 942,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "galvantula",
+    "dexNum": 596,
+    "position": 943,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "ferroseed",
+    "dexNum": 597,
+    "position": 944,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "ferrothorn",
+    "dexNum": 598,
+    "position": 945,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "klink",
+    "dexNum": 599,
+    "position": 946,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "klang",
+    "dexNum": 600,
+    "position": 947,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "klinklang",
+    "dexNum": 601,
+    "position": 948,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "tynamo",
+    "dexNum": 602,
+    "position": 949,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "eelektrik",
+    "dexNum": 603,
+    "position": 950,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "eelektross",
+    "dexNum": 604,
+    "position": 951,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "elgyem",
+    "dexNum": 605,
+    "position": 952,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "beheeyem",
+    "dexNum": 606,
+    "position": 953,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "litwick",
+    "dexNum": 607,
+    "position": 954,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "lampent",
+    "dexNum": 608,
+    "position": 955,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "chandelure",
+    "dexNum": 609,
+    "position": 956,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "axew",
+    "dexNum": 610,
+    "position": 957,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "fraxure",
+    "dexNum": 611,
+    "position": 958,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "haxorus",
+    "dexNum": 612,
+    "position": 959,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "cubchoo",
+    "dexNum": 613,
+    "position": 960,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "beartic",
+    "dexNum": 614,
+    "position": 961,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "cryogonal",
+    "dexNum": 615,
+    "position": 962,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "shelmet",
+    "dexNum": 616,
+    "position": 963,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "accelgor",
+    "dexNum": 617,
+    "position": 964,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "stunfisk",
+    "dexNum": 618,
+    "position": 965,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "mienfoo",
+    "dexNum": 619,
+    "position": 966,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "mienshao",
+    "dexNum": 620,
+    "position": 967,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "druddigon",
+    "dexNum": 621,
+    "position": 968,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "golett",
+    "dexNum": 622,
+    "position": 969,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "golurk",
+    "dexNum": 623,
+    "position": 970,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "pawniard",
+    "dexNum": 624,
+    "position": 971,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "bisharp",
+    "dexNum": 625,
+    "position": 972,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "bouffalant",
+    "dexNum": 626,
+    "position": 973,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "rufflet",
+    "dexNum": 627,
+    "position": 974,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "braviary",
+    "dexNum": 628,
+    "position": 975,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "vullaby",
+    "dexNum": 629,
+    "position": 976,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "mandibuzz",
+    "dexNum": 630,
+    "position": 977,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "heatmor",
+    "dexNum": 631,
+    "position": 978,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "durant",
+    "dexNum": 632,
+    "position": 979,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "deino",
+    "dexNum": 633,
+    "position": 980,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "zweilous",
+    "dexNum": 634,
+    "position": 981,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "hydreigon",
+    "dexNum": 635,
+    "position": 982,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "larvesta",
+    "dexNum": 636,
+    "position": 983,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "volcarona",
+    "dexNum": 637,
+    "position": 984,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "cobalion",
+    "dexNum": 638,
+    "position": 985,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "terrakion",
+    "dexNum": 639,
+    "position": 986,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "virizion",
+    "dexNum": 640,
+    "position": 987,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "tornadus",
+    "dexNum": 641,
+    "position": 988,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "thundurus",
+    "dexNum": 642,
+    "position": 989,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "reshiram",
+    "dexNum": 643,
+    "position": 990,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "zekrom",
+    "dexNum": 644,
+    "position": 991,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "landorus",
+    "dexNum": 645,
+    "position": 992,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "kyurem",
+    "dexNum": 646,
+    "position": 993,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "keldeo",
+    "dexNum": 647,
+    "position": 994,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "meloetta",
+    "dexNum": 648,
+    "position": 995,
+    "boxGroup": "Gen 5 Bases"
+  },
+  {
+    "slug": "genesect",
+    "dexNum": 649,
+    "position": 996,
+    "boxGroup": "Gen 5 Bases"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "unfezant-f",
+    "dexNum": 521,
+    "position": 1021,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "basculin-blue-striped",
+    "dexNum": 550,
+    "position": 1022,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "deerling-autumn",
+    "dexNum": 585,
+    "position": 1023,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "deerling-summer",
+    "dexNum": 585,
+    "position": 1024,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "deerling-winter",
+    "dexNum": 585,
+    "position": 1025,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "sawsbuck-autumn",
+    "dexNum": 586,
+    "position": 1026,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "sawsbuck-summer",
+    "dexNum": 586,
+    "position": 1027,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "sawsbuck-winter",
+    "dexNum": 586,
+    "position": 1028,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "frillish-f",
+    "dexNum": 592,
+    "position": 1029,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "jellicent-f",
+    "dexNum": 593,
+    "position": 1030,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "tornadus-therian",
+    "dexNum": 641,
+    "position": 1031,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "thundurus-therian",
+    "dexNum": 642,
+    "position": 1032,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "landorus-therian",
+    "dexNum": 645,
+    "position": 1033,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  {
+    "slug": "keldeo-resolute",
+    "dexNum": 647,
+    "position": 1034,
+    "boxGroup": "Gen 5 Alternates"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "chespin",
+    "dexNum": 650,
+    "position": 1051,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "quilladin",
+    "dexNum": 651,
+    "position": 1052,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "chesnaught",
+    "dexNum": 652,
+    "position": 1053,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "fennekin",
+    "dexNum": 653,
+    "position": 1054,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "braixen",
+    "dexNum": 654,
+    "position": 1055,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "delphox",
+    "dexNum": 655,
+    "position": 1056,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "froakie",
+    "dexNum": 656,
+    "position": 1057,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "frogadier",
+    "dexNum": 657,
+    "position": 1058,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "greninja",
+    "dexNum": 658,
+    "position": 1059,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "bunnelby",
+    "dexNum": 659,
+    "position": 1060,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "diggersby",
+    "dexNum": 660,
+    "position": 1061,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "fletchling",
+    "dexNum": 661,
+    "position": 1062,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "fletchinder",
+    "dexNum": 662,
+    "position": 1063,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "talonflame",
+    "dexNum": 663,
+    "position": 1064,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "scatterbug",
+    "dexNum": 664,
+    "position": 1065,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "spewpa",
+    "dexNum": 665,
+    "position": 1066,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "vivillon",
+    "dexNum": 666,
+    "position": 1067,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "litleo",
+    "dexNum": 667,
+    "position": 1068,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "pyroar",
+    "dexNum": 668,
+    "position": 1069,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "flabebe",
+    "dexNum": 669,
+    "position": 1070,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "floette",
+    "dexNum": 670,
+    "position": 1071,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "florges",
+    "dexNum": 671,
+    "position": 1072,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "skiddo",
+    "dexNum": 672,
+    "position": 1073,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "gogoat",
+    "dexNum": 673,
+    "position": 1074,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "pancham",
+    "dexNum": 674,
+    "position": 1075,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "pangoro",
+    "dexNum": 675,
+    "position": 1076,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "furfrou",
+    "dexNum": 676,
+    "position": 1077,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "espurr",
+    "dexNum": 677,
+    "position": 1078,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "meowstic",
+    "dexNum": 678,
+    "position": 1079,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "honedge",
+    "dexNum": 679,
+    "position": 1080,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "doublade",
+    "dexNum": 680,
+    "position": 1081,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "aegislash",
+    "dexNum": 681,
+    "position": 1082,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "spritzee",
+    "dexNum": 682,
+    "position": 1083,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "aromatisse",
+    "dexNum": 683,
+    "position": 1084,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "swirlix",
+    "dexNum": 684,
+    "position": 1085,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "slurpuff",
+    "dexNum": 685,
+    "position": 1086,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "inkay",
+    "dexNum": 686,
+    "position": 1087,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "malamar",
+    "dexNum": 687,
+    "position": 1088,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "binacle",
+    "dexNum": 688,
+    "position": 1089,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "barbaracle",
+    "dexNum": 689,
+    "position": 1090,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "skrelp",
+    "dexNum": 690,
+    "position": 1091,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "dragalge",
+    "dexNum": 691,
+    "position": 1092,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "clauncher",
+    "dexNum": 692,
+    "position": 1093,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "clawitzer",
+    "dexNum": 693,
+    "position": 1094,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "helioptile",
+    "dexNum": 694,
+    "position": 1095,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "heliolisk",
+    "dexNum": 695,
+    "position": 1096,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "tyrunt",
+    "dexNum": 696,
+    "position": 1097,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "tyrantrum",
+    "dexNum": 697,
+    "position": 1098,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "amaura",
+    "dexNum": 698,
+    "position": 1099,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "aurorus",
+    "dexNum": 699,
+    "position": 1100,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "sylveon",
+    "dexNum": 700,
+    "position": 1101,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "hawlucha",
+    "dexNum": 701,
+    "position": 1102,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "dedenne",
+    "dexNum": 702,
+    "position": 1103,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "carbink",
+    "dexNum": 703,
+    "position": 1104,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "goomy",
+    "dexNum": 704,
+    "position": 1105,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "sliggoo",
+    "dexNum": 705,
+    "position": 1106,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "goodra",
+    "dexNum": 706,
+    "position": 1107,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "klefki",
+    "dexNum": 707,
+    "position": 1108,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "phantump",
+    "dexNum": 708,
+    "position": 1109,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "trevenant",
+    "dexNum": 709,
+    "position": 1110,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "pumpkaboo",
+    "dexNum": 710,
+    "position": 1111,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "gourgeist",
+    "dexNum": 711,
+    "position": 1112,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "bergmite",
+    "dexNum": 712,
+    "position": 1113,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "avalugg",
+    "dexNum": 713,
+    "position": 1114,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "noibat",
+    "dexNum": 714,
+    "position": 1115,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "noivern",
+    "dexNum": 715,
+    "position": 1116,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "xerneas",
+    "dexNum": 716,
+    "position": 1117,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "yveltal",
+    "dexNum": 717,
+    "position": 1118,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "zygarde",
+    "dexNum": 718,
+    "position": 1119,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "diancie",
+    "dexNum": 719,
+    "position": 1120,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "hoopa",
+    "dexNum": 720,
+    "position": 1121,
+    "boxGroup": "Gen 6 Bases"
+  },
+  {
+    "slug": "volcanion",
+    "dexNum": 721,
+    "position": 1122,
+    "boxGroup": "Gen 6 Bases"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "vivillon-archipelago",
+    "dexNum": 666,
+    "position": 1141,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-continental",
+    "dexNum": 666,
+    "position": 1142,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-elegant",
+    "dexNum": 666,
+    "position": 1143,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-fancy",
+    "dexNum": 666,
+    "position": 1144,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-garden",
+    "dexNum": 666,
+    "position": 1145,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-high-plains",
+    "dexNum": 666,
+    "position": 1146,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-jungle",
+    "dexNum": 666,
+    "position": 1147,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-marine",
+    "dexNum": 666,
+    "position": 1148,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-meadow",
+    "dexNum": 666,
+    "position": 1149,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-modern",
+    "dexNum": 666,
+    "position": 1150,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-monsoon",
+    "dexNum": 666,
+    "position": 1151,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-ocean",
+    "dexNum": 666,
+    "position": 1152,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-pokeball",
+    "dexNum": 666,
+    "position": 1153,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-polar",
+    "dexNum": 666,
+    "position": 1154,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-river",
+    "dexNum": 666,
+    "position": 1155,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-sandstorm",
+    "dexNum": 666,
+    "position": 1156,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-savanna",
+    "dexNum": 666,
+    "position": 1157,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-sun",
+    "dexNum": 666,
+    "position": 1158,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "vivillon-tundra",
+    "dexNum": 666,
+    "position": 1159,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "pyroar-f",
+    "dexNum": 668,
+    "position": 1160,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "flabebe-blue",
+    "dexNum": 669,
+    "position": 1161,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "flabebe-orange",
+    "dexNum": 669,
+    "position": 1162,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "flabebe-white",
+    "dexNum": 669,
+    "position": 1163,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "flabebe-yellow",
+    "dexNum": 669,
+    "position": 1164,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "floette-blue",
+    "dexNum": 670,
+    "position": 1165,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "floette-eternal",
+    "dexNum": 670,
+    "position": 1166,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "floette-orange",
+    "dexNum": 670,
+    "position": 1167,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "floette-white",
+    "dexNum": 670,
+    "position": 1168,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "floette-yellow",
+    "dexNum": 670,
+    "position": 1169,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "florges-blue",
+    "dexNum": 671,
+    "position": 1170,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "florges-orange",
+    "dexNum": 671,
+    "position": 1171,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "florges-white",
+    "dexNum": 671,
+    "position": 1172,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "florges-yellow",
+    "dexNum": 671,
+    "position": 1173,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "furfrou-dandy",
+    "dexNum": 676,
+    "position": 1174,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "furfrou-debutante",
+    "dexNum": 676,
+    "position": 1175,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "furfrou-diamond",
+    "dexNum": 676,
+    "position": 1176,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "furfrou-heart",
+    "dexNum": 676,
+    "position": 1177,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "furfrou-kabuki",
+    "dexNum": 676,
+    "position": 1178,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "furfrou-la-reine",
+    "dexNum": 676,
+    "position": 1179,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "furfrou-matron",
+    "dexNum": 676,
+    "position": 1180,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "furfrou-pharaoh",
+    "dexNum": 676,
+    "position": 1181,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "furfrou-star",
+    "dexNum": 676,
+    "position": 1182,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "meowstic-f",
+    "dexNum": 678,
+    "position": 1183,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "pumpkaboo-large",
+    "dexNum": 710,
+    "position": 1184,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "pumpkaboo-small",
+    "dexNum": 710,
+    "position": 1185,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "pumpkaboo-super",
+    "dexNum": 710,
+    "position": 1186,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "gourgeist-large",
+    "dexNum": 711,
+    "position": 1187,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "gourgeist-small",
+    "dexNum": 711,
+    "position": 1188,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "gourgeist-super",
+    "dexNum": 711,
+    "position": 1189,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "zygarde-10",
+    "dexNum": 718,
+    "position": 1190,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  {
+    "slug": "hoopa-unbound",
+    "dexNum": 720,
+    "position": 1191,
+    "boxGroup": "Gen 6 Alternates"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "rowlet",
+    "dexNum": 722,
+    "position": 1201,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "dartrix",
+    "dexNum": 723,
+    "position": 1202,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "decidueye",
+    "dexNum": 724,
+    "position": 1203,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "litten",
+    "dexNum": 725,
+    "position": 1204,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "torracat",
+    "dexNum": 726,
+    "position": 1205,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "incineroar",
+    "dexNum": 727,
+    "position": 1206,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "popplio",
+    "dexNum": 728,
+    "position": 1207,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "brionne",
+    "dexNum": 729,
+    "position": 1208,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "primarina",
+    "dexNum": 730,
+    "position": 1209,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "pikipek",
+    "dexNum": 731,
+    "position": 1210,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "trumbeak",
+    "dexNum": 732,
+    "position": 1211,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "toucannon",
+    "dexNum": 733,
+    "position": 1212,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "yungoos",
+    "dexNum": 734,
+    "position": 1213,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "gumshoos",
+    "dexNum": 735,
+    "position": 1214,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "grubbin",
+    "dexNum": 736,
+    "position": 1215,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "charjabug",
+    "dexNum": 737,
+    "position": 1216,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "vikavolt",
+    "dexNum": 738,
+    "position": 1217,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "crabrawler",
+    "dexNum": 739,
+    "position": 1218,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "crabominable",
+    "dexNum": 740,
+    "position": 1219,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "oricorio",
+    "dexNum": 741,
+    "position": 1220,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "cutiefly",
+    "dexNum": 742,
+    "position": 1221,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "ribombee",
+    "dexNum": 743,
+    "position": 1222,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "rockruff",
+    "dexNum": 744,
+    "position": 1223,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "lycanroc",
+    "dexNum": 745,
+    "position": 1224,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "wishiwashi",
+    "dexNum": 746,
+    "position": 1225,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "mareanie",
+    "dexNum": 747,
+    "position": 1226,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "toxapex",
+    "dexNum": 748,
+    "position": 1227,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "mudbray",
+    "dexNum": 749,
+    "position": 1228,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "mudsdale",
+    "dexNum": 750,
+    "position": 1229,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "dewpider",
+    "dexNum": 751,
+    "position": 1230,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "araquanid",
+    "dexNum": 752,
+    "position": 1231,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "fomantis",
+    "dexNum": 753,
+    "position": 1232,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "lurantis",
+    "dexNum": 754,
+    "position": 1233,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "morelull",
+    "dexNum": 755,
+    "position": 1234,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "shiinotic",
+    "dexNum": 756,
+    "position": 1235,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "salandit",
+    "dexNum": 757,
+    "position": 1236,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "salazzle",
+    "dexNum": 758,
+    "position": 1237,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "stufful",
+    "dexNum": 759,
+    "position": 1238,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "bewear",
+    "dexNum": 760,
+    "position": 1239,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "bounsweet",
+    "dexNum": 761,
+    "position": 1240,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "steenee",
+    "dexNum": 762,
+    "position": 1241,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "tsareena",
+    "dexNum": 763,
+    "position": 1242,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "comfey",
+    "dexNum": 764,
+    "position": 1243,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "oranguru",
+    "dexNum": 765,
+    "position": 1244,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "passimian",
+    "dexNum": 766,
+    "position": 1245,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "wimpod",
+    "dexNum": 767,
+    "position": 1246,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "golisopod",
+    "dexNum": 768,
+    "position": 1247,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "sandygast",
+    "dexNum": 769,
+    "position": 1248,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "palossand",
+    "dexNum": 770,
+    "position": 1249,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "pyukumuku",
+    "dexNum": 771,
+    "position": 1250,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "typenull",
+    "dexNum": 772,
+    "position": 1251,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "silvally",
+    "dexNum": 773,
+    "position": 1252,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "minior-red",
+    "dexNum": 774,
+    "position": 1253,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "komala",
+    "dexNum": 775,
+    "position": 1254,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "turtonator",
+    "dexNum": 776,
+    "position": 1255,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "togedemaru",
+    "dexNum": 777,
+    "position": 1256,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "mimikyu",
+    "dexNum": 778,
+    "position": 1257,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "bruxish",
+    "dexNum": 779,
+    "position": 1258,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "drampa",
+    "dexNum": 780,
+    "position": 1259,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "dhelmise",
+    "dexNum": 781,
+    "position": 1260,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "jangmoo",
+    "dexNum": 782,
+    "position": 1261,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "hakamoo",
+    "dexNum": 783,
+    "position": 1262,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "kommoo",
+    "dexNum": 784,
+    "position": 1263,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "tapukoko",
+    "dexNum": 785,
+    "position": 1264,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "tapulele",
+    "dexNum": 786,
+    "position": 1265,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "tapubulu",
+    "dexNum": 787,
+    "position": 1266,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "tapufini",
+    "dexNum": 788,
+    "position": 1267,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "cosmog",
+    "dexNum": 789,
+    "position": 1268,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "cosmoem",
+    "dexNum": 790,
+    "position": 1269,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "solgaleo",
+    "dexNum": 791,
+    "position": 1270,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "lunala",
+    "dexNum": 792,
+    "position": 1271,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "nihilego",
+    "dexNum": 793,
+    "position": 1272,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "buzzwole",
+    "dexNum": 794,
+    "position": 1273,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "pheromosa",
+    "dexNum": 795,
+    "position": 1274,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "xurkitree",
+    "dexNum": 796,
+    "position": 1275,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "celesteela",
+    "dexNum": 797,
+    "position": 1276,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "kartana",
+    "dexNum": 798,
+    "position": 1277,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "guzzlord",
+    "dexNum": 799,
+    "position": 1278,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "necrozma",
+    "dexNum": 800,
+    "position": 1279,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "magearna",
+    "dexNum": 801,
+    "position": 1280,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "marshadow",
+    "dexNum": 802,
+    "position": 1281,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "poipole",
+    "dexNum": 803,
+    "position": 1282,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "naganadel",
+    "dexNum": 804,
+    "position": 1283,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "stakataka",
+    "dexNum": 805,
+    "position": 1284,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "blacephalon",
+    "dexNum": 806,
+    "position": 1285,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "zeraora",
+    "dexNum": 807,
+    "position": 1286,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "meltan",
+    "dexNum": 808,
+    "position": 1287,
+    "boxGroup": "Gen 7 Bases"
+  },
+  {
+    "slug": "melmetal",
+    "dexNum": 809,
+    "position": 1288,
+    "boxGroup": "Gen 7 Bases"
+  },
+  null,
+  null,
+  {
+    "slug": "oricorio-pau",
+    "dexNum": 741,
+    "position": 1291,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "oricorio-pom-pom",
+    "dexNum": 741,
+    "position": 1292,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "oricorio-sensu",
+    "dexNum": 741,
+    "position": 1293,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "lycanroc-dusk",
+    "dexNum": 745,
+    "position": 1294,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "lycanroc-midnight",
+    "dexNum": 745,
+    "position": 1295,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "minior-blue",
+    "dexNum": 774,
+    "position": 1296,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "minior-green",
+    "dexNum": 774,
+    "position": 1297,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "minior-indigo",
+    "dexNum": 774,
+    "position": 1298,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "minior-orange",
+    "dexNum": 774,
+    "position": 1299,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "minior-violet",
+    "dexNum": 774,
+    "position": 1300,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "minior-yellow",
+    "dexNum": 774,
+    "position": 1301,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  {
+    "slug": "magearna-original",
+    "dexNum": 801,
+    "position": 1302,
+    "boxGroup": "Gen 7 Alternates"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "rattata-alola",
+    "dexNum": 19,
+    "position": 1321,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "raticate-alola",
+    "dexNum": 20,
+    "position": 1322,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "raichu-alola",
+    "dexNum": 26,
+    "position": 1323,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "sandshrew-alola",
+    "dexNum": 27,
+    "position": 1324,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "sandslash-alola",
+    "dexNum": 28,
+    "position": 1325,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "vulpix-alola",
+    "dexNum": 37,
+    "position": 1326,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "ninetales-alola",
+    "dexNum": 38,
+    "position": 1327,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "diglett-alola",
+    "dexNum": 50,
+    "position": 1328,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "dugtrio-alola",
+    "dexNum": 51,
+    "position": 1329,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "meowth-alola",
+    "dexNum": 52,
+    "position": 1330,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "persian-alola",
+    "dexNum": 53,
+    "position": 1331,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "geodude-alola",
+    "dexNum": 74,
+    "position": 1332,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "graveler-alola",
+    "dexNum": 75,
+    "position": 1333,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "golem-alola",
+    "dexNum": 76,
+    "position": 1334,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "grimer-alola",
+    "dexNum": 88,
+    "position": 1335,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "muk-alola",
+    "dexNum": 89,
+    "position": 1336,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "exeggutor-alola",
+    "dexNum": 103,
+    "position": 1337,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  {
+    "slug": "marowak-alola",
+    "dexNum": 105,
+    "position": 1338,
+    "boxGroup": "Gen 7 Regionals"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "grookey",
+    "dexNum": 810,
+    "position": 1351,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "thwackey",
+    "dexNum": 811,
+    "position": 1352,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "rillaboom",
+    "dexNum": 812,
+    "position": 1353,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "scorbunny",
+    "dexNum": 813,
+    "position": 1354,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "raboot",
+    "dexNum": 814,
+    "position": 1355,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "cinderace",
+    "dexNum": 815,
+    "position": 1356,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "sobble",
+    "dexNum": 816,
+    "position": 1357,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "drizzile",
+    "dexNum": 817,
+    "position": 1358,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "inteleon",
+    "dexNum": 818,
+    "position": 1359,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "skwovet",
+    "dexNum": 819,
+    "position": 1360,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "greedent",
+    "dexNum": 820,
+    "position": 1361,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "rookidee",
+    "dexNum": 821,
+    "position": 1362,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "corvisquire",
+    "dexNum": 822,
+    "position": 1363,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "corviknight",
+    "dexNum": 823,
+    "position": 1364,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "blipbug",
+    "dexNum": 824,
+    "position": 1365,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "dottler",
+    "dexNum": 825,
+    "position": 1366,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "orbeetle",
+    "dexNum": 826,
+    "position": 1367,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "nickit",
+    "dexNum": 827,
+    "position": 1368,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "thievul",
+    "dexNum": 828,
+    "position": 1369,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "gossifleur",
+    "dexNum": 829,
+    "position": 1370,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "eldegoss",
+    "dexNum": 830,
+    "position": 1371,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "wooloo",
+    "dexNum": 831,
+    "position": 1372,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "dubwool",
+    "dexNum": 832,
+    "position": 1373,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "chewtle",
+    "dexNum": 833,
+    "position": 1374,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "drednaw",
+    "dexNum": 834,
+    "position": 1375,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "yamper",
+    "dexNum": 835,
+    "position": 1376,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "boltund",
+    "dexNum": 836,
+    "position": 1377,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "rolycoly",
+    "dexNum": 837,
+    "position": 1378,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "carkol",
+    "dexNum": 838,
+    "position": 1379,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "coalossal",
+    "dexNum": 839,
+    "position": 1380,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "applin",
+    "dexNum": 840,
+    "position": 1381,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "flapple",
+    "dexNum": 841,
+    "position": 1382,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "appletun",
+    "dexNum": 842,
+    "position": 1383,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "silicobra",
+    "dexNum": 843,
+    "position": 1384,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "sandaconda",
+    "dexNum": 844,
+    "position": 1385,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "cramorant",
+    "dexNum": 845,
+    "position": 1386,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "arrokuda",
+    "dexNum": 846,
+    "position": 1387,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "barraskewda",
+    "dexNum": 847,
+    "position": 1388,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "toxel",
+    "dexNum": 848,
+    "position": 1389,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "toxtricity",
+    "dexNum": 849,
+    "position": 1390,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "sizzlipede",
+    "dexNum": 850,
+    "position": 1391,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "centiskorch",
+    "dexNum": 851,
+    "position": 1392,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "clobbopus",
+    "dexNum": 852,
+    "position": 1393,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "grapploct",
+    "dexNum": 853,
+    "position": 1394,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "sinistea",
+    "dexNum": 854,
+    "position": 1395,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "polteageist",
+    "dexNum": 855,
+    "position": 1396,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "hatenna",
+    "dexNum": 856,
+    "position": 1397,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "hattrem",
+    "dexNum": 857,
+    "position": 1398,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "hatterene",
+    "dexNum": 858,
+    "position": 1399,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "impidimp",
+    "dexNum": 859,
+    "position": 1400,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "morgrem",
+    "dexNum": 860,
+    "position": 1401,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "grimmsnarl",
+    "dexNum": 861,
+    "position": 1402,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "obstagoon",
+    "dexNum": 862,
+    "position": 1403,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "perrserker",
+    "dexNum": 863,
+    "position": 1404,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "cursola",
+    "dexNum": 864,
+    "position": 1405,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "sirfetchd",
+    "dexNum": 865,
+    "position": 1406,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "mrrime",
+    "dexNum": 866,
+    "position": 1407,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "runerigus",
+    "dexNum": 867,
+    "position": 1408,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "milcery",
+    "dexNum": 868,
+    "position": 1409,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "alcremie",
+    "dexNum": 869,
+    "position": 1410,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "falinks",
+    "dexNum": 870,
+    "position": 1411,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "pincurchin",
+    "dexNum": 871,
+    "position": 1412,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "snom",
+    "dexNum": 872,
+    "position": 1413,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "frosmoth",
+    "dexNum": 873,
+    "position": 1414,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "stonjourner",
+    "dexNum": 874,
+    "position": 1415,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "eiscue",
+    "dexNum": 875,
+    "position": 1416,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "indeedee",
+    "dexNum": 876,
+    "position": 1417,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "morpeko",
+    "dexNum": 877,
+    "position": 1418,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "cufant",
+    "dexNum": 878,
+    "position": 1419,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "copperajah",
+    "dexNum": 879,
+    "position": 1420,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "dracozolt",
+    "dexNum": 880,
+    "position": 1421,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "arctozolt",
+    "dexNum": 881,
+    "position": 1422,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "dracovish",
+    "dexNum": 882,
+    "position": 1423,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "arctovish",
+    "dexNum": 883,
+    "position": 1424,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "duraludon",
+    "dexNum": 884,
+    "position": 1425,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "dreepy",
+    "dexNum": 885,
+    "position": 1426,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "drakloak",
+    "dexNum": 886,
+    "position": 1427,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "dragapult",
+    "dexNum": 887,
+    "position": 1428,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "zacian",
+    "dexNum": 888,
+    "position": 1429,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "zamazenta",
+    "dexNum": 889,
+    "position": 1430,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "eternatus",
+    "dexNum": 890,
+    "position": 1431,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "kubfu",
+    "dexNum": 891,
+    "position": 1432,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "urshifu",
+    "dexNum": 892,
+    "position": 1433,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "zarude",
+    "dexNum": 893,
+    "position": 1434,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "regieleki",
+    "dexNum": 894,
+    "position": 1435,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "regidrago",
+    "dexNum": 895,
+    "position": 1436,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "glastrier",
+    "dexNum": 896,
+    "position": 1437,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "spectrier",
+    "dexNum": 897,
+    "position": 1438,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "calyrex",
+    "dexNum": 898,
+    "position": 1439,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "wyrdeer",
+    "dexNum": 899,
+    "position": 1440,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "kleavor",
+    "dexNum": 900,
+    "position": 1441,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "ursaluna",
+    "dexNum": 901,
+    "position": 1442,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "basculegion",
+    "dexNum": 902,
+    "position": 1443,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "sneasler",
+    "dexNum": 903,
+    "position": 1444,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "overqwil",
+    "dexNum": 904,
+    "position": 1445,
+    "boxGroup": "Gen 8 Bases"
+  },
+  {
+    "slug": "enamorus",
+    "dexNum": 905,
+    "position": 1446,
+    "boxGroup": "Gen 8 Bases"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "toxtricity-low-key",
+    "dexNum": 849,
+    "position": 1471,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "sinistea-antique",
+    "dexNum": 854,
+    "position": 1472,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "polteageist-antique",
+    "dexNum": 855,
+    "position": 1473,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-caramel-swirl-berry",
+    "dexNum": 869,
+    "position": 1474,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-caramel-swirl-clover",
+    "dexNum": 869,
+    "position": 1475,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-caramel-swirl-flower",
+    "dexNum": 869,
+    "position": 1476,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-caramel-swirl-love",
+    "dexNum": 869,
+    "position": 1477,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-caramel-swirl-ribbon",
+    "dexNum": 869,
+    "position": 1478,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-caramel-swirl-star",
+    "dexNum": 869,
+    "position": 1479,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-caramel-swirl-strawberry",
+    "dexNum": 869,
+    "position": 1480,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-lemon-cream-berry",
+    "dexNum": 869,
+    "position": 1481,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-lemon-cream-clover",
+    "dexNum": 869,
+    "position": 1482,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-lemon-cream-flower",
+    "dexNum": 869,
+    "position": 1483,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-lemon-cream-love",
+    "dexNum": 869,
+    "position": 1484,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-lemon-cream-ribbon",
+    "dexNum": 869,
+    "position": 1485,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-lemon-cream-star",
+    "dexNum": 869,
+    "position": 1486,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-lemon-cream-strawberry",
+    "dexNum": 869,
+    "position": 1487,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-matcha-cream-berry",
+    "dexNum": 869,
+    "position": 1488,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-matcha-cream-clover",
+    "dexNum": 869,
+    "position": 1489,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-matcha-cream-flower",
+    "dexNum": 869,
+    "position": 1490,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-matcha-cream-love",
+    "dexNum": 869,
+    "position": 1491,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-matcha-cream-ribbon",
+    "dexNum": 869,
+    "position": 1492,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-matcha-cream-star",
+    "dexNum": 869,
+    "position": 1493,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-matcha-cream-strawberry",
+    "dexNum": 869,
+    "position": 1494,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-mint-cream-berry",
+    "dexNum": 869,
+    "position": 1495,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-mint-cream-clover",
+    "dexNum": 869,
+    "position": 1496,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-mint-cream-flower",
+    "dexNum": 869,
+    "position": 1497,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-mint-cream-love",
+    "dexNum": 869,
+    "position": 1498,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-mint-cream-ribbon",
+    "dexNum": 869,
+    "position": 1499,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-mint-cream-star",
+    "dexNum": 869,
+    "position": 1500,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-mint-cream-strawberry",
+    "dexNum": 869,
+    "position": 1501,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-rainbow-swirl-berry",
+    "dexNum": 869,
+    "position": 1502,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-rainbow-swirl-clover",
+    "dexNum": 869,
+    "position": 1503,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-rainbow-swirl-flower",
+    "dexNum": 869,
+    "position": 1504,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-rainbow-swirl-love",
+    "dexNum": 869,
+    "position": 1505,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-rainbow-swirl-ribbon",
+    "dexNum": 869,
+    "position": 1506,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-rainbow-swirl-star",
+    "dexNum": 869,
+    "position": 1507,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-rainbow-swirl-strawberry",
+    "dexNum": 869,
+    "position": 1508,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-cream-berry",
+    "dexNum": 869,
+    "position": 1509,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-cream-clover",
+    "dexNum": 869,
+    "position": 1510,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-cream-flower",
+    "dexNum": 869,
+    "position": 1511,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-cream-love",
+    "dexNum": 869,
+    "position": 1512,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-cream-ribbon",
+    "dexNum": 869,
+    "position": 1513,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-cream-star",
+    "dexNum": 869,
+    "position": 1514,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-cream-strawberry",
+    "dexNum": 869,
+    "position": 1515,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-swirl-berry",
+    "dexNum": 869,
+    "position": 1516,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-swirl-clover",
+    "dexNum": 869,
+    "position": 1517,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-swirl-flower",
+    "dexNum": 869,
+    "position": 1518,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-swirl-love",
+    "dexNum": 869,
+    "position": 1519,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-swirl-ribbon",
+    "dexNum": 869,
+    "position": 1520,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-swirl-star",
+    "dexNum": 869,
+    "position": 1521,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-ruby-swirl-strawberry",
+    "dexNum": 869,
+    "position": 1522,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-salted-cream-berry",
+    "dexNum": 869,
+    "position": 1523,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-salted-cream-clover",
+    "dexNum": 869,
+    "position": 1524,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-salted-cream-flower",
+    "dexNum": 869,
+    "position": 1525,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-salted-cream-love",
+    "dexNum": 869,
+    "position": 1526,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-salted-cream-ribbon",
+    "dexNum": 869,
+    "position": 1527,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-salted-cream-star",
+    "dexNum": 869,
+    "position": 1528,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-salted-cream-strawberry",
+    "dexNum": 869,
+    "position": 1529,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-vanilla-cream-berry",
+    "dexNum": 869,
+    "position": 1530,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-vanilla-cream-clover",
+    "dexNum": 869,
+    "position": 1531,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-vanilla-cream-flower",
+    "dexNum": 869,
+    "position": 1532,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-vanilla-cream-love",
+    "dexNum": 869,
+    "position": 1533,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-vanilla-cream-ribbon",
+    "dexNum": 869,
+    "position": 1534,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "alcremie-vanilla-cream-star",
+    "dexNum": 869,
+    "position": 1535,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "indeedee-f",
+    "dexNum": 876,
+    "position": 1536,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "urshifu-rapid-strike",
+    "dexNum": 892,
+    "position": 1537,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "zarude-dada",
+    "dexNum": 893,
+    "position": 1538,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "ursaluna-bloodmoon",
+    "dexNum": 901,
+    "position": 1539,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "basculegion-f",
+    "dexNum": 902,
+    "position": 1540,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  {
+    "slug": "enamorus-therian",
+    "dexNum": 905,
+    "position": 1541,
+    "boxGroup": "Gen 8 Alternates"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "meowth-galar",
+    "dexNum": 52,
+    "position": 1561,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "growlithe-hisui",
+    "dexNum": 58,
+    "position": 1562,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "arcanine-hisui",
+    "dexNum": 59,
+    "position": 1563,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "ponyta-galar",
+    "dexNum": 77,
+    "position": 1564,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "rapidash-galar",
+    "dexNum": 78,
+    "position": 1565,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "slowpoke-galar",
+    "dexNum": 79,
+    "position": 1566,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "slowbro-galar",
+    "dexNum": 80,
+    "position": 1567,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "farfetchd-galar",
+    "dexNum": 83,
+    "position": 1568,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "voltorb-hisui",
+    "dexNum": 100,
+    "position": 1569,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "electrode-hisui",
+    "dexNum": 101,
+    "position": 1570,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "weezing-galar",
+    "dexNum": 110,
+    "position": 1571,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "mrmime-galar",
+    "dexNum": 122,
+    "position": 1572,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "articuno-galar",
+    "dexNum": 144,
+    "position": 1573,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "zapdos-galar",
+    "dexNum": 145,
+    "position": 1574,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "moltres-galar",
+    "dexNum": 146,
+    "position": 1575,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "typhlosion-hisui",
+    "dexNum": 157,
+    "position": 1576,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "slowking-galar",
+    "dexNum": 199,
+    "position": 1577,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "qwilfish-hisui",
+    "dexNum": 211,
+    "position": 1578,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "sneasel-hisui",
+    "dexNum": 215,
+    "position": 1579,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "sneasel-hisui-f",
+    "dexNum": 215,
+    "position": 1580,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "corsola-galar",
+    "dexNum": 222,
+    "position": 1581,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "zigzagoon-galar",
+    "dexNum": 263,
+    "position": 1582,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "linoone-galar",
+    "dexNum": 264,
+    "position": 1583,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "samurott-hisui",
+    "dexNum": 503,
+    "position": 1584,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "lilligant-hisui",
+    "dexNum": 549,
+    "position": 1585,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "basculin-white-striped",
+    "dexNum": 550,
+    "position": 1586,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "darumaka-galar",
+    "dexNum": 554,
+    "position": 1587,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "darmanitan-galar",
+    "dexNum": 555,
+    "position": 1588,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "yamask-galar",
+    "dexNum": 562,
+    "position": 1589,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "zorua-hisui",
+    "dexNum": 570,
+    "position": 1590,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "zoroark-hisui",
+    "dexNum": 571,
+    "position": 1591,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "stunfisk-galar",
+    "dexNum": 618,
+    "position": 1592,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "braviary-hisui",
+    "dexNum": 628,
+    "position": 1593,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "sliggoo-hisui",
+    "dexNum": 705,
+    "position": 1594,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "goodra-hisui",
+    "dexNum": 706,
+    "position": 1595,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "avalugg-hisui",
+    "dexNum": 713,
+    "position": 1596,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  {
+    "slug": "decidueye-hisui",
+    "dexNum": 724,
+    "position": 1597,
+    "boxGroup": "Gen 8 Regionals"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "sprigatito",
+    "dexNum": 906,
+    "position": 1621,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "floragato",
+    "dexNum": 907,
+    "position": 1622,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "meowscarada",
+    "dexNum": 908,
+    "position": 1623,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "fuecoco",
+    "dexNum": 909,
+    "position": 1624,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "crocalor",
+    "dexNum": 910,
+    "position": 1625,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "skeledirge",
+    "dexNum": 911,
+    "position": 1626,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "quaxly",
+    "dexNum": 912,
+    "position": 1627,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "quaxwell",
+    "dexNum": 913,
+    "position": 1628,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "quaquaval",
+    "dexNum": 914,
+    "position": 1629,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "lechonk",
+    "dexNum": 915,
+    "position": 1630,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "oinkologne",
+    "dexNum": 916,
+    "position": 1631,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "tarountula",
+    "dexNum": 917,
+    "position": 1632,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "spidops",
+    "dexNum": 918,
+    "position": 1633,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "nymble",
+    "dexNum": 919,
+    "position": 1634,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "lokix",
+    "dexNum": 920,
+    "position": 1635,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "pawmi",
+    "dexNum": 921,
+    "position": 1636,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "pawmo",
+    "dexNum": 922,
+    "position": 1637,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "pawmot",
+    "dexNum": 923,
+    "position": 1638,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "tandemaus",
+    "dexNum": 924,
+    "position": 1639,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "maushold",
+    "dexNum": 925,
+    "position": 1640,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "fidough",
+    "dexNum": 926,
+    "position": 1641,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "dachsbun",
+    "dexNum": 927,
+    "position": 1642,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "smoliv",
+    "dexNum": 928,
+    "position": 1643,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "dolliv",
+    "dexNum": 929,
+    "position": 1644,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "arboliva",
+    "dexNum": 930,
+    "position": 1645,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "squawkabilly",
+    "dexNum": 931,
+    "position": 1646,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "nacli",
+    "dexNum": 932,
+    "position": 1647,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "naclstack",
+    "dexNum": 933,
+    "position": 1648,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "garganacl",
+    "dexNum": 934,
+    "position": 1649,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "charcadet",
+    "dexNum": 935,
+    "position": 1650,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "armarouge",
+    "dexNum": 936,
+    "position": 1651,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ceruledge",
+    "dexNum": 937,
+    "position": 1652,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "tadbulb",
+    "dexNum": 938,
+    "position": 1653,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "bellibolt",
+    "dexNum": 939,
+    "position": 1654,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "wattrel",
+    "dexNum": 940,
+    "position": 1655,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "kilowattrel",
+    "dexNum": 941,
+    "position": 1656,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "maschiff",
+    "dexNum": 942,
+    "position": 1657,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "mabosstiff",
+    "dexNum": 943,
+    "position": 1658,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "shroodle",
+    "dexNum": 944,
+    "position": 1659,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "grafaiai",
+    "dexNum": 945,
+    "position": 1660,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "bramblin",
+    "dexNum": 946,
+    "position": 1661,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "brambleghast",
+    "dexNum": 947,
+    "position": 1662,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "toedscool",
+    "dexNum": 948,
+    "position": 1663,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "toedscruel",
+    "dexNum": 949,
+    "position": 1664,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "klawf",
+    "dexNum": 950,
+    "position": 1665,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "capsakid",
+    "dexNum": 951,
+    "position": 1666,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "scovillain",
+    "dexNum": 952,
+    "position": 1667,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "rellor",
+    "dexNum": 953,
+    "position": 1668,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "rabsca",
+    "dexNum": 954,
+    "position": 1669,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "flittle",
+    "dexNum": 955,
+    "position": 1670,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "espathra",
+    "dexNum": 956,
+    "position": 1671,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "tinkatink",
+    "dexNum": 957,
+    "position": 1672,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "tinkatuff",
+    "dexNum": 958,
+    "position": 1673,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "tinkaton",
+    "dexNum": 959,
+    "position": 1674,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "wiglett",
+    "dexNum": 960,
+    "position": 1675,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "wugtrio",
+    "dexNum": 961,
+    "position": 1676,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "bombirdier",
+    "dexNum": 962,
+    "position": 1677,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "finizen",
+    "dexNum": 963,
+    "position": 1678,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "palafin",
+    "dexNum": 964,
+    "position": 1679,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "varoom",
+    "dexNum": 965,
+    "position": 1680,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "revavroom",
+    "dexNum": 966,
+    "position": 1681,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "cyclizar",
+    "dexNum": 967,
+    "position": 1682,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "orthworm",
+    "dexNum": 968,
+    "position": 1683,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "glimmet",
+    "dexNum": 969,
+    "position": 1684,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "glimmora",
+    "dexNum": 970,
+    "position": 1685,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "greavard",
+    "dexNum": 971,
+    "position": 1686,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "houndstone",
+    "dexNum": 972,
+    "position": 1687,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "flamigo",
+    "dexNum": 973,
+    "position": 1688,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "cetoddle",
+    "dexNum": 974,
+    "position": 1689,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "cetitan",
+    "dexNum": 975,
+    "position": 1690,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "veluza",
+    "dexNum": 976,
+    "position": 1691,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "dondozo",
+    "dexNum": 977,
+    "position": 1692,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "tatsugiri",
+    "dexNum": 978,
+    "position": 1693,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "annihilape",
+    "dexNum": 979,
+    "position": 1694,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "clodsire",
+    "dexNum": 980,
+    "position": 1695,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "farigiraf",
+    "dexNum": 981,
+    "position": 1696,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "dudunsparce",
+    "dexNum": 982,
+    "position": 1697,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "kingambit",
+    "dexNum": 983,
+    "position": 1698,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "greattusk",
+    "dexNum": 984,
+    "position": 1699,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "screamtail",
+    "dexNum": 985,
+    "position": 1700,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "brutebonnet",
+    "dexNum": 986,
+    "position": 1701,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "fluttermane",
+    "dexNum": 987,
+    "position": 1702,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "slitherwing",
+    "dexNum": 988,
+    "position": 1703,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "sandyshocks",
+    "dexNum": 989,
+    "position": 1704,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "irontreads",
+    "dexNum": 990,
+    "position": 1705,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ironbundle",
+    "dexNum": 991,
+    "position": 1706,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ironhands",
+    "dexNum": 992,
+    "position": 1707,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ironjugulis",
+    "dexNum": 993,
+    "position": 1708,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ironmoth",
+    "dexNum": 994,
+    "position": 1709,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ironthorns",
+    "dexNum": 995,
+    "position": 1710,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "frigibax",
+    "dexNum": 996,
+    "position": 1711,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "arctibax",
+    "dexNum": 997,
+    "position": 1712,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "baxcalibur",
+    "dexNum": 998,
+    "position": 1713,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "gimmighoul",
+    "dexNum": 999,
+    "position": 1714,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "gholdengo",
+    "dexNum": 1000,
+    "position": 1715,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "wochien",
+    "dexNum": 1001,
+    "position": 1716,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "chienpao",
+    "dexNum": 1002,
+    "position": 1717,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "tinglu",
+    "dexNum": 1003,
+    "position": 1718,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "chiyu",
+    "dexNum": 1004,
+    "position": 1719,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "roaringmoon",
+    "dexNum": 1005,
+    "position": 1720,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ironvaliant",
+    "dexNum": 1006,
+    "position": 1721,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "koraidon",
+    "dexNum": 1007,
+    "position": 1722,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "miraidon",
+    "dexNum": 1008,
+    "position": 1723,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "walkingwake",
+    "dexNum": 1009,
+    "position": 1724,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ironleaves",
+    "dexNum": 1010,
+    "position": 1725,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "dipplin",
+    "dexNum": 1011,
+    "position": 1726,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "poltchageist",
+    "dexNum": 1012,
+    "position": 1727,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "sinistcha",
+    "dexNum": 1013,
+    "position": 1728,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "okidogi",
+    "dexNum": 1014,
+    "position": 1729,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "munkidori",
+    "dexNum": 1015,
+    "position": 1730,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "fezandipiti",
+    "dexNum": 1016,
+    "position": 1731,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ogerpon",
+    "dexNum": 1017,
+    "position": 1732,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "archaludon",
+    "dexNum": 1018,
+    "position": 1733,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "hydrapple",
+    "dexNum": 1019,
+    "position": 1734,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "gougingfire",
+    "dexNum": 1020,
+    "position": 1735,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ragingbolt",
+    "dexNum": 1021,
+    "position": 1736,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ironboulder",
+    "dexNum": 1022,
+    "position": 1737,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "ironcrown",
+    "dexNum": 1023,
+    "position": 1738,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "terapagos",
+    "dexNum": 1024,
+    "position": 1739,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "pecharunt",
+    "dexNum": 1025,
+    "position": 1740,
+    "boxGroup": "Gen 9 Bases"
+  },
+  {
+    "slug": "oinkologne-f",
+    "dexNum": 916,
+    "position": 1741,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "maushold-three",
+    "dexNum": 925,
+    "position": 1742,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "squawkabilly-blue",
+    "dexNum": 931,
+    "position": 1743,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "squawkabilly-white",
+    "dexNum": 931,
+    "position": 1744,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "squawkabilly-yellow",
+    "dexNum": 931,
+    "position": 1745,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "tatsugiri-droopy",
+    "dexNum": 978,
+    "position": 1746,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "tatsugiri-stretchy",
+    "dexNum": 978,
+    "position": 1747,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "dudunsparce-three-segment",
+    "dexNum": 982,
+    "position": 1748,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "gimmighoul-roaming",
+    "dexNum": 999,
+    "position": 1749,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "poltchageist-artisan",
+    "dexNum": 1012,
+    "position": 1750,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  {
+    "slug": "sinistcha-masterpiece",
+    "dexNum": 1013,
+    "position": 1751,
+    "boxGroup": "Gen 9 Alternates"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "slug": "tauros-paldea",
+    "dexNum": 128,
+    "position": 1771,
+    "boxGroup": "Gen 9 Regionals"
+  },
+  {
+    "slug": "tauros-paldea-fire",
+    "dexNum": 128,
+    "position": 1772,
+    "boxGroup": "Gen 9 Regionals"
+  },
+  {
+    "slug": "tauros-paldea-water",
+    "dexNum": 128,
+    "position": 1773,
+    "boxGroup": "Gen 9 Regionals"
+  },
+  {
+    "slug": "wooper-paldea",
+    "dexNum": 194,
+    "position": 1774,
+    "boxGroup": "Gen 9 Regionals"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null
+]
